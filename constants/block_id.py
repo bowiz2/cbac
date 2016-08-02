@@ -1,5 +1,12 @@
-REDSTONE_BLOCK_ID = 22
-SNOW_BLOCK_ID = 20
+
+REDSTONE_BLOCK = 22
+SNOW_BLOCK = 20
+EMPTY_BLOCK = 0
+
+# A block which represents the "true" value.
+TRUE_BLOCK = REDSTONE_BLOCK
+# A block which represents the "false" value.
+FALSE_BLOCK = SNOW_BLOCK
 
 IMPULSE_COMMAND_BLOCK = 137
 REPEATING_COMMAND_BLOCK = 210

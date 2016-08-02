@@ -1,17 +1,18 @@
 from constants.block_id import CHAIN_COMMAND_BLOCK, IMPULSE_COMMAND_BLOCK, REPEATING_COMMAND_BLOCK
 
+
 class Block(object):
-    def __init__(self, block_id, block_data):
+    def __init__(self, block_id, block_data=0):
         self.block_id = block_id
         self.block_data = block_data
 
 
 class CommandBlock(Block):
-    def __init__(self, command, facing, action="impuls", allways_active=False, conditional=False):
+    def __init__(self, command, facing, action="impuls", always_active=False, conditional=False):
         self.command = command
         self.facing = facing
         self.action = action
-        self.allways_active = allways_active
+        self.always_active = always_active
         self.conditional = conditional
 
         if self.action == "impulse":
@@ -23,6 +24,6 @@ class CommandBlock(Block):
         else:
             raise TypeError("No such action {0}.".format(action))
 
-        block_data = 1 if self.allways_active else 0
+        block_data = 1 if self.always_active else 0
 
         super(CommandBlock, self).__init__(block_id, block_data)
