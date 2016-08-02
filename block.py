@@ -8,7 +8,7 @@ class Block(object):
 
 class CommandBlock(Block):
     def __init__(self, command, facing, action="impuls", allways_active=False, conditional=False):
-
+        self.command = command
         self.facing = facing
         self.action = action
         self.allways_active = allways_active
