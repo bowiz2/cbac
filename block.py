@@ -8,6 +8,7 @@ class Block(object):
 
 
 class CommandBlock(Block):
+
     def __init__(self, command, facing, action="impuls", always_active=False, conditional=False):
         self.command = command
         self.facing = facing
