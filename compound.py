@@ -10,6 +10,9 @@ class Compound(object):
 
 
 class CBA(Compound):
+    """
+    Command Block Array
+    """
     def __init__(self, *commands):
         blocks = list(self._gen_cb_chain(commands))
         super(CBA, self).__init__(blocks, isolated=True)
