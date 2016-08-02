@@ -7,11 +7,11 @@ class Block(object):
 
 
 class CommandBlock(Block):
-    def __init__(self, command, facing, action="impuls", allways_active=False, conditional=False):
+    def __init__(self, command, facing, action="impulse", always_active=False, conditional=False):
 
         self.facing = facing
         self.action = action
-        self.allways_active = allways_active
+        self.always_active = always_active
         self.conditional = conditional
 
         if self.action == "impulse":
@@ -23,6 +23,6 @@ class CommandBlock(Block):
         else:
             raise TypeError("No such action {0}.".format(action))
 
-        block_data = 1 if self.allways_active else 0
+        block_data = 1 if self.always_active else 0
 
         super(CommandBlock, self).__init__(block_id, block_data)
