@@ -1,2 +1,0 @@
-enum Direction
-enum CommandBlockActions

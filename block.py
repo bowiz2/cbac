@@ -1,3 +1,5 @@
+from constants.block_id import CHAIN_COMMAND_BLOCK, IMPULSE_COMMAND_BLOCK, REPEATING_COMMAND_BLOCK
+
 class Block(object):
     def __init__(self, block_id, block_data):
         self.block_id = block_id
