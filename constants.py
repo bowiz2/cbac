@@ -1,0 +1,2 @@
+enum Direction
+enum CommandBlockActions
