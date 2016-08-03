@@ -10,8 +10,6 @@ class Vector(namedtuple('Vector', ['x', 'y', 'z'])):
     def __mul__(self, other):
         return Vector(*[i * other for i in self])
 
-    def __str__(self):
-        return " ".join(map(str, self.__iter__()))
 
 
 Location = Vector
