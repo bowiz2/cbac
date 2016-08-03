@@ -1,4 +1,6 @@
-from constants.block_id import CHAIN_COMMAND_BLOCK, IMPULSE_COMMAND_BLOCK, REPEATING_COMMAND_BLOCK
+from constants import block_id as ids
+from constants import cb_action
+from constants import direction
 
 
 class Block(object):
@@ -9,19 +11,19 @@ class Block(object):
 
 class CommandBlock(Block):
 
-    def __init__(self, command, facing, action="impuls", always_active=False, conditional=False):
+    def __init__(self, command, facing=direction.UP, action=cb_action.IMPULSE, always_active=False, conditional=False):
         self.command = command
         self.facing = facing
         self.action = action
         self.always_active = always_active
         self.conditional = conditional
 
-        if self.action == "impulse":
-            block_id = 137
-        elif self.action == "repeat":
-            block_id = 210
-        elif self.action == "chain":
-            block_id = 211
+        if self.action == cb_action.IMPULSE:  # 'impulse'
+            block_id = ids.IMPULSE_COMMAND_BLOCK
+        elif self.action == cb_action.REPEAT:  # 'repeat'
+            block_id = ids.REPEATING_COMMAND_BLOCK
+        elif self.action == cb_action.CHAIN:  # 'chain'
+            block_id = ids.CHAIN_COMMAND_BLOCK
         else:
             raise TypeError("No such action {0}.".format(action))
 

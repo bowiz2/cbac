@@ -31,7 +31,7 @@ class BlockSpace(object):
                 # Get the next possible location.
                 location = possible_locations.next()
                 # Generate assignments.
-                assignments = self.assign_coordinates(location)
+                assignments = self.assign_coordinates(location, compound)
 
                 for block, coordinate in assignments:
                     self.blocks[block] = coordinate
