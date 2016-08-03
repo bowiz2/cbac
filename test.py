@@ -55,8 +55,20 @@ def test_get_block_location():
     loc = bs.get_location_of(mem.blocks[2])
     assert loc == (0, 0, 2)
 
+def test_commands():
+    from compound import Constant, Memory
+    from blockspace import BlockSpace
+    from command_shell import CompoundShell
+    import block
+    mem = Memory(8)
+    bs = BlockSpace((200, 200, 200), mem)
+    shl = CompoundShell(mem, bs)
+    print shl.testforblock(block.ids.FALSE_BLOCK)()
+    print shl.setblock(block.ids.EMPTY_BLOCK)()
+
 test_block()
 test_compound()
 test_blockspace()
 test_get_area()
 test_get_block_location()
+test_commands()

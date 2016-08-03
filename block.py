@@ -4,9 +4,12 @@ from constants import direction
 
 
 class Block(object):
-    def __init__(self, block_id, block_data=0):
+    def __init__(self, block_id, block_data=0, tags=None):
         self.block_id = block_id
         self.block_data = block_data
+        if not tags:
+            tags = {}
+        self.tags = tags
 
 
 class CommandBlock(Block):

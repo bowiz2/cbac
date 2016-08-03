@@ -104,8 +104,16 @@ class BlockSpace(object):
 
         return (min_x, min_y, min_z), (max_x, max_y, max_z)
 
-    def get_location_of(self, block):
-        return self.blocks[block]
+    def get_location_of(self, item):
+        """
+        Get a location of an item which is stored in the block space.
+        """
+        try:
+            location = self.blocks[item]
+        except KeyError:
+            location, blocks = self.compounds[item]
+
+        return location
 
 
 class AssignmentError(BaseException):
