@@ -14,19 +14,27 @@ def test_compound():
             assert b.block_id == block.ids.TRUE_BLOCK
         else:
             assert b.block_id == block.ids.FALSE_BLOCK
-    print const.blocks
+
 
 def test_blockspace():
-    from compound import Constant
+    from compound import Constant, Memory
     from blockspace import BlockSpace
-    const = Constant(72)
+
     bs = BlockSpace((200, 200, 200))
-    print "init ok."
-    bs.add_compound(const)
-    for i in xrange(50,100):
-        bs.add_compound(Constant(i))
+    TEST_SIZE = 10
+    for i in xrange(TEST_SIZE):
+        bs.add_compound(Constant(i+1))
         # Some bugs found.
-    print bs.blocks
+    assert len(bs.compounds) == TEST_SIZE
+
+    bs = BlockSpace((200, 200, 200))
+
+    MEMORY_SIZE = 8
+
+    for i in xrange(TEST_SIZE):
+        bs.add_compound(Memory(MEMORY_SIZE))
+        # Some bugs found.
+    assert len(bs.blocks) == MEMORY_SIZE * TEST_SIZE
 
 test_block()
 test_compound()
