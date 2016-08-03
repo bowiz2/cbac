@@ -46,7 +46,17 @@ def test_get_area():
     area = bs.get_area_of(mem)
     assert area == ((0, 0, 0), (0, 0, 7))
 
+
+def test_get_block_location():
+    from compound import Constant, Memory
+    from blockspace import BlockSpace
+    mem = Memory(8)
+    bs = BlockSpace((200, 200, 200), mem)
+    loc = bs.get_location_of(mem.blocks[2])
+    assert loc == (0, 0, 2)
+
 test_block()
 test_compound()
 test_blockspace()
 test_get_area()
+test_get_block_location()

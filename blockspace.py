@@ -104,6 +104,9 @@ class BlockSpace(object):
 
         return (min_x, min_y, min_z), (max_x, max_y, max_z)
 
+    def get_location_of(self, block):
+        return self.blocks[block]
+
 
 class AssignmentError(BaseException):
     """
