@@ -31,12 +31,12 @@ class BlockSpace(object):
                 # Get the next possible location.
                 location = possible_locations.next()
                 # Generate assignments.
-                assignments = self.assign_coordinates(location, compound)
+                assignments = dict(self.assign_coordinates(location, compound))
 
-                for block, coordinate in assignments:
+                for block, coordinate in assignments.items():
                     self.blocks[block] = coordinate
                 # Save the compound location.
-                self.compounds[compound] = location
+                self.compounds[compound] = (location, assignments)
                 is_compound_added = True
             except AssignmentError:
                 # Means the the assignment for this generation is not possible.
@@ -87,6 +87,22 @@ class BlockSpace(object):
 
             yield block, assigned_location
 
+    def get_area_of(self, compound):
+        """
+        Gets the area of a compound.
+        """
+        location, blocks = self.compounds[compound]
+        block_locations = [self.blocks[block] for block in blocks]
+        # TODO: remove code duplication.
+        min_x = sorted(block_locations, key=lambda item: item[0])[0].x
+        min_y = sorted(block_locations, key=lambda item: item[1])[0].y
+        min_z = sorted(block_locations, key=lambda item: item[2])[0].z
+
+        max_x = sorted(block_locations, key=lambda item: item[0])[-1].x
+        max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
+        max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
+
+        return (min_x, min_y, min_z), (max_x, max_y, max_z)
 
 class AssignmentError(BaseException):
     """
