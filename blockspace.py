@@ -77,7 +77,7 @@ class BlockSpace(object):
             # try to assign location.
             for vec in direction.vectors.values():
                 possible_location = location + (vec * i)
-                if not (possible_location in self.blocks.keys() or self.is_location_out_of_bounds(possible_location)):
+                if not (possible_location in self.blocks.values() or self.is_location_out_of_bounds(possible_location)):
                     assigned_location = possible_location
                     break
 
