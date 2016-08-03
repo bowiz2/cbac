@@ -3,6 +3,7 @@ def test_block():
     cb = block.CommandBlock("/say hello", facing=block.direction.SOUTH, action=block.cb_action.CHAIN)
     redstone = block.Block(block.ids.REDSTONE_BLOCK)
 
+
 def test_compound():
     from compound import Compound, Constant
     import block
@@ -36,6 +37,16 @@ def test_blockspace():
         # Some bugs found.
     assert len(bs.blocks) == MEMORY_SIZE * TEST_SIZE
 
+
+def test_get_area():
+    from compound import Constant, Memory
+    from blockspace import BlockSpace
+    mem = Memory(8)
+    bs = BlockSpace((200, 200, 200), mem)
+    area = bs.get_area_of(mem)
+    assert area == ((0, 0, 0), (0, 0, 7))
+
 test_block()
 test_compound()
 test_blockspace()
+test_get_area()
