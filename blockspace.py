@@ -104,6 +104,7 @@ class BlockSpace(object):
 
         return (min_x, min_y, min_z), (max_x, max_y, max_z)
 
+
 class AssignmentError(BaseException):
     """
     Thrown when the block space cannot assign coordinates for a compound in a specific location.
