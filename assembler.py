@@ -3,6 +3,7 @@ from pymclevel import box
 from pymclevel import MCSchematic
 from block import CommandBlock
 
+
 # For development only.
 def tagged_cb(command_block, location):
     """
@@ -42,6 +43,9 @@ def translate(location, block):
 
 
 def build(block_space):
+    """
+    Converts a block space into a schematic.
+    """
     # Create a schematic of the size of the blockspace.
     schematic = MCSchematic(shape=block_space.size)
     entities_to_add = []
