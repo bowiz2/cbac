@@ -67,9 +67,19 @@ def test_commands():
     print shl.testforblock(block.ids.FALSE_BLOCK)()
     print shl.setblock(block.ids.EMPTY_BLOCK)()
 
+
+def test_assembler():
+    from pymclevel import MCSchematic
+    import assembler
+    schematic = MCSchematic(shape=(3,3,3))
+    block_space = {(0, 0, 0): "not_a_block"}
+    schematic = assembler.build(schematic, block_space)
+    schematic.saveToFile(r'./schematics/test.schematic')
+
 test_block()
 test_compound()
 test_blockspace()
 test_get_area()
 test_get_block_location()
 test_commands()
+test_assembler()

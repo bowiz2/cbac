@@ -1,5 +1,3 @@
-from random import randint
-from pymclevel import MCSchematic
 from pymclevel import nbt
 from pymclevel import box
 
@@ -38,12 +36,3 @@ def build(schematic, block_space):
         chunk.TileEntities.append(entity)
         chunk.dirty = True
     return schematic
-
-def main():
-    schematic = MCSchematic(shape=(3,3,3))
-    block_space = {(0, 0, 0): "not_a_block"}            
-    schematic = build(schematic, block_space)
-    schematic.saveToFile(r'./MCEdit/MCEdit 2 Files/schematics/3new.schematic')
-
-if __name__ == "__main__":
-    main()
