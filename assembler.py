@@ -39,4 +39,5 @@ def build(block_space):
     for (chunk, entity) in ents_to_add:
         chunk.TileEntities.append(entity)
         chunk.dirty = True
+
     return schematic
