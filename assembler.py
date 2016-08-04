@@ -19,16 +19,11 @@ def translate(location, block):
     return tagged_cb()
 
 
-# Don't know if this will be needed.
-def _get_block_space_size(block_space):
-    return block_space.size
-
-
 def build(block_space):
     # Create a schematic of the size of the blockspace.
     schematic = MCSchematic(shape=block_space.size)
     ents_to_add = []
-    schematic_size = _get_block_space_size(block_space)
+    schematic_size = block_space.size
     schematic_box = box.BoundingBox(size=schematic_size)
     for (chunk, _, _) in schematic.getChunkSlices(schematic_box):
         for block, location in block_space.blocks.items():
