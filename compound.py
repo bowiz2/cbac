@@ -53,6 +53,7 @@ class Constant(Compound):
             for i in xrange(buffer_size - len(self.bits)):
                 self.blocks.append(Block(block_id.EMPTY_BLOCK))
 
+
 class Memory(Compound):
     """
     An array of empty blocks which later will be used to store some data.
