@@ -4,6 +4,9 @@ from constants import direction
 
 
 class Block(object):
+    """
+    Represents a block in minecraft world. to bind it to a location, use a blockspace.
+    """
     def __init__(self, block_id, block_data=0, tags=None):
         self.block_id = block_id
         self.block_data = block_data
@@ -13,7 +16,10 @@ class Block(object):
 
 
 class CommandBlock(Block):
-
+    """
+    Command Block inside minecraft.
+    Contains all the command block types. Such as impulse repeat and chain.
+    """
     def __init__(self, command, facing=direction.UP, action=cb_action.IMPULSE, always_active=False, conditional=False):
         self.command = command
         self.facing = facing
