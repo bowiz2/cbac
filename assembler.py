@@ -1,5 +1,7 @@
 from pymclevel import nbt
 from pymclevel import box
+from pymclevel import MCSchematic
+
 
 # For development only.
 def tagged_cb():
@@ -22,7 +24,9 @@ def _get_block_space_size(block_space):
     return (3, 3, 3)
 
 
-def build(schematic, block_space):
+def build(block_space):
+    # Create a schematic of the size of the blockspace.
+    schematic = MCSchematic(shape=block_space.size)
     ents_to_add = []
     schematic_size = _get_block_space_size(block_space)
     schematic_box = box.BoundingBox(size=schematic_size)
