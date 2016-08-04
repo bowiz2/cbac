@@ -31,9 +31,9 @@ def build(block_space):
     schematic_size = _get_block_space_size(block_space)
     schematic_box = box.BoundingBox(size=schematic_size)
     for (chunk, _, _) in schematic.getChunkSlices(schematic_box):
-        for location, block in block_space.items():
+        for block, location in block_space.blocks.items():
             new_ent = translate(location, block)
-            schematic.setBlockAt(location[0], location[1], location[2], 137)
+            schematic.setBlockAt(location[0], location[1], location[2], block.block_id)
             ents_to_add.append((chunk, new_ent))
 
     for (chunk, entity) in ents_to_add:
