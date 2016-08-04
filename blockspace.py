@@ -13,6 +13,8 @@ class BlockSpace(object):
         self.blocks = dict()
         # Saves the locations of the compounds.
         self.compounds = dict()
+        # Saves the locations of the entities.
+        self.entities = dict()
 
         for compound in compounds:
             self.add_compound(compound)
@@ -44,6 +46,13 @@ class BlockSpace(object):
             except StopIteration:
                 # When the end of the possible locations generation is reached.
                 raise Exception("Can't add compound {0} to this block space.".format(compound))
+
+    def add_entity(self, entity, location=(0, 0, 0)):
+        """
+        Add entity to the blockspace.
+        """
+        location = Vector(*location)
+        self.entities[entity] = location
 
     def is_location_out_of_bounds(self, location):
         """
