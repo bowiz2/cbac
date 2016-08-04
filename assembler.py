@@ -21,7 +21,7 @@ def translate(location, block):
 
 # Don't know if this will be needed.
 def _get_block_space_size(block_space):
-    return (3, 3, 3)
+    return block_space.size
 
 
 def build(block_space):
