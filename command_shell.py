@@ -105,5 +105,5 @@ class CompoundShell(LocationShell):
                          ["/fill", area_string(self.area), block_id, data_value, block_handling, tags]
                          if item is not None])
 
-
+# A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell
