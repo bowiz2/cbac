@@ -69,17 +69,20 @@ def test_commands():
 
 
 def test_assembler():
-    from pymclevel import MCSchematic
+    from blockspace import BlockSpace
+    from compound import Compound
+    from block import CommandBlock
     import assembler
-    schematic = MCSchematic(shape=(3,3,3))
-    block_space = {(0, 0, 0): "not_a_block"}
-    schematic = assembler.build(schematic, block_space)
+
+    cb = Compound([CommandBlock("/say what")])
+    block_space = BlockSpace((200, 200, 200), cb)
+    schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 
-test_block()
-test_compound()
-test_blockspace()
-test_get_area()
-test_get_block_location()
-test_commands()
+# test_block()
+# test_compound()
+# test_blockspace()
+# test_get_area()
+# test_get_block_location()
+# test_commands()
 test_assembler()
