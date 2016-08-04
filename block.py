@@ -7,12 +7,15 @@ class Block(object):
     """
     Represents a block in minecraft world. to bind it to a location, use a blockspace.
     """
-    def __init__(self, block_id, block_data=0, tags=None):
+    def __init__(self, block_id, block_data=0, has_tile_entity=False):
+        """
+        :param block_id: The minecraft block id of this block, such as 0 for air and 1 for stone.
+        :param block_data: Block data value.
+        :param has_tile_entity: If this block has a tile entity and needs to be translated to it.
+        """
         self.block_id = block_id
         self.block_data = block_data
-        if not tags:
-            tags = {}
-        self.tags = tags
+        self.has_tile_entity = has_tile_entity
 
 
 class CommandBlock(Block):
@@ -38,4 +41,4 @@ class CommandBlock(Block):
 
         block_data = 1 if self.always_active else 0
 
-        super(CommandBlock, self).__init__(block_id, block_data)
+        super(CommandBlock, self).__init__(block_id, block_data, has_tile_entity=True)
