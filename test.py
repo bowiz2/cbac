@@ -39,7 +39,7 @@ def test_blockspace():
 
 
 def test_get_area():
-    from compound import Constant, Memory
+    from compound import Memory
     from blockspace import BlockSpace
     mem = Memory(8)
     bs = BlockSpace((200, 200, 200), mem)
@@ -48,12 +48,13 @@ def test_get_area():
 
 
 def test_get_block_location():
-    from compound import Constant, Memory
+    from compound import Memory
     from blockspace import BlockSpace
     mem = Memory(8)
     bs = BlockSpace((200, 200, 200), mem)
     loc = bs.get_location_of(mem.blocks[2])
     assert loc == (0, 0, 2)
+
 
 def test_commands():
     from compound import Constant, Memory

@@ -1,4 +1,14 @@
+# Selectors
+NEAREST_PLAYER = '@p'
+RANDOM_PLAYER = '@r'
+ALL_PLAYERS = '@a'
+ALL_ENTITIES = '@e'
+
+
 def command(f):
+    """
+    Makes this function a suspended method.
+    """
     def _wrapper(*args, **kwargs):
         def _command_suspender():
             return f(*args, **kwargs)
@@ -7,11 +17,17 @@ def command(f):
 
 
 def area_string(area):
+    """
+    Convert area to the minecraft command representation.
+    """
     area = map(location_string, area)
     return "{} {}".format(*area)
 
 
 def location_string(location):
+    """
+    Converts a location into the minecraft representation.
+    """
     return " ".join(map(str, location))
 
 
@@ -25,16 +41,24 @@ class CommandShell(object):
         self. wrapped = wrapped
         self.blockspace = blockspace
 
+    @command
+    def raw(self, cmd):
+        return cmd
+
 
 class LocationShell(CommandShell):
-
+    """
+    Provides commands for manipulating objects inside Minecraft which have location.
+    """
     @property
     def location(self):
         return self.blockspace.get_location_of(self.wrapped)
 
     @command
     def testforblock(self, block_id, data_value=None, tags=None):
-
+        """
+        Test if this location object is of the certain type.
+        """
         return " ".join([str(item) for item in
                          ["/testforblock", location_string(self.location), block_id, data_value, tags]
                          if item is not None])
@@ -47,11 +71,12 @@ class LocationShell(CommandShell):
         return " ".join([str(item) for item in
                          ["/setblock", location_string(self.location), block_id, data_value, block_handling, tags]
                          if item is not None])
-BlockShell = LocationShell
 
 
 class CompoundShell(LocationShell):
-
+    """
+    Provides commands for manipulating compounds inside Minecraft.
+    """
     @property
     def area(self):
         # TODO: implement caching.
@@ -79,3 +104,6 @@ class CompoundShell(LocationShell):
         return " ".join([str(item) for item in
                          ["/fill", area_string(self.area), block_id, data_value, block_handling, tags]
                          if item is not None])
+
+
+BlockShell = LocationShell
