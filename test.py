@@ -98,11 +98,27 @@ def test_cba():
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 
-# test_block()
-# test_compound()
-# test_blockspace()
-# test_get_area()
-# test_get_block_location()
-# test_commands()
-# test_assembler()
+
+def test_unit():
+    from blockspace import BlockSpace
+    from compound import CBA
+    import assembler
+
+    cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
+    cba2 = CBA("/say this is totaly a new cba", "/say really.")
+    my_uniy = {cba: (0, 1, 1), cba2: (2, 3, 1)}
+
+    block_space = BlockSpace((8, 8, 8))
+    block_space.add_unit(my_uniy)
+    schematic = assembler.build(block_space)
+    schematic.saveToFile(r'./schematics/test.schematic')
+
+test_block()
+test_compound()
+test_blockspace()
+test_get_area()
+test_get_block_location()
+test_commands()
+test_assembler()
 test_cba()
+test_unit()

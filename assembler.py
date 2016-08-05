@@ -15,7 +15,8 @@ def tagged_cb(command_block, location):
 
     root_tag["id"] = nbt.TAG_String("Control")
     root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)
-    root_tag["CustomName"] = nbt.TAG_String(command_block.custom_name)
+    if command_block.custom_name is not None:
+        root_tag["CustomName"] = nbt.TAG_String(command_block.custom_name)
     if command_block.always_active:
         root_tag['auto'] = nbt.TAG_Byte(1)
 
@@ -67,7 +68,11 @@ def build(block_space):
     for block, location in block_space.blocks.items():
         # Create the actual block.
         schematic.setBlockAt(location[0], location[1], location[2], block.block_id)
-        schematic.setBlockDataAt(location[0], location[1], location[2], calculate_data_value(block))
+
+        data_value = calculate_data_value(block)
+        if data_value is not None:
+            schematic.setBlockDataAt(location[0], location[1], location[2], data_value)
+
         if block.has_tile_entity:
             # Create the tile entity of the block, if it has one.
             tile_entity = translate(block, location)

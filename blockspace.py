@@ -30,21 +30,19 @@ class BlockSpace(object):
         takes a unit and tries to place it in the blockspace.
         :param unit: dict of compounds and relative poistion
         """
-        possible_locations = self.possible_locations_for(unit)
         # TODO: cleanup mess.
-        is_unit_added = False
-        while not is_unit_added:
+        for unit_location in self.possible_locations_for(unit):
             try:
-                unit_location = possible_locations.next()
                 compound_assigments = {compound: dict(self.assign_coordinates(unit_location + compound_location, compound)) for compound, compound_location in unit.items()}
                 for compound, assigments in compound_assigments.items():
                     self.add_blocks(assigments, compound.isolated)
                     self.compounds[compound] = unit_location + unit[compound], assigments
+                return
 
             except AssignmentError:
                 pass
-            except StopIteration:
-                raise Exception("Cant add unit.")
+
+        raise Exception("Cant add unit.")
 
     def add_compound(self, compound, location=None):
         """
@@ -57,24 +55,18 @@ class BlockSpace(object):
             # The user can force the blockspace to use a specific location.
             possible_locations = [location]
 
-        is_compound_added = False
-
-        while not is_compound_added:
+        for location in possible_locations:
             try:
-                # Get the next possible location.
-                location = possible_locations.next()
                 # Generate assignments.
                 assignments = dict(self.assign_coordinates(location, compound))
                 self.add_blocks(assignments)
                 # Save the compound location.
                 self.compounds[compound] = (location, assignments)
-                is_compound_added = True
+                return
             except AssignmentError:
                 # Means the the assignment for this generation is not possible.
                 pass
-            except StopIteration:
-                # When the end of the possible locations generation is reached.
-                raise Exception("Can't add compound {0} to this block space.".format(compound))
+        raise Exception("Can't add compound {0} to this block space.".format(compound))
 
     def add_blocks(self, blocks, isolated=False):
         for block, coordinate in blocks.items():
