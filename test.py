@@ -93,8 +93,8 @@ def test_cba():
     from compound import CBA
     import assembler
 
-    cba = CBA("/say what what", "/say in the butt.")
-    block_space = BlockSpace((8, 8, 8), cba)
+    cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
+    block_space = BlockSpace((8, 3, 8), cba)
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 

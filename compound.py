@@ -16,11 +16,16 @@ class CBA(Compound):
     created_count = 0
 
     def __init__(self, *commands):
-        blocks = list(self._gen_cb_chain(commands))
-        super(CBA, self).__init__(blocks, isolated=True)
         self.cba_id = self.created_count
         self.created_count += 1
         self.name = "CBA_n{0}".format(self.cba_id)
+
+        blocks = list(self._gen_cb_chain(commands))
+
+        for i, block in enumerate(blocks):
+            block.custom_name = "{cba_name}[{i}]".format(cba_name=self.name, i=i)
+
+        super(CBA, self).__init__(blocks, isolated=True)
 
     @staticmethod
     def _gen_cb_chain(commands):
