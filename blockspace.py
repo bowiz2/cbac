@@ -88,9 +88,8 @@ class BlockSpace(object):
             for vec in direction.vectors.values():
                 possible_location = location + (vec * i)
                 if not (possible_location in self.blocks.values() or self.is_location_out_of_bounds(possible_location)):
-                    if compound.isolated:
-                        for direction_vec in direction.vectors.values():
-
+                    if compound.isolated and not self.is_isolated(possible_location):
+                        continue
                     assigned_location = possible_location
                     break
 
@@ -100,7 +99,7 @@ class BlockSpace(object):
 
             yield block, assigned_location
 
-    def check_if_isolated(self, location):
+    def is_isolated(self, location):
         """
         Check if a location is isolated from other redstone sources.
         """
