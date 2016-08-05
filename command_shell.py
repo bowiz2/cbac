@@ -1,4 +1,5 @@
 from block import Block
+from constants.block_id import names as block_names
 from compound import Compound
 # Selectors
 NEAREST_PLAYER = '@p'
@@ -64,7 +65,7 @@ class LocationShell(CommandShell):
         Test if this location object is of the certain type.
         """
         return " ".join([str(item) for item in
-                         ["/testforblock", self.location, block_id, data_value, tags]
+                         ["/testforblock", self.location, block_names[block_id], data_value, tags]
                          if item is not None])
 
     @command
@@ -73,7 +74,7 @@ class LocationShell(CommandShell):
         Clone this compound to another area.
         """
         return " ".join([str(item) for item in
-                         ["/setblock", self.location, block_id, data_value, block_handling, tags]
+                         ["/setblock", self.location, block_names[block_id], data_value, block_handling, tags]
                          if item is not None])
 
 
@@ -121,7 +122,7 @@ class CompoundShell(LocationShell):
         """
 
         return " ".join([str(item) for item in
-                         ["/fill", self.area, block_id, data_value, block_handling, tags]
+                         ["/fill", self.area, block_names[block_id], data_value, block_handling, tags]
                          if item is not None])
 
 
