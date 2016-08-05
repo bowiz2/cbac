@@ -74,7 +74,7 @@ def test_assembler():
     from block import CommandBlock
     import assembler
 
-    cbs = Compound([CommandBlock("/say what")])
+    cbs = Compound([CommandBlock("/say what")], isolated=True)
     constants = [Constant(i+5, 8) for i in xrange(7)]
     block_space = BlockSpace((8, 8, 8), cbs, *constants)
     schematic = assembler.build(block_space)
