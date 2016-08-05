@@ -1,5 +1,4 @@
 from pymclevel import nbt
-from pymclevel import box
 from pymclevel import MCSchematic
 from pymclevel import TileEntity
 from block import CommandBlock
