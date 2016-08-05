@@ -26,6 +26,7 @@ def tagged_cb(command_block, location):
     # Parse the command of the command block.
     command = command_block.command
     if not isinstance(command, str):
+        command.f_self.executor = command_block
         command = command()
     root_tag["Command"] = nbt.TAG_String(command)
 

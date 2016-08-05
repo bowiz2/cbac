@@ -9,14 +9,23 @@ ALL_PLAYERS = '@a'
 ALL_ENTITIES = '@e'
 
 
+class CommandSuspender(object):
+    def __init__(self, f, f_self, *args, **kwargs):
+        self.f = f
+        self.f_self = f_self
+        self.args = args
+        self.kwargs = kwargs
+
+    def __call__(self):
+        return self.f(self.f_self, *self.args, **self.kwargs)
+
+
 def command(f):
     """
     Makes this function a suspended method. decorator
     """
-    def _wrapper(*args, **kwargs):
-        def _command_suspender():
-            return f(*args, **kwargs)
-        return _command_suspender
+    def _wrapper(self, *args, **kwargs):
+        return CommandSuspender(f, self, *args, **kwargs)
     return _wrapper
 
 
