@@ -1,4 +1,5 @@
 from block import Block, CommandBlock
+from constants.block_id import FALSE_BLOCK
 from constants import cb_action, block_id
 
 
@@ -21,6 +22,10 @@ class CBA(Compound):
         self.name = "CBA_n{0}".format(self.cba_id)
 
         blocks = list(self._gen_cb_chain(commands))
+
+        # create activator block.
+        self.activator = Block(FALSE_BLOCK)
+        blocks = [self.activator] + blocks
 
         for i, block in enumerate(blocks):
             block.custom_name = "{cba_name}[{i}]".format(cba_name=self.name, i=i)
