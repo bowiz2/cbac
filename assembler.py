@@ -21,7 +21,7 @@ def tagged_cb(command_block, location):
     command = command_block.command
     if not isinstance(command, str):
         command = command()
-    root_tag["command"] = nbt.TAG_String(command)
+    root_tag["Command"] = nbt.TAG_String(command)
 
     # Return the tag which represents the entity of the command block.
     return root_tag
