@@ -75,7 +75,7 @@ def test_assembler():
     import assembler
 
     cb = Compound([CommandBlock("/say what")])
-    block_space = BlockSpace((200, 200, 200), cb)
+    block_space = BlockSpace((8, 8, 8), cb)
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 
