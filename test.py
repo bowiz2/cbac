@@ -1,13 +1,18 @@
+from compound import Memory, Compound
+from block import CommandBlock
+from command_shell import CompoundShell
+import block
+from blockspace import BlockSpace
+from compound import CBA, Extender, Constant, Memory
+import assembler
+
+
 def test_block():
-    import block
     cb = block.CommandBlock("/say hello", facing=block.direction.SOUTH, action=block.cb_action.CHAIN)
     redstone = block.Block(block.ids.REDSTONE_BLOCK)
 
 
 def test_compound():
-    from compound import Compound, Constant
-    import block
-
     cp = Compound([block.Block(1), block.Block(1)])
     const = Constant(28)
     for bit, b in zip(const.bits, const.blocks):
@@ -18,9 +23,6 @@ def test_compound():
 
 
 def test_blockspace():
-    from compound import Constant, Memory
-    from blockspace import BlockSpace
-
     bs = BlockSpace((200, 200, 200))
     TEST_SIZE = 10
     for i in xrange(TEST_SIZE):
@@ -39,8 +41,7 @@ def test_blockspace():
 
 
 def test_get_area():
-    from compound import Memory
-    from blockspace import BlockSpace
+
     mem = Memory(8)
     bs = BlockSpace((200, 200, 200), mem)
     area = bs.get_area_of(mem)
@@ -48,8 +49,6 @@ def test_get_area():
 
 
 def test_get_block_location():
-    from compound import Memory
-    from blockspace import BlockSpace
     mem = Memory(8)
     bs = BlockSpace((200, 200, 200), mem)
     loc = bs.get_location_of(mem.blocks[2])
@@ -57,13 +56,6 @@ def test_get_block_location():
 
 
 def test_commands():
-    from compound import Memory, Compound
-    from block import CommandBlock
-    from blockspace import BlockSpace
-    from command_shell import CompoundShell
-    import assembler
-    import block
-
     mem = Memory(8)
     cb = CommandBlock("/say what")
     cbs = Compound([cb], isolated=True)
@@ -76,11 +68,6 @@ def test_commands():
 
 
 def test_assembler():
-    from blockspace import BlockSpace
-    from compound import Compound, Constant
-    from block import CommandBlock
-    import assembler
-
     cbs = Compound([CommandBlock("/say what")], isolated=True)
     constants = [Constant(i+5, 8) for i in xrange(7)]
     block_space = BlockSpace((8, 8, 8), cbs, *constants)
@@ -89,10 +76,6 @@ def test_assembler():
 
 
 def test_cba():
-    from blockspace import BlockSpace
-    from compound import CBA
-    import assembler
-
     cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
     block_space = BlockSpace((8, 3, 8), cba)
     schematic = assembler.build(block_space)
@@ -100,10 +83,6 @@ def test_cba():
 
 
 def test_unit():
-    from blockspace import BlockSpace
-    from compound import CBA
-    import assembler
-
     cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
     cba2 = CBA("/say this is totaly a new cba", "/say really.")
     my_uniy = {cba: (0, 1, 1), cba2: (2, 3, 1)}
@@ -114,10 +93,18 @@ def test_unit():
     schematic.saveToFile(r'./schematics/test.schematic')
 
 
-def test_extander():
-    from blockspace import BlockSpace
-    from compound import CBA,Extender
-    import assembler
+def test_extender():
+    cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
+    cba2 = CBA("/say this is totaly a new cba", "/say really.")
+    ext = Extender(cba, cba2)
+
+    block_space = BlockSpace((8, 8, 8), cba, cba2, ext)
+
+    schematic = assembler.build(block_space)
+    schematic.saveToFile(r'./schematics/test.schematic')
+
+
+def test_build_direction():
     cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
     cba2 = CBA("/say this is totaly a new cba", "/say really.")
     ext = Extender(cba, cba2)
@@ -136,4 +123,4 @@ def test_extander():
 # test_assembler()
 # test_cba()
 # test_unit()
-test_extander()
+# test_extender()
