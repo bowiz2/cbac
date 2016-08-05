@@ -12,6 +12,8 @@ def tagged_cb(command_block, location):
     root_tag = nbt.TAG_Compound()
 
     root_tag["id"] = nbt.TAG_String("Control")
+    root_tag["conditional"] = nbt.TAG_BYTE(1 if command_block.conditional else 0)
+    root_tag["facing"] = nbt.TAG_String(command_block.facing if command_block.facing is not None else "north")
     # Set the location of the command block.
     TileEntity.setpos(root_tag, location)
     # Parse the command of the command block.
