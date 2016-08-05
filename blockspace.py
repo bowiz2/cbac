@@ -64,8 +64,8 @@ class BlockSpace(object):
         for location in possible_locations:
             try:
                 # Generate assignments.
-                assignments = dict(self.assign_coordinates(location, compound, build_direction))
-                self.add_blocks(assignments, build_direction)
+                assignments = dict(self.assign_coordinates(location, compound, build_direction=build_direction))
+                self.add_blocks(assignments, build_direction=build_direction)
                 # Save the compound location.
                 self.compounds[compound] = (location, assignments)
                 return
