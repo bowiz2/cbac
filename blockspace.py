@@ -25,6 +25,27 @@ class BlockSpace(object):
         for compound in compounds:
             self.add_compound(compound)
 
+    def add_unit(self, unit):
+        """
+        takes a unit and tries to place it in the blockspace.
+        :param unit: dict of compounds and relative poistion
+        """
+        possible_locations = self.possible_locations_for(unit)
+        # TODO: cleanup mess.
+        is_unit_added = False
+        while not is_unit_added:
+            try:
+                unit_location = possible_locations.next()
+                compound_assigments = {compound: dict(self.assign_coordinates(unit_location + compound_location, compound)) for compound, compound_location in unit.items()}
+                for compound, assigments in compound_assigments.items():
+                    self.add_blocks(assigments, compound.isolated)
+                    self.compounds[compound] = unit_location + unit[compound], assigments
+
+            except AssignmentError:
+                pass
+            except StopIteration:
+                raise Exception("Cant add unit.")
+
     def add_compound(self, compound, location=None):
         """
         Mainly, Generate the blocks of that compound to the block dict.
@@ -44,19 +65,7 @@ class BlockSpace(object):
                 location = possible_locations.next()
                 # Generate assignments.
                 assignments = dict(self.assign_coordinates(location, compound))
-
-                for block, coordinate in assignments.items():
-                    # TODO: think if it is good for here.
-                    try:
-                        if block.facing is None:
-                            block.facing = direction.oposite(self.build_direction)
-
-                    except AttributeError:
-                        pass
-                    self.blocks[block] = coordinate
-                    if compound.isolated:
-                        self._isolated_blocks_locations.append(coordinate)
-
+                self.add_blocks(assignments)
                 # Save the compound location.
                 self.compounds[compound] = (location, assignments)
                 is_compound_added = True
@@ -66,6 +75,18 @@ class BlockSpace(object):
             except StopIteration:
                 # When the end of the possible locations generation is reached.
                 raise Exception("Can't add compound {0} to this block space.".format(compound))
+
+    def add_blocks(self, blocks, isolated=False):
+        for block, coordinate in blocks.items():
+            # TODO: think if it is good for here.
+            try:
+                if block.facing is None:
+                    block.facing = direction.oposite(self.build_direction)
+            except AttributeError:
+                pass
+            self.blocks[block] = coordinate
+            if isolated:
+                self._isolated_blocks_locations.append(coordinate)
 
     def add_entity(self, entity, location=(0, 0, 0)):
         """
@@ -84,7 +105,7 @@ class BlockSpace(object):
             if location_d > size_d - 1:
                 return True
 
-    def possible_locations_for(self, compound):
+    def possible_locations_for(self, obj):
         """
         Generate possible location in which a compound can stand at.
         """
@@ -93,7 +114,7 @@ class BlockSpace(object):
                 for z in xrange(self.size[2]):
                     yield Location(x, y, z)
 
-        raise AssignmentError("Can't find location for compound {0}.".format(compound))
+        raise AssignmentError("Can't find location for compound {0}.".format(obj))
 
     def assign_coordinates(self, location, compound):
         """
