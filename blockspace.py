@@ -7,7 +7,6 @@ class BlockSpace(object):
     """
     Logical representation of blocks in the world
     """
-    build_direction = direction.NORTH
 
     def __init__(self, size, *compounds):
         # Tuple which describes the size of the block space (x,y,z)
@@ -51,7 +50,7 @@ class BlockSpace(object):
 
         raise Exception("Cant add unit.")
 
-    def add_compound(self, compound, location=None):
+    def add_compound(self, compound, location=None, build_direction=direction.NORTH):
         """
         Mainly, Generate the blocks of that compound to the block dict.
         """
@@ -65,8 +64,8 @@ class BlockSpace(object):
         for location in possible_locations:
             try:
                 # Generate assignments.
-                assignments = dict(self.assign_coordinates(location, compound))
-                self.add_blocks(assignments)
+                assignments = dict(self.assign_coordinates(location, compound, build_direction))
+                self.add_blocks(assignments, build_direction)
                 # Save the compound location.
                 self.compounds[compound] = (location, assignments)
                 return
@@ -75,12 +74,12 @@ class BlockSpace(object):
                 pass
         raise Exception("Can't add compound {0} to this block space.".format(compound))
 
-    def add_blocks(self, blocks, isolated=False):
+    def add_blocks(self, blocks, isolated=False, build_direction=None):
         for block, coordinate in blocks.items():
             # TODO: think if it is good for here.
             try:
                 if block.facing is None:
-                    block.facing = direction.oposite(self.build_direction)
+                    block.facing = direction.oposite(build_direction)
             except AttributeError:
                 pass
             self.blocks[block] = coordinate
@@ -115,7 +114,7 @@ class BlockSpace(object):
 
         raise AssignmentError("Can't find location for compound {0}.".format(obj))
 
-    def assign_coordinates(self, location, compound):
+    def assign_coordinates(self, location, compound, build_direction):
         """
         For each block in the compound, assign a coordinate for it.
         """
@@ -123,7 +122,7 @@ class BlockSpace(object):
         for i, block in enumerate(compound.blocks):
 
             # try to assign location.
-            direction_vector = direction.vectors[self.build_direction]
+            direction_vector = direction.vectors[build_direction]
 
             possible_location = location + (direction_vector * i)
 
