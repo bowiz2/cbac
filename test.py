@@ -70,12 +70,13 @@ def test_commands():
 
 def test_assembler():
     from blockspace import BlockSpace
-    from compound import Compound
+    from compound import Compound , Constant
     from block import CommandBlock
     import assembler
 
-    cb = Compound([CommandBlock("/say what")])
-    block_space = BlockSpace((8, 8, 8), cb)
+    cbs = Compound([CommandBlock("/say what")])
+    constants = [Constant(i+5, 8) for i in xrange(7)]
+    block_space = BlockSpace((8, 8, 8), cbs, *constants)
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 
