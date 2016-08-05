@@ -1,3 +1,5 @@
+from block import Block
+from compound import Compound
 # Selectors
 NEAREST_PLAYER = '@p'
 RANDOM_PLAYER = '@r'
@@ -16,35 +18,21 @@ def command(f):
     return _wrapper
 
 
-def area_string(area):
-    """
-    Convert area to the minecraft command representation.
-    """
-    area = map(location_string, area)
-    return "{} {}".format(*area)
-
-
-def location_string(location):
-    """
-    Converts a location into the minecraft representation.
-    """
-    return " ".join(map(str, location))
-
-
 class CommandShell(object):
     """
     A command shell is a wrapper object which wrapes some object,
     and provides some functionality which later can be used with command blocks.
     operates on a block space.
     """
-    def __init__(self, wrapped, blockspace, origin=None):
+    def __init__(self, wrapped, blockspace, executor=None):
         """
         :param wrapped: The object which this command shell is wrapping.
         :param blockspace: The blockspace the wrapped object is located at.
-        :param origin: the place from where the commands will be executed.
+        :param executor: the place from where the commands will be executed.
         """
         self. wrapped = wrapped
         self.blockspace = blockspace
+        self.executor = executor
 
     @command
     def raw(self, cmd):
@@ -57,10 +45,18 @@ class LocationShell(CommandShell):
     """
     @property
     def location(self):
+        location = self._location if self.executor is None else self.get_relative_location(self.executor)
+        ds = map(str, location)
+        if self.executor is not None:
+            ds = ['~' + d for d in ds]
+        return " ".join(ds)
+
+    @property
+    def _location(self):
         return self.blockspace.get_location_of(self.wrapped)
 
-    def get_relative_location_of(self, thing):
-        return self.location - self.blockspace.get_location_of(thing)
+    def get_relative_location(self, thing):
+        return self._location - self.blockspace.get_location_of(thing)
 
     @command
     def testforblock(self, block_id, data_value=None, tags=None):
@@ -68,7 +64,7 @@ class LocationShell(CommandShell):
         Test if this location object is of the certain type.
         """
         return " ".join([str(item) for item in
-                         ["/testforblock", location_string(self.location), block_id, data_value, tags]
+                         ["/testforblock", self.location, block_id, data_value, tags]
                          if item is not None])
 
     @command
@@ -77,7 +73,7 @@ class LocationShell(CommandShell):
         Clone this compound to another area.
         """
         return " ".join([str(item) for item in
-                         ["/setblock", location_string(self.location), block_id, data_value, block_handling, tags]
+                         ["/setblock", self.location, block_id, data_value, block_handling, tags]
                          if item is not None])
 
 
@@ -87,8 +83,23 @@ class CompoundShell(LocationShell):
     """
     @property
     def area(self):
+        # TODO: fix this ugly as f.
+        point_a, point_b = self._area if self.executor is None else self.get_relative_area(self.executor)
+        point_a = map(str, point_a)
+        point_b = map(str, point_b)
+        ds = point_a + point_b
+        if self.executor is not None:
+            ds = ['~' + d for d in ds]
+        return " ".join(ds)
+
+    @property
+    def _area(self):
         # TODO: implement caching.
         return self.blockspace.get_area_of(self.wrapped)
+
+    def get_relative_area(self, thing):
+        point_a, point_b = self._area
+        return (point_a - self.blockspace.get_location_of(thing)), (point_b - self.blockspace.get_location_of(thing))
 
     @command
     def clone(self, other):
@@ -101,7 +112,7 @@ class CompoundShell(LocationShell):
             # TODO: clone to area.
             location = other
 
-        return "/clone {} {}".format(area_string(self.area), location_string(location))
+        return "/clone {} {}".format(self.area, location)
 
     @command
     def fill(self, block_id, data_value=None, block_handling=None, tags=None):
@@ -110,9 +121,18 @@ class CompoundShell(LocationShell):
         """
 
         return " ".join([str(item) for item in
-                         ["/fill", area_string(self.area), block_id, data_value, block_handling, tags]
+                         ["/fill", self.area, block_id, data_value, block_handling, tags]
                          if item is not None])
 
+
+def shell_factory(obj, blockspace):
+    """
+    Creates a shell for an object by its type. The shell is over a blockspace.
+    """
+    if isinstance(obj, Block):
+        return LocationShell(obj, blockspace)
+    if isinstance(obj, Compound):
+        return CompoundShell(obj, blockspace)
 
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell

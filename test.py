@@ -57,15 +57,22 @@ def test_get_block_location():
 
 
 def test_commands():
-    from compound import Constant, Memory
+    from compound import Memory, Compound
+    from block import CommandBlock
     from blockspace import BlockSpace
     from command_shell import CompoundShell
+    import assembler
     import block
+
     mem = Memory(8)
-    bs = BlockSpace((200, 200, 200), mem)
-    shl = CompoundShell(mem, bs)
-    print shl.testforblock(block.ids.FALSE_BLOCK)()
-    print shl.setblock(block.ids.EMPTY_BLOCK)()
+    cb = CommandBlock("/say what")
+    cbs = Compound([cb], isolated=True)
+    block_space = BlockSpace((8, 8, 8), mem, cbs)
+    shl = CompoundShell(mem, block_space, cb)
+    cb.command = shl.fill(block.ids.GLASS_BLOCK)
+
+    schematic = assembler.build(block_space)
+    schematic.saveToFile(r'./schematics/test.schematic')
 
 
 def test_assembler():
@@ -85,5 +92,5 @@ def test_assembler():
 # test_blockspace()
 # test_get_area()
 # test_get_block_location()
-# test_commands()
-test_assembler()
+test_commands()
+#test_assembler()

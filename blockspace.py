@@ -141,7 +141,7 @@ class BlockSpace(object):
         max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
         max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
 
-        return (min_x, min_y, min_z), (max_x, max_y, max_z)
+        return Vector(min_x, min_y, min_z), Vector(max_x, max_y, max_z)
 
     def get_location_of(self, item):
         """
