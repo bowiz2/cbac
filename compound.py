@@ -58,12 +58,12 @@ class Memory(Compound):
     """
     An array of empty blocks which later will be used to store some data.
     """
-    def __init__(self, size, isolated=False):
+    def __init__(self, size):
         """
         :param size: Size of the memory in bits.
         """
         self.size = 0
-        super(Memory, self).__init__(list(), isolated)
+        super(Memory, self).__init__(list(), isolated=True)
 
         for i in xrange(size):
             self.blocks.append(Block(block_id.EMPTY_BLOCK))
