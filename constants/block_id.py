@@ -1,6 +1,6 @@
 EMPTY_BLOCK = 0
 GLASS_BLOCK = 20
-SNOW_BLOCK = 78
+SNOW_BLOCK = 80
 REDSTONE_BLOCK = 152
 
 # A block which represents the "true" value.
