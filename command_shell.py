@@ -1,4 +1,5 @@
 from block import Block
+from constants.block_id import TRUE_BLOCK
 from constants.block_id import names as block_names
 from compound import Compound
 # Selectors
@@ -10,7 +11,7 @@ ALL_ENTITIES = '@e'
 
 def command(f):
     """
-    Makes this function a suspended method.
+    Makes this function a suspended method. decorator
     """
     def _wrapper(*args, **kwargs):
         def _command_suspender():
@@ -76,6 +77,9 @@ class LocationShell(CommandShell):
         return " ".join([str(item) for item in
                          ["/setblock", self.location, block_names[block_id], data_value, block_handling, tags]
                          if item is not None])
+
+    def activate(self):
+        return self.setblock(TRUE_BLOCK)
 
 
 class CompoundShell(LocationShell):

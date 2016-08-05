@@ -1,7 +1,7 @@
 from utils import Vector, Location
 from constants import direction
 from constants.block_id import ISOLATORS
-
+from unit import Unit
 
 class BlockSpace(object):
     """
@@ -31,12 +31,19 @@ class BlockSpace(object):
         :param unit: dict of compounds and relative poistion
         """
         # TODO: cleanup mess.
+        if isinstance(unit, dict):
+            compounds_dict = unit
+        elif isinstance(unit, Unit):
+            compounds_dict = unit.compounds
+        else:
+            raise Exception("Unit is of an unknown type.")
+
         for unit_location in self.possible_locations_for(unit):
             try:
-                compound_assigments = {compound: dict(self.assign_coordinates(unit_location + compound_location, compound)) for compound, compound_location in unit.items()}
+                compound_assigments = {compound: dict(self.assign_coordinates(unit_location + compound_location, compound)) for compound, compound_location in compounds_dict.items()}
                 for compound, assigments in compound_assigments.items():
                     self.add_blocks(assigments, compound.isolated)
-                    self.compounds[compound] = unit_location + unit[compound], assigments
+                    self.compounds[compound] = unit_location + compounds_dict[compound], assigments
                 return
 
             except AssignmentError:

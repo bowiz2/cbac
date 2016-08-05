@@ -113,12 +113,28 @@ def test_unit():
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 
-test_block()
-test_compound()
-test_blockspace()
-test_get_area()
-test_get_block_location()
-test_commands()
-test_assembler()
-test_cba()
-test_unit()
+
+def test_extander():
+    from blockspace import BlockSpace
+    from compound import CBA
+    import assembler
+    from unit import Extender
+    cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
+    cba2 = CBA("/say this is totaly a new cba", "/say really.")
+
+    block_space = BlockSpace((8, 8, 8), cba, cba2)
+    ext = Extender(block_space, cba, cba2)
+    block_space.add_unit(ext)
+    schematic = assembler.build(block_space)
+    schematic.saveToFile(r'./schematics/test.schematic')
+
+# test_block()
+# test_compound()
+# test_blockspace()
+# test_get_area()
+# test_get_block_location()
+# test_commands()
+# test_assembler()
+# test_cba()
+# test_unit()
+test_extander()
