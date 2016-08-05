@@ -27,7 +27,7 @@ def tagged_cb(command_block, location):
     return root_tag
 
 
-def translate(location, block):
+def translate(block, location):
     """
     Receievs a block object and returns it in NBT tag form
     """
@@ -58,7 +58,7 @@ def build(block_space):
             schematic.setBlockAt(location[0], location[1], location[2], block.block_id)
             if block.has_tile_entity:
                 # Create the tile entity of the block, if it has one.
-                tile_entity = translate(location, block)
+                tile_entity = translate(block, location)
                 entities_to_add.append((chunk, tile_entity))
 
     for (chunk, entity) in entities_to_add:
