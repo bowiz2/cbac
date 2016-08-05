@@ -51,7 +51,7 @@ class Constant(Compound):
 
         if buffer_size is not None:
             for i in xrange(buffer_size - len(self.bits)):
-                self.blocks.append(Block(block_id.EMPTY_BLOCK))
+                self.blocks.append(Block(block_id.FALSE_BLOCK))
 
 
 class Memory(Compound):
