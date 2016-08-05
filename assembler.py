@@ -2,6 +2,8 @@ from pymclevel import nbt
 from pymclevel import MCSchematic
 from pymclevel import TileEntity
 from block import CommandBlock
+from constants.direction import DOWN, UP, NORTH,SOUTH, WEST, EAST
+import struct
 
 
 # For development only.
@@ -12,8 +14,12 @@ def tagged_cb(command_block, location):
     root_tag = nbt.TAG_Compound()
 
     root_tag["id"] = nbt.TAG_String("Control")
-    root_tag["conditional"] = nbt.TAG_BYTE(1 if command_block.conditional else 0)
-    root_tag["facing"] = nbt.TAG_String(command_block.facing if command_block.facing is not None else "north")
+    root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)
+
+    if command_block.always_active:
+        root_tag['auto'] = nbt.TAG_Byte(1)
+
+    root_tag["facing"] = nbt.TAG_String(command_block.facing)
     # Set the location of the command block.
     TileEntity.setpos(root_tag, location)
     # Parse the command of the command block.
@@ -41,6 +47,15 @@ def translate(block, location):
     return translated
 
 
+def calculate_data_value(block):
+    if isinstance(block, CommandBlock):
+        command_block = block
+        faceindex = [DOWN, UP, NORTH, SOUTH, WEST, EAST].index(command_block.facing)
+        conditional = 0x8 if command_block.conditional else 0
+        data_value = faceindex | conditional
+        return data_value
+
+
 def build(block_space):
     """
     Converts a block space into a schematic.
@@ -52,6 +67,7 @@ def build(block_space):
     for block, location in block_space.blocks.items():
         # Create the actual block.
         schematic.setBlockAt(location[0], location[1], location[2], block.block_id)
+        schematic.setBlockDataAt(location[0], location[1], location[2], calculate_data_value(block))
         if block.has_tile_entity:
             # Create the tile entity of the block, if it has one.
             tile_entity = translate(block, location)

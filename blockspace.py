@@ -7,6 +7,8 @@ class BlockSpace(object):
     """
     Logical representation of blocks in the world
     """
+    build_direction = direction.NORTH
+
     def __init__(self, size, *compounds):
         # Tuple which describes the size of the block space (x,y,z)
         self.size = size
@@ -18,6 +20,7 @@ class BlockSpace(object):
         self.compounds = dict()
         # Saves the locations of the entities.
         self.entities = dict()
+        # holds to which side each block is faced to.
 
         for compound in compounds:
             self.add_compound(compound)
@@ -39,6 +42,13 @@ class BlockSpace(object):
                 assignments = dict(self.assign_coordinates(location, compound))
 
                 for block, coordinate in assignments.items():
+                    # TODO: think if it is good for here.
+                    try:
+                        if block.facing is None:
+                            block.facing = direction.oposite(self.build_direction)
+
+                    except AttributeError:
+                        pass
                     self.blocks[block] = coordinate
                     if compound.isolated:
                         self._isolated_blocks_locations.append(coordinate)
@@ -87,10 +97,11 @@ class BlockSpace(object):
         """
         # For each block try to assign location and hope for the location to match.
         for i, block in enumerate(compound.blocks):
-            # try to assign location.
-            north_vector = direction.vectors[direction.NORTH]
 
-            possible_location = location + (north_vector * i)
+            # try to assign location.
+            direction_vector = direction.vectors[self.build_direction]
+
+            possible_location = location + (direction_vector * i)
 
             if possible_location in self.blocks.values():
                 raise AssignmentError("Collision with block at location {0}".format(possible_location))

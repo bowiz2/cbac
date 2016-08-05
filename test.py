@@ -77,7 +77,7 @@ def test_commands():
 
 def test_assembler():
     from blockspace import BlockSpace
-    from compound import Compound , Constant
+    from compound import Compound, Constant
     from block import CommandBlock
     import assembler
 
@@ -87,10 +87,22 @@ def test_assembler():
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 
+
+def test_cba():
+    from blockspace import BlockSpace
+    from compound import CBA
+    import assembler
+
+    cba = CBA("/say what what", "/say in the butt.")
+    block_space = BlockSpace((8, 8, 8), cba)
+    schematic = assembler.build(block_space)
+    schematic.saveToFile(r'./schematics/test.schematic')
+
 # test_block()
 # test_compound()
 # test_blockspace()
 # test_get_area()
 # test_get_block_location()
-test_commands()
-#test_assembler()
+# test_commands()
+# test_assembler()
+test_cba()

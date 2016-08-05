@@ -16,3 +16,13 @@ vectors = {
     SOUTH: Vector(0, 0, -1),
     WEST: Vector(-1, 0, 0)
 }
+
+def oposite(direction):
+    return {
+        UP: DOWN,
+        DOWN: UP,
+        NORTH: SOUTH,
+        SOUTH: NORTH,
+        EAST: WEST,
+        WEST: EAST
+     }[direction]
