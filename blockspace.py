@@ -12,6 +12,8 @@ class BlockSpace(object):
         self.size = size
         # Saves the locations of the blocks.
         self.blocks = dict()
+        # Saves the locations of the isolated objects
+        self._isolated_blocks_locations = list()
         # Saves the locations of the compounds.
         self.compounds = dict()
         # Saves the locations of the entities.
@@ -38,6 +40,9 @@ class BlockSpace(object):
 
                 for block, coordinate in assignments.items():
                     self.blocks[block] = coordinate
+                    if compound.isolated:
+                        self._isolated_blocks_locations.append(coordinate)
+
                 # Save the compound location.
                 self.compounds[compound] = (location, assignments)
                 is_compound_added = True
@@ -80,22 +85,28 @@ class BlockSpace(object):
         """
         For each block in the compound, assign a coordinate for it.
         """
-
+        # For each block try to assign location and hope for the location to match.
         for i, block in enumerate(compound.blocks):
-            assigned_location = None
-
             # try to assign location.
-            for vec in direction.vectors.values():
-                possible_location = location + (vec * i)
-                if not (possible_location in self.blocks.values() or self.is_location_out_of_bounds(possible_location)):
-                    if compound.isolated and not self.is_isolated(possible_location):
-                        continue
-                    assigned_location = possible_location
-                    break
+            north_vector = direction.vectors[direction.NORTH]
 
-            # If no location was assigned
-            if not assigned_location:
-                raise AssignmentError("No assignment found for {0}.".format(block))
+            possible_location = location + (north_vector * i)
+
+            if possible_location in self.blocks.values():
+                raise AssignmentError("Collision with block at location {0}".format(possible_location))
+
+            if self.is_location_out_of_bounds(possible_location):
+                raise AssignmentError("Location out of bounds.")
+
+            if compound.isolated and not self.is_isolated(possible_location):
+                raise AssignmentError("Location not isolated while isolation is required.")
+
+            if block.block_id not in ISOLATORS:
+                for isolated_location in self._isolated_blocks_locations:
+                    if isolated_location.is_adjacent(possible_location):
+                        raise AssignmentError("Location interferes with the isolation of other compounds.")
+
+            assigned_location = possible_location
 
             yield block, assigned_location
 
