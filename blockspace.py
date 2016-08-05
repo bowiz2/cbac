@@ -25,12 +25,16 @@ class BlockSpace(object):
         for compound in compounds:
             self.add_compound(compound)
 
-    def add_compound(self, compound):
+    def add_compound(self, compound, location=None):
         """
         Mainly, Generate the blocks of that compound to the block dict.
         """
         # Generates possible locations for the new compound.
-        possible_locations = self.possible_locations_for(compound)
+        if location is None:
+            possible_locations = self.possible_locations_for(compound)
+        else:
+            # The user can force the blockspace to use a specific location.
+            possible_locations = [location]
 
         is_compound_added = False
 
