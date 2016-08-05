@@ -13,9 +13,14 @@ class CBA(Compound):
     """
     Command Block Array
     """
+    created_count = 0
+
     def __init__(self, *commands):
         blocks = list(self._gen_cb_chain(commands))
         super(CBA, self).__init__(blocks, isolated=True)
+        self.cba_id = self.created_count
+        self.created_count += 1
+        self.name = "CBA_n{0}".format(self.cba_id)
 
     @staticmethod
     def _gen_cb_chain(commands):
@@ -25,6 +30,9 @@ class CBA(Compound):
 
         for command in commands[1:]:
             yield CommandBlock(command, facing=None, action=cb_action.CHAIN, always_active=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Constant(Compound):
