@@ -23,6 +23,7 @@ class CommandBlock(Block):
     Command Block inside minecraft.
     Contains all the command block types. Such as impulse repeat and chain.
     """
+    # TODO: Use command block name as a debug tool.
     def __init__(self, command, facing=direction.UP, action=cb_action.IMPULSE, always_active=False, conditional=False):
         self.command = command
         self.facing = facing
