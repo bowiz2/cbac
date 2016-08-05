@@ -37,7 +37,12 @@ class CommandShell(object):
     and provides some functionality which later can be used with command blocks.
     operates on a block space.
     """
-    def __init__(self, wrapped, blockspace):
+    def __init__(self, wrapped, blockspace, origin=None):
+        """
+        :param wrapped: The object which this command shell is wrapping.
+        :param blockspace: The blockspace the wrapped object is located at.
+        :param origin: the place from where the commands will be executed.
+        """
         self. wrapped = wrapped
         self.blockspace = blockspace
 
@@ -53,6 +58,9 @@ class LocationShell(CommandShell):
     @property
     def location(self):
         return self.blockspace.get_location_of(self.wrapped)
+
+    def get_relative_location_of(self, thing):
+        return self.location - self.blockspace.get_location_of(thing)
 
     @command
     def testforblock(self, block_id, data_value=None, tags=None):
@@ -104,6 +112,7 @@ class CompoundShell(LocationShell):
         return " ".join([str(item) for item in
                          ["/fill", area_string(self.area), block_id, data_value, block_handling, tags]
                          if item is not None])
+
 
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell
