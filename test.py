@@ -120,10 +120,10 @@ def test_extander():
     import assembler
     cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
     cba2 = CBA("/say this is totaly a new cba", "/say really.")
-
-    block_space = BlockSpace((8, 8, 8), cba, cba2)
     ext = Extender(cba, cba2)
-    block_space.add_compound(ext)
+
+    block_space = BlockSpace((8, 8, 8), cba, cba2, ext)
+
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 
