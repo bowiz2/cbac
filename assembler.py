@@ -15,7 +15,7 @@ def tagged_cb(command_block, location):
 
     root_tag["id"] = nbt.TAG_String("Control")
     root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)
-
+    root_tag["CustomName"] = nbt.TAG_String(command_block.custom_name)
     if command_block.always_active:
         root_tag['auto'] = nbt.TAG_Byte(1)
 

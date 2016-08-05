@@ -24,12 +24,14 @@ class CommandBlock(Block):
     Contains all the command block types. Such as impulse repeat and chain.
     """
     # TODO: Use command block name as a debug tool.
-    def __init__(self, command, facing=direction.UP, action=cb_action.IMPULSE, always_active=False, conditional=False):
+    def __init__(self, command, facing=direction.UP, action=cb_action.IMPULSE, always_active=False, conditional=False,
+                 custom_name=None):
         self.command = command
         self.facing = facing
         self.action = action
         self.always_active = always_active
         self.conditional = conditional
+        self.custom_name = custom_name
 
         if self.action == cb_action.IMPULSE:  # 'impulse'
             block_id = ids.IMPULSE_COMMAND_BLOCK
