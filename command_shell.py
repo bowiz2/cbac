@@ -1,7 +1,5 @@
-from block import Block
-from constants.block_id import TRUE_BLOCK
+from constants.block_id import TRUE_BLOCK, FALSE_BLOCK
 from constants.block_id import names as block_names
-from compound import Compound
 # Selectors
 NEAREST_PLAYER = '@p'
 RANDOM_PLAYER = '@r'
@@ -35,11 +33,11 @@ class CommandShell(object):
     and provides some functionality which later can be used with command blocks.
     operates on a block space.
     """
-    def __init__(self, wrapped, blockspace, executor=None):
+    def __init__(self, wrapped, blockspace=None, executor=None):
         """
         :param wrapped: The object which this command shell is wrapping.
-        :param blockspace: The blockspace the wrapped object is located at.
-        :param executor: the place from where the commands will be executed.
+        :param blockspace: The blockspace the wrapped object is located at. will be bound later by the assembler.
+        :param executor: the place from where the commands will be executed. will be bound later by the assembler.
         """
         self. wrapped = wrapped
         self.blockspace = blockspace
@@ -89,6 +87,9 @@ class LocationShell(CommandShell):
 
     def activate(self):
         return self.setblock(TRUE_BLOCK)
+
+    def deactivate(self):
+        return self.setblock(FALSE_BLOCK)
 
 
 class CompoundShell(LocationShell):
@@ -143,10 +144,7 @@ def shell_factory(obj, blockspace):
     """
     Creates a shell for an object by its type. The shell is over a blockspace.
     """
-    if isinstance(obj, Block):
-        return LocationShell(obj, blockspace)
-    if isinstance(obj, Compound):
-        return CompoundShell(obj, blockspace)
+
 
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell

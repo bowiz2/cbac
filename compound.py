@@ -1,6 +1,7 @@
 from block import Block, CommandBlock
 from constants.block_id import FALSE_BLOCK
 from constants import cb_action, block_id
+from command_shell import BlockShell
 
 
 class Compound(object):
@@ -20,11 +21,12 @@ class CBA(Compound):
         self.cba_id = self.created_count
         self.created_count += 1
         self.name = "CBA_n{0}".format(self.cba_id)
+        self.activator = Block(FALSE_BLOCK)
 
-        blocks = list(self._gen_cb_chain(commands))
+        blocks = list(self._gen_cb_chain(list(commands) + [BlockShell(self.activator).deactivate()]))
 
         # create activator block.
-        self.activator = Block(FALSE_BLOCK)
+
         blocks = [self.activator] + blocks
 
         for i, block in enumerate(blocks):
@@ -43,6 +45,11 @@ class CBA(Compound):
 
     def __str__(self):
         return self.name
+
+
+class Extender(CBA):
+    def __init__(self, *targets):
+        super(Extender, self).__init__(*[BlockShell(target.activator).activate() for target in targets])
 
 
 class Constant(Compound):

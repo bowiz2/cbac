@@ -1,4 +1,6 @@
 import command_shell
+from compound import Compound
+from block import Block
 
 
 class Unit(object):
@@ -7,4 +9,7 @@ class Unit(object):
         self.compounds = dict()
 
     def shell(self, item):
-        return command_shell.shell_factory(item, self.blockspace)
+        if isinstance(item, Block):
+            return command_shell.LocationShell(item, self.blockspace)
+        if isinstance(item, Compound):
+            return command_shell.CompoundShell(item, self.blockspace)

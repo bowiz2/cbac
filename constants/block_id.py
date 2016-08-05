@@ -18,6 +18,6 @@ ISOLATORS = [EMPTY_BLOCK, GLASS_BLOCK]
 names = {
     GLASS_BLOCK: 'glass',
     EMPTY_BLOCK: 'air',
-    SNOW_BLOCK: 'snow_block',
+    SNOW_BLOCK: 'snow',
     REDSTONE_BLOCK: 'redstone_block'
 }
