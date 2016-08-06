@@ -163,10 +163,11 @@ class CompoundShell(LocationShell):
     @command(True)
     def testforblocks(self, other):
         other = other.shell
-
+        # TODO: remove hack.
+        other.blockspace = self.blockspace
         location = other.location
 
-        return "/clone {0} {1}".format(self.area, location)
+        return "/testforblocks {0} {1}".format(self.area, location)
 
     def __eq__(self, other):
         """
