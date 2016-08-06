@@ -66,6 +66,15 @@ class IfFlow(CBA):
         super(IfFlow, self).__init__(condition, BlockShell(target.activator).activate())
 
 
+class SwitchFlow(CBA):
+    def __init__(self, cases):
+        commands = list()
+        for condition, target in cases.items():
+            commands.append(condition)
+            commands.append(BlockShell(target.activator).activate())
+        super(SwitchFlow, self).__init__(commands)
+
+
 class Constant(Compound):
     """
     When compiled, holds the binary representation of a number.
