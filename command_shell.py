@@ -169,5 +169,13 @@ class CompoundShell(LocationShell):
             location = other
         return "/clone {0} {1}".format(self.area, location)
 
+    def __eq__(self, other):
+        """
+        Check if this compound has the same blocks as other thing.
+        :return: CommandSuspender
+        """
+        return self.testforblocks(other)
+
+
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell
