@@ -165,6 +165,7 @@ class CompoundShell(LocationShell):
         other = other.shell
         # TODO: remove hack.
         other.blockspace = self.blockspace
+        other.executor = self.executor
         location = other.location
 
         return "/testforblocks {0} {1}".format(self.area, location)
