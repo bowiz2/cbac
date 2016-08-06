@@ -112,6 +112,7 @@ class LocationShell(CommandShell):
         except AttributeError:
             return self.testforblock(other)
 
+
 class CompoundShell(LocationShell):
     """
     Provides commands for manipulating compounds inside Minecraft.
@@ -147,7 +148,7 @@ class CompoundShell(LocationShell):
             # TODO: clone to area.
             location = other
 
-        return "/clone {} {}".format(self.area, location)
+        return "/clone {0} {1}".format(self.area, location)
 
     @command()
     def fill(self, block_id, data_value=None, block_handling=None, tags=None):
@@ -159,6 +160,14 @@ class CompoundShell(LocationShell):
                          ["/fill", self.area, block_names[block_id], data_value, block_handling, tags]
                          if item is not None])
 
+    @command(True)
+    def testforblocks(self, other):
+        try:
+            location = other.location
+        except AttributeError:
+            # TODO: clone to area.
+            location = other
+        return "/clone {0} {1}".format(self.area, location)
 
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell
