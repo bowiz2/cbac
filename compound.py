@@ -23,11 +23,11 @@ class CBA(Compound):
         self.name = "CBA_n{0}".format(self.cba_id)
         self.activator = Block(FALSE_BLOCK)
 
-        blocks = list(self._gen_cb_chain(list(commands)))
+        blocks = list(self._gen_cb_chain(list(commands) + [BlockShell(self.activator).deactivate()]))
 
         # create activator block.
 
-        blocks = [self.activator] + blocks + [BlockShell(self.activator).deactivate()]
+        blocks = [self.activator] + blocks
 
         for i, block in enumerate(blocks):
             block.custom_name = "{cba_name}[{i}]".format(cba_name=self.name, i=i)
@@ -59,6 +59,11 @@ class CBA(Compound):
 class Extender(CBA):
     def __init__(self, *targets):
         super(Extender, self).__init__(*[BlockShell(target.activator).activate() for target in targets])
+
+
+class IfFlow(CBA):
+    def __init__(self, condition, target):
+        super(IfFlow, self).__init__(condition, BlockShell(target.activator).activate())
 
 
 class Constant(Compound):

@@ -107,8 +107,10 @@ class LocationShell(CommandShell):
         This is used for conditionning in the condition unit.
         :param other: some block you want to test against.
         """
-        return self.testforblock(other.block_id)
-
+        try:
+            return self.testforblock(other.block_id)
+        except AttributeError:
+            return self.testforblock(other)
 
 class CompoundShell(LocationShell):
     """

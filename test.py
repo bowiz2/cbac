@@ -5,6 +5,8 @@ import block
 from blockspace import BlockSpace
 from compound import CBA, Extender, Constant, Memory
 import assembler
+from command_shell import BlockShell
+from constants.block_id import TRUE_BLOCK
 
 
 def test_block():
@@ -114,6 +116,14 @@ def test_build_direction():
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 
+
+def test_condition():
+    const = Constant(3)
+    cba = CBA(BlockShell(const.blocks[0]) == TRUE_BLOCK, "/say it is true.")
+    block_space = BlockSpace((8, 8, 8), const, cba)
+    schematic = assembler.build(block_space)
+    schematic.saveToFile(r'./schematics/test.schematic')
+
 # test_block()
 # test_compound()
 # test_blockspace()
@@ -124,3 +134,4 @@ def test_build_direction():
 # test_cba()
 # test_unit()
 # test_extender()
+test_condition()
