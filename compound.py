@@ -1,7 +1,7 @@
 from block import Block, CommandBlock
 from constants.block_id import FALSE_BLOCK
 from constants import cb_action, block_id
-from command_shell import BlockShell, CommandShell
+from command_shell import BlockShell, CommandShell, CommandSuspender
 
 
 class Compound(object):
@@ -75,9 +75,11 @@ class SwitchFlow(CBA):
         commands = list()
         for value, target in cases.items():
             commands.append(item.shell == value)
-            commands.append(target.activator.shell.activate())
+            try:
+                commands.append(target.activator.shell.activate())
+            except AttributeError:
+                commands.append(target)
         super(SwitchFlow, self).__init__(commands)
-
 
 class Constant(Compound):
     """
