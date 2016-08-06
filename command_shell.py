@@ -147,11 +147,5 @@ class CompoundShell(LocationShell):
                          if item is not None])
 
 
-def shell_factory(obj, blockspace):
-    """
-    Creates a shell for an object by its type. The shell is over a blockspace.
-    """
-
-
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell
