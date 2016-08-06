@@ -24,35 +24,45 @@ class BlockSpace(object):
         for compound in compounds:
             self.add_compound(compound)
 
-    def add_unit(self, unit):
+    def add_unit(self, unit, build_direction=direction.NORTH):
         """
         takes a unit and tries to place it in the blockspace.
         :param unit: dict of compounds and relative poistion
         """
         # TODO: cleanup mess.
-        if isinstance(unit, dict):
-            compounds_dict = unit
-        elif isinstance(unit, Unit):
-            compounds_dict = unit.compounds
+
+        if isinstance(unit, Unit):
+            compounds = unit.compounds
         else:
-            raise Exception("Unit is of an unknown type.")
+            compounds = unit
 
-        for unit_location in self.possible_locations_for(unit):
-            try:
-                compound_assigments = dict()
-                for compound, compound_location in compounds_dict.items():
-                    compound_assigments[compound] = dict(self.assign_coordinates(unit_location + compound_location, compound))
+        if isinstance(unit, dict):
+            for unit_location in self.possible_locations_for(unit):
+                try:
+                    compound_assigments = dict()
+                    for compound, compound_location in compounds.items():
+                        compound_assigments[compound] = dict(self.assign_coordinates(
+                            unit_location + compound_location,
+                            compound,
+                            build_direction
+                        ))
 
-                for compound, assigments in compound_assigments.items():
-                    self.add_blocks(assigments, compound.isolated)
-                    self.compounds[compound] = unit_location + compounds_dict[compound], assigments
+                    for compound, assigments in compound_assigments.items():
+                        self.add_blocks(assigments, compound.isolated, build_direction)
+                        self.compounds[compound] = unit_location + compounds[compound], assigments
+                    return
 
-                return
+                except AssignmentError:
+                    pass
+            raise Exception("Cant add unit.")
 
-            except AssignmentError:
-                pass
+        elif isinstance(compounds, list):
+            # TODO: make it when the compound fails will not f up the whole compounds.
+            for compound in compounds:
+                self.add_compound(compound)
 
-        raise Exception("Cant add unit.")
+        else:
+            raise Exception("Compounds are in an unknown format.")
 
     def add_compound(self, compound, location=None, build_direction=direction.NORTH):
         """
