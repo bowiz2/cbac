@@ -3,7 +3,7 @@ from block import CommandBlock
 from command_shell import CompoundShell
 import block
 from blockspace import BlockSpace
-from compound import CBA, Extender, Constant, Memory
+from compound import CBA, Extender, Constant, Memory, SwitchFlow
 import assembler
 from command_shell import BlockShell
 from constants.block_id import TRUE_BLOCK
@@ -124,8 +124,19 @@ def test_condition():
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 
+
+def test_flow():
+    constants = [Constant(i+3, buffer_size=8) for i in xrange(5)]
+    test_subject = Constant(5, buffer_size=8)
+    # TODO: fix isolation bug.
+    switch = SwitchFlow(test_subject, {constant: "/say It's {0}".format(constant.number) for constant in constants})
+    switch.isolated = True
+    block_space = BlockSpace((8, 20, 15), test_subject, *(constants + [switch]))
+    schematic = assembler.build(block_space)
+    schematic.saveToFile(r'./schematics/test.schematic')
+
 # test_block()
-# test_compound()
+# test_compound()w
 # test_blockspace()
 # test_get_area()
 # test_get_block_location()
@@ -134,4 +145,4 @@ def test_condition():
 # test_cba()
 # test_unit()
 # test_extender()
-test_condition()
+test_flow()

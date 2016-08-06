@@ -2,6 +2,7 @@ from block import Block, CommandBlock
 from constants.block_id import FALSE_BLOCK
 from constants import cb_action, block_id
 from command_shell import BlockShell, CompoundShell
+from utils import memoize
 
 
 class Compound(object):
@@ -11,6 +12,7 @@ class Compound(object):
         self.isolated = isolated
 
     @property
+    @memoize
     def shell(self):
         return CompoundShell(self)
 

@@ -162,11 +162,10 @@ class CompoundShell(LocationShell):
 
     @command(True)
     def testforblocks(self, other):
-        try:
-            location = other.location
-        except AttributeError:
-            # TODO: clone to area.
-            location = other
+        other = other.shell
+
+        location = other.location
+
         return "/clone {0} {1}".format(self.area, location)
 
     def __eq__(self, other):
