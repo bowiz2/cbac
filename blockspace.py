@@ -39,10 +39,14 @@ class BlockSpace(object):
 
         for unit_location in self.possible_locations_for(unit):
             try:
-                compound_assigments = {compound: dict(self.assign_coordinates(unit_location + compound_location, compound)) for compound, compound_location in compounds_dict.items()}
+                compound_assigments = dict()
+                for compound, compound_location in compounds_dict.items():
+                    compound_assigments[compound] = dict(self.assign_coordinates(unit_location + compound_location, compound))
+
                 for compound, assigments in compound_assigments.items():
                     self.add_blocks(assigments, compound.isolated)
                     self.compounds[compound] = unit_location + compounds_dict[compound], assigments
+
                 return
 
             except AssignmentError:
