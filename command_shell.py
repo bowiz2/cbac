@@ -91,6 +91,13 @@ class LocationShell(CommandShell):
     def deactivate(self):
         return self.setblock(FALSE_BLOCK)
 
+    def __eq__(self, other):
+        """
+        This is used for conditionning in the condition unit.
+        :param other: some block you want to test against.
+        """
+        return self.testforblock(other.block_id)
+
 
 class CompoundShell(LocationShell):
     """
