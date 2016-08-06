@@ -1,7 +1,7 @@
 from block import Block, CommandBlock
 from constants.block_id import FALSE_BLOCK
 from constants import cb_action, block_id
-from command_shell import BlockShell, CommandShell
+from command_shell import BlockShell, CompoundShell
 
 
 class Compound(object):
@@ -12,7 +12,7 @@ class Compound(object):
 
     @property
     def shell(self):
-        return CommandShell(self)
+        return CompoundShell(self)
 
 
 class CBA(Compound):
