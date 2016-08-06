@@ -13,18 +13,29 @@ class CommandSuspender(object):
         self.f_self = f_self
         self.args = args
         self.kwargs = kwargs
+        self.creates_condition = False
 
     def __call__(self):
         return self.f(self.f_self, *self.args, **self.kwargs)
 
 
-def command(f):
+def command(creates_condition=None):
     """
-    Makes this function a suspended method. decorator
+    :param creates_condition: whenever this command creates condition.
+    :return: command decorator.
     """
-    def _wrapper(self, *args, **kwargs):
-        return CommandSuspender(f, self, *args, **kwargs)
-    return _wrapper
+    def command_decorator(f):
+        """
+        Makes this function a suspended method. decorator
+        """
+        def _wrapper(self, *args, **kwargs):
+            sus = CommandSuspender(f, self, *args, **kwargs)
+            sus.creates_condition = creates_condition
+            return sus
+
+        return _wrapper
+
+    return command_decorator
 
 
 class CommandShell(object):
@@ -67,7 +78,7 @@ class LocationShell(CommandShell):
     def get_relative_location(self, thing):
         return self._location - self.blockspace.get_location_of(thing)
 
-    @command
+    @command(True)
     def testforblock(self, block_id, data_value=None, tags=None):
         """
         Test if this location object is of the certain type.
@@ -76,7 +87,7 @@ class LocationShell(CommandShell):
                          ["/testforblock", self.location, block_names[block_id], data_value, tags]
                          if item is not None])
 
-    @command
+    @command()
     def setblock(self, block_id, data_value=None, block_handling=None, tags=None):
         """
         Clone this compound to another area.
@@ -123,7 +134,7 @@ class CompoundShell(LocationShell):
         point_a, point_b = self._area
         return (point_a - self.blockspace.get_location_of(thing)), (point_b - self.blockspace.get_location_of(thing))
 
-    @command
+    @command()
     def clone(self, other):
         """
         Clone this compound to another area.
@@ -136,7 +147,7 @@ class CompoundShell(LocationShell):
 
         return "/clone {} {}".format(self.area, location)
 
-    @command
+    @command()
     def fill(self, block_id, data_value=None, block_handling=None, tags=None):
         """
         Clone this compound to another area.
