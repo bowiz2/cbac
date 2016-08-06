@@ -79,7 +79,7 @@ class SwitchFlow(CBA):
                 commands.append(target.activator.shell.activate())
             except AttributeError:
                 commands.append(target)
-        super(SwitchFlow, self).__init__(commands)
+        super(SwitchFlow, self).__init__(*commands)
 
 class Constant(Compound):
     """
