@@ -1,7 +1,7 @@
 from block import Block, CommandBlock
 from constants.block_id import FALSE_BLOCK
 from constants import cb_action, block_id
-from command_shell import BlockShell
+from command_shell import BlockShell, CommandShell
 
 
 class Compound(object):
@@ -9,6 +9,10 @@ class Compound(object):
     def __init__(self, blocks, isolated=False):
         self.blocks = blocks
         self.isolated = isolated
+
+    @property
+    def shell(self):
+        return CommandShell(self)
 
 
 class CBA(Compound):
@@ -63,15 +67,15 @@ class Extender(CBA):
 
 class IfFlow(CBA):
     def __init__(self, condition, target):
-        super(IfFlow, self).__init__(condition, BlockShell(target.activator).activate())
+        super(IfFlow, self).__init__(condition, target.activator.shell.activate())
 
 
 class SwitchFlow(CBA):
-    def __init__(self, cases):
+    def __init__(self, item, cases):
         commands = list()
-        for condition, target in cases.items():
-            commands.append(condition)
-            commands.append(BlockShell(target.activator).activate())
+        for value, target in cases.items():
+            commands.append(item.shell == value)
+            commands.append(target.activator.shell.activate())
         super(SwitchFlow, self).__init__(commands)
 
 
