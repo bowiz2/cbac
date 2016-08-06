@@ -23,14 +23,23 @@ class CBA(Compound):
         self.name = "CBA_n{0}".format(self.cba_id)
         self.activator = Block(FALSE_BLOCK)
 
-        blocks = list(self._gen_cb_chain(list(commands) + [BlockShell(self.activator).deactivate()]))
+        blocks = list(self._gen_cb_chain(list(commands)))
 
         # create activator block.
 
-        blocks = [self.activator] + blocks
+        blocks = [self.activator] + blocks + [BlockShell(self.activator).deactivate()]
 
         for i, block in enumerate(blocks):
             block.custom_name = "{cba_name}[{i}]".format(cba_name=self.name, i=i)
+            try:
+                if block.command.creates_condition:
+                    # make the next block conditional.
+                    next_block = blocks[i+1]
+                    next_block.conditional = True
+            except IndexError:
+                pass  # if there is not next block.
+            except AttributeError:
+                pass # in-case this was not a command block or the next block had no conditional option.
 
         super(CBA, self).__init__(blocks, isolated=True)
 
