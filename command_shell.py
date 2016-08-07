@@ -8,15 +8,19 @@ ALL_ENTITIES = '@e'
 
 
 class CommandSuspender(object):
-    def __init__(self, f, f_self, *args, **kwargs):
-        self.f = f
-        self.f_self = f_self
+    def __init__(self, command_shell, command_function, *args, **kwargs):
+        # The command shell which created the command.
+        self.command_shell = command_shell
+        # The actual command function which was suspended.
+        self.command_function = command_function
+        # The args which will be used when the command function will be resumed
         self.args = args
         self.kwargs = kwargs
+        # If the command creates conditioning for other commands. testforblock for example, creates conditioning.
         self.creates_condition = False
 
     def __call__(self):
-        return self.f(self.f_self, *self.args, **self.kwargs)
+        return self.command_function(self.command_shell, *self.args, **self.kwargs)
 
 
 def command(creates_condition=None):
@@ -29,7 +33,7 @@ def command(creates_condition=None):
         Makes this function a suspended method. decorator
         """
         def _wrapper(self, *args, **kwargs):
-            sus = CommandSuspender(f, self, *args, **kwargs)
+            sus = CommandSuspender(self, f, *args, **kwargs)
             sus.creates_condition = creates_condition
             return sus
 
