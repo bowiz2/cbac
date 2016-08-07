@@ -5,6 +5,7 @@ from unit import Unit
 
 DEF_BUILD_DIRECTION = direction.NORTH
 
+
 class BlockSpace(object):
     """
     Logical representation of blocks in the world
