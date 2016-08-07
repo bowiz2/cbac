@@ -2,41 +2,6 @@ from constants.block_id import TRUE_BLOCK, FALSE_BLOCK
 from constants.block_id import names as block_names
 
 
-class CommandSuspender(object):
-    def __init__(self, command_shell, command_function, *args, **kwargs):
-        # The command shell which created the command.
-        self.command_shell = command_shell
-        # The actual command function which was suspended.
-        self.command_function = command_function
-        # The args which will be used when the command function will be resumed
-        self.args = args
-        self.kwargs = kwargs
-        # If the command creates conditioning for other commands. testforblock for example, creates conditioning.
-        self.creates_condition = False
-
-    def __call__(self):
-        return self.command_function(self.command_shell, *self.args, **self.kwargs)
-
-
-def command(creates_condition=None):
-    """
-    :param creates_condition: whenever this command creates condition.
-    :return: command decorator.
-    """
-    def command_decorator(f):
-        """
-        Makes this function a suspended method. decorator
-        """
-        def _wrapper(self, *args, **kwargs):
-            sus = CommandSuspender(self, f, *args, **kwargs)
-            sus.creates_condition = creates_condition
-            return sus
-
-        return _wrapper
-
-    return command_decorator
-
-
 class CommandShell(object):
     """
     A command shell is a wrapper object which wrapes some object,
@@ -175,6 +140,43 @@ class CompoundShell(LocationShell):
         :return: CommandSuspender
         """
         return self.testforblocks(other)
+
+
+class CommandSuspender(object):
+    def __init__(self, command_shell, command_function, *args, **kwargs):
+        # The command shell which created the command.
+        self.command_shell = command_shell
+        # The actual command function which was suspended.
+        self.command_function = command_function
+        # The args which will be used when the command function will be resumed
+        self.args = args
+        self.kwargs = kwargs
+        # If the command creates conditioning for other commands. testforblock for example, creates conditioning.
+        self.creates_condition = False
+
+    def __call__(self):
+        return self.command_function(self.command_shell, *self.args, **self.kwargs)
+
+
+def command(creates_condition=None):
+    """
+    :param creates_condition: whenever this command creates condition.
+    :return: command decorator.
+    """
+
+    def command_decorator(f):
+        """
+        Makes this function a suspended method. decorator
+        """
+
+        def _wrapper(self, *args, **kwargs):
+            sus = CommandSuspender(self, f, *args, **kwargs)
+            sus.creates_condition = creates_condition
+            return sus
+
+        return _wrapper
+
+    return command_decorator
 
 
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
