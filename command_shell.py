@@ -8,19 +8,34 @@ class CommandShell(object):
     and provides some functionality which later can be used with command blocks.
     operates on a block space.
     """
-    def __init__(self, wrapped, blockspace=None, executor=None):
+    def __init__(self, wrapped, context=None):
         """
         :param wrapped: The object which this command shell is wrapping.
         :param blockspace: The blockspace the wrapped object is located at. will be bound later by the assembler.
         :param executor: the place from where the commands will be executed. will be bound later by the assembler.
         """
-        self. wrapped = wrapped
-        self.blockspace = blockspace
-        self.executor = executor
+        self.wrapped = wrapped
+        # Coupling.
+        if not isinstance(context, ShellContext):
+            context = ShellContext(*context)
+        self.context = context
 
     @command
     def raw(self, cmd):
         return cmd
+
+
+class ShellContext(object):
+    """
+    A context is the state from which the commands in the command shell are compiled.
+    """
+    def __init__(self, blockspace, executor):
+        """
+        :param blockspace: The blockspace the wrapped object is located at. will be bound later by the assembler.
+        :param executor: the place from where the commands will be executed. will be bound later by the assembler.
+        """
+        self.blockspace = blockspace
+        self.executor = executor
 
 
 class LocationShell(CommandShell):
