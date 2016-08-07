@@ -3,6 +3,7 @@ from constants import direction
 from constants.block_id import ISOLATORS
 from unit import Unit
 
+
 class BlockSpace(object):
     """
     Logical representation of blocks in the world
@@ -21,8 +22,10 @@ class BlockSpace(object):
         self.entities = dict()
         # holds to which side each block is faced to.
 
-        for compound in compounds:
+        print "compiling..."
+        for i, compound in enumerate(compounds):
             self.add_compound(compound)
+            print i, '/', len(compounds)
 
     def add_unit(self, unit, build_direction=direction.NORTH):
         """
@@ -64,7 +67,7 @@ class BlockSpace(object):
         else:
             raise Exception("Compounds are in an unknown format.")
 
-    def add_compound(self, compound, location=None, build_direction=direction.NORTH):
+    def add_compound(self, compound, location=None, build_direction=direction.WEST):
         """
         Mainly, Generate the blocks of that compound to the block dict.
         """
