@@ -142,6 +142,15 @@ class CompoundShell(LocationShell):
         return self.testforblocks(other)
 
 
+class MemoryShell(CompoundShell):
+    @command()
+    def reset(self):
+        """
+        Set the memory to zero.
+        """
+        self.fill(FALSE_BLOCK)
+
+
 class CommandSuspender(object):
     def __init__(self, command_shell, command_function, *args, **kwargs):
         # The command shell which created the command.
