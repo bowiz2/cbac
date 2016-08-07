@@ -2,6 +2,7 @@ from constants import block_id as ids
 from constants import cb_action
 from constants import direction
 from command_shell import BlockShell
+from utils import memoize
 
 class Block(object):
     """
@@ -18,8 +19,10 @@ class Block(object):
         self.has_tile_entity = has_tile_entity
 
     @property
+    @memoize
     def shell(self):
         return BlockShell(self)
+
 
 class CommandBlock(Block):
     """

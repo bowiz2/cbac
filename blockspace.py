@@ -27,7 +27,7 @@ class BlockSpace(object):
         print "compiling..."
         for i, compound in enumerate(compounds):
             self.add_compound(compound)
-            print i, '/', len(compounds)
+            print i+1, '/', len(compounds)
 
     def add_unit(self, unit, build_direction=DEF_BUILD_DIRECTION):
         """
@@ -181,22 +181,27 @@ class BlockSpace(object):
         return True
 
     # Getters
-    def get_area_of(self, compound):
+    def get_area_of(self, item):
         """
         Gets the area of a compound.
         """
-        location, blocks = self.compounds[compound]
-        block_locations = [self.blocks[block] for block in blocks]
-        # TODO: remove code duplication.
-        min_x = sorted(block_locations, key=lambda item: item[0])[0].x
-        min_y = sorted(block_locations, key=lambda item: item[1])[0].y
-        min_z = sorted(block_locations, key=lambda item: item[2])[0].z
+        try:
+            location, blocks = self.compounds[item]
 
-        max_x = sorted(block_locations, key=lambda item: item[0])[-1].x
-        max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
-        max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
+            block_locations = [self.blocks[block] for block in blocks]
+            # TODO: remove code duplication.
+            min_x = sorted(block_locations, key=lambda item: item[0])[0].x
+            min_y = sorted(block_locations, key=lambda item: item[1])[0].y
+            min_z = sorted(block_locations, key=lambda item: item[2])[0].z
 
-        return Vector(min_x, min_y, min_z), Vector(max_x, max_y, max_z)
+            max_x = sorted(block_locations, key=lambda item: item[0])[-1].x
+            max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
+            max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
+
+            return Vector(min_x, min_y, min_z), Vector(max_x, max_y, max_z)
+        except KeyError:
+            location = self.blocks[item]
+            return location, location
 
     def get_location_of(self, item):
         """
