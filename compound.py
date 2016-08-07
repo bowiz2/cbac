@@ -123,4 +123,4 @@ class Memory(Compound):
         super(Memory, self).__init__(list(), isolated=True)
 
         for i in xrange(size):
-            self.blocks.append(Block(block_id.EMPTY_BLOCK))
+            self.blocks.append(Block(block_id.FALSE_BLOCK))
