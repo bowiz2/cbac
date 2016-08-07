@@ -3,6 +3,7 @@ from constants import direction
 from constants.block_id import ISOLATORS
 from unit import Unit
 
+DEF_BUILD_DIRECTION = direction.NORTH
 
 class BlockSpace(object):
     """
@@ -27,7 +28,7 @@ class BlockSpace(object):
             self.add_compound(compound)
             print i, '/', len(compounds)
 
-    def add_unit(self, unit, build_direction=direction.NORTH):
+    def add_unit(self, unit, build_direction=DEF_BUILD_DIRECTION):
         """
         takes a unit and tries to place it in the blockspace.
         :param unit: dict of compounds and relative poistion
@@ -67,7 +68,7 @@ class BlockSpace(object):
         else:
             raise Exception("Compounds are in an unknown format.")
 
-    def add_compound(self, compound, location=None, build_direction=direction.WEST):
+    def add_compound(self, compound, location=None, build_direction=DEF_BUILD_DIRECTION):
         """
         Mainly, Generate the blocks of that compound to the block dict.
         """
@@ -91,7 +92,7 @@ class BlockSpace(object):
                 pass
         raise Exception("Can't add compound {0} to this block space.".format(compound))
 
-    def add_blocks(self, blocks, isolated=False, build_direction=None):
+    def add_blocks(self, blocks, isolated=False, build_direction=DEF_BUILD_DIRECTION):
         for block, coordinate in blocks.items():
             # TODO: think if it is good for here.
             try:
@@ -109,16 +110,6 @@ class BlockSpace(object):
         """
         location = Vector(*location)
         self.entities[entity] = location
-
-    def is_location_out_of_bounds(self, location):
-        """
-        Check if a location is not outside of the bounds of this block-space.
-        """
-        for location_d, size_d in zip(location, self.size):
-            if location_d < 0:
-                return True
-            if location_d > size_d - 1:
-                return True
 
     def possible_locations_for(self, obj):
         """
@@ -161,6 +152,17 @@ class BlockSpace(object):
 
             yield block, assigned_location
 
+    # Checkers
+    def is_location_out_of_bounds(self, location):
+        """
+        Check if a location is not outside of the bounds of this block-space.
+        """
+        for location_d, size_d in zip(location, self.size):
+            if location_d < 0:
+                return True
+            if location_d > size_d - 1:
+                return True
+
     def is_isolated(self, location):
         """
         Check if a location is isolated from other redstone sources.
@@ -177,6 +179,7 @@ class BlockSpace(object):
 
         return True
 
+    # Getters
     def get_area_of(self, compound):
         """
         Gets the area of a compound.
