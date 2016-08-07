@@ -1,10 +1,5 @@
 from constants.block_id import TRUE_BLOCK, FALSE_BLOCK
 from constants.block_id import names as block_names
-# Selectors
-NEAREST_PLAYER = '@p'
-RANDOM_PLAYER = '@r'
-ALL_PLAYERS = '@a'
-ALL_ENTITIES = '@e'
 
 
 class CommandSuspender(object):
