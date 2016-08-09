@@ -126,14 +126,21 @@ def test_condition():
 
 
 def test_flow():
-    constants = [Constant(i, buffer_size=8) for i in xrange(5)]
+    def msg(something):
+        return "/say {}".format(something)
+
     memory = Memory(8)
     # TODO: fix isolation bug.
-    switch = SwitchFlow(memory, {constant: "/say It's {0}".format(constant.number) for constant in constants})
+    switch = SwitchFlow(memory, {
+        Constant(0): msg("Empty :("),
+        Constant(1): msg("Wow 1 is so nice."),
+        Constant(2): msg("2 is so much better"),
+        Constant(3): msg("3 is ruller!")
+    })
 
 
     switch.isolated = True
-    block_space = BlockSpace((15, 20, 15), memory, *(constants + [switch]))
+    block_space = BlockSpace((15, 20, 15), memory, *(switch.comparables + [switch]))
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 

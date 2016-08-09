@@ -75,12 +75,14 @@ class IfFlow(CBA):
 class SwitchFlow(CBA):
     def __init__(self, item, cases):
         commands = list()
+        self.comparables = list()
         for value, target in cases.items():
             commands.append(item.shell == value)
             try:
                 commands.append(target.activator.shell.activate())
             except AttributeError:
                 commands.append(target)
+            self.comparables.append(value)
         super(SwitchFlow, self).__init__(*commands)
 
 
@@ -88,7 +90,7 @@ class Constant(Compound):
     """
     When compiled, holds the binary representation of a number.
     """
-    def __init__(self, number, buffer_size=None):
+    def __init__(self, number, buffer_size=8):
         """
         :param number: The constat value you want to store in the world
         :param buffer_size: the number of the blocks will be completed to this size if exits.
