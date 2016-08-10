@@ -1,9 +1,13 @@
 import random
 from unittest import TestCase
+from .const import SCHEMATIC_FORMAT
+
 
 import block
-from compound import Compound, Constant, Memory
+from compound import Compound, Constant, Memory, CBA, Extender
+from blockspace import BlockSpace
 from constants.block_id import FALSE_BLOCK
+import assembler
 
 
 class TestCompound(TestCase):
@@ -35,3 +39,14 @@ class TestCompound(TestCase):
 
         for i in xrange(BITS):
             self.assertEqual(memory.blocks[i].block_id, FALSE_BLOCK)
+
+    def test_extender(self):
+        cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
+        cba2 = CBA("/say this is totaly a new cba", "/say really.")
+        ext = Extender(cba, cba2)
+
+        block_space = BlockSpace((8, 8, 8), cba, cba2, ext)
+
+        schematic = assembler.build(block_space)
+        schematic.saveToFile(SCHEMATIC_FORMAT.format(self.__class__.__name__, self.test_extender.__name__))
+
