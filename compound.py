@@ -63,17 +63,18 @@ class CBA(Compound):
         return self.name
 
 
-class Extender(CBA):
-    def __init__(self, *targets):
-        super(Extender, self).__init__(*[BlockShell(target.activator).activate() for target in targets])
-
-
 class IfFlow(CBA):
+    """
+    Target is activated when the condition command is sucsessfull.
+    """
     def __init__(self, condition, target):
         super(IfFlow, self).__init__(condition, target.activator.shell.activate())
 
 
 class SwitchFlow(CBA):
+    """
+    Switches to a case given an item.
+    """
     def __init__(self, item, cases):
         commands = list()
         self.comparables = list()
@@ -87,6 +88,14 @@ class SwitchFlow(CBA):
         super(SwitchFlow, self).__init__(*commands)
 
 
+class Extender(CBA):
+    """
+    When you activate this CBA, it will activate all the targets.
+    """
+    def __init__(self, *targets):
+        super(Extender, self).__init__(*[BlockShell(target.activator).activate() for target in targets])
+
+
 class Constant(Compound):
     """
     When compiled, holds the binary representation of a number.
@@ -94,7 +103,7 @@ class Constant(Compound):
 
     def __init__(self, number, buffer_size=8):
         """
-        :param number: The constat value you want to store in the world
+        :param number: The constat value you want to store in the world, the bits of the consstant represent this number,
         :param buffer_size: the number of the blocks will be completed to this size if exits.
         """
         super(Constant, self).__init__(list(), isolated=False)
@@ -124,7 +133,7 @@ class Memory(Compound):
         """
         :param size: Size of the memory in bits.
         """
-        self.size = 0
+        self.size = size
         super(Memory, self).__init__(list(), isolated=True)
 
         for i in xrange(size):
