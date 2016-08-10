@@ -8,21 +8,17 @@ from compound import CBA, Extender, Constant, Memory, SwitchFlow
 from compound import Compound
 from constants.block_id import TRUE_BLOCK
 from unit import OrUnit, NotUnit
+from unittest import TestCase
 
 
-def test_block():
-    cb = block.CommandBlock("/say hello", facing=block.direction.SOUTH, action=block.cb_action.CHAIN)
-    redstone = block.Block(block.ids.REDSTONE_BLOCK)
+class TestBlock(TestCase):
+    def test_block(self):
+        cb = block.CommandBlock("/say hello", facing=block.direction.SOUTH, action=block.cb_action.CHAIN)
+        redstone = block.Block(block.ids.REDSTONE_BLOCK)
 
 
-def test_compound():
+class TestCompound(TestCase):
     cp = Compound([block.Block(1), block.Block(1)])
-    const = Constant(28)
-    for bit, b in zip(const.bits, const.blocks):
-        if bit:
-            assert b.block_id == block.ids.TRUE_BLOCK
-        else:
-            assert b.block_id == block.ids.FALSE_BLOCK
 
 
 def test_blockspace():
