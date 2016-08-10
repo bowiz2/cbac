@@ -9,6 +9,7 @@ from command_shell import BlockShell
 from constants.block_id import TRUE_BLOCK
 from unit import OrUnit, NotUnit
 
+
 def test_block():
     cb = block.CommandBlock("/say hello", facing=block.direction.SOUTH, action=block.cb_action.CHAIN)
     redstone = block.Block(block.ids.REDSTONE_BLOCK)
@@ -28,7 +29,7 @@ def test_blockspace():
     bs = BlockSpace((200, 200, 200))
     TEST_SIZE = 10
     for i in xrange(TEST_SIZE):
-        bs.add_compound(Constant(i+1))
+        bs.add_compound(Constant(i + 1))
         # Some bugs found.
     assert len(bs.compounds) == TEST_SIZE
 
@@ -43,7 +44,6 @@ def test_blockspace():
 
 
 def test_get_area():
-
     mem = Memory(8)
     bs = BlockSpace((200, 200, 200), mem)
     area = bs.get_area_of(mem)
@@ -71,7 +71,7 @@ def test_commands():
 
 def test_assembler():
     cbs = Compound([CommandBlock("/say what")], isolated=True)
-    constants = [Constant(i+5, 8) for i in xrange(7)]
+    constants = [Constant(i + 5, 8) for i in xrange(7)]
     block_space = BlockSpace((8, 8, 8), cbs, *constants)
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
@@ -138,22 +138,25 @@ def test_flow():
         Constant(3): msg("3 is ruller!")
     })
 
-
     switch.isolated = True
     block_space = BlockSpace((15, 20, 15), memory, *(switch.comparables + [switch]))
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
+
+
 def test_or():
-    u = OrUnit(4);
+    u = OrUnit(4)
     block_space = BlockSpace((30, 10, 30), *u.compounds)
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
 
+
 def test_not():
-    u = NotUnit(4);
+    u = NotUnit(4)
     block_space = BlockSpace((30, 10, 30), *u.compounds)
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
+
 
 # test_block()
 # test_compound()w
@@ -167,4 +170,4 @@ def test_not():
 # test_extender()
 # test_flow()
 # test_or()
-test_not()
+# test_not()
