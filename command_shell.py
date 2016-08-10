@@ -133,7 +133,7 @@ class LocationShell(CommandShell):
     @command()
     def setblock(self, block_id, data_value=None, block_handling=None, tags=None):
         """
-        Clone this compound to another area.
+        Sets a block to a new block id
         """
         return " ".join([str(item) for item in
                          ["/setblock", self.location, block_names[block_id], data_value, block_handling, tags]
@@ -160,7 +160,6 @@ class LocationShell(CommandShell):
             return self.testforblock(other.block_id)
         except AttributeError:
             return self.testforblock(other)
-
 
 class CompoundShell(LocationShell):
     """
@@ -215,12 +214,11 @@ class CompoundShell(LocationShell):
 
 
 class MemoryShell(CompoundShell):
-    @command()
     def reset(self):
         """
         Set the memory to zero.
         """
-        self.fill(FALSE_BLOCK)
+        return self.fill(FALSE_BLOCK)
 
 
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.

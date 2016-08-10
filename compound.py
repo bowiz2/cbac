@@ -1,5 +1,5 @@
 from block import Block, CommandBlock
-from command_shell import BlockShell, CompoundShell
+from command_shell import BlockShell, CompoundShell, MemoryShell
 from constants import cb_action, block_id
 from constants.block_id import FALSE_BLOCK
 from utils import memoize
@@ -16,7 +16,6 @@ class Compound(object):
     @memoize
     def shell(self):
         return CompoundShell(self)
-
 
 class CBA(Compound):
     """
@@ -138,3 +137,8 @@ class Memory(Compound):
 
         for i in xrange(size):
             self.blocks.append(Block(block_id.FALSE_BLOCK))
+
+    @property
+    @memoize
+    def shell(self):
+        return MemoryShell(self)
