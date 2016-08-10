@@ -1,6 +1,5 @@
 import random
 from unittest import TestCase
-from .const import SCHEMATIC_FORMAT
 
 
 import block
@@ -48,5 +47,5 @@ class TestCompound(TestCase):
         block_space = BlockSpace((8, 8, 8), cba, cba2, ext)
 
         schematic = assembler.build(block_space)
-        schematic.saveToFile(SCHEMATIC_FORMAT.format(self.__class__.__name__, self.test_extender.__name__))
+
 

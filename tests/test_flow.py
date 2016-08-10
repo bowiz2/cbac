@@ -2,23 +2,22 @@ import assembler
 from blockspace import BlockSpace
 from compound import Memory, SwitchFlow, Constant, CBA
 from unittest import TestCase
-from .const import SCHEMATIC_FORMAT
 from constants.block_id import TRUE_BLOCK
-
+from .decorators import save_schematic
 
 class TestFlow(TestCase):
     """
     Tests control flow.
     """
-
+    @save_schematic
     def test_condition(self):
         const = Constant(3)
         cba = CBA(const.blocks[0].shell == TRUE_BLOCK, "/say it is true.")
         block_space = BlockSpace((8, 8, 8), const, cba)
         schematic = assembler.build(block_space)
-        schematic.saveToFile(
-            SCHEMATIC_FORMAT.format(self.__class__.__name__, self.test_condition.__name__))
+        return schematic
 
+    @save_schematic
     def test_switch(self):
         def msg(something):
             return "/say {}".format(something)
@@ -35,5 +34,4 @@ class TestFlow(TestCase):
         switch.isolated = True
         block_space = BlockSpace((15, 20, 15), memory, *(switch.comparables + [switch]))
         schematic = assembler.build(block_space)
-        schematic.saveToFile(
-            SCHEMATIC_FORMAT.format(self.__class__.__name__, self.test_switch.__name__))
+        return schematic
