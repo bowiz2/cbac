@@ -11,59 +11,6 @@ from unit import OrUnit, NotUnit
 from unittest import TestCase
 
 
-class TestBlock(TestCase):
-    def test_block(self):
-        cb = block.CommandBlock("/say hello", facing=block.direction.SOUTH, action=block.cb_action.CHAIN)
-        redstone = block.Block(block.ids.REDSTONE_BLOCK)
-
-
-class TestCompound(TestCase):
-    cp = Compound([block.Block(1), block.Block(1)])
-
-
-def test_blockspace():
-    bs = BlockSpace((200, 200, 200))
-    TEST_SIZE = 10
-    for i in xrange(TEST_SIZE):
-        bs.add_compound(Constant(i + 1))
-        # Some bugs found.
-    assert len(bs.compounds) == TEST_SIZE
-
-    bs = BlockSpace((200, 200, 200))
-
-    MEMORY_SIZE = 8
-
-    for i in xrange(TEST_SIZE):
-        bs.add_compound(Memory(MEMORY_SIZE))
-        # Some bugs found.
-    assert len(bs.blocks) == MEMORY_SIZE * TEST_SIZE
-
-
-def test_get_area():
-    mem = Memory(8)
-    bs = BlockSpace((200, 200, 200), mem)
-    area = bs.get_area_of(mem)
-    assert area == ((0, 0, 0), (0, 0, 7))
-
-
-def test_get_block_location():
-    mem = Memory(8)
-    bs = BlockSpace((200, 200, 200), mem)
-    loc = bs.get_location_of(mem.blocks[2])
-    assert loc == (0, 0, 2)
-
-
-def test_commands():
-    mem = Memory(8)
-    cb = CommandBlock("/say what")
-    cbs = Compound([cb], isolated=True)
-    block_space = BlockSpace((8, 8, 8), mem, cbs)
-    shl = CompoundShell(mem, block_space, cb)
-    cb.command = shl.fill(block.ids.GLASS_BLOCK)
-
-    schematic = assembler.build(block_space)
-    schematic.saveToFile(r'./schematics/test.schematic')
-
 
 def test_assembler():
     cbs = Compound([CommandBlock("/say what")], isolated=True)
