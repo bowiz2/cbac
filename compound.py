@@ -17,6 +17,7 @@ class Compound(object):
     def shell(self):
         return CompoundShell(self)
 
+
 class CBA(Compound):
     """
     Command Block Array
@@ -66,6 +67,7 @@ class IfFlow(CBA):
     """
     Target is activated when the condition command is sucsessfull.
     """
+
     def __init__(self, condition, target):
         super(IfFlow, self).__init__(condition, target.activator.shell.activate())
 
@@ -74,6 +76,7 @@ class SwitchFlow(CBA):
     """
     Switches to a case given an item.
     """
+
     def __init__(self, item, cases):
         commands = list()
         self.comparables = list()
@@ -91,6 +94,7 @@ class Extender(CBA):
     """
     When you activate this CBA, it will activate all the targets.
     """
+
     def __init__(self, *targets):
         super(Extender, self).__init__(*[BlockShell(target.activator).activate() for target in targets])
 

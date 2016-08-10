@@ -1,9 +1,9 @@
 from unittest import TestCase
-from unit import ReverseUnit, NotUnit, OrUnit
-import assembler
-from blockspace import BlockSpace
-import unit
 
+import assembler
+import unit
+from blockspace import BlockSpace
+from unit import ReverseUnit, NotUnit
 from .decorators import save_schematic
 
 

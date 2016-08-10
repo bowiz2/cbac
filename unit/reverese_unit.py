@@ -18,7 +18,7 @@ class ReverseUnit(Unit):
 
         for index in xrange(self.bits):
             commands.append(self.input_a.blocks[index].shell == True)
-            commands.append(self.output.blocks[self.bits-index -1 ].shell.activate())
+            commands.append(self.output.blocks[self.bits - index - 1].shell.activate())
 
         self.cba = CBA(*commands)
 

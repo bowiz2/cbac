@@ -1,12 +1,11 @@
 import random
 from unittest import TestCase
 
-
-import block
-from compound import Compound, Constant, Memory, CBA, Extender
-from blockspace import BlockSpace
-from constants.block_id import FALSE_BLOCK
 import assembler
+import block
+from blockspace import BlockSpace
+from compound import Compound, Constant, Memory, CBA, Extender
+from constants.block_id import FALSE_BLOCK
 
 
 class TestCompound(TestCase):
@@ -47,5 +46,3 @@ class TestCompound(TestCase):
         block_space = BlockSpace((8, 8, 8), cba, cba2, ext)
 
         schematic = assembler.build(block_space)
-
-

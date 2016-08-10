@@ -161,6 +161,7 @@ class LocationShell(CommandShell):
         except AttributeError:
             return self.testforblock(other)
 
+
 class CompoundShell(LocationShell):
     """
     Provides commands for manipulating compounds inside Minecraft.

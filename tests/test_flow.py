@@ -1,14 +1,17 @@
+from unittest import TestCase
+
 import assembler
 from blockspace import BlockSpace
 from compound import Memory, SwitchFlow, Constant, CBA
-from unittest import TestCase
 from constants.block_id import TRUE_BLOCK
 from .decorators import save_schematic
+
 
 class TestFlow(TestCase):
     """
     Tests control flow.
     """
+
     @save_schematic
     def test_condition(self):
         const = Constant(3)

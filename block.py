@@ -1,4 +1,4 @@
-from command_shell import CompoundShell, BlockShell
+from command_shell import BlockShell
 from constants import block_id as ids
 from constants import cb_action
 from constants import direction

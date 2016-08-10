@@ -22,4 +22,3 @@ class NotUnit(Unit):
         self.cba = CBA(*commands)
 
         self.compounds = [self.input, self.output, self.cba]
-
