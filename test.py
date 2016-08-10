@@ -7,7 +7,7 @@ from compound import CBA, Extender, Constant, Memory, SwitchFlow
 import assembler
 from command_shell import BlockShell
 from constants.block_id import TRUE_BLOCK
-
+from unit import OrUnit, NotUnit
 
 def test_block():
     cb = block.CommandBlock("/say hello", facing=block.direction.SOUTH, action=block.cb_action.CHAIN)
@@ -143,6 +143,17 @@ def test_flow():
     block_space = BlockSpace((15, 20, 15), memory, *(switch.comparables + [switch]))
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
+def test_or():
+    u = OrUnit(4);
+    block_space = BlockSpace((30, 10, 30), *u.compounds)
+    schematic = assembler.build(block_space)
+    schematic.saveToFile(r'./schematics/test.schematic')
+
+def test_not():
+    u = NotUnit(4);
+    block_space = BlockSpace((30, 10, 30), *u.compounds)
+    schematic = assembler.build(block_space)
+    schematic.saveToFile(r'./schematics/test.schematic')
 
 # test_block()
 # test_compound()w
@@ -154,4 +165,6 @@ def test_flow():
 # test_cba()
 # test_unit()
 # test_extender()
-test_flow()
+# test_flow()
+# test_or()
+test_not()

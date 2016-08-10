@@ -119,7 +119,7 @@ class LocationShell(CommandShell):
 
         return " ".join(ds)
 
-    @command(True)
+    @command(creates_condition=True)
     def testforblock(self, block_id, data_value=None, tags=None):
         """
         Test if this location object is of the certain type.
@@ -148,6 +148,12 @@ class LocationShell(CommandShell):
         This is used for conditionning in the condition unit.
         :param other: some block you want to test against.
         """
+        # Work only with boolean values.
+        if other is True:
+            other = TRUE_BLOCK
+        elif other is False:
+            other = FALSE_BLOCK
+
         try:
             return self.testforblock(other.block_id)
         except AttributeError:
@@ -212,7 +218,6 @@ class MemoryShell(CompoundShell):
         Set the memory to zero.
         """
         self.fill(FALSE_BLOCK)
-
 
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell
