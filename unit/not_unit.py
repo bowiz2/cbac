@@ -20,4 +20,4 @@ class NotUnit(Unit):
 
         self.cba = CBA(*commands)
 
-        self.compounds = [self.input_a, self.input_b, self.output, self.cba]
+        self.compounds = [self.input_a, self.output, self.cba]
