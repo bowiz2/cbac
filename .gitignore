@@ -1,2 +1,2 @@
 .idea/
-/schematics/test.schematic
+*.schematic
