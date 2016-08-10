@@ -39,6 +39,7 @@ class CommandStats(object):
     """
     Information identifying scoreboard parameters to modify relative to the last command run
     """
+
     def __init__(self, success_count_objective=None, success_count_name=None, affected_blocks_objective=None,
                  affected_blocks_name=None, affected_entities_objective=None, affected_entities_name=None,
                  affected_items_objective=None, affected_items_name=None, query_result_objective=None,

@@ -1,6 +1,7 @@
-from unit import Unit
-from compound import Memory, Constant
 from compound import CBA
+from compound import Memory
+from unit import Unit
+
 
 class NotUnit(Unit):
     def __init__(self, bits=8):

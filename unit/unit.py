@@ -1,6 +1,6 @@
 import command_shell
-from compound import Compound
 from block import Block
+from compound import Compound
 
 
 class Unit(object):

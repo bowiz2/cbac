@@ -16,7 +16,6 @@ class Vector(namedtuple('Vector', ['x', 'y', 'z'])):
     def __mul__(self, other):
         return Vector(*[i * other for i in self])
 
-
     def is_adjacent(self, other):
         """
         Takes other vector and check if it is adjacent to this location.
@@ -25,8 +24,10 @@ class Vector(namedtuple('Vector', ['x', 'y', 'z'])):
             if self == other + direction_vector:
                 return True
         return False
+
+
 # TODO: think of something better for the adjacency.
-directions =[
+directions = [
     Vector(0, 1, 0),
     Vector(0, -1, 0),
     Vector(0, 0, 1),
@@ -37,15 +38,15 @@ directions =[
 Location = Vector
 
 
-import time
-
 def memoize(function):
-  memo = {}
-  def wrapper(*args):
-    if args in memo:
-      return memo[args]
-    else:
-      rv = function(*args)
-      memo[args] = rv
-      return rv
-  return wrapper
+    memo = {}
+
+    def wrapper(*args):
+        if args in memo:
+            return memo[args]
+        else:
+            rv = function(*args)
+            memo[args] = rv
+            return rv
+
+    return wrapper

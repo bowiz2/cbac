@@ -1,13 +1,15 @@
+from command_shell import BlockShell
 from constants import block_id as ids
 from constants import cb_action
 from constants import direction
-from command_shell import BlockShell
 from utils import memoize
+
 
 class Block(object):
     """
     Represents a block in minecraft world. to bind it to a location, use a blockspace.
     """
+
     def __init__(self, block_id, block_data=0, has_tile_entity=False):
         """
         :param block_id: The minecraft block id of this block, such as 0 for air and 1 for stone.
@@ -29,6 +31,7 @@ class CommandBlock(Block):
     Command Block inside minecraft.
     Contains all the command block types. Such as impulse repeat and chain.
     """
+
     # TODO: Use command block name as a debug tool.
     def __init__(self, command, facing=direction.UP, action=cb_action.IMPULSE, always_active=False, conditional=False,
                  custom_name=None):

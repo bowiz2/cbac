@@ -1,8 +1,9 @@
-from pymclevel import nbt
 from pymclevel import MCSchematic
 from pymclevel import TileEntity
+from pymclevel import nbt
+
 from block import CommandBlock
-from constants.direction import DOWN, UP, NORTH,SOUTH, WEST, EAST
+from constants.direction import DOWN, UP, NORTH, SOUTH, WEST, EAST
 
 
 # For development only.

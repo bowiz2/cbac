@@ -1,7 +1,7 @@
-from utils import Vector, Location
 from constants import direction
 from constants.block_id import ISOLATORS
 from unit import Unit
+from utils import Vector, Location
 
 DEF_BUILD_DIRECTION = direction.NORTH
 
@@ -27,7 +27,7 @@ class BlockSpace(object):
         print "compiling..."
         for i, compound in enumerate(compounds):
             self.add_compound(compound)
-            print i+1, '/', len(compounds)
+            print i + 1, '/', len(compounds)
 
     def add_unit(self, unit, build_direction=DEF_BUILD_DIRECTION):
         """

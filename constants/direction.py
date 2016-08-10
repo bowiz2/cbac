@@ -1,6 +1,5 @@
 from utils import Vector
 
-
 UP = 'up'
 DOWN = 'down'
 NORTH = 'north'
@@ -17,6 +16,7 @@ vectors = {
     WEST: Vector(-1, 0, 0)
 }
 
+
 def oposite(direction):
     return {
         UP: DOWN,
@@ -25,4 +25,4 @@ def oposite(direction):
         SOUTH: NORTH,
         EAST: WEST,
         WEST: EAST
-     }[direction]
+    }[direction]

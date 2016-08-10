@@ -1,11 +1,11 @@
-from compound import Memory, Compound
-from block import CommandBlock
-from command_shell import CompoundShell
-import block
-from blockspace import BlockSpace
-from compound import CBA, Extender, Constant, Memory, SwitchFlow
 import assembler
+import block
+from block import CommandBlock
+from blockspace import BlockSpace
 from command_shell import BlockShell
+from command_shell import CompoundShell
+from compound import CBA, Extender, Constant, Memory, SwitchFlow
+from compound import Compound
 from constants.block_id import TRUE_BLOCK
 from unit import OrUnit, NotUnit
 
@@ -156,7 +156,6 @@ def test_not():
     block_space = BlockSpace((30, 10, 30), *u.compounds)
     schematic = assembler.build(block_space)
     schematic.saveToFile(r'./schematics/test.schematic')
-
 
 # test_block()
 # test_compound()w

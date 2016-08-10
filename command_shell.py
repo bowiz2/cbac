@@ -45,6 +45,7 @@ class CommandShell(object):
     and provides some functionality which later can be used with command blocks.
     operates on a block space.
     """
+
     def __init__(self, wrapped, context=(None, None)):
         """
         :param wrapped: The object which this command shell is wrapping.
@@ -65,6 +66,7 @@ class ShellContext(object):
     """
     A context is the state from which the commands in the command shell are compiled.
     """
+
     def __init__(self, blockspace, executor):
         """
         :param blockspace: The blockspace the wrapped object is located at. will be bound later by the assembler.
@@ -164,6 +166,7 @@ class CompoundShell(LocationShell):
     """
     Provides commands for manipulating compounds inside Minecraft.
     """
+
     @property
     def area(self):
         # TODO: fix this ugly as f.
@@ -218,6 +221,7 @@ class MemoryShell(CompoundShell):
         Set the memory to zero.
         """
         self.fill(FALSE_BLOCK)
+
 
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell

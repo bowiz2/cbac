@@ -1,12 +1,13 @@
 from block import Block, CommandBlock
-from constants.block_id import FALSE_BLOCK
-from constants import cb_action, block_id
 from command_shell import BlockShell, CompoundShell
+from constants import cb_action, block_id
+from constants.block_id import FALSE_BLOCK
 from utils import memoize
 
 
 class Compound(object):
     """Contains the blocks which are part of the compound. Later can be bound to a blockspace."""
+
     def __init__(self, blocks, isolated=False):
         self.blocks = blocks
         self.isolated = isolated
@@ -40,12 +41,12 @@ class CBA(Compound):
             try:
                 if block.command.creates_condition:
                     # make the next block conditional.
-                    next_block = blocks[i+1]
+                    next_block = blocks[i + 1]
                     next_block.conditional = True
             except IndexError:
                 pass  # if there is not next block.
             except AttributeError:
-                pass # in-case this was not a command block or the next block had no conditional option.
+                pass  # in-case this was not a command block or the next block had no conditional option.
 
         super(CBA, self).__init__(blocks, isolated=True)
 
@@ -90,6 +91,7 @@ class Constant(Compound):
     """
     When compiled, holds the binary representation of a number.
     """
+
     def __init__(self, number, buffer_size=8):
         """
         :param number: The constat value you want to store in the world
@@ -117,6 +119,7 @@ class Memory(Compound):
     """
     An array of empty blocks which later will be used to store some data.
     """
+
     def __init__(self, size):
         """
         :param size: Size of the memory in bits.
