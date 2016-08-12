@@ -39,6 +39,11 @@ class CBA(Compound):
         for i, block in enumerate(blocks):
             block.custom_name = "{cba_name}[{i}]".format(cba_name=self.name, i=i)
             try:
+                action = "<{0}>".format(block.command.command_function.__name__ )
+                block.custom_name += action
+            except AttributeError:
+                pass
+            try:
                 if block.command.creates_condition:
                     # make the next block conditional.
                     next_block = blocks[i + 1]
