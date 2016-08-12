@@ -61,6 +61,10 @@ class CommandShell(object):
     def raw(self, cmd):
         return cmd
 
+    def _join_command(self, *items):
+        # TODO: implement test.
+        return " ".join([str(item) for item in items if item is not None])
+
 
 class ShellContext(object):
     """
@@ -135,15 +139,63 @@ class LocationShell(CommandShell):
         """
         Sets a block to a new block id
         """
-        return " ".join([str(item) for item in
-                         ["/setblock", self.location, block_names[block_id], data_value, block_handling, tags]
-                         if item is not None])
+        return self._join_command("/setblock", self.location, block_names[block_id], data_value, block_handling, tags)
 
     def activate(self):
         return self.setblock(TRUE_BLOCK)
 
     def deactivate(self):
         return self.setblock(FALSE_BLOCK)
+    @property
+    def area(self):
+        # TODO: fix this ugly as f.
+        if self.context.executor is None:
+            point_a, point_b = self.context.get_absolute_area(self.wrapped)
+        else:
+            point_a, point_b = self.context.get_relative_area(self.wrapped)
+
+        point_a = map(str, point_a)
+        point_b = map(str, point_b)
+        ds = point_a + point_b
+        if self.context.executor is not None:
+            ds = ['~' + d for d in ds]
+        return " ".join(ds)
+
+    @command()
+    def clone(self, other, mask_mode="replace", clone_mode="normal", tile_name=None):
+        """
+        Clone this compound to another area.
+        """
+        if mask_mode == "filtered":
+            assert tile_name is not None
+
+        other.shell.context = self.context
+        return self._join_command("/clone", self.area, other.shell.location, mask_mode, clone_mode, tile_name)
+
+    @command()
+    def fill(self, block_id, data_value=None, block_handling=None, *options):
+        """
+        Fill this compound with a block.
+        :param block_id: id of the block
+        :param data_value: data value of the block
+        :param block_handling: fill mode
+        :param tags:
+        """
+
+        return self._join_command("/fill", self.area, block_names[block_id], data_value, block_handling, *options)
+
+    def replace(self, block_id, other_block_id, block_data_value=0, other_block_data_value=0):
+        return self.fill(
+            other_block_id,
+            other_block_data_value,
+            "replace",
+            block_names[block_id],
+            block_data_value
+        )
+
+
+    def move(self, target):
+        return self.clone(target, clone_mode="move")
 
     def __eq__(self, other):
         """
@@ -167,39 +219,6 @@ class CompoundShell(LocationShell):
     Provides commands for manipulating compounds inside Minecraft.
     """
 
-    @property
-    def area(self):
-        # TODO: fix this ugly as f.
-        if self.context.executor is None:
-            point_a, point_b = self.context.get_absolute_area(self.wrapped)
-        else:
-            point_a, point_b = self.context.get_relative_area(self.wrapped)
-
-        point_a = map(str, point_a)
-        point_b = map(str, point_b)
-        ds = point_a + point_b
-        if self.context.executor is not None:
-            ds = ['~' + d for d in ds]
-        return " ".join(ds)
-
-    @command()
-    def clone(self, other):
-        """
-        Clone this compound to another area.
-        """
-        shell = other.shell
-        shell.context = self.context
-        return "/clone {0} {1}".format(self.area, shell.location)
-
-    @command()
-    def fill(self, block_id, data_value=None, block_handling=None, tags=None):
-        """
-        Clone this compound to another area.
-        """
-
-        return " ".join([str(item) for item in
-                         ["/fill", self.area, block_names[block_id], data_value, block_handling, tags]
-                         if item is not None])
 
     @command(True)
     def testforblocks(self, other):
@@ -220,7 +239,6 @@ class MemoryShell(CompoundShell):
         Set the memory to zero.
         """
         return self.fill(FALSE_BLOCK)
-
 
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell

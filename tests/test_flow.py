@@ -16,7 +16,8 @@ class TestFlow(TestCase):
     def test_condition(self):
         const = Constant(3)
         cba = CBA(const.blocks[0].shell == TRUE_BLOCK, "/say it is true.")
-        block_space = BlockSpace((8, 8, 8), const, cba)
+        block_space = BlockSpace((8, 8, 8))
+        block_space.add_compounds([const, cba])
         schematic = assembler.build(block_space)
         return schematic
 
@@ -35,6 +36,9 @@ class TestFlow(TestCase):
         })
 
         switch.isolated = True
-        block_space = BlockSpace((15, 20, 15), memory, *(switch.comparables + [switch]))
+
+        block_space = BlockSpace((15, 20, 15))
+        block_space.add_compounds(switch.comparables + [memory, switch])
+
         schematic = assembler.build(block_space)
         return schematic

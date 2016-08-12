@@ -11,9 +11,9 @@ vectors = {
     UP: Vector(0, 1, 0),
     DOWN: Vector(0, -1, 0),
     NORTH: Vector(0, 0, 1),
-    EAST: Vector(1, 0, 0),
+    EAST: Vector(-1, 0, 0),
     SOUTH: Vector(0, 0, -1),
-    WEST: Vector(-1, 0, 0)
+    WEST: Vector(1, 0, 0)
 }
 
 

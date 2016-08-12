@@ -13,6 +13,9 @@ class OrUnit(Unit):
 
         commands = list()
 
+        commands.append(self.input_a.shell.reset())
+        commands.append(self.input_b.shell.reset())
+
         for a_block, b_block, o_block, in zip(self.input_a.blocks, self.input_b.blocks, self.output.blocks):
             # note that the eq is overriden.
             commands.append(a_block.shell == True)

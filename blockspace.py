@@ -3,7 +3,7 @@ from constants.block_id import ISOLATORS
 from unit import Unit
 from utils import Vector, Location
 
-DEF_BUILD_DIRECTION = direction.NORTH
+DEF_BUILD_DIRECTION = direction.WEST
 
 
 class BlockSpace(object):
@@ -11,7 +11,7 @@ class BlockSpace(object):
     Logical representation of blocks in the world
     """
 
-    def __init__(self, size, *compounds):
+    def __init__(self, size):
         # Tuple which describes the size of the block space (x,y,z)
         self.size = size
         # Saves the locations of the blocks.
@@ -23,11 +23,6 @@ class BlockSpace(object):
         # Saves the locations of the entities.
         self.entities = dict()
         # holds to which side each block is faced to.
-
-        print "compiling..."
-        for i, compound in enumerate(compounds):
-            self.add_compound(compound)
-            print i + 1, '/', len(compounds)
 
     def add_unit(self, unit, build_direction=DEF_BUILD_DIRECTION):
         """
@@ -93,17 +88,31 @@ class BlockSpace(object):
                 pass
         raise Exception("Can't add compound {0} to this block space.".format(compound))
 
+    def add_compounds(self, compounds, build_direction=DEF_BUILD_DIRECTION):
+        for compound in compounds:
+            self.add_compound(compound, None, build_direction=build_direction)
+
     def add_blocks(self, blocks, isolated=False, build_direction=DEF_BUILD_DIRECTION):
+        """
+        Add blocks to the block sapce as long as they are not already in it.
+        :param blocks: iterator over blocks to add to the blockspace.
+        :param isolated: if you want the blocks to be isolated.
+        :param build_direction: the direction you want to build the blocks to, if they have the facing option.
+        :return:
+        """
         for block, coordinate in blocks.items():
-            # TODO: think if it is good for here.
-            try:
-                if block.facing is None:
-                    block.facing = direction.oposite(build_direction)
-            except AttributeError:
-                pass
-            self.blocks[block] = coordinate
-            if isolated:
-                self._isolated_blocks_locations.append(coordinate)
+            if block not in self.blocks:
+                # TODO: think if it is good for here.
+                try:
+                    if block.facing is None:
+                        block.facing = direction.oposite(build_direction)
+                except AttributeError:
+                    pass
+                self.blocks[block] = coordinate
+                if isolated:
+                    self._isolated_blocks_locations.append(coordinate)
+
+                block._belongs_to_blockspace = True
 
     def add_entity(self, entity, location=(0, 0, 0)):
         """
@@ -129,29 +138,33 @@ class BlockSpace(object):
         """
         # For each block try to assign location and hope for the location to match.
         for i, block in enumerate(compound.blocks):
+            # check if this block allready have been assigned location.
+            if block in self.blocks.keys():
+                yield block, self.blocks[block]
+            else:
+                # assign new location.
+                # try to assign location.
+                direction_vector = direction.vectors[build_direction]
 
-            # try to assign location.
-            direction_vector = direction.vectors[build_direction]
+                possible_location = location + (direction_vector * i)
 
-            possible_location = location + (direction_vector * i)
+                if possible_location in self.blocks.values():
+                    raise AssignmentError("Collision with block at location {0}".format(possible_location))
 
-            if possible_location in self.blocks.values():
-                raise AssignmentError("Collision with block at location {0}".format(possible_location))
+                if self.is_location_out_of_bounds(possible_location):
+                    raise AssignmentError("Location out of bounds.")
 
-            if self.is_location_out_of_bounds(possible_location):
-                raise AssignmentError("Location out of bounds.")
+                if compound.isolated and not self.is_isolated(possible_location):
+                    raise AssignmentError("Location not isolated while isolation is required.")
 
-            if compound.isolated and not self.is_isolated(possible_location):
-                raise AssignmentError("Location not isolated while isolation is required.")
+                if block.block_id not in ISOLATORS:
+                    for isolated_location in self._isolated_blocks_locations:
+                        if isolated_location.is_adjacent(possible_location):
+                            raise AssignmentError("Location interferes with the isolation of other compounds.")
 
-            if block.block_id not in ISOLATORS:
-                for isolated_location in self._isolated_blocks_locations:
-                    if isolated_location.is_adjacent(possible_location):
-                        raise AssignmentError("Location interferes with the isolation of other compounds.")
+                assigned_location = possible_location
 
-            assigned_location = possible_location
-
-            yield block, assigned_location
+                yield block, assigned_location
 
     # Checkers
     def is_location_out_of_bounds(self, location):
@@ -185,10 +198,15 @@ class BlockSpace(object):
         """
         Gets the area of a compound.
         """
-        try:
-            location, blocks = self.compounds[item]
 
+        if item in self.compounds:
+            location, blocks = self.compounds[item]
             block_locations = [self.blocks[block] for block in blocks]
+            if len(block_locations) < 1:
+                raise Exception(" no location")
+            for item in block_locations:
+                if len(item) != 3:
+                    raise Exception("no location")
             # TODO: remove code duplication.
             min_x = sorted(block_locations, key=lambda item: item[0])[0].x
             min_y = sorted(block_locations, key=lambda item: item[1])[0].y
@@ -199,7 +217,7 @@ class BlockSpace(object):
             max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
 
             return Vector(min_x, min_y, min_z), Vector(max_x, max_y, max_z)
-        except KeyError:
+        else:
             location = self.blocks[item]
             return location, location
 

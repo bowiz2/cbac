@@ -142,7 +142,19 @@ class Memory(Compound):
         for i in xrange(size):
             self.blocks.append(Block(block_id.FALSE_BLOCK))
 
+    def get_sub_memory(self, arange):
+        """
+        Get a sub memory of a memory.
+        :param range: iterator over the blocks you want to add to the sub memory.
+        :return: new memory compound which shares blocks with this memory.
+        """
+        sub_memory = Memory(size=len(arange))
+        for i, block_index in enumerate(arange):
+            sub_memory.blocks[i] = self.blocks[block_index]
+        return sub_memory
+
     @property
     @memoize
     def shell(self):
         return MemoryShell(self)
+
