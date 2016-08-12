@@ -146,6 +146,7 @@ class LocationShell(CommandShell):
 
     def deactivate(self):
         return self.setblock(FALSE_BLOCK)
+
     @property
     def area(self):
         # TODO: fix this ugly as f.
