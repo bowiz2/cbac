@@ -8,6 +8,7 @@ from compound import Compound, Constant, Memory, CBA, Extender
 from constants.block_id import FALSE_BLOCK
 from .decorators import save_schematic
 
+
 class TestCompound(TestCase):
     def test_base(self):
         BLOCK_LENGTH = 4
@@ -37,12 +38,13 @@ class TestCompound(TestCase):
 
         for i in xrange(BITS):
             self.assertEqual(memory.blocks[i].block_id, FALSE_BLOCK)
+
     def test_get_sub_memory(self):
         BITS = 8
         big_memory = Memory(BITS)
-        sub = big_memory.get_sub_memory(xrange(BITS/2))
+        sub = big_memory.get_sub_memory(xrange(BITS / 2))
         self.assertIsNotNone(sub)
-        self.assertEqual(len(sub.blocks), BITS/2)
+        self.assertEqual(len(sub.blocks), BITS / 2)
 
     @save_schematic
     def test_extender(self):

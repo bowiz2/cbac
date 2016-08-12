@@ -1,6 +1,6 @@
-from unit import Unit
 from compound import Memory
-import block
+from unit import Unit
+
 
 class IncrementUnit(Unit):
     def __init__(self, bits):
@@ -16,7 +16,6 @@ class IncrementUnit(Unit):
     def main_logic_commands(self):
         yield self.carry_in.shell.activate()
         for inp_block, out_block in zip(self.input.blocks, self.output.blocks):
-
             yield inp_block.shell == True
             yield self.carry_in.shell == True
             yield self.carry_out.shell.activate()

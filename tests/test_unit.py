@@ -1,7 +1,6 @@
 from unittest import TestCase
 
 import assembler
-import unit
 from blockspace import BlockSpace
 from unit import ReverseUnit, NotUnit, AndUnit, OrUnit, ShiftUnit, IncrementUnit
 from .decorators import save_schematic
@@ -37,7 +36,7 @@ class TestUnit(TestCase):
         u = ShiftUnit(8)
         block_space = BlockSpace((30, 10, 30))
         block_space.add_compounds(u.compounds)
-        cb =u.entry_point.blocks[9]
+        cb = u.entry_point.blocks[9]
 
         command = cb.command
         context = command.command_shell.context

@@ -157,4 +157,3 @@ class Memory(Compound):
     @memoize
     def shell(self):
         return MemoryShell(self)
-

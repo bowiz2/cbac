@@ -194,7 +194,6 @@ class LocationShell(CommandShell):
             block_data_value
         )
 
-
     def move(self, target):
         return self.clone(target, clone_mode="move")
 
@@ -220,7 +219,6 @@ class CompoundShell(LocationShell):
     Provides commands for manipulating compounds inside Minecraft.
     """
 
-
     @command(True)
     def testforblocks(self, other):
         other.shell.context = self.context
@@ -240,6 +238,7 @@ class MemoryShell(CompoundShell):
         Set the memory to zero.
         """
         return self.fill(FALSE_BLOCK)
+
 
 # A block has only a location. so it is very reasonable to have the same shell as the location shell.
 BlockShell = LocationShell
