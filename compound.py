@@ -33,11 +33,15 @@ class CBA(Compound):
         # commands
         self.user_command_blocks = list(self._gen_cb_chain(commands))
 
+        # An empty block which when activated. will fire up this cba.
         self.activator = Block(FALSE_BLOCK)
         self.system_prefix_blocks = [self.activator]
 
-        # this block responible for deactivating the activator block.
+        # This block responsible for deactivating the activator block.
         self.cb_re_setter = CommandBlock(self.activator.shell.deactivate(), None, cb_action.CHAIN, True)
+        # This command block is reserved for callback use.
+        self.cb_callback_reserved = CommandBlock("/say [callback reserve]", None, cb_action.CHAIN, True)
+
         self.system_postfix_blocks = [self.cb_re_setter]
 
         blocks = self.system_prefix_blocks + self.user_command_blocks + self.system_postfix_blocks
