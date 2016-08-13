@@ -29,21 +29,29 @@ class CBA(Compound):
         self.cba_id = self.created_count
         self.created_count += 1
         self.name = "CBA_n{0}".format(self.cba_id)
+
+        # commands
+        self.user_command_blocks = list(self._gen_cb_chain(commands))
+
         self.activator = Block(FALSE_BLOCK)
+        self.system_prefix_blocks = [self.activator]
 
-        blocks = list(self._gen_cb_chain(list(commands) + [BlockShell(self.activator).deactivate()]))
+        # this block responible for deactivating the activator block.
+        self.cb_re_setter = CommandBlock(self.activator.shell.deactivate(), None, cb_action.CHAIN, True)
+        self.system_postfix_blocks = [self.cb_re_setter]
 
-        # create activator block.
 
-        blocks = [self.activator] + blocks
+        blocks = self.system_prefix_blocks + self.user_command_blocks + self.system_postfix_blocks
 
         for i, block in enumerate(blocks):
+            # create custom names for blocks.
             block.custom_name = "{cba_name}[{i}]".format(cba_name=self.name, i=i)
             try:
                 action = "<{0}>".format(block.command.command_function.__name__ )
                 block.custom_name += action
             except AttributeError:
                 pass
+            # Parse conditionaning.
             try:
                 if block.command.creates_condition:
                     # make the next block conditional.
