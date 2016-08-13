@@ -38,8 +38,8 @@ class Unit(object):
 
         commands = []
 
-        for commnad_generator in [self.on_entry_init_commands(), self.main_logic_commands(), self.on_exit_commands()]:
-            for statement in list(commnad_generator):
+        for command_generator in [self.on_entry_init_commands(), self.main_logic_commands(), self.on_exit_commands()]:
+            for statement in command_generator:
                 if isinstance(statement, MainLogicJump):
                     # Lazy init some stuff.
                     commands.append(LazyCallbackSet(statement.jump_destination))
