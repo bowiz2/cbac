@@ -1,4 +1,4 @@
-from command_shell import BlockShell
+from command_shell import BlockShell, CommandBlockShell
 from constants import block_id as ids
 from constants import cb_action
 from constants import direction
@@ -59,7 +59,14 @@ class CommandBlock(Block):
 
     @property
     def data_value(self):
+        if self.facing is None:
+            return 0
         faceindex = [DOWN, UP, NORTH, SOUTH, WEST, EAST].index(self.facing)
         conditional = 0x8 if self.conditional else 0
         data_value = faceindex | conditional
         return data_value
+
+    @property
+    @memoize
+    def shell(self):
+        return CommandBlockShell(self)

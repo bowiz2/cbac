@@ -45,7 +45,13 @@ class CommandShell(object):
     @staticmethod
     def _join_command(*items):
         # TODO: implement test.
-        return " ".join([str(item) for item in items if item is not None])
+        def parse(obj):
+            if isinstance(obj, dict):
+                return str(obj).replace("'", "")
+
+            return str(obj)
+
+        return " ".join([parse(item)for item in items if item is not None])
 
 
 class LocationShell(CommandShell):

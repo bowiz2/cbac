@@ -1,5 +1,6 @@
 from block import Block, CommandBlock
-from command_shell import BlockShell, CompoundShell, MemoryShell
+from command_shell import BlockShell, CompoundShell
+from command_shell.memory_shell import MemoryShell
 from constants import cb_action, block_id
 from constants.block_id import FALSE_BLOCK
 from utils import memoize

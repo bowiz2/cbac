@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import assembler
 from blockspace import BlockSpace
-from unit import ReverseUnit, NotUnit, AndUnit, OrUnit, ShiftUnit, IncrementUnit
+from unit import ReverseUnit, NotUnit, AndUnit, OrUnit, ShiftUnit, IncrementUnit, CallbackUnit
 from .decorators import save_schematic
 
 
@@ -51,3 +51,6 @@ class TestUnit(TestCase):
     @save_schematic
     def test_incrament(self):
         return self.sample_schematic(IncrementUnit, 4, (100, 100, 100))
+    @save_schematic
+    def test_callback(self):
+        return self.sample_schematic(CallbackUnit, 4)

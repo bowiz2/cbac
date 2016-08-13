@@ -20,5 +20,8 @@ names = {
     GLASS_BLOCK: 'glass',
     EMPTY_BLOCK: 'air',
     SNOW_BLOCK: 'snow',
-    REDSTONE_BLOCK: 'redstone_block'
+    REDSTONE_BLOCK: 'redstone_block',
+    IMPULSE_COMMAND_BLOCK: 'command_block',
+    REPEATING_COMMAND_BLOCK: 'repeating_command_block',
+    CHAIN_COMMAND_BLOCK: 'chain_command_block'
 }
