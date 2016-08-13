@@ -1,6 +1,8 @@
 from constants import direction
 from constants.block_id import ISOLATORS
 from utils import Vector, Location
+import packer
+
 
 DEF_BUILD_DIRECTION = direction.WEST
 
@@ -14,7 +16,8 @@ class BlockSpace(object):
         # Tuple which describes the size of the block space (x,y,z)
         self.size = size
         # Saves the locations of the blocks.
-        self.blocks = dict()
+        self.blocks = {}
+        self.directions = {}
         # Saves the locations of the isolated objects
         self._isolated_blocks_locations = list()
         # Saves the locations of the compounds.
@@ -44,31 +47,19 @@ class BlockSpace(object):
         """
         if compound in self.compounds:
             return
-        # Generates possible locations for the new compound.
-        if location is None:
-            possible_locations = self.possible_locations_for(compound)
-        else:
-            # The user can force the blockspace to use a specific location.
-            possible_locations = [location]
-
-        for location in possible_locations:
-            try:
-                # Generate assignments.
-                assignments = dict(self.assign_coordinates(location, compound, build_direction=build_direction))
-                self.add_blocks(assignments, build_direction=build_direction)
-                # Save the compound location.
-                self.compounds[compound] = (location, assignments)
-                return
-            except AssignmentError:
-                # Means the the assignment for this generation is not possible.
-                pass
-        raise Exception("Can't add compound {0} to this block space.".format(compound))
+        try:
+            assignments = packer.pack(compound, self, location, build_direction)
+            self.add_blocks(assignments)
+            # Save the compound location.
+            self.compounds[compound] = (location, assignments)
+        except packer.PackingError:
+            raise Exception("Can't add compound {0} to this block space.".format(compound))
 
     def add_compounds(self, compounds, build_direction=DEF_BUILD_DIRECTION):
         for compound in compounds:
             self.add_compound(compound, None, build_direction=build_direction)
 
-    def add_blocks(self, blocks, isolated=False, build_direction=DEF_BUILD_DIRECTION):
+    def add_blocks(self, blocks, isolated=False):
         """
         Add blocks to the block sapce as long as they are not already in it.
         :param blocks: iterator over blocks to add to the blockspace.
@@ -76,15 +67,17 @@ class BlockSpace(object):
         :param build_direction: the direction you want to build the blocks to, if they have the facing option.
         :return:
         """
-        for block, coordinate in blocks.items():
+        for block,  pack_info in blocks.items():
+            coordinate, pack_direction = pack_info
             if block not in self.blocks:
                 # TODO: think if it is good for here.
                 try:
                     if block.facing is None:
-                        block.facing = direction.oposite(build_direction)
+                        block.facing = direction.oposite(pack_direction)
                 except AttributeError:
                     pass
                 self.blocks[block] = coordinate
+                self.directions[block] = pack_direction
                 if isolated:
                     self._isolated_blocks_locations.append(coordinate)
 
@@ -96,51 +89,6 @@ class BlockSpace(object):
         """
         location = Vector(*location)
         self.entities[entity] = location
-
-    def possible_locations_for(self, obj):
-        """
-        Generate possible location in which a compound can stand at.
-        """
-        for x in xrange(self.size[0]):
-            for y in xrange(self.size[1]):
-                for z in xrange(self.size[2]):
-                    yield Location(x, y, z)
-
-        raise AssignmentError("Can't find location for compound {0}.".format(obj))
-
-    def assign_coordinates(self, location, compound, build_direction):
-        """
-        For each block in the compound, assign a coordinate for it.
-        """
-        # For each block try to assign location and hope for the location to match.
-        for i, block in enumerate(compound.blocks):
-            # check if this block allready have been assigned location.
-            if block in self.blocks.keys():
-                yield block, self.blocks[block]
-            else:
-                # assign new location.
-                # try to assign location.
-                direction_vector = direction.vectors[build_direction]
-
-                possible_location = location + (direction_vector * i)
-
-                if possible_location in self.blocks.values():
-                    raise AssignmentError("Collision with block at location {0}".format(possible_location))
-
-                if self.is_location_out_of_bounds(possible_location):
-                    raise AssignmentError("Location out of bounds.")
-
-                if compound.isolated and not self.is_isolated(possible_location):
-                    raise AssignmentError("Location not isolated while isolation is required.")
-
-                if block.block_id not in ISOLATORS:
-                    for isolated_location in self._isolated_blocks_locations:
-                        if isolated_location.is_adjacent(possible_location):
-                            raise AssignmentError("Location interferes with the isolation of other compounds.")
-
-                assigned_location = possible_location
-
-                yield block, assigned_location
 
     # Checkers
     def is_location_out_of_bounds(self, location):
@@ -216,8 +164,3 @@ class BlockSpace(object):
         self.size = (max_x + 1, max_y + 1, max_z + 1)
 
 
-class AssignmentError(BaseException):
-    """
-    Thrown when the block space cannot assign coordinates for a compound in a specific location.
-    """
-    pass

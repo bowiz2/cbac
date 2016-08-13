@@ -41,7 +41,7 @@ class TestUnit(TestCase):
     def test_shift(self):
         u = ShiftUnit(8)
         block_space = BlockSpace((30, 10, 30))
-        block_space.add_compounds(u.compounds)
+        block_space.add_unit(u)
         cb = u.entry_point.blocks[9]
 
         command = cb.command
