@@ -1,4 +1,5 @@
-from command_shell import BlockShell, CommandBlockShell
+from command_shell import CommandBlockShell
+from command_shell.location_shell import BlockShell
 from constants import block_id as ids
 from constants import cb_action
 from constants import direction

@@ -8,14 +8,17 @@ class CallbackUnit(Unit):
         # == Here you declare all your memory slots.
 
         self.curse = self.add_compound(CBA("/say 1", "/say 2", "/say 3", "/say callback"))
+        self.a_callback = self.add_compound(CBA("/say its the callback of a"))
         self.a = self.add_compound(CBA(
             "/say a",
-            self.curse.blocks[4].shell.change_command("/say callbacking to a"),
+            self.curse.shell.set_callback(self.a_callback),
             self.curse.activator.shell.activate())
         )
+
+        self.b_callback = self.add_compound(CBA("/say its the callback of b"))
         self.b = self.add_compound(CBA(
             "/say b",
-            self.curse.blocks[4].shell.change_command("/say callbacking to b"),
+            self.curse.shell.set_callback(self.b_callback),
             self.curse.activator.shell.activate())
         )
 

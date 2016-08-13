@@ -1,57 +1,6 @@
-from constants.block_id import TRUE_BLOCK, FALSE_BLOCK
-from constants.block_id import names as block_names
-from . import ShellContext, CommandSuspender
-
-
-def command(creates_condition=None):
-    """
-    :param creates_condition: whenever this command creates condition.
-    :return: command decorator.
-    """
-
-    def command_decorator(f):
-        """
-        Makes this function a suspended method. decorator
-        """
-
-        def _wrapper(self, *args, **kwargs):
-            sus = CommandSuspender(self, f, *args, **kwargs)
-            sus.creates_condition = creates_condition
-            return sus
-
-        return _wrapper
-
-    return command_decorator
-
-
-class CommandShell(object):
-    """
-    A command command_shell is a wrapper object which wrapes some object,
-    and provides some functionality which later can be used with command blocks.
-    operates on a block space.
-    """
-
-    def __init__(self, wrapped, context=(None, None)):
-        """
-        :param wrapped: The object which this command command_shell is wrapping.
-        :param context
-        """
-        self.wrapped = wrapped
-        # Coupling.
-        if not isinstance(context, ShellContext):
-            context = ShellContext(*context)
-        self.context = context
-
-    @staticmethod
-    def _join_command(*items):
-        # TODO: implement test.
-        def parse(obj):
-            if isinstance(obj, dict):
-                return str(obj).replace("'", "")
-
-            return str(obj)
-
-        return " ".join([parse(item) for item in items if item is not None])
+from command_shell_base import CommandShell
+from .decorator import command
+from constants.block_id import names as block_names, TRUE_BLOCK, FALSE_BLOCK
 
 
 class LocationShell(CommandShell):
@@ -166,23 +115,4 @@ class LocationShell(CommandShell):
             return self.testforblock(other)
 
 
-class CompoundShell(LocationShell):
-    """
-    Provides commands for manipulating compounds inside Minecraft.
-    """
-
-    @command(True)
-    def testforblocks(self, other):
-        other.shell.context = self.context
-        return "/testforblocks {0} {1}".format(self.area, other.shell.location)
-
-    def __eq__(self, other):
-        """
-        Check if this compound has the same blocks as other thing.
-        :return: CommandSuspender
-        """
-        return self.testforblocks(other)
-
-
-# A block has only a location. so it is very reasonable to have the same command_shell as the location command_shell.
 BlockShell = LocationShell

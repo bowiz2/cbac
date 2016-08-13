@@ -1,4 +1,4 @@
-from command_shell import CompoundShell
+from . import CompoundShell
 from constants.block_id import FALSE_BLOCK
 
 

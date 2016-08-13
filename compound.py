@@ -1,5 +1,6 @@
 from block import Block, CommandBlock
-from command_shell import BlockShell, CompoundShell
+from command_shell import CompoundShell, CBAShell
+from command_shell.location_shell import BlockShell
 from command_shell.memory_shell import MemoryShell
 from constants import cb_action, block_id
 from constants.block_id import FALSE_BLOCK
@@ -40,7 +41,7 @@ class CBA(Compound):
         # This block responsible for deactivating the activator block.
         self.cb_re_setter = CommandBlock(self.activator.shell.deactivate(), None, cb_action.CHAIN, True)
         # This command block is reserved for callback use.
-        self.cb_callback_reserved = CommandBlock("/say [callback reserve]", None, cb_action.CHAIN, True)
+        self.cb_callback_reserved = CommandBlock("", None, cb_action.CHAIN, True)
 
         self.system_postfix_blocks = [self.cb_callback_reserved, self.cb_re_setter]
 
@@ -75,6 +76,11 @@ class CBA(Compound):
 
         for command in commands[1:]:
             yield CommandBlock(command, facing=None, action=cb_action.CHAIN, always_active=True)
+
+    @property
+    @memoize
+    def shell(self):
+        return CBAShell(self)
 
     def __str__(self):
         return self.name

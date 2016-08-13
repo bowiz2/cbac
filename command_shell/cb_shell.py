@@ -1,5 +1,5 @@
-from . import BlockShell
-from .command_shell import command
+from .location_shell import BlockShell
+from .decorator import command
 
 
 class CommandBlockShell(BlockShell):
