@@ -5,5 +5,6 @@ from .not_unit import NotUnit
 from .or_unit import OrUnit
 from .reverese_unit import ReverseUnit
 from .shift_unit import ShiftUnit
+from .xor_unit import XorUnit
 from .unit import Unit
 
