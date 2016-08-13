@@ -1,5 +1,4 @@
 from compound import Memory, CBA
-from constants import block_id
 
 
 class Statement(object):
@@ -84,7 +83,7 @@ class Unit(object):
                 if isinstance(cb.command, Lazy):
                     lazy_target = cb.command.target
                     if isinstance(cb.command, LazyCallbackSet):
-                        cb.command = lazy_target.shell.set_callback(temp_logic_cbas[i+1])
+                        cb.command = lazy_target.shell.set_callback(temp_logic_cbas[i + 1])
                     if isinstance(cb.command, LazyJump):
                         cb.command = lazy_target.activator.shell.activate()
 

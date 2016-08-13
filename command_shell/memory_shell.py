@@ -1,5 +1,5 @@
+from constants.block_id import TRUE_BLOCK
 from . import CompoundShell
-from constants.block_id import FALSE_BLOCK, TRUE_BLOCK
 
 
 class MemoryShell(CompoundShell):
@@ -13,7 +13,7 @@ class MemoryShell(CompoundShell):
         """
         Sets the value of the memory, can be done to a limited set of numebrs
         """
-        max = 2**self.wrapped.size
+        max = 2 ** self.wrapped.size
         possible_set = [0, max]
         if number == max:
             return self.fill(TRUE_BLOCK)
@@ -25,4 +25,4 @@ class MemoryShell(CompoundShell):
         Sets the momeries value to the maximum possible value
         :return:
         """
-        return self.set_value(2**self.wrapped.size)
+        return self.set_value(2 ** self.wrapped.size)

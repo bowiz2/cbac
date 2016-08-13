@@ -1,5 +1,6 @@
-from .decorator import command
 from . import LocationShell
+from .decorator import command
+
 
 class CompoundShell(LocationShell):
     """

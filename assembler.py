@@ -35,7 +35,6 @@ def tagged_cb(command_block, location, blockspace):
     root_tag["Command"] = nbt.TAG_String(command)
     root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)
 
-
     # Return the tag which represents the entity of the command block.
     return root_tag
 

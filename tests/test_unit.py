@@ -72,4 +72,4 @@ class TestUnit(TestCase):
 
     @save_schematic
     def test_fulladder(self):
-        return self.sample_schematic(FullAdderUnit, 4,(200, 200, 200))
+        return self.sample_schematic(FullAdderUnit, 4, (200, 200, 200))

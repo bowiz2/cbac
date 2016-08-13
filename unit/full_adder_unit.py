@@ -1,5 +1,5 @@
 from unit import Unit, Conditional
-from compound import Memory
+
 
 class FullAdderUnit(Unit):
     def __init__(self, bits=8, carry_flag=None):
@@ -11,7 +11,7 @@ class FullAdderUnit(Unit):
         # == Here you declare all your memory slots.
         self.input_a = self.create_input(self.bits)
         self.input_b = self.create_input(self.bits)
-        self.carry = self.create_input(self.bits+1)
+        self.carry = self.create_input(self.bits + 1)
         self.output = self.create_output(self.bits)
         self.carry_flag = None
         # ==
@@ -19,8 +19,8 @@ class FullAdderUnit(Unit):
 
     def main_logic_commands(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
-        for i, a, b, cin, cout, s in zip(xrange(self.bits), self.input_a.blocks, self.input_b.blocks, self.carry.blocks[:-1], self.carry.blocks[1:], self.output.blocks):
-
+        for i, a, b, cin, cout, s in zip(xrange(self.bits), self.input_a.blocks, self.input_b.blocks,
+                                         self.carry.blocks[:-1], self.carry.blocks[1:], self.output.blocks):
             yield a.shell == False
             yield b.shell == False
             yield cin.shell == True

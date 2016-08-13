@@ -1,6 +1,6 @@
 from command_shell_base import CommandShell
-from .decorator import command
 from constants.block_id import names as block_names, TRUE_BLOCK, FALSE_BLOCK
+from .decorator import command
 
 
 class LocationShell(CommandShell):

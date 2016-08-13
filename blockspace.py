@@ -1,6 +1,5 @@
 from constants import direction
 from constants.block_id import ISOLATORS
-from unit import Unit
 from utils import Vector, Location
 
 DEF_BUILD_DIRECTION = direction.WEST
@@ -214,7 +213,7 @@ class BlockSpace(object):
         max_x = sorted(block_locations, key=lambda item: item[0])[-1].x
         max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
         max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
-        self.size = (max_x+1, max_y+1, max_z+1)
+        self.size = (max_x + 1, max_y + 1, max_z + 1)
 
 
 class AssignmentError(BaseException):
