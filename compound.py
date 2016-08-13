@@ -42,7 +42,7 @@ class CBA(Compound):
         # This command block is reserved for callback use.
         self.cb_callback_reserved = CommandBlock("/say [callback reserve]", None, cb_action.CHAIN, True)
 
-        self.system_postfix_blocks = [self.cb_re_setter]
+        self.system_postfix_blocks = [self.cb_callback_reserved, self.cb_re_setter]
 
         blocks = self.system_prefix_blocks + self.user_command_blocks + self.system_postfix_blocks
 
