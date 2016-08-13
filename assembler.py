@@ -3,7 +3,6 @@ from pymclevel import TileEntity
 from pymclevel import nbt
 
 from block import CommandBlock
-from constants.direction import DOWN, UP, NORTH, SOUTH, WEST, EAST
 
 
 # For development only.
@@ -56,6 +55,7 @@ def calculate_data_value(block):
         return block.data_value
     except AttributeError:
         return 0
+
 
 def build(block_space):
     """

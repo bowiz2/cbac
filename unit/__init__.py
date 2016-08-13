@@ -1,9 +1,9 @@
 from .and_unit import AndUnit
+from .callback_unit import CallbackUnit
 from .increment_unit import IncrementUnit
 from .not_unit import NotUnit
 from .or_unit import OrUnit
 from .reverese_unit import ReverseUnit
 from .shift_unit import ShiftUnit
-from .callback_unit import CallbackUnit
 from .unit import Unit
 

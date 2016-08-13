@@ -1,6 +1,6 @@
-from . import ShellContext, CommandSuspender
 from constants.block_id import TRUE_BLOCK, FALSE_BLOCK
 from constants.block_id import names as block_names
+from . import ShellContext, CommandSuspender
 
 
 def command(creates_condition=None):
@@ -51,7 +51,7 @@ class CommandShell(object):
 
             return str(obj)
 
-        return " ".join([parse(item)for item in items if item is not None])
+        return " ".join([parse(item) for item in items if item is not None])
 
 
 class LocationShell(CommandShell):

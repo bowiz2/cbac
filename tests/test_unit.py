@@ -51,6 +51,7 @@ class TestUnit(TestCase):
     @save_schematic
     def test_incrament(self):
         return self.sample_schematic(IncrementUnit, 4, (100, 100, 100))
+
     @save_schematic
     def test_callback(self):
         return self.sample_schematic(CallbackUnit, 4)

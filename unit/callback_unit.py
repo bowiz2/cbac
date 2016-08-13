@@ -1,5 +1,5 @@
-from unit import Unit
 from compound import CBA
+from unit import Unit
 
 
 class CallbackUnit(Unit):
