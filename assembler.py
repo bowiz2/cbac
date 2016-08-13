@@ -52,13 +52,10 @@ def translate(block, location, blockspace):
 
 
 def calculate_data_value(block):
-    if isinstance(block, CommandBlock):
-        command_block = block
-        faceindex = [DOWN, UP, NORTH, SOUTH, WEST, EAST].index(command_block.facing)
-        conditional = 0x8 if command_block.conditional else 0
-        data_value = faceindex | conditional
-        return data_value
-
+    try:
+        return block.data_value
+    except AttributeError:
+        return 0
 
 def build(block_space):
     """

@@ -2,6 +2,7 @@ from command_shell import BlockShell
 from constants import block_id as ids
 from constants import cb_action
 from constants import direction
+from constants.direction import DOWN, UP, NORTH, SOUTH, WEST, EAST
 from utils import memoize
 
 
@@ -55,3 +56,10 @@ class CommandBlock(Block):
         block_data = 1 if self.always_active else 0
 
         super(CommandBlock, self).__init__(block_id, block_data, has_tile_entity=True)
+
+    @property
+    def data_value(self):
+        faceindex = [DOWN, UP, NORTH, SOUTH, WEST, EAST].index(self.facing)
+        conditional = 0x8 if self.conditional else 0
+        data_value = faceindex | conditional
+        return data_value
