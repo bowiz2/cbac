@@ -14,7 +14,7 @@ class ShiftUnit(Unit):
         self.operation_register = self.add_input(self.buffer_register.get_sub_memory(xrange(bits)))
         self.output = self.create_output(bits)
         self.input_shift_size = self.create_input(int(math.ceil(math.log(bits, 2))))
-        self.generate_main_point_entry()
+        self.generate_main_logic_cbas()
 
     def main_logic_commands(self):
         for i, shift_block in enumerate(self.input_shift_size.blocks):

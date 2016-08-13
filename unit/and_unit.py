@@ -13,7 +13,7 @@ class AndUnit(Unit):
         self.input_b = self.create_input(self.bits)
         self.output = self.create_output(self.bits)
 
-        self.generate_main_point_entry()
+        self.generate_main_logic_cbas()
 
     def main_logic_commands(self):
         for a_block, b_block, o_block, in zip(self.input_a.blocks, self.input_b.blocks, self.output.blocks):

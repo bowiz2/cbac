@@ -11,7 +11,7 @@ class IncrementUnit(Unit):
         self.carry_out = self.flags.blocks[1]
         self.input = self.create_input(self.bits)
         self.output = self.create_output(self.bits)
-        self.generate_main_point_entry()
+        self.generate_main_logic_cbas()
 
     def main_logic_commands(self):
         yield self.carry_in.shell.activate()

@@ -1,5 +1,5 @@
 from compound import CBA
-from unit import Unit
+from unit import Unit, MainLogicJump
 
 
 class CallbackUnit(Unit):
@@ -23,8 +23,10 @@ class CallbackUnit(Unit):
         )
 
         # ==
-        self.generate_main_point_entry()
+        self.generate_main_logic_cbas()
 
     def main_logic_commands(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
-        yield "/say a"
+        yield "/say main logic start"
+        yield MainLogicJump(self.a)
+        yield "/say main logic end"
