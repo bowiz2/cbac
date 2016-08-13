@@ -1,21 +1,6 @@
+from . import ShellContext, CommandSuspender
 from constants.block_id import TRUE_BLOCK, FALSE_BLOCK
 from constants.block_id import names as block_names
-
-
-class CommandSuspender(object):
-    def __init__(self, command_shell, command_function, *args, **kwargs):
-        # The command shell which created the command.
-        self.command_shell = command_shell
-        # The actual command function which was suspended.
-        self.command_function = command_function
-        # The args which will be used when the command function will be resumed
-        self.args = args
-        self.kwargs = kwargs
-        # If the command creates conditioning for other commands. testforblock for example, creates conditioning.
-        self.creates_condition = False
-
-    def __call__(self):
-        return self.command_function(self.command_shell, *self.args, **self.kwargs)
 
 
 def command(creates_condition=None):
@@ -41,14 +26,14 @@ def command(creates_condition=None):
 
 class CommandShell(object):
     """
-    A command shell is a wrapper object which wrapes some object,
+    A command command_shell is a wrapper object which wrapes some object,
     and provides some functionality which later can be used with command blocks.
     operates on a block space.
     """
 
     def __init__(self, wrapped, context=(None, None)):
         """
-        :param wrapped: The object which this command shell is wrapping.
+        :param wrapped: The object which this command command_shell is wrapping.
         :param context
         """
         self.wrapped = wrapped
@@ -57,49 +42,10 @@ class CommandShell(object):
             context = ShellContext(*context)
         self.context = context
 
-    @command()
-    def raw(self, cmd):
-        return cmd
-
-    def _join_command(self, *items):
+    @staticmethod
+    def _join_command(*items):
         # TODO: implement test.
         return " ".join([str(item) for item in items if item is not None])
-
-
-class ShellContext(object):
-    """
-    A context is the state from which the commands in the command shell are compiled.
-    """
-
-    def __init__(self, blockspace, executor):
-        """
-        :param blockspace: The blockspace the wrapped object is located at. will be bound later by the assembler.
-        :param executor: the place from where the commands will be executed. will be bound later by the assembler.
-        """
-        self.blockspace = blockspace
-        self.executor = executor
-
-    def get_absolute_location(self, thing):
-        """
-        Get the absolute location of an object. In the context of the blockspace.
-        """
-        return self.blockspace.get_location_of(thing)
-
-    def get_relative_location(self, thing):
-        """
-        Get hte location of an object, in relation to the executor in the context of the blockspace.
-        """
-        return self.get_absolute_location(thing) - self.blockspace.get_location_of(self.executor)
-
-    def get_absolute_area(self, thing):
-        # TODO: implement caching.
-        return self.blockspace.get_area_of(thing)
-
-    def get_relative_area(self, thing):
-        thing_area = self.get_absolute_area(thing)
-        executor_area = self.get_absolute_area(self.executor)
-
-        return tuple([thing_point - executor_point for thing_point, executor_point in zip(thing_area, executor_area)])
 
 
 class LocationShell(CommandShell):
@@ -110,7 +56,7 @@ class LocationShell(CommandShell):
     @property
     def location(self):
         """
-        Construct a location of this shell for a context. The location is ready to use in commands.
+        Construct a location of this command_shell for a context. The location is ready to use in commands.
         """
         if self.context.executor is None:
             # If there is not executor there is no location to be related to.
@@ -232,13 +178,5 @@ class CompoundShell(LocationShell):
         return self.testforblocks(other)
 
 
-class MemoryShell(CompoundShell):
-    def reset(self):
-        """
-        Set the memory to zero.
-        """
-        return self.fill(FALSE_BLOCK)
-
-
-# A block has only a location. so it is very reasonable to have the same shell as the location shell.
+# A block has only a location. so it is very reasonable to have the same command_shell as the location command_shell.
 BlockShell = LocationShell
