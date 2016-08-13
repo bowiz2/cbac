@@ -13,7 +13,7 @@ def tagged_cb(command_block, location, blockspace):
     root_tag = nbt.TAG_Compound()
 
     root_tag["id"] = nbt.TAG_String("Control")
-    root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)
+
     if command_block.custom_name is not None:
         root_tag["CustomName"] = nbt.TAG_String(command_block.custom_name)
     if command_block.always_active:
@@ -28,8 +28,13 @@ def tagged_cb(command_block, location, blockspace):
         context = command.command_shell.context
         context.executor = command_block
         context.blockspace = blockspace
+        if command.is_conditional:
+            command_block.is_conditional = True
         command = command()
+
     root_tag["Command"] = nbt.TAG_String(command)
+    root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.is_conditional else 0)
+
 
     # Return the tag which represents the entity of the command block.
     return root_tag
