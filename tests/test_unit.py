@@ -2,7 +2,8 @@ from unittest import TestCase
 
 import assembler
 from blockspace import BlockSpace
-from unit import ReverseUnit, NotUnit, AndUnit, OrUnit, ShiftUnit, IncrementUnit, CallbackUnit, XorUnit, NandUnit, XnorUnit
+from unit import ReverseUnit, NotUnit, AndUnit, OrUnit, ShiftUnit, IncrementUnit, CallbackUnit, XorUnit, NandUnit, \
+    XnorUnit
 from .decorators import save_schematic
 
 
