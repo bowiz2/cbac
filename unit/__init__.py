@@ -8,5 +8,7 @@ from .shift_unit import ShiftUnit
 from .xor_unit import XorUnit
 from .xnor_unit import XnorUnit
 from .nand_unit import NandUnit
+from .full_adder_unit import FullAdderUnit
 from .unit import Unit
+
 

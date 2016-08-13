@@ -3,7 +3,7 @@ AIR_BLOCK = EMPTY_BLOCK
 GLASS_BLOCK = 20
 SNOW_BLOCK = 80
 REDSTONE_BLOCK = 152
-
+EMERALD_BLOCK = 133
 # A block which represents the "true" value.
 TRUE_BLOCK = REDSTONE_BLOCK
 # A block which represents the "false" value.
@@ -23,5 +23,6 @@ names = {
     REDSTONE_BLOCK: 'redstone_block',
     IMPULSE_COMMAND_BLOCK: 'command_block',
     REPEATING_COMMAND_BLOCK: 'repeating_command_block',
-    CHAIN_COMMAND_BLOCK: 'chain_command_block'
+    CHAIN_COMMAND_BLOCK: 'chain_command_block',
+    EMERALD_BLOCK: 'emerald_block'
 }

@@ -18,7 +18,7 @@ class MemoryShell(CompoundShell):
         if number == max:
             return self.fill(TRUE_BLOCK)
         if number == 0:
-            return self.fill(FALSE_BLOCK)
+            return self.fill(self.wrapped.default_block)
 
     def set_max_value(self):
         """

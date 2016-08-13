@@ -42,7 +42,7 @@ class CommandBlock(Block):
         self.facing = facing
         self.action = action
         self.always_active = always_active
-        self.is_conditional = conditional
+        self.conditional = conditional
         self.custom_name = custom_name
 
         if self.action == cb_action.IMPULSE:  # 'impulse'
@@ -63,8 +63,15 @@ class CommandBlock(Block):
         if self.facing is None:
             return 0
         faceindex = [DOWN, UP, NORTH, SOUTH, WEST, EAST].index(self.facing)
-        conditional = 0x8 if self.is_conditional else 0
-        data_value = faceindex | conditional
+
+        # TODO: refactor
+        try:
+            conditional = self.conditional or self.command.is_conditional
+        except AttributeError:
+            conditional = self.conditional
+
+        conditional_num = 0x8 if conditional else 0
+        data_value = faceindex | conditional_num
         return data_value
 
     @property

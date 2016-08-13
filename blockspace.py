@@ -179,11 +179,7 @@ class BlockSpace(object):
         if item in self.compounds:
             location, blocks = self.compounds[item]
             block_locations = [self.blocks[block] for block in blocks]
-            if len(block_locations) < 1:
-                raise Exception(" no location")
-            for item in block_locations:
-                if len(item) != 3:
-                    raise Exception("no location")
+
             # TODO: remove code duplication.
             min_x = sorted(block_locations, key=lambda item: item[0])[0].x
             min_y = sorted(block_locations, key=lambda item: item[1])[0].y
@@ -208,6 +204,17 @@ class BlockSpace(object):
             location, blocks = self.compounds[item]
 
         return location
+
+    def shrink(self):
+        """
+        Shrinks the blockspace size to the minimal, according to its blocks.
+        """
+        # TODO: remove code duplication.
+        block_locations = self.blocks.values()
+        max_x = sorted(block_locations, key=lambda item: item[0])[-1].x
+        max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
+        max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
+        self.size = (max_x+1, max_y+1, max_z+1)
 
 
 class AssignmentError(BaseException):

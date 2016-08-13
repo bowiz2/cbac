@@ -1,12 +1,26 @@
 from compound import Memory, CBA
+from constants import block_id
 
 
-class MainLogicJump(object):
+class Statement(object):
+    def __init__(self, wrapped):
+        self.wrapped = wrapped
+
+
+class MainLogicJump(Statement):
     """
     Main logic jump is a statement used in the main logic of a unit to jump to another item.
     """
-    def __init__(self, jump_destination):
-        self.jump_destination= jump_destination
+    pass
+
+
+class Conditional(Statement):
+    def __init__(self, *commands):
+        super(Conditional, self).__init__(commands)
+
+    @property
+    def commands(self):
+        return self.wrapped
 
 
 class Unit(object):
@@ -41,15 +55,26 @@ class Unit(object):
         commands = []
 
         for command_generator in [self.on_entry_init_commands(), self.main_logic_commands(), self.on_exit_commands()]:
+            # Parse Statements
             for statement in command_generator:
-                if isinstance(statement, MainLogicJump):
+                # wrap the command in a statement.
+                if not isinstance(statement, Statement):
+                    statement = Statement(statement)
+
+                if isinstance(statement, Conditional):
+                    for command in statement.commands:
+                        command.is_conditional = True
+                        commands.append(command)
+
+                elif isinstance(statement, MainLogicJump):
                     # Lazy init some stuff.
-                    commands.append(LazyCallbackSet(statement.jump_destination))
-                    commands.append(LazyJump(statement.jump_destination))
+                    commands.append(LazyCallbackSet(statement.wrapped))
+                    commands.append(LazyJump(statement.wrapped))
                     temp_logic_cbas.append(self.add_compound(CBA(*commands)))
                     commands = []
                 else:
-                    commands.append(statement)
+                    # regular statement
+                    commands.append(statement.wrapped)
         if len(commands) > 0:
             temp_logic_cbas.append(self.add_compound(CBA(*commands)))
 

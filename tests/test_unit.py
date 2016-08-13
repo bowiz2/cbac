@@ -3,7 +3,7 @@ from unittest import TestCase
 import assembler
 from blockspace import BlockSpace
 from unit import ReverseUnit, NotUnit, AndUnit, OrUnit, ShiftUnit, IncrementUnit, CallbackUnit, XorUnit, NandUnit, \
-    XnorUnit
+    XnorUnit, FullAdderUnit
 from .decorators import save_schematic
 
 
@@ -13,6 +13,7 @@ class TestUnit(TestCase):
         u = unit_class(size)
         block_space = BlockSpace(blockspace_size)
         block_space.add_unit(u)
+        block_space.shrink()
         schematic = assembler.build(block_space)
         return schematic
 
@@ -68,3 +69,7 @@ class TestUnit(TestCase):
     @save_schematic
     def test_xnor(self):
         return self.sample_schematic(XnorUnit, 4)
+
+    @save_schematic
+    def test_fulladder(self):
+        return self.sample_schematic(FullAdderUnit, 4,(200, 200, 200))

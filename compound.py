@@ -155,15 +155,16 @@ class Memory(Compound):
     An array of empty blocks which later will be used to store some data.
     """
 
-    def __init__(self, size):
+    def __init__(self, size, default_block=block_id.FALSE_BLOCK):
         """
         :param size: Size of the memory in bits.
         """
         self.size = size
+        self.default_block = default_block
         super(Memory, self).__init__(list(), isolated=True)
 
         for i in xrange(size):
-            self.blocks.append(Block(block_id.FALSE_BLOCK))
+            self.blocks.append(Block(self.default_block))
 
     def get_sub_memory(self, arange):
         """
