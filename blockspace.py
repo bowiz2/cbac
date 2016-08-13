@@ -20,6 +20,8 @@ class BlockSpace(object):
         self._isolated_blocks_locations = list()
         # Saves the locations of the compounds.
         self.compounds = dict()
+        # List of units in this blockspace.
+        self.units = []
         # Saves the locations of the entities.
         self.entities = dict()
         # holds to which side each block is faced to.
@@ -29,45 +31,20 @@ class BlockSpace(object):
         takes a unit and tries to place it in the blockspace.
         :param unit: dict of compounds and relative poistion
         """
-        # TODO: cleanup mess.
+        if unit in self.units:
+            return
+        for compound in unit.compounds:
+            self.add_compound(compound, build_direction=build_direction)
 
-        if isinstance(unit, Unit):
-            compounds = unit.compounds
-        else:
-            compounds = unit
-
-        if isinstance(unit, dict):
-            for unit_location in self.possible_locations_for(unit):
-                try:
-                    compound_assigments = dict()
-                    for compound, compound_location in compounds.items():
-                        compound_assigments[compound] = dict(self.assign_coordinates(
-                            unit_location + compound_location,
-                            compound,
-                            build_direction
-                        ))
-
-                    for compound, assigments in compound_assigments.items():
-                        self.add_blocks(assigments, compound.isolated, build_direction)
-                        self.compounds[compound] = unit_location + compounds[compound], assigments
-                    return
-
-                except AssignmentError:
-                    pass
-            raise Exception("Cant add unit.")
-
-        elif isinstance(compounds, list):
-            # TODO: make it when the compound fails will not f up the whole compounds.
-            for compound in compounds:
-                self.add_compound(compound)
-
-        else:
-            raise Exception("Compounds are in an unknown format.")
+        for other_unit in unit.dependent_units:
+            self.add_unit(other_unit, build_direction=build_direction)
 
     def add_compound(self, compound, location=None, build_direction=DEF_BUILD_DIRECTION):
         """
         Mainly, Generate the blocks of that compound to the block dict.
         """
+        if compound in self.compounds:
+            return
         # Generates possible locations for the new compound.
         if location is None:
             possible_locations = self.possible_locations_for(compound)

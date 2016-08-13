@@ -9,6 +9,7 @@ class ReverseUnit(Unit):
     """
 
     def __init__(self, bits=8):
+        # TODO: re-write to new format.
         super(ReverseUnit, self).__init__()
         self.bits = bits
         self.input_a = Memory(size=bits)

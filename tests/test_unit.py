@@ -11,7 +11,7 @@ class TestUnit(TestCase):
     def sample_schematic(unit_class, size, blockspace_size=(30, 10, 30)):
         u = unit_class(size)
         block_space = BlockSpace(blockspace_size)
-        block_space.add_compounds(u.compounds)
+        block_space.add_unit(u)
         schematic = assembler.build(block_space)
         return schematic
 

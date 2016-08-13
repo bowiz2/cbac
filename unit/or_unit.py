@@ -5,6 +5,7 @@ from unit import Unit
 
 class OrUnit(Unit):
     def __init__(self, bits=8):
+        # TODO: re-write to new format
         super(OrUnit, self).__init__()
         self.bits = bits
         self.input_a = Memory(size=bits)

@@ -15,6 +15,8 @@ class Unit(object):
         self.compounds = []
         self.inputs = []
         self.outputs = []
+        # Units which are needed for this unit to function.
+        self.dependent_units = []
         # Logic cbas are cbac which excecute the logic of the unit. the entry point is the first logic_cba
         self.logic_cbas = []
 
@@ -70,6 +72,10 @@ class Unit(object):
     def add_compound(self, compound):
         self.compounds.append(compound)
         return compound
+
+    def add_unit(self, unit):
+        self.dependent_units.append(unit)
+        return unit
 
     def add_input(self, memory):
         self.inputs.append(memory)
