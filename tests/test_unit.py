@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import assembler
 from blockspace import BlockSpace
-from unit import ReverseUnit, NotUnit, AndUnit, OrUnit, ShiftUnit, IncrementUnit, CallbackUnit, XorUnit
+from unit import ReverseUnit, NotUnit, AndUnit, OrUnit, ShiftUnit, IncrementUnit, CallbackUnit, XorUnit, NandUnit
 from .decorators import save_schematic
 
 
@@ -30,6 +30,10 @@ class TestUnit(TestCase):
     @save_schematic
     def test_and(self):
         return self.sample_schematic(AndUnit, 4)
+
+    @save_schematic
+    def test_nand(self):
+        return self.sample_schematic(NandUnit, 4)
 
     @save_schematic
     def test_shift(self):

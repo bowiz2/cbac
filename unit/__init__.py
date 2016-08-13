@@ -6,5 +6,6 @@ from .or_unit import OrUnit
 from .reverese_unit import ReverseUnit
 from .shift_unit import ShiftUnit
 from .xor_unit import XorUnit
+from .nand_unit import NandUnit
 from .unit import Unit
 
