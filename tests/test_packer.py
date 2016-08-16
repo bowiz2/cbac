@@ -4,6 +4,19 @@ from unittest import TestCase
 from blockspace import packer
 
 
+class AreaMock(packer.Area):
+    """
+    Used for tests
+    """
+    def __init__(self, compound=None):
+        self.compound = compound
+        self.packed_blocks = None
+
+
+class CompoundMock(object):
+    def __init__(self, isolated=False):
+        self.isolated = isolated
+
 class TestPacker(TestCase):
     """
     Test the packet functionality.
@@ -28,7 +41,6 @@ class TestArea(TestCase):
         pass
 
     def test_dimensions(self):
-        area = packer.DummyArea()
-        area.packed_blocks = (
-            (None, (1, 4, 1), None), (None, (0, 3, 5), None), (None, (8, 5, 1), None), (None, (7, 3, 27), None))
-        self.assertEqual(area.dimensions, (8, 5, 27))
+        pass
+
+

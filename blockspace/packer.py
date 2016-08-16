@@ -1,10 +1,7 @@
-from compound import CBA
-from constants import direction
-from constants.block_id import ISOLATORS
-from utils import Location
 from collections import namedtuple
-from utils import Vector, memoize
 
+from constants import direction
+from utils import Vector
 
 BlockAssignment = namedtuple('BlockAssignment', ['block', 'location', 'direction'])
 
@@ -21,27 +18,11 @@ class Area(object):
     start_build_direction = direction.WEST
 
     def __init__(self, compound):
-        self._compound = compound
-        self.packed_blocks = self._pack(compound)
+        self.compound = compound
 
-    @property
-    def compound(self):
-        return self._compound
-
-    @compound.setter
-    def compound(self, value):
-        self._compound = value
-        self.packed_blocks = self._pack(value)
-
-    @staticmethod
-    def _pack(compound):
-        """
-        :return: list of relative Block Assignments.
-        """
-        # The corner of the area, the build starts from here.
+    def _pack(self, compound):
         corner = Vector(0, 0, 0)
-
-        build_direction = Area.start_build_direction
+        build_direction = self.start_build_direction
 
         packed = []
 
@@ -54,6 +35,24 @@ class Area(object):
         return packed
 
     @property
+    def margin(self):
+        if not self.compound.isolated:
+            return Vector(0, 0, 0)
+        else:
+            return Vector(1, 1, 1)
+
+    @property
+    def packed_blocks(self):
+        """
+        :return: list of relative Block Assignments.
+        """
+        # The corner of the area, the build starts from here.
+        packed_blocks = self._pack(self.compound)
+        packed_blocks = [BlockAssignment(block, self.margin + location, direction) for block, location, direction in
+                         packed_blocks]
+        return packed_blocks
+
+    @property
     def dimensions(self):
         """
         :return: Get the width, height and length of the area.
@@ -63,24 +62,19 @@ class Area(object):
         max_y = 0
         max_z = 0
 
-        for block, rel_locatiom, direction in self.packed_blocks:
-            if rel_locatiom[0] > max_x:
-                max_x = rel_locatiom[0]
-            if rel_locatiom[1] > max_y:
-                max_y = rel_locatiom[1]
-            if rel_locatiom[2] > max_z:
-                max_z = rel_locatiom[2]
+        for block, rel_location, _ in self.packed_blocks:
+            if rel_location[0] > max_x:
+                max_x = rel_location[0]
+            if rel_location[1] > max_y:
+                max_y = rel_location[1]
+            if rel_location[2] > max_z:
+                max_z = rel_location[2]
 
-        return Vector(max_x, max_y, max_z)
+        result = Vector(max_x, max_y, max_z)
+        # Adjust for margin
+        result += self.margin
 
-
-class DummyArea(Area):
-    """
-    Used for tests
-    """
-    def __init__(self):
-        self.compound = None
-        self.packed_blocks = None
+        return result
 
 
 def pack(compounds, blockspace):
@@ -101,7 +95,6 @@ def pack(compounds, blockspace):
             block_assignments.append(assignment)
 
     return block_assignments
-
 
 
 def pack_areas(areas, blockspace):
