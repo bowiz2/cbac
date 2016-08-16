@@ -22,7 +22,7 @@ def pack(compound, blockspace, spec_location, start_build_direction):
     """
     Try to pack a compound at a location in a blockspace
     """
-    def try_pack(location):
+    def _try_pack(try_location):
         current_build_direction = start_build_direction
         # For each block try to assign location and hope for the location to match.
         for i, block in enumerate(compound.blocks):
@@ -34,7 +34,7 @@ def pack(compound, blockspace, spec_location, start_build_direction):
                 # try to assign location.
                 direction_vector = direction.vectors[current_build_direction]
 
-                possible_location = location + (direction_vector * i)
+                possible_location = try_location + (direction_vector * i)
 
                 if possible_location in blockspace.blocks.values():
                     raise PackingError("Collision with block at location {0}".format(possible_location))
@@ -57,8 +57,9 @@ def pack(compound, blockspace, spec_location, start_build_direction):
     if spec_location is None:
         for location in location_gen(compound, blockspace):
             try:
-                return dict(try_pack(location))
+                return dict(_try_pack(location))
             except PackingError:
                 pass
         raise PackingError
-    return dict(try_pack(spec_location))
+    else:
+        return dict(_try_pack(spec_location))

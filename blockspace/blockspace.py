@@ -51,6 +51,7 @@ class BlockSpace(object):
             assignments = packer.pack(compound, self, location, build_direction)
             self.add_blocks(assignments)
             # Save the compound location.
+            # TODO: fix location to the assigned location.
             self.compounds[compound] = (location, assignments)
         except packer.PackingError:
             raise Exception("Can't add compound {0} to this block space.".format(compound))
