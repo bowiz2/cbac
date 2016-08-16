@@ -17,18 +17,41 @@ class PackingError(BaseException):
 
 
 class Area(object):
-
-    build_direction = direction.WEST
+    # The direction from which the build starts.
+    start_build_direction = direction.WEST
 
     def __init__(self, compound):
-        self.compound = compound
-        self.packed_blocks = self._pack()
+        self._compound = compound
+        self.packed_blocks = self._pack(compound)
 
-    def _pack(self):
+    @property
+    def compound(self):
+        return self._compound
+
+    @compound.setter
+    def compound(self, value):
+        self._compound = value
+        self.packed_blocks = self._pack(value)
+
+    @staticmethod
+    def _pack(compound):
         """
         :return: list of relative Block Assignments.
         """
-        pass
+        # The corner of the area, the build starts from here.
+        corner = Vector(0, 0, 0)
+
+        build_direction = Area.start_build_direction
+
+        packed = []
+
+        for i, block in enumerate(compound.blocks):
+            build_direction_vector = direction.vectors[build_direction]
+            relative_location = corner + (build_direction_vector * i)
+            relative_assignment = BlockAssignment(block, relative_location, build_direction)
+            packed.append(relative_assignment)
+
+        return packed
 
     @property
     def dimensions(self):
