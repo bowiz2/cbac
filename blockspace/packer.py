@@ -42,7 +42,8 @@ def pack(compounds, blockspace):
     block_assignments = {}
     for area, location in area_assignments.items():
         for block_location, block_direction in area.pack():
-            
+            pass
+
 
 
 def pack_areas(areas, blockspace):
