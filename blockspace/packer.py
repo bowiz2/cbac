@@ -1,5 +1,5 @@
 from collections import namedtuple, defaultdict
-
+from compound import CBA
 from constants import direction
 from utils import Vector
 
@@ -15,11 +15,13 @@ class PackingError(BaseException):
 # The direction from which the build starts.
 start_build_direction = direction.EAST
 
+
 class Area(object):
     def __init__(self, compound):
         self.compound = compound
 
-    def _pack(self, compound):
+    @staticmethod
+    def _pack(compound):
         corner = Vector(0, 0, 0)
         build_direction =  start_build_direction
 
@@ -63,6 +65,7 @@ class Area(object):
         result = Vector(max_x, max_y, max_z)
 
         return result
+
     @property
     def is_isolated(self):
         """
@@ -71,6 +74,51 @@ class Area(object):
         """
         return self.compound.isolated
 
+max_width = 8
+
+class CBAArea(Area):
+    @staticmethod
+    def _pack(compound):
+        # TODO: document
+        build_direction = start_build_direction
+
+        rows = []
+        row = []
+        total_blocks = compound.blocks
+        for i, block in enumerate(total_blocks):
+            row.append(block)
+            if i % max_width is max_width -1 :
+                rows.append(row)
+                row = []
+                row_id = []
+        rows.append(row)
+        last_row = rows[-1]
+        for i in xrange(max_width - len(last_row)):
+            #Append none for operation
+            last_row.append(None)
+        directions = {}
+        locs = {}
+        # set directions for the blocks.
+        for row_id, row in enumerate(rows):
+            for block_id, block in enumerate(row):
+                if block_id % max_width is not max_width -1:
+                    directions[block] = [build_direction, direction.oposite(build_direction)][row_id % 2]
+                else:
+                    directions[block] = direction.UP
+            if row_id % 2 is 1:
+                row.reverse()
+        # set locations for the blocks.
+        for row_id, row in enumerate(rows):
+            for block_id, block in enumerate(row):
+                locs[block] = Vector(block_id, row_id, 0)
+        # compile assignments
+        return [BlockAssignment(block, locs[block], directions[block]) for block in total_blocks]
+
+def area_factory(compound):
+    if isinstance(compound, CBA):
+        return CBAArea(compound)
+    else:
+        return Area(compound)
 
 def pack(compounds):
     """
@@ -79,7 +127,7 @@ def pack(compounds):
     :param blockspace:
     :return: list of block assignments.
     """
-    areas = [Area(compound) for compound in compounds]
+    areas = [area_factory(compound) for compound in compounds]
 
     area_assignments = pack_areas(areas)
 

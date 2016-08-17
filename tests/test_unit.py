@@ -3,7 +3,7 @@ from unittest import TestCase
 import assembler
 from blockspace import BlockSpace
 from unit import ReverseUnit, NotUnit, AndUnit, OrUnit, ShiftUnit, IncrementUnit, CallbackUnit, XorUnit, NandUnit, \
-    XnorUnit, FullAdderUnit
+    XnorUnit, FullAdderUnit, TimerUnit
 from .decorators import save_schematic
 
 
@@ -61,3 +61,8 @@ class TestUnit(TestCase):
     @save_schematic
     def test_fulladder(self):
         return self.sample_schematic(FullAdderUnit, 4, (200, 200, 200))
+
+
+    @save_schematic
+    def test_timer(self):
+        return self.sample_schematic(TimerUnit, 1000)
