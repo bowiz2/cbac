@@ -1,7 +1,7 @@
 from constants import direction
 from constants.block_id import ISOLATORS
 from utils import Vector, Location
-import packer2
+import packer
 
 
 DEF_BUILD_DIRECTION = direction.WEST
@@ -118,7 +118,7 @@ class BlockSpace(object):
         return location
 
     def pack(self):
-        compound_packings = packer2.pack(self.unpacked_compounds)
+        compound_packings = packer.pack(self.unpacked_compounds)
         for compound, packing in compound_packings.items():
             self.packed_compounds[compound] = packing
 

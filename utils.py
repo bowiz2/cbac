@@ -26,6 +26,7 @@ class Vector(namedtuple('Vector', ['x', 'y', 'z'])):
         return False
 
 
+
 # TODO: think of something better for the adjacency.
 directions = [
     Vector(0, 1, 0),

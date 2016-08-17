@@ -1,10 +1,10 @@
 """Test the packer module"""
 from unittest import TestCase
 
-from blockspace import packer2
+from blockspace import packer
 
 
-class AreaMock(packer2.Area):
+class AreaMock(packer.Area):
     """
     Used for tests
     """
