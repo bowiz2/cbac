@@ -1,7 +1,7 @@
 from constants import direction
 from constants.block_id import ISOLATORS
 from utils import Vector, Location
-import packer
+import packer2
 
 
 DEF_BUILD_DIRECTION = direction.WEST
@@ -15,7 +15,6 @@ class BlockSpace(object):
     def __init__(self, size):
         # Tuple which describes the size of the block space (x,y,z)
         self.size = size
-
         self.packed_compounds = {}
         self.packed_entities = {}
 
@@ -89,8 +88,9 @@ class BlockSpace(object):
         """
 
         if item in self.packed_compounds:
-            location, blocks = self.packed_compounds[item]
-            block_locations = [self.packed_blocks[block] for block in blocks]
+            location, block_packings = self.packed_compounds[item]
+            # TODO: fix
+            block_locations = [self.packed_blocks[block] for block, location, direction in block_packings]
 
             # TODO: remove code duplication.
             min_x = sorted(block_locations, key=lambda item: item[0])[0].x
@@ -113,20 +113,25 @@ class BlockSpace(object):
         try:
             location = self.packed_blocks[item]
         except KeyError:
-            location, blocks = self.packed_compounds[item]
+            location = self.packed_compounds[item].location
 
         return location
 
     def pack(self):
-        compound_packings = packer.pack(self.unpacked_compounds, self)
+        compound_packings = packer2.pack(self.unpacked_compounds)
         for compound, packing in compound_packings.items():
             self.packed_compounds[compound] = packing
 
     @property
     def packed_blocks(self):
         to_return = {}
-        for location, blocks in self.packed_compounds.values():
-            to_return.append(blocks)
+        for compound in self.packed_compounds.values():
+            for block, location, build_direction in compound.block_assignments:
+                try:
+                    block.facing = build_direction
+                except AttributeError:
+                    pass
+                to_return[block] = location
         return to_return
 
     def shrink(self):

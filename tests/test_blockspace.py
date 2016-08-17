@@ -11,6 +11,7 @@ class TestBlockSpace(TestCase):
         for i in xrange(TEST_SIZE):
             bs.add_compound(Constant(i + 1))
             # Some bugs found.
+        bs.pack()
         assert len(bs.packed_compounds) == TEST_SIZE
 
         bs = BlockSpace((200, 200, 200))

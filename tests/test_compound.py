@@ -53,7 +53,8 @@ class TestCompound(TestCase):
         ext = Extender(cba, cba2)
 
         block_space = BlockSpace((8, 8, 8))
-        block_space.add_compounds([cba, cba2, ext])
+        for comp in [cba, cba2, ext]:
+            block_space.add_compound(comp)
 
         # build a schematic and save it to file.
         return assembler.build(block_space)
