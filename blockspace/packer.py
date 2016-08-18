@@ -81,10 +81,12 @@ class CBAArea(Area):
     def _pack(compound):
         # TODO: document
         build_direction = start_build_direction
-
+        # Matrix of rows.
         rows = []
         row = []
+        # All the blocks of the compound.
         total_blocks = compound.blocks
+        # Generate rows from blocks.
         for i, block in enumerate(total_blocks):
             row.append(block)
             if i % max_width is max_width -1 :
@@ -94,7 +96,7 @@ class CBAArea(Area):
         rows.append(row)
         last_row = rows[-1]
         for i in xrange(max_width - len(last_row)):
-            #Append none for operation
+            # Append none for operation
             last_row.append(None)
         directions = {}
         locs = {}
