@@ -32,8 +32,28 @@ class Entity(object):
         self.custom_name_visible = custom_name_visible
         self.silent = silent
         self.glowing = glowing
+
+        if tags is None:
+            tags = {}
         self.tags = tags
 
+    def parse_tags(self):
+        parsed_tags = {}
+        # Include isoteric tags.
+        for tagname, tagvalue in self.tags.items():
+            parsed_tags[tagname] = tagvalue
+
+        parsed_tags["CustomName"] = self.custom_name
+        parsed_tags["Rotation"] = self.rotation
+        parsed_tags["FallDistance"] = self.fall_distance
+        parsed_tags["Fire"] = self.fire
+        parsed_tags["Air"] = self.air
+        parsed_tags["OnGround"] = self.on_ground
+        parsed_tags["NoGravity"] = self.no_gravity
+        parsed_tags["CustomNameVisible"] = self.custom_name_visible
+        parsed_tags["Silent"] = self.silent
+
+        return parsed_tags
 
 class CommandStats(object):
     """
