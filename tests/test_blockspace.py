@@ -11,7 +11,8 @@ class TestBlockSpace(TestCase):
         for i in xrange(TEST_SIZE):
             bs.add_compound(Constant(i + 1))
             # Some bugs found.
-        assert len(bs.compounds) == TEST_SIZE
+        bs.pack()
+        assert len(bs.packed_compounds) == TEST_SIZE
 
         bs = BlockSpace((200, 200, 200))
 
@@ -20,4 +21,4 @@ class TestBlockSpace(TestCase):
         for i in xrange(TEST_SIZE):
             bs.add_compound(Memory(MEMORY_SIZE))
             # Some bugs found.
-        self.assertEqual(len(bs.blocks), MEMORY_SIZE * TEST_SIZE)
+        self.assertEqual(len(bs.packed_blocks), MEMORY_SIZE * TEST_SIZE)

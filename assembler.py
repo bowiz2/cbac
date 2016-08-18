@@ -69,7 +69,7 @@ def build(block_space):
     schematic = MCSchematic(shape=block_space.size)
     tile_entities_to_add = []
 
-    for block, location in block_space.blocks.items():
+    for block, location in block_space.packed_blocks.items():
         # Create the actual block.
         schematic.setBlockAt(location[0], location[1], location[2], block.block_id)
 

@@ -49,12 +49,17 @@ class CBA(Compound):
 
         for i, block in enumerate(blocks):
             # create custom names for blocks.
+            # TODO: make more readable.
+
+            # Deprecated.
             block.custom_name = "{cba_name}[{i}]".format(cba_name=self.name, i=i)
             try:
                 action = "<{0}>".format(block.command.command_function.__name__)
                 block.custom_name += action
             except AttributeError:
                 pass
+            # end of deprecated.
+
             # Parse conditionaning.
             try:
                 if block.command.creates_condition:
