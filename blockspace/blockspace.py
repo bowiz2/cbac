@@ -110,6 +110,9 @@ class BlockSpace(object):
         """
         Get a location of an item which is stored in the block space.
         """
+        # if item is a location, return itself.
+        if isinstance(item, Vector):
+            return item
         try:
             location = self.packed_blocks[item]
         except KeyError:

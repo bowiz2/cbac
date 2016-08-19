@@ -6,6 +6,7 @@ from utils import Vector
 BlockAssignment = namedtuple('BlockAssignment', ['block', 'location', 'direction'])
 CompoundAssignment = namedtuple('CompoundAssignment', ['location', 'block_assignments'])
 
+
 class PackingError(BaseException):
     """
     Thrown when the block space cannot assign coordinates for a compound in a specific location.
@@ -23,7 +24,7 @@ class Area(object):
     @staticmethod
     def _pack(compound):
         corner = Vector(0, 0, 0)
-        build_direction =  start_build_direction
+        build_direction = start_build_direction
 
         packed = []
 
@@ -76,6 +77,7 @@ class Area(object):
 
 max_width = 8
 
+
 class CBAArea(Area):
     @staticmethod
     def _pack(compound):
@@ -116,11 +118,13 @@ class CBAArea(Area):
         # compile assignments
         return [BlockAssignment(block, locs[block], directions[block]) for block in total_blocks]
 
-def area_factory(compound):
-    if isinstance(compound, CBA):
-        return CBAArea(compound)
+
+def area_factory(obj):
+    if isinstance(obj, CBA):
+        return CBAArea(obj)
     else:
-        return Area(compound)
+        return Area(obj)
+
 
 def pack(compounds):
     """

@@ -17,6 +17,7 @@ class CompoundMock(object):
     def __init__(self, isolated=False):
         self.isolated = isolated
 
+
 class TestPacker(TestCase):
     """
     Test the packet functionality.

@@ -7,4 +7,5 @@ from .compound_shell import CompoundShell
 from .cb_shell import CommandBlockShell
 from .cba_shell import CBAShell
 from .memory_shell import MemoryShell
+from .entity_shell import EntityShell
 

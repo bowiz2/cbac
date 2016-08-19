@@ -52,3 +52,10 @@ def memoize(function):
 
     return wrapper
 
+
+def format_location(location):
+    return " ".join([str(i) for i in location])
+
+
+def format_realtive_location(location):
+    return " ".join(["~" + str(i) for i in location])

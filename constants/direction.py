@@ -26,3 +26,4 @@ def oposite(direction):
         EAST: WEST,
         WEST: EAST
     }[direction]
+__all__ = ["UP", "DOWN", "WEST", "EAST", "SOUTH", "NORTH"]

@@ -1,3 +1,7 @@
+from command_shell import EntityShell
+from utils import memoize
+
+
 class Entity(object):
     def __init__(self, mc_type, custom_name=None, rotation=None, fall_distance=None, fire=None, air=None,
                  on_ground=None, no_gravity=None, custom_name_visible=None, silent=None, glowing=None, tags=None):
@@ -35,12 +39,12 @@ class Entity(object):
 
         if tags is None:
             tags = {}
-        self.tags = tags
+        self.misc_tags = tags
 
     def parse_tags(self):
         parsed_tags = {}
         # Include isoteric tags.
-        for tagname, tagvalue in self.tags.items():
+        for tagname, tagvalue in self.misc_tags.items():
             parsed_tags[tagname] = tagvalue
 
         parsed_tags["CustomName"] = self.custom_name
@@ -48,12 +52,24 @@ class Entity(object):
         parsed_tags["FallDistance"] = self.fall_distance
         parsed_tags["Fire"] = self.fire
         parsed_tags["Air"] = self.air
-        parsed_tags["OnGround"] = self.on_ground
-        parsed_tags["NoGravity"] = self.no_gravity
+        parsed_tags["OnGround"] = 1 if self.on_ground else 0
+        parsed_tags["NoGravity"] = 1 if self.no_gravity else 0
         parsed_tags["CustomNameVisible"] = self.custom_name_visible
         parsed_tags["Silent"] = self.silent
 
         return parsed_tags
+
+    @property
+    def selector(self):
+        assert self.custom_name is not None
+        return "@e[name={0}]".format(self.custom_name)
+
+    @property
+    @memoize
+    def shell(self):
+        assert self.custom_name is not None
+        return EntityShell(self)
+
 
 class CommandStats(object):
     """

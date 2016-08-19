@@ -1,4 +1,5 @@
 from . import ShellContext
+from utils import Vector
 
 
 class CommandShell(object):
@@ -23,8 +24,15 @@ class CommandShell(object):
     def _join_command(*items):
         # TODO: implement test.
         def parse(obj):
+            if isinstance(obj, Vector):
+                return " ".join([str(i) for i in obj])
             if isinstance(obj, dict):
-                return str(obj).replace("'", "")
+                new_dict = {}
+                for key, value in obj.items():
+                    if value is not None:
+                        new_dict[key] = value
+
+                return str(new_dict).replace("'", "")
 
             return str(obj)
 

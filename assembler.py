@@ -39,6 +39,11 @@ def tagged_cb(command_block, location, blockspace):
     return root_tag
 
 
+def tagged_entity(entity, location, blockspace):
+    # TODO: implemnet.
+    pass
+
+
 def translate(block, location, blockspace):
     """
     Receievs a block object and returns it in NBT tag form
