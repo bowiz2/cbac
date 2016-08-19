@@ -1,5 +1,5 @@
 from command_shell import BlockShell
-from compound.cba import CBA
+from compound import CBA
 
 
 class Extender(CBA):

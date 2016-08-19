@@ -1,6 +1,6 @@
 from block import Block, CommandBlock
 from command_shell import CBAShell
-from compound.compound import Compound
+from compound import Compound
 from constants import cb_action
 from constants.block_id import FALSE_BLOCK
 from utils import memoize

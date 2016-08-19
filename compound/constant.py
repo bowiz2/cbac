@@ -1,5 +1,5 @@
 from block import Block
-from compound.compound import Compound
+from compound import Compound
 from constants import block_id
 
 

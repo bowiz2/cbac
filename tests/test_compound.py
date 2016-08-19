@@ -4,7 +4,10 @@ from unittest import TestCase
 import assembler
 import block
 from blockspace import BlockSpace
-from compound import Compound, Constant, Memory, CBA, Extender
+from compound import Compound, CBA
+from compound import Memory
+from compound import Constant
+from compound import Extender
 from constants.block_id import FALSE_BLOCK
 from .decorators import save_schematic
 

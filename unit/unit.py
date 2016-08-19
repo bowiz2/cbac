@@ -1,4 +1,5 @@
-from compound import Memory, CBA
+from compound import CBA
+from compound import Memory
 
 
 class Statement(object):

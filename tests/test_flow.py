@@ -2,7 +2,10 @@ from unittest import TestCase
 
 import assembler
 from blockspace import BlockSpace
-from compound import Memory, SwitchFlow, Constant, CBA
+from compound import CBA
+from compound import Memory
+from compound import Constant
+from compound.switch import SwitchFlow
 from constants.block_id import TRUE_BLOCK
 from .decorators import save_schematic
 

@@ -2,7 +2,8 @@ from unittest import TestCase
 from entity import Entity
 from constants.entity_id import *
 from blockspace import BlockSpace
-from compound import CBA, Memory
+from compound import CBA
+from compound import Memory
 from .decorators import save_schematic
 import assembler
 from constants.direction import *

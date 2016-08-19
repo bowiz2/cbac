@@ -1,6 +1,6 @@
 from block import Block
 from command_shell import MemoryShell
-from compound.compound import Compound
+from compound import Compound
 from constants import block_id
 from utils import memoize
 
