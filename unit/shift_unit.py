@@ -2,7 +2,7 @@ import math
 
 from compound import Memory
 from constants.block_id import EMPTY_BLOCK, FALSE_BLOCK
-from unit import Unit
+from unit_base import Unit
 
 
 class ShiftUnit(Unit):

@@ -1,8 +1,8 @@
-from unit import Unit
+from unit_base import Unit
 from compound import Memory
 from entity import Entity
 from constants.entity_id import ARMOR_STAND
-from unit import Conditional
+from unit_base import Conditional
 from constants.direction import *
 
 

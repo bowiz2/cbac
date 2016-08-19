@@ -7,7 +7,7 @@ from .not_unit import NotUnit
 from .or_unit import OrUnit
 from .reverese_unit import ReverseUnit
 from .shift_unit import ShiftUnit
-from .unit import Unit
+from .unit_base import Unit
 from .xnor_unit import XnorUnit
 from .xor_unit import XorUnit
 from .timer import TimerUnit

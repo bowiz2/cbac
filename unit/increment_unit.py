@@ -1,5 +1,5 @@
 from compound import Memory
-from unit import Unit
+from unit_base import Unit
 
 
 class IncrementUnit(Unit):

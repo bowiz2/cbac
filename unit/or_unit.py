@@ -1,6 +1,6 @@
 from compound import CBA
 from compound import Memory
-from unit import Unit
+from unit_base import Unit
 
 
 class OrUnit(Unit):

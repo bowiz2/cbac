@@ -1,5 +1,5 @@
 from compound import CBA
-from unit import Unit, MainLogicJump
+from unit_base import Unit, MainLogicJump
 
 
 class CallbackUnit(Unit):
