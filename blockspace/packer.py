@@ -120,10 +120,7 @@ class CBAArea(Area):
 
 
 def area_factory(obj):
-    if isinstance(obj, CBA):
-        return CBAArea(obj)
-    else:
-        return Area(obj)
+    return Area(obj)
 
 
 def pack(compounds):

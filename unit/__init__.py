@@ -11,4 +11,5 @@ from .unit import Unit
 from .xnor_unit import XnorUnit
 from .xor_unit import XorUnit
 from .timer import TimerUnit
+from .ram_unit import RamUnit
 
