@@ -79,9 +79,9 @@ class BlockSpace(object):
         """
 
         if item in self.packed_compounds:
+            # If the item was a compound, Calculate the minimal vectors.
             location, block_packings = self.packed_compounds[item]
             # TODO: Write unit test for it.
-
             block_locations = [self.packed_blocks[block] for block, location, direction in block_packings]
 
             sort_by_x = sorted(block_locations, key=lambda obj: obj[0])
@@ -93,6 +93,7 @@ class BlockSpace(object):
 
             return min_location, max_location
         else:
+            # If the item provided was a block, just return its location in an area form.
             location = self.packed_blocks[item]
             return location, location
 
