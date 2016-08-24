@@ -8,23 +8,31 @@ from constants.mc_direction import vectors as direction_vectors
 class EntityShell(CommandShell):
     @command()
     def kill(self):
+        """
+        Kills this entity
+        :return: Kill command.
+        """
         return self._join_command("/kill", self.wrapped.selector)
 
     @command()
     def execute(self, to_execute_command, location="~ ~ ~"):
+        """
+        Executes a command on behalf of one or more other entities, with originating permissions,
+            optionally on condition that a single-block /testforblock-style check passes.
+        :param to_execute_command: Specifies the command to be run. Must be a valid command.
+        :param location: Specifies the position from which to run the command.
+        :return: Execute command.
+        """
         if not isinstance(to_execute_command, str):
             to_execute_command = to_execute_command()
         return self._join_command("/execute", self.wrapped.selector, location, to_execute_command)
-
-    def activate(self):
-        return self.execute("/setblock ~ ~ ~ {}".format(names[TRUE_BLOCK]))
 
     @command()
     def summon(self, location):
         """
         Summons an entity at a given location.
         :param location: The location you want to spawn the entity at.
-        :return: CommandSuspender
+        :return: Summon command.
         """
         entity = self.wrapped
         return self._join_command(
@@ -35,6 +43,20 @@ class EntityShell(CommandShell):
         )
 
     @command()
-    def move(self, direction, times=1):
-        direction_vector = direction_vectors[direction] * times
+    def move(self, direction, distance=1):
+        """
+        Moves this entity in a direction by a distance
+        :param direction: The direction to move the entity.
+        :param distance: How far to move the entity.
+        :return: Tp command.
+        """
+        direction_vector = direction_vectors[direction] * distance
         return self._join_command("/tp", self.wrapped.selector, format_realtive_location(direction_vector))
+
+    def activate(self):
+        """
+        Set the block at which this entity is standing as true block.
+        :return: Execute command.
+        """
+        return self.execute("/setblock ~ ~ ~ {}".format(names[TRUE_BLOCK]))
+
