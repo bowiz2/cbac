@@ -1,7 +1,5 @@
 from collections import namedtuple
 
-from constants.mc_direction import UP, DOWN, NORTH, EAST, SOUTH, WEST
-
 
 class Vector(namedtuple('Vector', ['x', 'y', 'z'])):
     """
@@ -17,15 +15,6 @@ class Vector(namedtuple('Vector', ['x', 'y', 'z'])):
 
     def __mul__(self, other):
         return Vector(*[i * other for i in self])
-
-    def is_adjacent(self, other):
-        """
-        Takes other vector and check if it is adjacent to this location.
-        """
-        for direction_vector in directions:
-            if self == other + direction_vector:
-                return True
-        return False
 
 
 Location = Vector
@@ -53,11 +42,3 @@ def format_realtive_location(location):
     return " ".join(["~" + str(i) for i in location])
 
 
-vectors = {
-    UP: Vector(0, 1, 0),
-    DOWN: Vector(0, -1, 0),
-    NORTH: Vector(0, 0, 1),
-    EAST: Vector(1, 0, 0),
-    SOUTH: Vector(0, 0, -1),
-    WEST: Vector(-1, 0, 0)
-}

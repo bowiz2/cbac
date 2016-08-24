@@ -6,6 +6,8 @@ I chose to place them in a separate module to prevent programming error. (I type
 
 Also this module provide some basic functionality working with directions.
 """
+from utils import Vector
+
 UP = 'up'
 DOWN = 'down'
 NORTH = 'north'
@@ -25,3 +27,11 @@ def oposite(direction):
     }[direction]
 
 __all__ = ["UP", "DOWN", "WEST", "EAST", "SOUTH", "NORTH"]
+vectors = {
+    UP: Vector(0, 1, 0),
+    DOWN: Vector(0, -1, 0),
+    NORTH: Vector(0, 0, 1),
+    EAST: Vector(1, 0, 0),
+    SOUTH: Vector(0, 0, -1),
+    WEST: Vector(-1, 0, 0)
+}
