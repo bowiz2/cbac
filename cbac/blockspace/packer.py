@@ -26,60 +26,19 @@ def pack(items):
 
 def pack_areas(areas):
     """
-    Takes a collection of areas and organizes them inside the
+    Takes a colelction of areas and organizes them inside the
     :param areas:
-    :return: dictionary of area and the location inside the blockspace.
+    :param blockspace:
+    :return: dictionery of area and the location inside the blockspace.
     """
-    # Sort the areas by height, greatest height first
-    sorted_areas = sorted(areas, key=lambda area: area.dimensions[2], reverse=True)
-    # Make a packing space the height of the tallest area.
-    packing_height = sorted_areas[0].z
     assignments = {}
-    x_offset = 0
+    pivot = Vector(0, 0, 0)
+    # TODO: adjust to build direction
+    for area in areas:
+        assignments[area] = pivot
+        if area.is_isolated:
+            pivot += Vector(0, 0, 2)
+        pivot += Vector(0, 0, area.dimensions.z)
 
-    while len(sorted_areas) > 0:
-        root_area = sorted_areas.pop()
-        column = _build_column(root_area, sorted_areas, packing_height)
-        column_dict = _column_to_dict(column, x_offset)
-        for key in column_dict:
-            assignments[key] = column_dict[key]
-        x_offset += root_area.dimensions[0]
     return assignments
-
-
-def _build_column(root_area, sorted_areas, packing_height):
-    """ Returns a list of areas for the column, from top to bottom."""
-    res = [root_area]
-    height_left = packing_height - root_area.dimensions[2]
-    while height_left > 0:
-        index = _find_suitable_child(sorted_areas, height_left, root_area.dimensions[2])
-        if index == -1:
-            return res
-        child = sorted_areas.pop(index)
-        res.append(child)
-        height_left -= child.z
-    return res
-
-
-def _column_to_dict(column, x_offset):
-    res = {}
-    z_offset = 0
-    for i in xrange(len(column)):
-        area = column[i]
-        res[area] = (x_offset, area.dimensions[2] + z_offset)
-        z_offset += area.dimensions[2]
-    return res
-
-
-def _find_suitable_child(sorted_areas, max_z, max_x):
-    """
-    Goes over sorted_areas, finding a suitable area to place the next area in the column.
-    Can be a binary search when I feel like implementing it.
-    :return: If found, the index of the area. Else, -1.
-    """
-    for i in xrange(len(sorted_areas) - 1):
-        if sorted_areas[i + 1].z - max_z < 0 and sorted_areas[i + 1].x < max_x:
-            return i
-    return -1
-
 
