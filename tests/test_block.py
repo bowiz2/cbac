@@ -5,7 +5,6 @@ import cbac
 
 
 class TestBlock(TestCase):
-    def
     def test_command_block(self):
         cb = cbac.block.CommandBlock("/say hello", facing=cbac.block.mc_direction.SOUTH, action="chain")
         self.assertEqual(cb.command, "/say hello")
