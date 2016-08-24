@@ -2,6 +2,7 @@
 Statements are syntactic sugar for the definition of units.
 """
 
+
 class Statement(object):
     def __init__(self, wrapped):
         self.wrapped = wrapped
@@ -45,6 +46,7 @@ class If(Statement):
             "/say condition is false"
         )
     """
+
     def __init__(self, condition_command):
         super(If, self).__init__(None)
         self.condition_command = condition_command
@@ -57,6 +59,4 @@ class If(Statement):
 
     def otherwise(self, *statements):
         assert False, "otherwise is not implemented."
-        #self.otherwise_body = statements
-
-
+        # self.otherwise_body = statements

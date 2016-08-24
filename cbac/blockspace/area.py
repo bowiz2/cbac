@@ -65,6 +65,7 @@ class Area(object):
         """
         return self.wrapped.isolated
 
+
 # class LineArea(Area):
 #     """
 #     An area which constructs a line out of blocks.
@@ -77,6 +78,7 @@ class WindedArea(Area):
     """
     An area which was winded from a long line of blocks into a compressed block area.
     """
+
     def __init__(self, wrapped_item, max_width=8):
         super(WindedArea, self).__init__(wrapped_item)
         self.max_width = max_width
@@ -106,7 +108,7 @@ class WindedArea(Area):
         # set directions for the blocks.
         for row_id, row in enumerate(rows):
             for block_id, block in enumerate(row):
-                if block_id % self.max_width is not self.max_width -1:
+                if block_id % self.max_width is not self.max_width - 1:
                     directions[block] = [build_direction, mc_direction.oposite(build_direction)][row_id % 2]
                 else:
                     directions[block] = mc_direction.UP
@@ -124,6 +126,7 @@ class RawArea(Area):
     """
     An area which was constructed from a schematic file.
     """
+
     def __init__(self, schematic):
         self.schematic = schematic
 
