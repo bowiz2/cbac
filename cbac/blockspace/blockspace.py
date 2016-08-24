@@ -72,22 +72,6 @@ class BlockSpace(object):
             if location_d > size_d - 1:
                 return True
 
-    def is_isolated(self, location):
-        """
-        Check if a location is isolated from other redstone sources.
-        """
-        # TODO: Optimize and make smarter.
-        # Generate a list of locations which are adjacent to the tested location.
-        adjacent_locations = [location + vector for vector in utils.vectors.values()]
-
-        # iterate over all the blocks in the blockspace and see if they are adjacent to the location.
-        for block, block_location in self.packed_blocks.items():
-            if block_location in adjacent_locations:
-                if block.block_id not in ISOLATORS:
-                    return False
-
-        return True
-
     # Getters
     def get_area_of(self, item):
         """
