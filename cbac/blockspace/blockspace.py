@@ -80,19 +80,18 @@ class BlockSpace(object):
 
         if item in self.packed_compounds:
             location, block_packings = self.packed_compounds[item]
-            # TODO: fix
+            # TODO: Write unit test for it.
+
             block_locations = [self.packed_blocks[block] for block, location, direction in block_packings]
 
-            # TODO: remove code duplication.
-            min_x = sorted(block_locations, key=lambda item: item[0])[0].x
-            min_y = sorted(block_locations, key=lambda item: item[1])[0].y
-            min_z = sorted(block_locations, key=lambda item: item[2])[0].z
+            sort_by_x = sorted(block_locations, key=lambda obj: obj[0])
+            sort_by_y = sorted(block_locations, key=lambda obj: obj[1])
+            sort_by_z = sorted(block_locations, key=lambda obj: obj[2])
 
-            max_x = sorted(block_locations, key=lambda item: item[0])[-1].x
-            max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
-            max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
+            min_location = Vector(sort_by_x[0].x, sort_by_y[0].y, sort_by_z[0].z)
+            max_location = Vector(sort_by_x[-1].x, sort_by_y[-1].y, sort_by_z[-1].z)
 
-            return Vector(min_x, min_y, min_z), Vector(max_x, max_y, max_z)
+            return min_location, max_location
         else:
             location = self.packed_blocks[item]
             return location, location
