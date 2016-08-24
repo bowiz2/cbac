@@ -1,3 +1,4 @@
+import constants.mc_direction
 import utils
 
 from .assignment import BlockAssignment
@@ -18,7 +19,7 @@ class Area(object):
         packed = []
 
         for i, block in enumerate(compound.blocks):
-            build_direction_vector = utils.vectors[build_direction]
+            build_direction_vector = constants.mc_direction.vectors[build_direction]
             relative_location = corner + (build_direction_vector * i)
             relative_assignment = BlockAssignment(block, relative_location, build_direction)
             packed.append(relative_assignment)

@@ -99,4 +99,8 @@ def build(block_space):
             # Create the tile entity of the block, if it has one.
             tile_entity = translate(block, location, blockspace=block_space)
             tile_entities_to_add.append(tile_entity)
+
+    for tile_entity in tile_entities_to_add:
+        schematic.addTileEntity(tile_entity)
+
     return schematic

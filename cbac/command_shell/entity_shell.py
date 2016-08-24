@@ -2,7 +2,7 @@ from .command_shell_base import CommandShell
 from .decorator import command
 from cbac.utils import format_realtive_location
 from cbac.constants.block_id import TRUE_BLOCK, names
-from utils import vectors as direction_vectors
+from constants.mc_direction import vectors as direction_vectors
 
 
 class EntityShell(CommandShell):
