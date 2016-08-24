@@ -1,7 +1,7 @@
 from .command_shell_base import CommandShell
 from cbac.constants.block_id import names as block_names, TRUE_BLOCK, FALSE_BLOCK
 from .decorator import command
-
+from cbac.utils import format_location, format_realtive_location
 
 class LocationShell(CommandShell):
     """
@@ -19,12 +19,10 @@ class LocationShell(CommandShell):
         else:
             location = self.context.get_relative_location(self.wrapped)
 
-        ds = map(str, location)
-
         if self.context.executor is not None:
-            ds = ['~' + d for d in ds]
+            return format_realtive_location(location)
 
-        return " ".join(ds)
+        return format_location(location)
 
     @command(creates_condition=True)
     def testforblock(self, block_id, data_value=None, tags=None):
@@ -50,18 +48,15 @@ class LocationShell(CommandShell):
 
     @property
     def area(self):
-        # TODO: fix this ugly as f.
+        # TODO: write test.
         if self.context.executor is None:
-            point_a, point_b = self.context.get_absolute_area(self.wrapped)
+            area = self.context.get_absolute_area(self.wrapped)
+            formatted_area = [format_location(point) for point in area]
         else:
-            point_a, point_b = self.context.get_relative_area(self.wrapped)
+            area = self.context.get_relative_area(self.wrapped)
+            formatted_area = [format_realtive_location(point) for point in area]
 
-        point_a = map(str, point_a)
-        point_b = map(str, point_b)
-        ds = point_a + point_b
-        if self.context.executor is not None:
-            ds = ['~' + d for d in ds]
-        return " ".join(ds)
+        return " ".join(formatted_area)
 
     @command()
     def clone(self, other, mask_mode="replace", clone_mode="normal", tile_name=None):
