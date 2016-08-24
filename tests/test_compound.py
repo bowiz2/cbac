@@ -1,15 +1,14 @@
 import random
 from unittest import TestCase
-
-import assembler
-import block
-from blockspace import BlockSpace
-from compound import Compound, CBA
-from compound import Memory
-from compound import Constant
-from compound import Extender
-from constants.block_id import FALSE_BLOCK
-from .decorators import save_schematic
+import cbac.assembler as assembler
+import cbac.block as block
+from cbac.blockspace import BlockSpace
+from cbac.compound import Compound, CBA
+from cbac.compound import Register
+from cbac.compound import Constant
+from cbac.compound import Extender
+from cbac.constants.block_id import FALSE_BLOCK
+import tests.decorators
 
 
 class TestCompound(TestCase):
@@ -36,7 +35,7 @@ class TestCompound(TestCase):
 
     def test_memory(self):
         BITS = 8
-        memory = Memory(BITS)
+        memory = Register(BITS)
         self.assertEqual(len(memory.blocks), BITS)
 
         for i in xrange(BITS):
@@ -44,12 +43,12 @@ class TestCompound(TestCase):
 
     def test_get_sub_memory(self):
         BITS = 8
-        big_memory = Memory(BITS)
+        big_memory = Register(BITS)
         sub = big_memory.get_sub_memory(xrange(BITS / 2))
         self.assertIsNotNone(sub)
         self.assertEqual(len(sub.blocks), BITS / 2)
 
-    @save_schematic
+    @tests.decorators.save_schematic
     def test_extender(self):
         cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
         cba2 = CBA("/say this is totaly a new cba", "/say really.")

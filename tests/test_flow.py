@@ -1,12 +1,12 @@
 from unittest import TestCase
 
-import assembler
-from blockspace import BlockSpace
-from compound import CBA
-from compound import Memory
-from compound import Constant
-from compound.switch import SwitchFlow
-from constants.block_id import TRUE_BLOCK
+import cbac.assembler
+from cbac.blockspace import BlockSpace
+from cbac.compound import CBA
+from cbac.compound import Register
+from cbac.compound import Constant
+from cbac.compound.switch import SwitchFlow
+from cbac.constants.block_id import TRUE_BLOCK
 from .decorators import save_schematic
 
 
@@ -22,7 +22,7 @@ class TestFlow(TestCase):
         block_space = BlockSpace((8, 8, 8))
         for c in [const, cba]:
             block_space.add_compound(c)
-        schematic = assembler.build(block_space)
+        schematic = cbac.assembler.build(block_space)
         return schematic
 
     @save_schematic
@@ -30,7 +30,7 @@ class TestFlow(TestCase):
         def msg(something):
             return "/say {}".format(something)
 
-        memory = Memory(8)
+        memory = Register(8)
         # TODO: fix isolation bug.
         switch = SwitchFlow(memory, {
             Constant(0): msg("Empty :("),
@@ -45,5 +45,5 @@ class TestFlow(TestCase):
         for c in switch.comparables + [memory, switch]:
             block_space.add_compound(c)
 
-        schematic = assembler.build(block_space)
+        schematic = cbac.assembler.build(block_space)
         return schematic

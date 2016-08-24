@@ -1,12 +1,12 @@
 from unittest import TestCase
-from entity import Entity
-from constants.entity_id import *
-from blockspace import BlockSpace
-from compound import CBA
-from compound import Memory
-from .decorators import save_schematic
-import assembler
-from constants.direction import *
+from cbac.entity import Entity
+from cbac.constants.entity_id import *
+from cbac.blockspace import BlockSpace
+from cbac.compound import CBA
+from cbac.compound import Register
+from decorators import save_schematic
+import cbac.assembler
+from cbac.constants.mc_direction import *
 
 
 class TestEntity(TestCase):
@@ -39,7 +39,7 @@ class TestEntity(TestCase):
 
         entity.custom_name = "test_pivot"
         blockspace = BlockSpace((10, 10, 10))
-        memory = Memory(8)
+        memory = Register(8)
         blockspace.add_compound(memory)
         blockspace.add_compound(CBA(
             entity.shell.summon(memory.blocks[0]),
@@ -53,6 +53,6 @@ class TestEntity(TestCase):
 
         blockspace.pack()
         blockspace.shrink()
-        schematic = assembler.build(blockspace)
+        schematic = cbac.assembler.build(blockspace)
         return schematic
 
