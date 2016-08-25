@@ -28,7 +28,7 @@ class RamUnit(Unit):
         for i, addres_bit in enumerate(self.address_input.blocks):
             yield addres_bit.shell == True
             yield Conditional(
-                self.pivot.shell.move(UP, 2**i)
+                self.pivot.shell.move(UP, 2 ** i)
             )
         yield self.pivot.shell.activate()
         yield self.pivot.shell.kill()

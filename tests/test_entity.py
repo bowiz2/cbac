@@ -10,7 +10,6 @@ from cbac.constants.mc_direction import *
 
 
 class TestEntity(TestCase):
-
     def test_ctor(self):
 
         ent = Entity(ARMOR_STAND, custom_name="a", no_gravity=True)
@@ -55,4 +54,3 @@ class TestEntity(TestCase):
         blockspace.shrink()
         schematic = cbac.assembler.build(blockspace)
         return schematic
-

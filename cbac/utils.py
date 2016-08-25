@@ -7,7 +7,6 @@ class Vector(namedtuple('Vector', ['x', 'y', 'z'])):
     """
 
     def __add__(self, other):
-
         return Vector(*[i + j for i, j in zip(self, other)])
 
     def __sub__(self, other):
@@ -40,5 +39,3 @@ def format_location(location):
 
 def format_realtive_location(location):
     return " ".join(["~" + str(i) for i in location])
-
-

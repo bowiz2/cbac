@@ -4,7 +4,6 @@ from cbac.constants.block_id import ISOLATORS
 from cbac.utils import Vector
 import packer
 
-
 DEF_BUILD_DIRECTION = mc_direction.WEST
 
 
@@ -144,5 +143,3 @@ class BlockSpace(object):
         max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
         max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
         self.size = (max_x + 1, max_y + 1, max_z + 1)
-
-

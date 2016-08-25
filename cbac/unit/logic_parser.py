@@ -19,7 +19,6 @@ class LazyJump(Lazy):
 
 
 def parse(statement_generators):
-
     logic_cbas = []
     commands = []
 

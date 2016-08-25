@@ -13,6 +13,3 @@ class Compound(object):
     @memoize
     def shell(self):
         return CompoundShell(self)
-
-
-

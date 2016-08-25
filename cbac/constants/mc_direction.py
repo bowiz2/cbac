@@ -26,6 +26,7 @@ def oposite(direction):
         WEST: EAST
     }[direction]
 
+
 __all__ = ["UP", "DOWN", "WEST", "EAST", "SOUTH", "NORTH"]
 vectors = {
     UP: Vector(0, 1, 0),

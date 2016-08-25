@@ -10,6 +10,7 @@ class TestSUL(TestCase):
     """
     Test the standard unit library.
     """
+
     @staticmethod
     def sample_schematic(unit_class, size, blockspace_size=(30, 10, 30)):
         u = unit_class(size)
@@ -75,6 +76,7 @@ class TestSUL(TestCase):
     @save_schematic
     def test_negate_unit(self):
         return self.sample_schematic(sul.NegateUnit, 4)
+
     @save_schematic
     def test_subtract_unit(self):
         return self.sample_schematic(sul.SubtractUnit, 4)

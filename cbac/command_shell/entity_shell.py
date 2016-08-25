@@ -59,4 +59,3 @@ class EntityShell(CommandShell):
         :return: Execute command.
         """
         return self.execute("/setblock ~ ~ ~ {}".format(names[TRUE_BLOCK]))
-

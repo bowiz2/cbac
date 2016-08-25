@@ -37,5 +37,3 @@ class TestArea(TestCase):
 
     def test_dimensions(self):
         pass
-
-
