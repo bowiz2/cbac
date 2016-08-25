@@ -1,7 +1,8 @@
 """
 This module parses the statement logic of a unit provided in its main logic commands generation method.
 """
-from cbac.unit.statements import Statement, MainLogicJump, Conditional, STDCall, If
+from cbac.unit.statements import Statement, MainLogicJump, Conditional, STDCall
+import cbac.unit.statements
 from compound import CBA
 
 
@@ -26,8 +27,6 @@ def parse(statement_generators):
         # Parse Statements
         for statement in command_generator:
             # wrap the command in a statement.
-            if not isinstance(statement, Statement):
-                statement = Statement(statement)
 
             # Copy Parameters and rename the statemnt to a main logic jump
             if isinstance(statement, STDCall):
@@ -35,7 +34,7 @@ def parse(statement_generators):
                     commands.append(parameter.shell.copy(statement.called_unit.inputs[param_id]))
                 statement = MainLogicJump(statement.called_unit)
 
-            if isinstance(statement, If):
+            if issubclass(statement.__class__, cbac.unit.statements.If):
                 # Unwrap the if statement.
                 commands.append(statement.condition_command)
                 statement = statement.condition_body
@@ -52,7 +51,7 @@ def parse(statement_generators):
                 commands = []
             else:
                 # regular statement
-                commands.append(statement.wrapped)
+                commands.append(statement)
 
     if len(commands) > 0:
         logic_cbas.append(CBA(*commands))

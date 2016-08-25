@@ -31,24 +31,8 @@ class STDCall(Statement):
 
 
 class If(Statement):
-    """
-    use case
-
-    If("/testforblock ~ ~2 ~ stone").then("/sat condition met")
-
-    OR
-
-    If(
-        "/testfoblock ~ ~1 ~ redstone_block"
-    ).then(
-        "/say condition is true"
-        ).otherwise(
-            "/say condition is false"
-        )
-    """
-
     def __init__(self, condition_command):
-        super(If, self).__init__(None)
+        super(If, self).__init__([])
         self.condition_command = condition_command
         self.condition_body = None
         self.otherwise_body = None
