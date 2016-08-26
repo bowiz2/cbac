@@ -15,6 +15,8 @@ class CBA(Compound):
         self.cba_id = self.created_count
         self.created_count += 1
 
+        self.commands = commands
+
         # commands
         self.user_command_blocks = list(self._gen_cb_chain(commands))
 
@@ -95,6 +97,14 @@ class CBA(Compound):
     @property
     def name(self):
         return "CBA_n{0}".format(self.cba_id)
+
+    def __add__(self, other):
+        """
+        Create a new cba out of this cba's commands and the other cba's commands.
+        :param other: Another cba.
+        :return: A new cba.
+        """
+        return CBA(*[self.commands + other.commands])
 
     def __str__(self):
         return self.name
