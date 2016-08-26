@@ -66,10 +66,6 @@ class TestSUL(TestCase):
         return self.sample_schematic(sul.FullAdderUnit, 4, (200, 200, 200))
 
     @save_schematic
-    def test_timer(self):
-        return self.sample_schematic(sul.TimerUnit, 1000)
-
-    @save_schematic
     def test_ram(self):
         return self.sample_schematic(sul.RamUnit, 4)
 

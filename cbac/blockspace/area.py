@@ -84,7 +84,13 @@ class WindedArea(Area):
         self.max_width = max_width
 
     def _pack(self, compound):
-        # TODO: document
+        """
+        Takes a compound a compresses it to the maximum width. It is actually winding the row. Used mainly for CBAs.
+        :param compound: a cba you want ot compress.
+        :return:
+        :note: That this does not account for conditional commands.
+        """
+        # TODO: provide better doc.
         build_direction = self.start_build_direction
         # Matrix of rows.
         rows = []

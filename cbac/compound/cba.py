@@ -104,7 +104,7 @@ class CBA(Compound):
         :param other: Another cba.
         :return: A new cba.
         """
-        return CBA(*[self.commands + other.commands])
+        return CBA(*(self.commands + other.commands))
 
     def __str__(self):
         return self.name
