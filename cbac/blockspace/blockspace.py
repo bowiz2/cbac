@@ -21,18 +21,18 @@ class BlockSpace(object):
         self.size = size
 
         self.packer = packer_instance
-        self.packed_compounds = {}
-        self.packed_entities = {}
+        # An item can be a compound, block-box or anything else.
+        self.packed_items = {}
 
-        # Saves the locations of the isolated objects
-        self._isolated_blocks_locations = []
-        # Saves the locations of the compounds.
+        self.unpacked_items = []
 
-        # List of units in this blockspace.
-        self.unpacked_compounds = []
-        # Saves the locations of the entities.
 
-        # holds to which side each block is faced to.
+    def add(self, item):
+        """
+        Transform all the other adds to this add.
+        :param item: An item you want to add to the blockspace.
+        """
+        self.unpacked_items.append(item)
 
     def add_unit(self, unit):
         """
@@ -49,16 +49,9 @@ class BlockSpace(object):
         """
         Schedule the compound for mapping.
         """
-        if compound in self.unpacked_compounds:
+        if compound in self.unpacked_items:
             return
-        self.unpacked_compounds.append(compound)
-
-    def add_entity(self, entity, location=(0, 0, 0)):
-        """
-        Add entity to the blockspace.
-        """
-        location = Vector(*location)
-        self.packed_entities[entity] = location
+        self.unpacked_items.append(compound)
 
     # Checkers
     def is_location_out_of_bounds(self, location):
@@ -77,9 +70,9 @@ class BlockSpace(object):
         Gets the area of a compound.
         """
 
-        if item in self.packed_compounds:
+        if item in self.packed_items:
             # If the item was a compound, Calculate the minimal vectors.
-            location, block_packings = self.packed_compounds[item]
+            location, block_packings = self.packed_items[item]
             # TODO: Write unit test for it.
             block_locations = [self.packed_blocks[block] for block, location, direction in block_packings]
 
@@ -106,7 +99,7 @@ class BlockSpace(object):
         try:
             location = self.packed_blocks[item]
         except KeyError:
-            location = self.packed_compounds[item].location
+            location = self.packed_items[item].location
 
         return location
 
@@ -114,9 +107,9 @@ class BlockSpace(object):
         """
         Take the unpacked compounds which are in the blockspace and pack them.
         """
-        compound_packings = self.packer.pack(self.unpacked_compounds)
-        for compound, packing in compound_packings.items():
-            self.packed_compounds[compound] = packing
+        block_packings = self.packer.pack(self.unpacked_items)
+        for packed_item, block_packing in block_packings.items():
+            self.packed_items[packed_item] = block_packing
 
     @property
     def packed_blocks(self):
@@ -124,7 +117,7 @@ class BlockSpace(object):
         :return: A dict of the packed blocks in this blockspace mapped with their location.
         """
         to_return = {}
-        for compound in self.packed_compounds.values():
+        for compound in self.packed_items.values():
             for block, location, build_direction in compound.block_assignments:
                 try:
                     block.facing = build_direction
