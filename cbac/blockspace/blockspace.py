@@ -26,12 +26,14 @@ class BlockSpace(object):
 
         self.unpacked_items = []
 
-
     def add(self, item):
         """
-        Transform all the other adds to this add.
-        :param item: An item you want to add to the blockspace.
+        Schedule an item for packing.
+        :param item: Item you want to pack in this blockspace.
+        :return: None
         """
+        if item in self.unpacked_items:
+            return
         self.unpacked_items.append(item)
 
     def add_unit(self, unit):
@@ -40,18 +42,10 @@ class BlockSpace(object):
         :param unit: dict of compounds and relative poistion
         """
         for compound in unit.compounds:
-            self.add_compound(compound)
+            self.add(compound)
 
         for other_unit in unit.dependent_units:
             self.add_unit(other_unit)
-
-    def add_compound(self, compound):
-        """
-        Schedule the compound for mapping.
-        """
-        if compound in self.unpacked_items:
-            return
-        self.unpacked_items.append(compound)
 
     # Checkers
     def is_location_out_of_bounds(self, location):

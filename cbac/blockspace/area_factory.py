@@ -1,6 +1,6 @@
 from pymclevel import MCSchematic
-from .area import Area, RawArea
-
+from .area import Area, RawArea, BlocBoxArea
+from cbac.blockbox import BlockBox
 
 def area_factory(obj):
     """
@@ -9,4 +9,6 @@ def area_factory(obj):
     """
     if isinstance(obj, MCSchematic):
         return RawArea(obj)
+    if isinstance(obj, BlockBox):
+        return BlocBoxArea(obj)
     return Area(obj)

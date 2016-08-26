@@ -6,6 +6,7 @@ from cbac.block import Block
 from constants import mc_direction
 from utils import Vector
 
+# TODO: fix this mess.
 
 class Area(object):
     def __init__(self, wrapped_item, start_build_direction=mc_direction.EAST):
@@ -126,6 +127,20 @@ class WindedArea(Area):
                 locs[block] = Vector(block_id, row_id, 0)
         # compile assignments
         return [BlockAssignment(block, locs[block], directions[block]) for block in total_blocks]
+
+
+class BlocBoxArea(Area):
+    @property
+    def block_box(self):
+        return self.wrapped
+    @property
+    def packed_blocks(self):
+        to_return = []
+        for x, block_plane in enumerate(self.block_box.blocks):
+            for y, block_row in enumerate(block_plane):
+                for z, block_id in enumerate(block_row):
+                    to_return.append(BlockAssignment(self.block_box[x][y][z], Vector(x, y, z), None))
+        return to_return
 
 
 class RawArea(Area):
