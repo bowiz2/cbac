@@ -56,7 +56,7 @@ class TestCompound(TestCase):
 
         block_space = BlockSpace((8, 8, 8))
         for comp in [cba, cba2, ext]:
-            block_space.add_compound(comp)
+            block_space.add(comp)
 
         # build a schematic and save it to file.
         return assembler.build(block_space)

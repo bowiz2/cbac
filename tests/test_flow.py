@@ -21,7 +21,7 @@ class TestFlow(TestCase):
         cba = CBA(const.blocks[0].shell == TRUE_BLOCK, "/say it is true.")
         block_space = BlockSpace((8, 8, 8))
         for c in [const, cba]:
-            block_space.add_compound(c)
+            block_space.add(c)
         schematic = cbac.assembler.build(block_space)
         return schematic
 
@@ -43,7 +43,7 @@ class TestFlow(TestCase):
 
         block_space = BlockSpace((15, 20, 15))
         for c in switch.comparables + [memory, switch]:
-            block_space.add_compound(c)
+            block_space.add(c)
 
         schematic = cbac.assembler.build(block_space)
         return schematic

@@ -39,8 +39,8 @@ class TestEntity(TestCase):
         entity.custom_name = "test_pivot"
         blockspace = BlockSpace((10, 10, 10))
         memory = Register(8)
-        blockspace.add_compound(memory)
-        blockspace.add_compound(CBA(
+        blockspace.add(memory)
+        blockspace.add(CBA(
             entity.shell.summon(memory.blocks[0]),
             entity.shell.activate(),
             entity.shell.move(UP),
