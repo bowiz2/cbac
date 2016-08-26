@@ -6,8 +6,16 @@ class Compound(object):
     """Contains the blocks which are part of the compound. Later can be bound to a blockspace."""
 
     def __init__(self, blocks, isolated=False):
-        self.blocks = blocks
+        self._blocks = blocks
         self.isolated = isolated
+
+    @property
+    def blocks(self):
+        return self._blocks
+
+    @blocks.setter
+    def blocks(self, value):
+        self._blocks = value
 
     @property
     @memoize
