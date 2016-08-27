@@ -1,5 +1,5 @@
 from cbac.unit.unit_base import Unit
-from unit.statements import If
+from cbac.unit.statements import If
 
 class OrUnit(Unit):
     def __init__(self, bits=8):
