@@ -142,7 +142,6 @@ class BlocBoxArea(Area):
                     to_return.append(BlockAssignment(self.block_box[x][y][z], Vector(x, y, z), None))
         return to_return
 
-
 class RawArea(Area):
     """
     An area which was constructed from a schematic file.
