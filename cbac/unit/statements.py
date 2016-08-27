@@ -23,12 +23,24 @@ class Conditional(Statement):
     def commands(self):
         return self.wrapped
 
-
-class STDCall(Statement):
-    def __init__(self, called_unit, *parameters):
-        self.called_unit = called_unit
+class PassParameters(Statement):
+    def __init__(self, unit, *parameters):
+        super(PassParameters, self).__init__(unit)
         self.parameters = parameters
 
+
+class Call(Statement):
+    @property
+    def called_unit(self):
+        return self.wrapped
+
+
+class STDCall(Call, PassParameters, MainLogicJump):
+    pass
+
+
+class InlineCall(Call, PassParameters):
+    pass
 
 class If(Statement):
     """

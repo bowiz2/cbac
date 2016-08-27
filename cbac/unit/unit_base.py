@@ -19,6 +19,7 @@ class Unit(object):
         self.dependent_units = []
         # Logic cbas are cbac which excecute the logic of the unit. the entry point is the first logic_cba
         self.logic_cbas = []
+        self.is_inline = False
 
     def synthesis(self):
         """
@@ -102,6 +103,13 @@ class Unit(object):
         """
         for input_memory in self.inputs:
             yield input_memory.shell.reset()
+
+    @property
+    def compounds_to_pack(self):
+        if self.is_inline:
+            return filter(lambda compound: compound not in self.logic_cbas, self.compounds)
+        else:
+            return self.compounds
 
     @property
     def entry_point(self):

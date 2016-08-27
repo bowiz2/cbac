@@ -1,4 +1,4 @@
-from cbac.unit.statements import STDCall
+from cbac.unit.statements import STDCall , InlineCall
 from cbac.unit.unit_base import Unit
 from increment_unit import IncrementUnit
 from not_unit import NotUnit
@@ -26,6 +26,6 @@ class NegateUnit(Unit):
 
     def main_logic_commands(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
-        yield STDCall(self.not_unit, self.input)
-        yield STDCall(self.increment_unit, self.not_unit.output)
+        yield InlineCall(self.not_unit, self.input)
+        yield InlineCall(self.increment_unit, self.not_unit.output)
         yield self.increment_unit.output.shell.copy(self.output)

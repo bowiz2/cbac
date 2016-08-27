@@ -1,4 +1,4 @@
-from cbac.unit.statements import STDCall
+from cbac.unit.statements import InlineCall
 from cbac.unit.unit_base import Unit
 from sul import NegateUnit, FullAdderUnit
 
@@ -28,6 +28,6 @@ class SubtractUnit(Unit):
 
     def main_logic_commands(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
-        yield STDCall(self.negate_unit, self.input_b)
-        yield STDCall(self.full_adder, self.input_a, self.negate_unit.output)
+        yield InlineCall(self.negate_unit, self.input_b)
+        yield InlineCall(self.full_adder, self.input_a, self.negate_unit.output)
         yield self.full_adder.output.shell.copy(self.output)

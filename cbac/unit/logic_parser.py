@@ -2,7 +2,7 @@
 This module parses the statement logic of a unit provided in its main logic commands generation method.
 """
 from cbac.compound import CBA
-from cbac.unit.statements import MainLogicJump, Conditional, STDCall, If
+from cbac.unit.statements import MainLogicJump, Conditional, STDCall, If, InlineCall, PassParameters
 
 
 class Lazy(object):
@@ -28,10 +28,9 @@ def parse(statement_generators):
             # wrap the command in a statement.
 
             # Copy Parameters and rename the statemnt to a main logic jump
-            if isinstance(statement, STDCall):
+            if isinstance(statement, PassParameters):
                 for param_id, parameter in enumerate(statement.parameters):
                     commands.append(parameter.shell.copy(statement.called_unit.inputs[param_id]))
-                statement = MainLogicJump(statement.called_unit)
 
             if isinstance(statement, If):
                 # Unwrap the if statement.
@@ -43,6 +42,14 @@ def parse(statement_generators):
                 for command in statement.commands:
                     command.is_conditional = True
                     commands.append(command)
+
+            elif isinstance(statement, InlineCall):
+                # TODO: support inline for jumpables units.
+                assert len(statement.called_unit.logic_cbas) == 1, "The inline-called function must not contain jumps"
+                statement.called_unit.is_inline = True
+                for command in statement.called_unit.logic_cbas[0].commands:
+                    commands.append(command)
+
             elif isinstance(statement, MainLogicJump):
                 # Lazy init some stuff.
                 commands.append(LazyCallbackSet(statement.wrapped))
