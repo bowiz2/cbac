@@ -1,6 +1,4 @@
 from unittest import TestCase
-
-import block
 import cbac
 
 

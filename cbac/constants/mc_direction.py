@@ -6,7 +6,7 @@ I chose to place them in a separate module to prevent programming error. (I type
 
 Also this module provide some basic functionality working with directions.
 """
-from utils import Vector
+from cbac.utils import Vector
 
 UP = 'up'
 DOWN = 'down'

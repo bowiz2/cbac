@@ -6,7 +6,7 @@ from cbac.unit.statements import Conditional
 from cbac.constants.mc_direction import *
 from cbac.blockbox import BlockBox
 from cbac.constants.block_id import FALSE_BLOCK
-from utils import Vector
+from cbac.utils import Vector
 import math
 from sul.increment_unit import IncrementUnit
 from cbac.unit.statements import STDCall

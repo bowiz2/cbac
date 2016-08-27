@@ -1,10 +1,8 @@
-import constants.mc_direction
-import utils
-
+import cbac.constants.mc_direction
 from .assignment import BlockAssignment
 from cbac.block import Block
-from constants import mc_direction
-from utils import Vector
+from cbac.constants import mc_direction
+from cbac.utils import Vector
 
 # TODO: fix this mess.
 
@@ -20,7 +18,7 @@ class Area(object):
         packed = []
 
         for i, block in enumerate(compound.blocks):
-            build_direction_vector = constants.mc_direction.vectors[build_direction]
+            build_direction_vector = cbac.constants.mc_direction.vectors[build_direction]
             relative_location = corner + (build_direction_vector * i)
             relative_assignment = BlockAssignment(block, relative_location, build_direction)
             packed.append(relative_assignment)

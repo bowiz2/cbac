@@ -2,7 +2,7 @@
 This module parses the statement logic of a unit provided in its main logic commands generation method.
 """
 from cbac.unit.statements import Statement, MainLogicJump, Conditional, STDCall, If
-from compound import CBA
+from cbac.compound import CBA
 
 
 class Lazy(object):
