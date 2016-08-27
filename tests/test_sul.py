@@ -67,7 +67,7 @@ class TestSUL(TestCase):
 
     @save_schematic
     def test_ram(self):
-        return self.sample_schematic(sul.RamUnit, 4)
+        return self.sample_schematic(sul.RamUnit, 8)
 
     @save_schematic
     def test_negate_unit(self):
