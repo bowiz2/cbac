@@ -1,3 +1,8 @@
+"""
+SUL - Standard Unit Library.
+
+This is library which contains all the pre-written units for the use of CBAC developer.
+"""
 from and_unit import AndUnit
 from callback_unit import CallbackUnit
 from example_unit import ExampleUnit
