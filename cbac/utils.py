@@ -72,3 +72,5 @@ class InlineGenerator(object):
 def _from(value):
     assert isinstance(value, types.GeneratorType)
     return InlineGenerator(value)
+
+
