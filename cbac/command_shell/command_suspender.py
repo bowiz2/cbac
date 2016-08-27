@@ -19,6 +19,9 @@ class CommandSuspender(object):
         """
         Return a list of this command and other command
         :param other: Other Command.
+        This is used for the if statement sugar.
         :return: tuple of self and other.
         """
+        assert isinstance(other, CommandSuspender), "Other must be a suspended command."
+        assert self.creates_condition and other.creates_condition, "Both suspended commands must create condition"
         return self, other

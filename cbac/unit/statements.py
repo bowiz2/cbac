@@ -49,9 +49,11 @@ class If(Statement):
         command_b
     )
     """
-    def __init__(self, condition_command):
+    def __init__(self, condition_commands):
         super(If, self).__init__(None)
-        self.condition_command = condition_command
+        if not (isinstance(condition_commands, tuple) or isinstance(condition_commands, list)):
+            condition_commands = [condition_commands]
+        self.condition_commands = condition_commands
         self.condition_body = None
         self.otherwise_body = None
 

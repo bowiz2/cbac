@@ -35,7 +35,8 @@ def parse(statement_generators):
 
             if isinstance(statement, If):
                 # Unwrap the if statement.
-                commands.append(statement.condition_command)
+                for condition_command in statement.condition_commands:
+                    commands.append(condition_command)
                 statement = statement.condition_body
 
             if isinstance(statement, Conditional):
