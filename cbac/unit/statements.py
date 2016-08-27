@@ -31,8 +31,26 @@ class STDCall(Statement):
 
 
 class If(Statement):
+    """
+    Usage:
+
+    if(condition creating command).then(*commands which will be activated when the condition met).otherwise(...)
+
+    of
+
+    if (
+        condition
+    ).then(
+        command_1,
+        command_2,
+        command_3
+    ).otherwise(
+        command_a,
+        command_b
+    )
+    """
     def __init__(self, condition_command):
-        super(If, self).__init__([])
+        super(If, self).__init__(None)
         self.condition_command = condition_command
         self.condition_body = None
         self.otherwise_body = None
