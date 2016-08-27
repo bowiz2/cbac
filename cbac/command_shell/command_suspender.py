@@ -14,3 +14,11 @@ class CommandSuspender(object):
 
     def __call__(self):
         return self.command_function(self.command_shell, *self.args, **self.kwargs)
+
+    def __and__(self, other):
+        """
+        Return a list of this command and other command
+        :param other: Other Command.
+        :return: tuple of self and other.
+        """
+        return self, other
