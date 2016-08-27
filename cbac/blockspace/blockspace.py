@@ -1,6 +1,4 @@
-import utils
 from cbac.constants import mc_direction
-from cbac.constants.block_id import ISOLATORS
 from cbac.utils import Vector
 import packer
 
