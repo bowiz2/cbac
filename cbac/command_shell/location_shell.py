@@ -1,7 +1,8 @@
-from .command_shell_base import CommandShell
 from cbac.constants.block_id import names as block_names, TRUE_BLOCK, FALSE_BLOCK
-from .decorator import command
 from cbac.utils import format_location, format_realtive_location
+
+from .command_shell_base import CommandShell
+from .decorator import command
 
 
 class LocationShell(CommandShell):

@@ -1,5 +1,6 @@
-from . import ShellContext
 from cbac.utils import Vector
+
+from . import ShellContext
 
 
 class CommandShell(object):

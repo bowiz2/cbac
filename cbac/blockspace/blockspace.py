@@ -1,6 +1,6 @@
+import packer
 from cbac.constants import mc_direction
 from cbac.utils import Vector
-import packer
 
 DEF_BUILD_DIRECTION = mc_direction.WEST
 

@@ -1,7 +1,7 @@
-from cbac.unit.unit_base import Unit
 from cbac.unit.statements import STDCall
-from not_unit import NotUnit
+from cbac.unit.unit_base import Unit
 from increment_unit import IncrementUnit
+from not_unit import NotUnit
 
 
 class NegateUnit(Unit):

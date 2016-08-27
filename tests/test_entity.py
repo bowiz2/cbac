@@ -1,12 +1,13 @@
 from unittest import TestCase
-from cbac.entity import Entity
-from cbac.constants.entity_id import *
+
+import cbac.assembler
 from cbac.blockspace import BlockSpace
 from cbac.compound import CBA
 from cbac.compound import Register
-from decorators import save_schematic
-import cbac.assembler
+from cbac.constants.entity_id import *
 from cbac.constants.mc_direction import *
+from cbac.entity import Entity
+from decorators import save_schematic
 
 
 class TestEntity(TestCase):

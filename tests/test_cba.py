@@ -1,9 +1,9 @@
 from unittest import TestCase
+
 from cbac import CBA
 
 
 class TestCCBA(TestCase):
-
     def test_init(self):
         """
         Test constructor.
@@ -24,6 +24,6 @@ class TestCCBA(TestCase):
         print added_cba.commands
         self.assertEqual(added_cba.commands, ("/say a", "/say b", "/say c", "/say 1", "/say 2", "/say 3"))
 
-        combined_length = len(my_cba_1.user_command_blocks)+ len(my_cba_2.user_command_blocks)
+        combined_length = len(my_cba_1.user_command_blocks) + len(my_cba_2.user_command_blocks)
 
         self.assertEqual(len(added_cba.user_command_blocks), combined_length)

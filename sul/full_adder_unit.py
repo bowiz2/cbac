@@ -1,5 +1,5 @@
-from cbac.unit.unit_base import Unit
 from cbac.unit.statements import Conditional
+from cbac.unit.unit_base import Unit
 
 
 class FullAdderUnit(Unit):

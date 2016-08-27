@@ -1,6 +1,6 @@
 from cbac.compound import CBA
-from cbac.unit.unit_base import Unit
 from cbac.unit.statements import MainLogicJump
+from cbac.unit.unit_base import Unit
 
 
 class CallbackUnit(Unit):

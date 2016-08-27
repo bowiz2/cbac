@@ -3,10 +3,11 @@ from unittest import TestCase
 import cbac.assembler
 from cbac.blockspace import BlockSpace
 from cbac.compound import CBA
-from cbac.compound import Register
 from cbac.compound import Constant
+from cbac.compound import Register
 from cbac.compound.switch import SwitchFlow
 from cbac.constants.block_id import TRUE_BLOCK
+
 from .decorators import save_schematic
 
 

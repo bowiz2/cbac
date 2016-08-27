@@ -1,7 +1,7 @@
+from block import CommandBlock
 from pymclevel import MCSchematic
 from pymclevel import TileEntity
 from pymclevel import nbt
-from block import CommandBlock
 
 
 def tagged_cb(command_block, location, blockspace):

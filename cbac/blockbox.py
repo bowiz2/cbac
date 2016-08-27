@@ -5,6 +5,7 @@ class BlockBox(object):
     """
     A block box is a collection of blocks fit in a bound area.
     """
+
     def __init__(self, size, fill_material, isolated=False):
         self.isolated = isolated
         self.size = size

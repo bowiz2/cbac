@@ -1,10 +1,13 @@
 from unittest import TestCase
-from cbac.blockbox import BlockBox
-from cbac.constants.block_id import REDSTONE_BLOCK
-from cbac.blockspace.area import BlocBoxArea
-from cbac.blockspace import BlockSpace
+
 import cbac.assembler
+from cbac.blockbox import BlockBox
+from cbac.blockspace import BlockSpace
+from cbac.blockspace.area import BlocBoxArea
+from cbac.constants.block_id import REDSTONE_BLOCK
+
 from .decorators import save_schematic
+
 
 class BlockBoxTest(TestCase):
     def test_creation(self):

@@ -1,5 +1,3 @@
-from cbac.compound import CBA
-from cbac.compound import Register
 from cbac.unit.unit_base import Unit
 
 

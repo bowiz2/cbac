@@ -1,8 +1,10 @@
 import cbac.constants.mc_direction
-from .assignment import BlockAssignment
 from cbac.block import Block
 from cbac.constants import mc_direction
 from cbac.utils import Vector
+
+from .assignment import BlockAssignment
+
 
 # TODO: fix this mess.
 
@@ -131,6 +133,7 @@ class BlocBoxArea(Area):
     @property
     def block_box(self):
         return self.wrapped
+
     @property
     def packed_blocks(self):
         to_return = []
@@ -139,6 +142,7 @@ class BlocBoxArea(Area):
                 for z, block_id in enumerate(block_row):
                     to_return.append(BlockAssignment(self.block_box[x][y][z], Vector(x, y, z), None))
         return to_return
+
 
 class RawArea(Area):
     """

@@ -1,7 +1,7 @@
+import logic_parser
 from cbac.command_shell import UnitShell
 from cbac.compound import Register
 from cbac.utils import memoize
-import logic_parser
 
 
 class Unit(object):

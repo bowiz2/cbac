@@ -1,4 +1,5 @@
 from cbac.constants.block_id import TRUE_BLOCK
+
 from . import CompoundShell
 
 

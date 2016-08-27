@@ -1,6 +1,7 @@
 import math
-from cbac.constants.block_id import EMPTY_BLOCK, FALSE_BLOCK
+
 from cbac.compound import Register
+from cbac.constants.block_id import EMPTY_BLOCK, FALSE_BLOCK
 from cbac.unit.unit_base import Unit
 
 

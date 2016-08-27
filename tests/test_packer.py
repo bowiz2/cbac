@@ -1,8 +1,9 @@
 """Test the packer module"""
 from unittest import TestCase
+
 from cbac import Block, Compound
-from cbac.constants.block_id import SNOW_BLOCK
 from cbac.blockspace import packer
+from cbac.constants.block_id import SNOW_BLOCK
 
 
 class TestPacker(TestCase):
