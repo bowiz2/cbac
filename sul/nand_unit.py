@@ -1,4 +1,5 @@
 from cbac.unit.unit_base import Unit
+from cbac.unit.statements import If
 
 
 class NandUnit(Unit):
@@ -22,6 +23,5 @@ class NandUnit(Unit):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         for a_block, b_block, o_block, in zip(self.input_a.blocks, self.input_b.blocks, self.output.blocks):
             # note that the eq is overriden.
-            yield a_block.shell == True
-            yield b_block.shell == True
-            yield o_block.shell.deactivate()
+            yield If((a_block.shell == True) & (b_block.shell == True)).then(o_block.shell.deactivate())
+

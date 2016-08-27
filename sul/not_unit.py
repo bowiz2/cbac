@@ -1,4 +1,5 @@
 from cbac.unit.unit_base import Unit
+from cbac.unit.statements import If
 
 
 class NotUnit(Unit):
@@ -13,7 +14,6 @@ class NotUnit(Unit):
     def main_logic_commands(self):
         for a_block, o_block, in zip(self.input.blocks, self.output.blocks):
             # note that the eq is overriden.
-            yield a_block.shell == False
-            yield o_block.shell.activate()
-            yield a_block.shell == True
-            yield o_block.shell.deactivate()
+            yield If(a_block.shell == False).then(o_block.shell.activate())
+            yield If(a_block.shell == True).then(o_block.shell.deactivate())
+

@@ -1,4 +1,5 @@
 from cbac.unit.unit_base import Unit
+from cbac.unit.statements import If
 
 
 class ReverseUnit(Unit):
@@ -17,5 +18,9 @@ class ReverseUnit(Unit):
 
     def main_logic_commands(self):
         for index in xrange(self.bits):
-            yield self.input_a.blocks[index].shell == True
-            yield self.output.blocks[self.bits - index - 1].shell.activate()
+            yield If(
+                self.input_a.blocks[index].shell == True
+            ).then(
+                self.output.blocks[self.bits - index - 1].shell.activate()
+            )
+

@@ -3,6 +3,7 @@ import math
 from cbac.compound import Register
 from cbac.constants.block_id import EMPTY_BLOCK, FALSE_BLOCK
 from cbac.unit.unit_base import Unit
+from cbac.unit.statements import If
 
 
 class ShiftUnit(Unit):
@@ -17,8 +18,13 @@ class ShiftUnit(Unit):
         self.synthesis()
 
     def main_logic_commands(self):
+
         for i, shift_block in enumerate(self.input_shift_size.blocks):
-            yield shift_block.shell == True
-            yield self.operation_register.shell.move(self.operation_register.blocks[2 ** i])
+            yield If(
+                shift_block.shell == True
+            ).then(
+                self.operation_register.shell.move(self.operation_register.blocks[2 ** i])
+            )
+
         yield self.operation_register.shell.move(self.output)
         yield self.output.shell.replace(EMPTY_BLOCK, FALSE_BLOCK)

@@ -1,4 +1,5 @@
 from cbac.unit.unit_base import Unit
+from cbac.unit.statements import If
 
 
 class XnorUnit(Unit):
@@ -14,9 +15,14 @@ class XnorUnit(Unit):
     def main_logic_commands(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         for inp_block_a, inp_block_b, out_block in zip(self.input_a.blocks, self.input_b.blocks, self.output.blocks):
-            yield inp_block_a.shell == False
-            yield inp_block_b.shell == False
-            yield out_block.shell.activate()
-            yield inp_block_a.shell == True
-            yield inp_block_b.shell == True
-            yield out_block.shell.activate()
+            yield If(
+                (inp_block_a.shell == False) & (inp_block_b.shell == False)
+            ).then(
+                out_block.shell.activate()
+            )
+            yield If(
+                (inp_block_a.shell == True) & (inp_block_b.shell == True)
+            ).then(
+                out_block.shell.activate()
+            )
+

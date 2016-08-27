@@ -5,7 +5,7 @@ from cbac.constants.block_id import FALSE_BLOCK
 from cbac.constants.entity_id import ARMOR_STAND
 from cbac.constants.mc_direction import *
 from cbac.entity import Entity
-from cbac.unit.statements import Conditional
+from cbac.unit.statements import Conditional, If
 from cbac.unit.unit_base import Unit
 from cbac.utils import Vector
 
@@ -34,24 +34,31 @@ class RamUnit(Unit):
 
     def main_logic_commands(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
+
+        # Create the pivot.
         yield self.pivot.shell.summon(self.memory_box[0][0][0])
+
+        # Move it by to the address specified in the address register.
         for i, addres_bit in enumerate(self.address_input.blocks):
             if 2 ** i < self.ratio.x:
-                yield addres_bit.shell == True
-                yield Conditional(
+                yield If(
+                    addres_bit.shell == True
+                ).then(
                     self.pivot.shell.move(EAST, self.word_size * (2 ** i))
                 )
+
             elif 2 ** i < self.ratio.x + self.ratio.y - 1:
-                to_move = int(2 ** (i - math.log(self.ratio.x, 2)))
-                yield addres_bit.shell == True
-                yield Conditional(
-                    self.pivot.shell.move(NORTH, to_move)
+                yield If(
+                    addres_bit.shell == True
+                ).then(
+                    self.pivot.shell.move(NORTH, int(2 ** (i - math.log(self.ratio.x, 2))))
                 )
             else:
-                to_move = int(2 ** (i - math.log(self.ratio.x, 2) - math.log(self.ratio.y, 2)))
-                yield addres_bit.shell == True
-                yield Conditional(
-                    self.pivot.shell.move(UP, to_move)
+                yield If(
+                    addres_bit.shell == True
+                ).then(
+                    self.pivot.shell.move(NORTH, int(2 ** (i - math.log(self.ratio.x, 2) - math.log(self.ratio.y, 2))))
                 )
+        # execute the command.
         yield self.pivot.shell.activate()
         yield self.pivot.shell.kill()
