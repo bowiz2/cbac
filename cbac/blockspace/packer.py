@@ -48,3 +48,4 @@ def pack_areas(areas):
         pivot += Vector(0, 0, area.dimensions.z+1)
 
     return assignments
+
