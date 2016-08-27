@@ -38,7 +38,7 @@ class If(Statement):
 
     of
 
-    if (
+    If (
         condition
     ).then(
         command_1,
