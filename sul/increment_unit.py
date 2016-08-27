@@ -14,6 +14,7 @@ class IncrementUnit(Unit):
         self.synthesis()
 
     def main_logic_commands(self):
+        # TODO: If statement include
         yield self.carry_in.shell.activate()
         for inp_block, out_block in zip(self.input.blocks, self.output.blocks):
             yield inp_block.shell == True
