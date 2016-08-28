@@ -1,10 +1,11 @@
 from cbac.constants.block_id import TRUE_BLOCK, names
 from cbac.constants.mc_direction import vectors as direction_vectors
-from cbac.utils import format_realtive_location
+from cbac.constants.mc_direction import EAST
+from cbac.utils import format_realtive_location, format_location
 
 from .command_shell_base import CommandShell
 from .decorator import command
-
+from utils import Vector
 
 class EntityShell(CommandShell):
     @command()
@@ -53,6 +54,25 @@ class EntityShell(CommandShell):
         """
         direction_vector = direction_vectors[direction] * distance
         return self._join_command("/tp", self.wrapped.selector, format_realtive_location(direction_vector))
+
+    # TODO: standardise point of reference.
+    def clone_to_point_of_reference(self, word_size, point_of_reference=(0, 0, 0), word_direction=EAST):
+        return self.execute(self._join_command(
+            "/clone",
+            format_realtive_location((0, 0, 0)),
+            format_realtive_location(direction_vectors[word_direction] * word_size),
+            format_location(point_of_reference)
+        ))
+
+    def load_from_point_of_reference(self, word_size, point_of_reference=(0, 0, 0), word_direction=EAST):
+        point_of_reference = Vector(*point_of_reference)
+        return self.execute(self._join_command(
+            "/clone",
+            format_location(point_of_reference),
+            format_location(point_of_reference + (direction_vectors[word_direction] * word_size)),
+            format_realtive_location((0, 0, 0))
+
+        ))
 
     def activate(self):
         """

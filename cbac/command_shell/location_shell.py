@@ -1,6 +1,7 @@
 from cbac.constants.block_id import names as block_names, TRUE_BLOCK, FALSE_BLOCK
 from cbac.utils import format_location, format_realtive_location
-
+from cbac.constants.mc_direction import vectors as direction_vectors
+from cbac.constants.mc_direction import EAST
 from .command_shell_base import CommandShell
 from .decorator import command
 
@@ -85,6 +86,22 @@ class LocationShell(CommandShell):
         """
 
         return self._join_command("/fill", self.area, block_names[block_id], data_value, block_handling, *options)
+
+    @command()
+    def load_for_point_of_reference(self):
+        # TODO: fix this mess.
+        return self._join_command(
+            "/clone",
+            format_location((0, 0, 0)),
+            format_location(direction_vectors[EAST]* len(self.wrapped.blocks)),
+            self.location)
+
+    @command()
+    def write_to_point_of_reference(self):
+        return self._join_command(
+            "/clone",
+            self.area,
+            format_location((0, 0, 0)),)
 
     def copy(self, other):
         """

@@ -5,36 +5,45 @@ from cbac.constants.block_id import FALSE_BLOCK
 from cbac.constants.entity_id import ARMOR_STAND
 from cbac.constants.mc_direction import *
 from cbac.entity import Entity
-from cbac.unit.statements import Conditional, If
+from cbac.unit.statements import If, InlineCall
 from cbac.unit.unit_base import Unit
-from cbac.utils import Vector
+from cbac.utils import Vector, inline_generators
+from cbac.command_shell.command_suspender import CommandSuspender
 
 
-class RamUnit(Unit):
+class MemoryAccessUnit(Unit):
+    """
+    This unit provides basic functionality for accessing memory and preforming some user-defined action.
+
+    See example of use in the ReadUnit.
+    """
     def __init__(self, address_space_size=8, ratio=(1, 16, 16), word_size=8):
         """
         :param address_space_size: The size of the address space in bits.
         """
-        self.ratio = Vector(*ratio)
-        print self.ratio.x * self.ratio.y * self.ratio.z
+        super(MemoryAccessUnit, self).__init__(address_space_size)
 
+        self.ratio = Vector(*ratio)
         self.word_size = word_size
         self.address_space = address_space_size
-        super(RamUnit, self).__init__(address_space_size)
-        # == Here you declare all your memory slots.
 
         self.address_input = self.create_input(self.bits)
-        self.read_output = self.create_output(self.bits)
-        self.write_input = self.create_input(self.bits)
-        blocksize = (self.ratio.x * 8, self.ratio.y, self.ratio.z)
-        self.memory_box = self.add_compound(BlockBox(blocksize, FALSE_BLOCK))
+
+        # The size of the box in which the memory is stored.
+        memory_box_size = (self.ratio.x * self.word_size, self.ratio.y, self.ratio.z)
+        self.memory_box = self.add_compound(BlockBox(memory_box_size, FALSE_BLOCK))
+
+        # This pivot is going to move in the memory.
+        # TODO: create pivot class with generated names.
         self.pivot = Entity(ARMOR_STAND, custom_name="RAM_PIVOT", no_gravity=True)
         # ==
         self.synthesis()
 
+    @inline_generators
     def main_logic_commands(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
-
+        # Reset the pivot.
+        yield self.pivot.shell.kill()
         # Create the pivot.
         yield self.pivot.shell.summon(self.memory_box[0][0][0])
 
@@ -57,8 +66,61 @@ class RamUnit(Unit):
                 yield If(
                     addres_bit.shell == True
                 ).then(
-                    self.pivot.shell.move(NORTH, int(2 ** (i - math.log(self.ratio.x, 2) - math.log(self.ratio.y, 2))))
+                    self.pivot.shell.move(UP, int(2 ** (i - math.log(self.ratio.x, 2) - math.log(self.ratio.y, 2))))
                 )
-        # execute the command.
-        yield self.pivot.shell.activate()
-        yield self.pivot.shell.kill()
+
+
+class ReadUnit(Unit):
+    def __init__(self, word_size, memory_access_unit):
+        assert word_size == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
+        super(ReadUnit, self).__init__(word_size)
+        # Unit declaration.
+        self.memory_access_unit = self.add_unit(memory_access_unit)
+
+        self.address_input = self.add_input(self.memory_access_unit.address_input)
+        self.read_output = self.create_output(self.word_size)
+        self.synthesis()
+
+    @property
+    def word_size(self):
+        return self.bits
+
+    @property
+    def pivot(self):
+        return self.memory_access_unit.pivot
+
+    def main_logic_commands(self):
+        # We are not passing parameters because the inputs of the memory access unit are the same as this unit.
+        yield InlineCall(self.memory_access_unit)
+        yield self.pivot.shell.clone_to_point_of_reference(self.word_size)
+        yield self.read_output.shell.load_for_point_of_reference()
+        yield "/say done reading slot to the output."
+
+
+class WriteUnit(Unit):
+    def __init__(self, word_size, memory_access_unit):
+        assert word_size == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
+        super(WriteUnit, self).__init__(word_size)
+        # Unit declaration.
+        self.memory_access_unit = self.add_unit(memory_access_unit)
+
+        self.address_input = self.add_input(self.memory_access_unit.address_input)
+        self.data_input = self.create_input(self.word_size)
+        self.synthesis()
+
+    @property
+    def word_size(self):
+        return self.bits
+
+    @property
+    def pivot(self):
+        return self.memory_access_unit.pivot
+
+    def main_logic_commands(self):
+        # We are not passing parameters because the inputs of the memory access unit are the same as this unit.
+        yield InlineCall(self.memory_access_unit)
+        yield self.data_input.shell.write_to_point_of_reference()
+        yield self.pivot.shell.load_from_point_of_reference(self.word_size)
+
+        yield "/say done reading slot to the output."
+
