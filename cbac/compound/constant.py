@@ -29,7 +29,7 @@ class Constant(Compound):
             else:
                 material = block_id.FALSE_BLOCK
 
-                to_return.append(Block(material))
+            to_return.append(Block(material))
 
         if self.buffer_size is not None:
             for i in xrange(self.buffer_size - len(self.bits)):
