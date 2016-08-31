@@ -60,12 +60,6 @@ class TestBitwiseUnits(SULTestCase):
         self.block_space.add_unit(sul.SubtractUnit(4))
 
 
-class TestConcepts(SULTestCase):
-
-    def test_callback(self):
-        self.block_space.add_unit(sul.CallbackUnit(4))
-
-
 class TestSULMemory(SULTestCase):
 
     def test_memory_access(self):
