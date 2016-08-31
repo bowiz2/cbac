@@ -16,10 +16,16 @@ class Register(Compound):
         """
         self.size = size
         self.default_block = default_block
-        super(Register, self).__init__(list(), isolated=True)
+        super(Register, self).__init__(isolated=True)
 
-        for i in xrange(size):
-            self.blocks.append(Block(self.default_block))
+
+    @property
+    @memoize
+    def blocks(self):
+        to_return = []
+        for i in xrange(self.size):
+            to_return.append(Block(self.default_block))
+        return to_return
 
     def get_sub_memory(self, arange):
         """

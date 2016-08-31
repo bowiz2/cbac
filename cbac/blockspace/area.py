@@ -2,30 +2,23 @@ import cbac.constants.mc_direction
 from cbac.block import Block
 from cbac.constants import mc_direction
 from cbac.utils import Vector
+from cbac.blockspace.assignment import BlockAssignment
 
-from .assignment import BlockAssignment
+# TODO: test raw area.
+# TODO: rename winded area.
 
-
-# TODO: fix this mess.
 
 class Area(object):
-    def __init__(self, wrapped_item, start_build_direction=mc_direction.EAST):
+    """
+    Wraps an object for packing.
+    """
+
+    def __init__(self, wrapped_item):
         self.wrapped = wrapped_item
-        self.start_build_direction = start_build_direction
 
     def _pack(self, compound):
-        corner = Vector(0, 0, 0)
-        build_direction = self.start_build_direction
-
-        packed = []
-
-        for i, block in enumerate(compound.blocks):
-            build_direction_vector = cbac.constants.mc_direction.vectors[build_direction]
-            relative_location = corner + (build_direction_vector * i)
-            relative_assignment = BlockAssignment(block, relative_location, build_direction)
-            packed.append(relative_assignment)
-
-        return packed
+        assert False, "must be implemented"
+        return []
 
     @property
     def packed_blocks(self):
@@ -67,15 +60,30 @@ class Area(object):
         return self.wrapped.isolated
 
 
-# class LineArea(Area):
-#     """
-#     An area which constructs a line out of blocks.
-#     """
-#     pass
-#     # TODO: implement.
+class LineArea(Area):
+    """
+    An area which constructs a line out of blocks.
+    """
+    def __init__(self, compound, start_build_direction=mc_direction.EAST):
+        super(LineArea, self).__init__(compound)
+        self.start_build_direction = start_build_direction
+
+    def _pack(self, compound):
+        corner = Vector(0, 0, 0)
+        build_direction = self.start_build_direction
+
+        packed = []
+
+        for i, block in enumerate(compound.blocks):
+            build_direction_vector = cbac.constants.mc_direction.vectors[build_direction]
+            relative_location = corner + (build_direction_vector * i)
+            relative_assignment = BlockAssignment(block, relative_location, build_direction)
+            packed.append(relative_assignment)
+
+        return packed
 
 
-class WindedArea(Area):
+class WindedArea(LineArea):
     """
     An area which was winded from a long line of blocks into a compressed block area.
     """
@@ -91,13 +99,14 @@ class WindedArea(Area):
         :return:
         :note: That this does not account for conditional commands.
         """
+        compound.padding = self.max_width
         # TODO: provide better doc.
         build_direction = self.start_build_direction
         # Matrix of rows.
         rows = []
         row = []
         # All the blocks of the compound.
-        total_blocks = compound.blocks
+        total_blocks = list(compound.blocks)
         # Generate rows from blocks.
         for i, block in enumerate(total_blocks):
             row.append(block)
@@ -129,13 +138,22 @@ class WindedArea(Area):
         return [BlockAssignment(block, locs[block], directions[block]) for block in total_blocks]
 
 
-class BlocBoxArea(Area):
+class BlockBoxArea(Area):
+    """
+    An area of a block box.
+    """
     @property
     def block_box(self):
+        """
+        :return: wrapped block box.
+        """
         return self.wrapped
 
     @property
     def packed_blocks(self):
+        """
+        :return: A list of relatively packed blocks.
+        """
         to_return = []
         for x, block_plane in enumerate(self.block_box.blocks):
             for y, block_row in enumerate(block_plane):
@@ -147,16 +165,29 @@ class BlocBoxArea(Area):
 class RawArea(Area):
     """
     An area which was constructed from a schematic file.
+    DONT USE, DEPRECATED>
     """
 
     def __init__(self, schematic):
-        self.schematic = schematic
+        super(RawArea, self).__init__(schematic)
+
+    @property
+    def schematic(self):
+        """
+        :return: Wrapped schematic.
+        """
+        return self.wrapped
 
     @property
     def packed_blocks(self):
+        """
+        :return: List of relatively packed blocks.
+        """
         to_return = []
         for x, block_plane in enumerate(self.schematic.Blocks):
             for y, block_row in enumerate(block_plane):
                 for z, block_id in enumerate(block_row):
                     to_return.append(BlockAssignment(Block(block_id), Vector(x, y, z), None))
         return to_return
+
+__all__ = ["LineArea", "WindedArea", "BlockBoxArea", "RawArea"]

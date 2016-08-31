@@ -40,16 +40,15 @@ class LocationShell(CommandShell):
         return " ".join(formatted_area)
 
     @command(creates_condition=True)
-    def testforblock(self, block_id, data_value=None, tags=None):
+    def testforblock(self, block_id, data_value=0, tags=None):
         """
-        Test if this location object is of the certain type.
+        Check if a block at this location is of a certain signature.
         """
-        return " ".join([str(item) for item in
-                         ["/testforblock", self.location, block_names[block_id], data_value, tags]
-                         if item is not None])
+        return self._join_command("/testforblock", self.location, block_names[block_id], data_value, tags)
+
 
     @command()
-    def setblock(self, block_id, data_value=None, block_handling=None, tags=None):
+    def setblock(self, block_id, data_value=0, block_handling=None, tags=None):
         """
         Sets a block to a new block id with some more advanced options.
         """

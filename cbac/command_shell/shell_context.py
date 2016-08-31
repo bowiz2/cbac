@@ -15,6 +15,7 @@ class ShellContext(object):
         """
         Get the absolute location of an object. In the context of the blockspace.
         """
+        assert self.blockspace is not None, "To use shell context, blockspace must be assigned"
         return self.blockspace.get_location_of(thing)
 
     def get_relative_location(self, thing):
@@ -24,7 +25,10 @@ class ShellContext(object):
         return self.get_absolute_location(thing) - self.blockspace.get_location_of(self.executor)
 
     def get_absolute_area(self, thing):
-        # TODO: implement caching.
+        """
+        Get the absolute area of an item.
+        """
+        assert self.blockspace is not None, "To use shell context, blockspace must be assigned"
         return self.blockspace.get_area_of(thing)
 
     def get_relative_area(self, thing):

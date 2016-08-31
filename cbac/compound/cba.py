@@ -1,8 +1,12 @@
+"""
+Command Block Array holder
+"""
 from cbac.block import Block, CommandBlock
 from cbac.command_shell import CBAShell
 from cbac.compound import Compound
 from cbac.constants.block_id import FALSE_BLOCK
 from cbac.utils import memoize
+import compound.padder
 
 
 class CBA(Compound):
@@ -10,15 +14,17 @@ class CBA(Compound):
     Command Block Array
     """
     created_count = 0
+    padder_instance = compound.padder
 
     def __init__(self, *commands):
+        # TODO: clarify padding doc.
+        # The size to which this compound command blocks must be padded to not interfere with the conditional commands
+        self.padding = None
+
         self.cba_id = self.created_count
         self.created_count += 1
 
         self.commands = commands
-
-        # commands
-        self.user_command_blocks = list(self._gen_cb_chain(commands))
 
         # An empty block which when activated. will fire up this cba.
         self.activator = Block(FALSE_BLOCK)
@@ -28,13 +34,7 @@ class CBA(Compound):
         # This command block is reserved for callback use.
         self.cb_callback_reserved = CommandBlock("", None, "chain", True)
 
-        blocks = self.system_prefix_blocks + self.user_command_blocks + self.system_postfix_blocks
-
-        blocks = self.set_block_names(blocks)
-
-        blocks = self.bind_conditions(blocks)
-
-        super(CBA, self).__init__(blocks, isolated=True)
+        super(CBA, self).__init__(isolated=True)
 
     def set_block_names(self, blocks):
         """
@@ -66,6 +66,13 @@ class CBA(Compound):
                 pass  # in-case this was not a command block or the next block had no conditional option.
         return blocks
 
+    @property
+    def user_command_blocks(self):
+        """
+        :return: List of command blocks which wrap user commands.
+        """
+        return list(self._gen_cb_chain(self.commands))
+
     @staticmethod
     def _gen_cb_chain(commands):
         """
@@ -82,20 +89,49 @@ class CBA(Compound):
             yield CommandBlock(command, facing=None, action="chain", always_active=True)
 
     @property
+    def blocks(self):
+        """
+        :return: Command block arrays.
+        """
+
+        to_return = self.system_prefix_blocks + self.user_command_blocks + self.system_postfix_blocks
+        to_return = self.set_block_names(to_return)
+        to_return = self.bind_conditions(to_return)
+
+        if self.padding:
+            to_return = list(self.padder_instance.pad(to_return.__iter__(), self.padding))
+
+        return to_return
+
+
+    @property
     @memoize
     def shell(self):
+        """
+        :return: CBAShell
+        """
         return CBAShell(self)
 
     @property
     def system_prefix_blocks(self):
+        """
+        :return: Blocks which are placed before the user commands.
+        """
         return [self.activator]
 
     @property
     def system_postfix_blocks(self):
+        """
+        :return: Blocks which follow the user command blocks.
+        """
         return [self.cb_callback_reserved, self.cb_re_setter]
 
     @property
     def name(self):
+        """
+        :return: The name of the cba.
+        """
+        # TODO: create naming for units.
         return "CBA_n{0}".format(self.cba_id)
 
     def __add__(self, other):
@@ -108,3 +144,5 @@ class CBA(Compound):
 
     def __str__(self):
         return self.name
+
+

@@ -1,3 +1,7 @@
+"""
+Packs items by their areas.
+Note that this module does not account for the destination size.
+"""
 from cbac.utils import Vector
 
 from .area_factory import area_factory
@@ -27,10 +31,9 @@ def pack(items):
 
 def pack_areas(areas):
     """
-    Takes a colelction of areas and organizes them inside the
-    :param areas:
-    :param blockspace:
-    :return: dictionery of area and the location inside the blockspace.
+    Takes a collection of areas and organizes them together relative to a centralized point.
+    :param areas: areas you want to pack.
+    :return: dict of area and the location inside the blockspace.
     """
     assignments = {}
     pivot = Vector(0, 0, 0)

@@ -1,8 +1,8 @@
+"""
+Holds the blockspace Class.
+"""
 import packer
-from cbac.constants import mc_direction
 from cbac.utils import Vector
-
-DEF_BUILD_DIRECTION = mc_direction.WEST
 
 
 class BlockSpace(object):

@@ -1,6 +1,7 @@
 """
 Statements are syntactic sugar for the definition of units.
 """
+# TODO: implement switch statement.
 
 
 class Statement(object):
@@ -76,4 +77,4 @@ class If(Statement):
 
     def otherwise(self, *statements):
         assert False, "otherwise is not implemented."
-        # self.otherwise_body = statements
+       
