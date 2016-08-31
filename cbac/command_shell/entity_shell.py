@@ -1,3 +1,6 @@
+"""
+Holds Entity Shell
+"""
 from cbac.constants.block_id import TRUE_BLOCK, names
 from cbac.constants.mc_direction import vectors as direction_vectors
 from cbac.constants.mc_direction import EAST
@@ -9,6 +12,9 @@ from utils import Vector
 
 
 class EntityShell(CommandShell):
+    """
+    Wraps the entity object and provides command iterface for it.
+    """
     @command()
     def kill(self):
         """
@@ -58,6 +64,11 @@ class EntityShell(CommandShell):
 
     # TODO: standardise point of reference.
     def clone_to_point_of_reference(self, word_size, point_of_reference=(0, 0, 0), word_direction=EAST):
+        """
+        Clone a word size area to the point of reference which is the location (0,0,0) in this minecraft world
+        :return: CommandSuspender
+        :note: Sees use in the RAM standard unit.
+        """
         return self.execute(self._join_command(
             "/clone",
             format_realtive_location((0, 0, 0)),
@@ -66,6 +77,12 @@ class EntityShell(CommandShell):
         ))
 
     def load_from_point_of_reference(self, word_size, point_of_reference=(0, 0, 0), word_direction=EAST):
+        """
+        clone  from the point of reference area to the location at which the entity is staying.
+        "Point of reference" is the location (0,0,0) in this minecraft world.
+        :return: CommandSuspender
+        :note: Sees use in the RAM standard unit.
+        """
         point_of_reference = Vector(*point_of_reference)
         return self.execute(self._join_command(
             "/clone",

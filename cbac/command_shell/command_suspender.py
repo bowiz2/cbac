@@ -1,4 +1,13 @@
+"""
+Holds Command Suspender
+"""
+
+
 class CommandSuspender(object):
+    """
+    Wraps a command generating function in a functor. Also holds meta-data of the generated command.
+    such as its condition properties and the shell of that command.
+    """
     def __init__(self, command_shell, command_function, *args, **kwargs):
         # The command command_shell which created the command.
         self.command_shell = command_shell

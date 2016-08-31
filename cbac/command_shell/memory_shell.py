@@ -1,9 +1,15 @@
+"""
+Holds register shell.
+"""
 from cbac.constants.block_id import TRUE_BLOCK
 
 from . import CompoundShell
 
 
 class RegisterShell(CompoundShell):
+    """
+    Wraps the register object and provides command interface for it.
+    """
     def reset(self):
         """
         Set the memory to zero.
@@ -14,9 +20,11 @@ class RegisterShell(CompoundShell):
         """
         Sets the value of the memory, can be done to a limited set of numebrs
         """
-        max = 2 ** self.wrapped.size
-        possible_set = [0, max]
-        if number == max:
+
+        # TODO: work on the set value feature.
+        max_value = 2 ** self.wrapped.size
+
+        if number == max_value:
             return self.fill(TRUE_BLOCK)
         if number == 0:
             return self.fill(self.wrapped.default_block)

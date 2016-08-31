@@ -1,3 +1,6 @@
+"""
+Holds decorators for the command shell logical components.
+"""
 from . import CommandSuspender
 
 

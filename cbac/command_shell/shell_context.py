@@ -1,3 +1,8 @@
+"""
+Holds Shell context.
+"""
+
+
 class ShellContext(object):
     """
     A context is the state from which the commands in the command command_shell are compiled.
@@ -32,6 +37,9 @@ class ShellContext(object):
         return self.blockspace.get_area_of(thing)
 
     def get_relative_area(self, thing):
+        """
+        Get the area related to the executor of this context.
+        """
         thing_area = self.get_absolute_area(thing)
         executor_area = self.get_absolute_area(self.executor)
 
