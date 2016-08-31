@@ -1,6 +1,9 @@
+"""
+Holds area factory methods.
+"""
 from cbac.blockbox import BlockBox
-from pymclevel import MCSchematic
 from cbac.compound import CBA
+from pymclevel import MCSchematic
 
 from .area import LineArea, RawArea, BlockBoxArea, WindedArea
 
