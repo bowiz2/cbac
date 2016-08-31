@@ -6,7 +6,7 @@ from cbac.blockspace import BlockSpace
 from cbac.blockspace.area import BlockBoxArea
 from cbac.constants.block_id import REDSTONE_BLOCK
 
-from .decorators import save_schematic
+from tests.decorators import save_schematic
 
 
 class BlockBoxTest(TestCase):
