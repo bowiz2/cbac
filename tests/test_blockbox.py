@@ -3,7 +3,7 @@ from unittest import TestCase
 import cbac.assembler
 from cbac.blockbox import BlockBox
 from cbac.blockspace import BlockSpace
-from cbac.blockspace.area import BlocBoxArea
+from cbac.blockspace.area import BlockBoxArea
 from cbac.constants.block_id import REDSTONE_BLOCK
 
 from .decorators import save_schematic
@@ -17,7 +17,7 @@ class BlockBoxTest(TestCase):
     def test_area(self):
         size = (2, 3, 4)
         my_blockbox = BlockBox(size, REDSTONE_BLOCK)
-        area = BlocBoxArea(my_blockbox)
+        area = BlockBoxArea(my_blockbox)
         self.assertEqual(len(area.packed_blocks), size[0] * size[1] * size[2])
 
     @save_schematic

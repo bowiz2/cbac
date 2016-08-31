@@ -1,4 +1,4 @@
-SCHEMATIC_FORMAT = "./test_products/{0}_{1}.schematic"
+SCHEMATIC_FORMAT = "./products/{0}_{1}.schematic"
 
 
 def save_schematic(f):

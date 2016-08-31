@@ -3,24 +3,15 @@ from unittest import TestCase
 
 import cbac.assembler as assembler
 import cbac.block as block
-import tests.decorators
+import test.decorators
 from cbac.blockspace import BlockSpace
 from cbac.compound import Compound, CBA
 from cbac.compound import Constant
-from cbac.compound import Extender
 from cbac.compound import Register
 from cbac.constants.block_id import FALSE_BLOCK
 
 
 class TestCompound(TestCase):
-    def test_base(self):
-        BLOCK_LENGTH = 4
-
-        get_random_block = lambda: block.Block(random.choice(block.ids.names.keys()))
-
-        compound = Compound([get_random_block() for _ in xrange(BLOCK_LENGTH)])
-        self.assertEqual(len(compound.blocks), BLOCK_LENGTH)
-
     def test_constant(self):
         NUM = 5
         const = Constant(NUM)
@@ -48,16 +39,3 @@ class TestCompound(TestCase):
         sub = big_memory.get_sub_memory(xrange(BITS / 2))
         self.assertIsNotNone(sub)
         self.assertEqual(len(sub.blocks), BITS / 2)
-
-    @tests.decorators.save_schematic
-    def test_extender(self):
-        cba = CBA("/say what what", "/say in the butt.", "/say look at me!", "/say this is so cool.")
-        cba2 = CBA("/say this is totaly a new cba", "/say really.")
-        ext = Extender(cba, cba2)
-
-        block_space = BlockSpace((8, 8, 8))
-        for comp in [cba, cba2, ext]:
-            block_space.add(comp)
-
-        # build a schematic and save it to file.
-        return assembler.build(block_space)
