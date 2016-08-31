@@ -1,8 +1,12 @@
+"""
+Declarations of objects which are wrapping items to be packed into a blockspace.
+"""
 import cbac.constants.mc_direction
 from cbac.block import Block
+from cbac.blockspace.assignment import BlockAssignment
 from cbac.constants import mc_direction
 from cbac.utils import Vector
-from cbac.blockspace.assignment import BlockAssignment
+
 
 # TODO: test raw area.
 # TODO: rename winded area.
@@ -16,8 +20,13 @@ class Area(object):
     def __init__(self, wrapped_item):
         self.wrapped = wrapped_item
 
-    def _pack(self, compound):
-        assert False, "must be implemented"
+    def _assign(self, obj):
+        """
+        Create a block assignment for each block representation in obj.
+        Must be implemented.
+        :param obj: holds representation for blocks.
+        :return: list of block assignments.
+        """
         return []
 
     @property
@@ -26,7 +35,7 @@ class Area(object):
         :return: list of relative Block Assignments.
         """
         # The corner of the area, the build starts from here.
-        packed_blocks = self._pack(self.wrapped)
+        packed_blocks = self._assign(self.wrapped)
         return packed_blocks
 
     @property
@@ -64,11 +73,12 @@ class LineArea(Area):
     """
     An area which constructs a line out of blocks.
     """
+
     def __init__(self, compound, start_build_direction=mc_direction.EAST):
         super(LineArea, self).__init__(compound)
         self.start_build_direction = start_build_direction
 
-    def _pack(self, compound):
+    def _assign(self, compound):
         corner = Vector(0, 0, 0)
         build_direction = self.start_build_direction
 
@@ -92,7 +102,7 @@ class WindedArea(LineArea):
         super(WindedArea, self).__init__(wrapped_item)
         self.max_width = max_width
 
-    def _pack(self, compound):
+    def _assign(self, compound):
         """
         Takes a compound a compresses it to the maximum width. It is actually winding the row. Used mainly for CBAs.
         :param compound: a cba you want ot compress.
@@ -142,6 +152,7 @@ class BlockBoxArea(Area):
     """
     An area of a block box.
     """
+
     @property
     def block_box(self):
         """
@@ -189,5 +200,6 @@ class RawArea(Area):
                 for z, block_id in enumerate(block_row):
                     to_return.append(BlockAssignment(Block(block_id), Vector(x, y, z), None))
         return to_return
+
 
 __all__ = ["LineArea", "WindedArea", "BlockBoxArea", "RawArea"]

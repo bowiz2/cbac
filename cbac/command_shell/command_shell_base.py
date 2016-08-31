@@ -1,3 +1,6 @@
+"""
+Holds abstract Command shell.
+"""
 from cbac.utils import Vector
 
 from . import ShellContext
@@ -39,4 +42,4 @@ class CommandShell(object):
 
         return " ".join([parse(item) for item in items if item is not None])
 
-# A block has only a location. so it is very reasonable to have the same command_shell as the location command_shell.
+

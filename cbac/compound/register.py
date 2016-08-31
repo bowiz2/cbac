@@ -18,7 +18,6 @@ class Register(Compound):
         self.default_block = default_block
         super(Register, self).__init__(isolated=True)
 
-
     @property
     @memoize
     def blocks(self):

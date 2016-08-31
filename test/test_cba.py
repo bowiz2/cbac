@@ -1,8 +1,6 @@
 from unittest import TestCase
 
-
 from cbac import CBA
-
 
 
 class TestCBA(TestCase):
@@ -28,8 +26,6 @@ class TestCBA(TestCase):
         combined_length = len(my_cba_1.user_command_blocks) + len(my_cba_2.user_command_blocks)
 
         self.assertEqual(len(added_cba.user_command_blocks), combined_length)
-
-
 
     def test_pad(self):
         """

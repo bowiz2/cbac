@@ -25,4 +25,3 @@ class XnorUnit(Unit):
             ).then(
                 out_block.shell.activate()
             )
-

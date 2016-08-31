@@ -8,6 +8,7 @@ class PadBlock(CommandBlock):
     """
     This is the blocks which is used for padding.
     """
+
     def __init__(self):
         # TODO: consider applying condition-creating command.
         super(PadBlock, self).__init__("/say padding", conditional=True, action="chain", always_active=True)
@@ -64,7 +65,7 @@ def pad(blocks, pad_size=8):
     """
 
     pad_counter = 0
-    danger_zone = (0, pad_size-1)
+    danger_zone = (0, pad_size - 1)
 
     block = blocks.next()
     first_block = True

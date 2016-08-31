@@ -1,4 +1,4 @@
-from cbac.unit.statements import STDCall , InlineCall
+from cbac.unit.statements import STDCall, InlineCall
 from cbac.unit.unit_base import Unit
 from increment_unit import IncrementUnit
 from not_unit import NotUnit

@@ -17,6 +17,7 @@ class MemoryAccessUnit(Unit):
 
     See example of use in the ReadUnit.
     """
+
     def __init__(self, address_space_size=8, ratio=(1, 16, 16), word_size=8):
         """
         :param address_space_size: The size of the address space in bits.
@@ -123,4 +124,3 @@ class WriteUnit(Unit):
         yield self.pivot.shell.load_from_point_of_reference(self.word_size)
 
         yield "/say done reading slot to the output."
-

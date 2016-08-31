@@ -1,6 +1,8 @@
 """
 Statements are syntactic sugar for the definition of units.
 """
+
+
 # TODO: implement switch statement.
 
 
@@ -23,6 +25,7 @@ class Conditional(Statement):
     @property
     def commands(self):
         return self.wrapped
+
 
 class PassParameters(Statement):
     def __init__(self, unit, *parameters):
@@ -60,6 +63,7 @@ class _SwitchCaseSugar(StatementOption):
 class InlineCall(Call, PassParameters):
     pass
 
+
 class If(Statement):
     """
     Usage:
@@ -94,4 +98,3 @@ class If(Statement):
 
     def otherwise(self, *statements):
         assert False, "otherwise is not implemented."
-       

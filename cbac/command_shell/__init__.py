@@ -1,3 +1,6 @@
+"""
+Exports Different command shell interfaces for different items in the CBAC infrastructure.
+"""
 from .command_suspender import CommandSuspender
 from . import decorator
 from .shell_context import ShellContext

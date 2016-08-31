@@ -9,6 +9,11 @@ class CompoundShell(LocationShell):
 
     @command(True)
     def testforblocks(self, other):
+        """
+        Check if this compound is equal to another compound.
+        :param other:
+        :return:
+        """
         other.shell.context = self.context
         return "/testforblocks {0} {1}".format(self.area, other.shell.location)
 

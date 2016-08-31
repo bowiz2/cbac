@@ -23,4 +23,3 @@ class ReverseUnit(Unit):
             ).then(
                 self.output.blocks[self.bits - index - 1].shell.activate()
             )
-
