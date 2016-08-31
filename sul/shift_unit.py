@@ -18,7 +18,6 @@ class ShiftUnit(Unit):
         self.synthesis()
 
     def main_logic_commands(self):
-
         for i, shift_block in enumerate(self.input_shift_size.blocks):
             yield If(
                 shift_block.shell == True

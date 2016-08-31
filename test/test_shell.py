@@ -10,6 +10,7 @@ class BlockspaceMock(BlockSpace):
     """
     Used in the command shell tests.
     """
+
     def __init__(self, size):
         super(BlockspaceMock, self).__init__(size)
         self._packed_blocks = {}

@@ -16,4 +16,3 @@ class NotUnit(Unit):
             # note that the eq is overriden.
             yield If(a_block.shell == False).then(o_block.shell.activate())
             yield If(a_block.shell == True).then(o_block.shell.deactivate())
-

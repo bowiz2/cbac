@@ -12,7 +12,7 @@ class SULTestCase(TestCase):
     """
 
     def setUp(self):
-        self.block_space = BlockSpace((100,100,100))
+        self.block_space = BlockSpace((100, 100, 100))
 
     @save_schematic
     def tearDown(self):
@@ -61,7 +61,6 @@ class TestBitwiseUnits(SULTestCase):
 
 
 class TestSULMemory(SULTestCase):
-
     def test_memory_access(self):
         self.block_space.add_unit(sul.MemoryAccessUnit(8))
 

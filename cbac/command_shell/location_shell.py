@@ -46,7 +46,6 @@ class LocationShell(CommandShell):
         """
         return self._join_command("/testforblock", self.location, block_names[block_id], data_value, tags)
 
-
     @command()
     def setblock(self, block_id, data_value=0, block_handling=None, tags=None):
         """
@@ -92,7 +91,7 @@ class LocationShell(CommandShell):
         return self._join_command(
             "/clone",
             format_location((0, 0, 0)),
-            format_location(direction_vectors[EAST]* len(self.wrapped.blocks)),
+            format_location(direction_vectors[EAST] * len(self.wrapped.blocks)),
             self.location)
 
     @command()
@@ -100,7 +99,7 @@ class LocationShell(CommandShell):
         return self._join_command(
             "/clone",
             self.area,
-            format_location((0, 0, 0)),)
+            format_location((0, 0, 0)), )
 
     def copy(self, other):
         """

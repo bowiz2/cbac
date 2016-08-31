@@ -48,6 +48,7 @@ def inline_generators(fn):
     :param fn:
     :return:
     """
+
     def inline(value):
         if isinstance(value, InlineGenerator):
             for x in value.wrapped:
@@ -61,6 +62,7 @@ def inline_generators(fn):
         if isinstance(result, types.GeneratorType):
             result = inline(_from(result))
         return result
+
     return wrapped
 
 
@@ -72,5 +74,3 @@ class InlineGenerator(object):
 def _from(value):
     assert isinstance(value, types.GeneratorType)
     return InlineGenerator(value)
-
-

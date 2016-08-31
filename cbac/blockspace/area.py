@@ -4,6 +4,7 @@ from cbac.constants import mc_direction
 from cbac.utils import Vector
 from cbac.blockspace.assignment import BlockAssignment
 
+
 # TODO: test raw area.
 # TODO: rename winded area.
 
@@ -64,6 +65,7 @@ class LineArea(Area):
     """
     An area which constructs a line out of blocks.
     """
+
     def __init__(self, compound, start_build_direction=mc_direction.EAST):
         super(LineArea, self).__init__(compound)
         self.start_build_direction = start_build_direction
@@ -142,6 +144,7 @@ class BlockBoxArea(Area):
     """
     An area of a block box.
     """
+
     @property
     def block_box(self):
         """
@@ -189,5 +192,6 @@ class RawArea(Area):
                 for z, block_id in enumerate(block_row):
                     to_return.append(BlockAssignment(Block(block_id), Vector(x, y, z), None))
         return to_return
+
 
 __all__ = ["LineArea", "WindedArea", "BlockBoxArea", "RawArea"]

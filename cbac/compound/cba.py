@@ -103,7 +103,6 @@ class CBA(Compound):
 
         return to_return
 
-
     @property
     @memoize
     def shell(self):
@@ -144,5 +143,3 @@ class CBA(Compound):
 
     def __str__(self):
         return self.name
-
-

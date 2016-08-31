@@ -37,7 +37,6 @@ class Unit(object):
 
         self.logic_cbas = parse_result
 
-
     def add_compound(self, compound):
         """
         Add a compound to the compound list, meaning it will be compiled with the unit.

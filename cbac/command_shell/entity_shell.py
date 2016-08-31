@@ -7,6 +7,7 @@ from .command_shell_base import CommandShell
 from .decorator import command
 from utils import Vector
 
+
 class EntityShell(CommandShell):
     @command()
     def kill(self):
