@@ -40,6 +40,23 @@ class STDCall(Call, PassParameters, MainLogicJump):
     pass
 
 
+class StatementOption(object):
+    pass
+
+
+class SwitchCase(StatementOption):
+    def __init__(self, wrap):
+        self.wrap = wrap
+    def __call__(self, *to_do):
+        self.to_do = to_do
+
+class _SwitchCaseSugar(StatementOption):
+    """
+    Singleton
+    """
+    def __getitem__(self, item):
+        return SwitchCase(item)
+
 class InlineCall(Call, PassParameters):
     pass
 
