@@ -19,4 +19,7 @@ def area_factory(obj):
     if isinstance(obj, BlockBox):
         return BlockBoxArea(obj)
 
+    if isinstance(obj, CBA):
+        return WindedArea(obj)
+
     return LineArea(obj)

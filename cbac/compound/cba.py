@@ -98,9 +98,6 @@ class CBA(Compound):
         to_return = self.set_block_names(to_return)
         to_return = self.bind_conditions(to_return)
 
-        if self.padding:
-            to_return = list(self.padder_instance.pad(to_return.__iter__(), self.padding))
-
         return to_return
 
     @property
