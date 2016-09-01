@@ -122,9 +122,10 @@ class BlockSpace(object):
         """
         Shrinks the blockspace size to the minimal, according to its blocks.
         """
-        # TODO: remove code duplication.
-        block_locations = self.packed_blocks.values()
-        max_x = sorted(block_locations, key=lambda item: item[0])[-1].x
-        max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
-        max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
-        self.size = (max_x + 1, max_y + 1, max_z + 1)
+        if len(self.packed_blocks) > 0:
+            # TODO: remove code duplication.
+            block_locations = self.packed_blocks.values()
+            max_x = sorted(block_locations, key=lambda item: item[0])[-1].x
+            max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
+            max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
+            self.size = (max_x + 1, max_y + 1, max_z + 1)

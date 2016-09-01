@@ -1,8 +1,9 @@
 """
 This module parses the statement logic of a unit provided in its main logic commands generation method.
 """
-from cbac.compound import CBA
-from cbac.unit.statements import MainLogicJump, Conditional, STDCall, If, InlineCall, PassParameters
+from cbac.compound import CBA, Constant
+from cbac.unit.statements import MainLogicJump, Conditional, STDCall, If, InlineCall, PassParameters, Switch
+
 
 
 class Lazy(object):
@@ -21,12 +22,13 @@ class LazyJump(Lazy):
 def parse(statement_generators):
     logic_cbas = []
     commands = []
+    other_compounds = []
 
     for command_generator in statement_generators:
         # Parse Statements
-        for statement in command_generator:
-            # wrap the command in a statement.
-
+        pre_parsed_statements = list(command_generator)
+        while len(pre_parsed_statements) > 0:
+            statement = pre_parsed_statements.pop(0)
             # Copy Parameters and rename the statemnt to a main logic jump
             if isinstance(statement, PassParameters):
                 for param_id, parameter in enumerate(statement.parameters):
@@ -38,10 +40,18 @@ def parse(statement_generators):
                     commands.append(condition_command)
                 statement = statement.condition_body
 
+
             if isinstance(statement, Conditional):
                 for command in statement.commands:
                     command.is_conditional = True
                     commands.append(command)
+
+            elif isinstance(statement, Switch):
+                switch = statement
+                for _case in statement.cases:
+                    constant = Constant(_case.to_compare)
+                    pre_parsed_statements.insert(0, If(switch.wrapped.shell == constant).then(*_case.body_statements))
+                    other_compounds.append(constant)
 
             elif isinstance(statement, InlineCall):
                 # TODO: support inline for jumpables units.
@@ -56,6 +66,7 @@ def parse(statement_generators):
                 commands.append(LazyJump(statement.wrapped))
                 logic_cbas.append(CBA(*commands))
                 commands = []
+
             else:
                 # regular statement
                 commands.append(statement)
@@ -76,4 +87,4 @@ def parse(statement_generators):
     # rewire the callbacks of all the cbac to be the actaull callback block of the last block.
     for cba in logic_cbas[:-1]:
         cba.cb_callback_reserved = logic_cbas[-1].cb_callback_reserved
-    return logic_cbas
+    return logic_cbas, other_compounds

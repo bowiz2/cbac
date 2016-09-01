@@ -47,18 +47,37 @@ class StatementOption(object):
     pass
 
 
-class SwitchCase(StatementOption):
-    def __init__(self, wrap):
-        self.wrap = wrap
-    def __call__(self, *to_do):
-        self.to_do = to_do
+class Switch(Statement):
+    def by(self, *cases):
+        self.cases = cases
+        return self
+
+
+class _SwitchCase(StatementOption):
+    def __init__(self, to_compare):
+        self.to_compare = to_compare
+
+    def __call__(self, *body_statements):
+        self.body_statements = body_statements
+        return self
+
 
 class _SwitchCaseSugar(StatementOption):
     """
-    Singleton
+    Singleton, just a get_item holder
+
+    makes so I can use it like this
+
+    case[thing](
+        statement,
+        statement,
+    )
     """
     def __getitem__(self, item):
-        return SwitchCase(item)
+        return _SwitchCase(item)
+
+case = _SwitchCaseSugar()
+
 
 class InlineCall(Call, PassParameters):
     pass
