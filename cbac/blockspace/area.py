@@ -2,10 +2,11 @@
 Declarations of objects which are wrapping items to be packed into a blockspace.
 """
 import cbac.constants.mc_direction
-from cbac.block import Block
+from cbac.block import Block, CommandBlock
 from cbac.blockspace.assignment import BlockAssignment
 from cbac.constants import mc_direction
 from cbac.utils import Vector
+from cbac.blockspace.winder import winde
 
 
 # TODO: test raw area.
@@ -109,43 +110,7 @@ class WindedArea(LineArea):
         :return:
         :note: That this does not account for conditional commands.
         """
-        compound.padding = self.max_width
-        # TODO: provide better doc.
-        build_direction = self.start_build_direction
-        # Matrix of rows.
-        rows = []
-        row = []
-        # All the blocks of the compound.
-        total_blocks = list(compound.blocks)
-        # Generate rows from blocks.
-        for i, block in enumerate(total_blocks):
-            row.append(block)
-            if i % self.max_width is self.max_width - 1:
-                rows.append(row)
-                row = []
-
-        rows.append(row)
-        last_row = rows[-1]
-        for i in xrange(self.max_width - len(last_row)):
-            # Append none for operation
-            last_row.append(None)
-        directions = {}
-        locs = {}
-        # set directions for the blocks.
-        for row_id, row in enumerate(rows):
-            for block_id, block in enumerate(row):
-                if block_id % self.max_width is not self.max_width - 1:
-                    directions[block] = [build_direction, mc_direction.oposite(build_direction)][row_id % 2]
-                else:
-                    directions[block] = mc_direction.UP
-            if row_id % 2 is 1:
-                row.reverse()
-        # set locations for the blocks.
-        for row_id, row in enumerate(rows):
-            for block_id, block in enumerate(row):
-                locs[block] = Vector(block_id, row_id, 0)
-        # compile assignments
-        return [BlockAssignment(block, locs[block], directions[block]) for block in total_blocks]
+        return winde(list(compound.blocks), self.max_width, self.start_build_direction)
 
 
 class BlockBoxArea(Area):

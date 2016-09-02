@@ -6,7 +6,6 @@ from cbac.command_shell import CBAShell
 from cbac.compound import Compound
 from cbac.constants.block_id import FALSE_BLOCK
 from cbac.utils import memoize
-import compound.padder
 
 
 class CBA(Compound):
@@ -14,7 +13,6 @@ class CBA(Compound):
     Command Block Array
     """
     created_count = 0
-    padder_instance = compound.padder
 
     def __init__(self, *commands):
         # TODO: clarify padding doc.
@@ -97,9 +95,6 @@ class CBA(Compound):
         to_return = self.system_prefix_blocks + self.user_command_blocks + self.system_postfix_blocks
         to_return = self.set_block_names(to_return)
         to_return = self.bind_conditions(to_return)
-
-        if self.padding:
-            to_return = list(self.padder_instance.pad(to_return.__iter__(), self.padding))
 
         return to_return
 
