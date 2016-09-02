@@ -77,15 +77,14 @@ def decide_directions(rows, start_direction):
     directions = {}
     # set directions for the blocks.
     for row_id, row in enumerate(rows):
-
-        if row_id % 2 is 1:
-            row.reverse()
-
         for block in row:
             if block is not row[-1]:
                 directions[block] = [start_direction, mc_direction.oposite(start_direction)][row_id % 2]
             else:
                 directions[block] = mc_direction.UP
+
+        if row_id % 2 is 1:
+            row.reverse()
     return directions
 
 
