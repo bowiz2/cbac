@@ -20,7 +20,7 @@ class SULTestCase(TestCase):
         self.schematic_path = "test_schematic.schematic"
         self.block_space = BlockSpace((100, 100, 100))
 
-    @save_schematic
+
     def tearDown(self):
         self.block_space.pack()
         self.block_space.shrink()
