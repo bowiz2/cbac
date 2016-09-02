@@ -3,7 +3,13 @@ from unittest import TestCase
 import cbac.assembler
 import sul
 from cbac.blockspace import BlockSpace
+<<<<<<< Updated upstream
 from decorators import save_schematic
+=======
+from decorators import named_schematic
+from cbac.unit import Unit
+from cbac.unit.statements import *
+>>>>>>> Stashed changes
 
 
 class SULTestCase(TestCase):
@@ -51,7 +57,7 @@ class TestBitwiseUnits(SULTestCase):
         self.block_space.add_unit(sul.XnorUnit(4))
 
     def test_fulladder(self):
-        self.block_space.add_unit(sul.FullAdderUnit(4))
+        self.block_space.add_unit(sul.FullAdderUnit(8))
 
     def test_negate_unit(self):
         self.block_space.add_unit(sul.NegateUnit(4))
@@ -95,3 +101,33 @@ class TestSULMemory(SULTestCase):
         self.block_space.add_unit(access_unit)
         self.block_space.add_unit(write_unit)
         self.block_space.add_unit(read_unit)
+
+
+class Filler(Unit):
+    def __init__(self, bits, incrementer, writer):
+        super(Filler, self).__init__(bits)
+        # == Here you declare all your memory slots.
+        self.writer = self.add_unit(writer)
+        self.incrementer = self.add_unit(incrementer)
+        # ==
+        self.synthesis()
+
+    def main_logic_commands(self):
+        # == Here you declare the commands wof the main logic. each command must be yielded out.
+        yield InlineCall(self.writer, self.incrementer.output, self.incrementer.output)
+        yield InlineCall(self.incrementer, self.incrementer.output)
+
+
+class TestIntegration(SULTestCase):
+
+    @named_schematic
+    def test_write_increment(self):
+        access_unit = sul.MemoryAccessUnit(8)
+        write_unit = sul.WriteUnit(8, access_unit)
+        increment_unit = sul.IncrementUnit(8)
+        filler = Filler(8, increment_unit, write_unit)
+
+        self.block_space.add_unit(access_unit)
+        self.block_space.add_unit(write_unit)
+        self.block_space.add_unit(increment_unit)
+        self.block_space.add_unit(filler)
