@@ -110,7 +110,7 @@ class WindedArea(LineArea):
         :return:
         :note: That this does not account for conditional commands.
         """
-        return winde(compound, self.max_width, self.start_build_direction)
+        return winde(list(compound.blocks), self.max_width, self.start_build_direction)
 
 
 class BlockBoxArea(Area):

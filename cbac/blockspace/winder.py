@@ -7,18 +7,17 @@ from cbac.blockspace.assignment import BlockAssignment
 from cbac.utils import Vector
 
 
-def winde(compound, max_width, start_build_direction):
+def winde(blocks, max_width, start_build_direction):
     """
     Winds an array of command blocks into a compact area.
-    :param compound: list of blocks you want to wind.
+    :param blocks: list of blocks you want to wind.
     :param max_width: the maximum with to which to winde.
     :param start_build_direction: to which the blocks are ought to be winded.
     :return: list of block assignments.
     """
     build_direction = start_build_direction
-    total_blocks = list(compound.blocks)
 
-    rows = generate_rows(total_blocks, max_width)
+    rows = generate_rows(blocks, max_width)
 
     # Pad last row.
     _pad(rows[-1], max_width)
