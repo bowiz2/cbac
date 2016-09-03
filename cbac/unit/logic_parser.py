@@ -73,6 +73,8 @@ def parse_statement(statement, parse_stack, commands, other_compounds):
         for param_id, parameter in enumerate(statement.parameters):
             add_parsed(parameter.shell.copy(statement.passed_unit.inputs[param_id]), commands)
     if isinstance(statement, Command):
+        if statement.is_conditional and isinstance(statement.wrapped, CommandSuspender):
+            statement.wrapped.is_conditional = True
         add_parsed(statement.wrapped, commands)
 
     elif isinstance(statement, If):
