@@ -3,7 +3,7 @@ Holds register shell.
 """
 from cbac.constants.block_id import TRUE_BLOCK
 
-from . import CompoundShell
+from cbac.command_shell.compound_shell import CompoundShell
 
 
 class RegisterShell(CompoundShell):

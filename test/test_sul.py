@@ -5,7 +5,7 @@ import sul
 from cbac.blockspace import BlockSpace
 
 
-from decorators import named_schematic
+from test.decorators import named_schematic
 from cbac.unit import Unit
 from cbac.unit.statements import *
 

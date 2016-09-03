@@ -2,7 +2,8 @@
 This module parses the statement logic of a unit provided in its main logic commands generation method.
 """
 from cbac.compound import CBA, Constant
-from cbac.unit.statements import MainLogicJump, Conditional, STDCall, If, InlineCall, PassParameters, Switch
+from cbac.command_shell.command_suspender import CommandSuspender
+from cbac.unit.statements import *
 
 
 
@@ -24,52 +25,58 @@ def parse(statement_generators):
     commands = []
     other_compounds = []
 
+    parse_stack = []
+
     for command_generator in statement_generators:
         # Parse Statements
-        pre_parsed_statements = list(command_generator)
-        while len(pre_parsed_statements) > 0:
-            statement = pre_parsed_statements.pop(0)
-            # Copy Parameters and rename the statemnt to a main logic jump
-            if isinstance(statement, PassParameters):
-                for param_id, parameter in enumerate(statement.parameters):
-                    commands.append(parameter.shell.copy(statement.called_unit.inputs[param_id]))
+        pre_parsed_tokens = list(command_generator)
 
-            if isinstance(statement, If):
-                # Unwrap the if statement.
-                for condition_command in statement.condition_commands:
-                    commands.append(condition_command)
-                statement = statement.condition_body
+        while len(pre_parsed_tokens) > 0:
+            parse_stack.append(pre_parsed_tokens.pop(0))
 
+            while len(parse_stack) > 0:
 
-            if isinstance(statement, Conditional):
-                for command in statement.commands:
-                    command.is_conditional = True
-                    commands.append(command)
+                token = parse_stack.pop()
+                # Copy Parameters and rename the statemnt to a main logic jump
+                if isinstance(token, Token):
 
-            elif isinstance(statement, Switch):
-                switch = statement
-                for _case in statement.cases:
-                    constant = Constant(_case.to_compare)
-                    pre_parsed_statements.insert(0, If(switch.wrapped.shell == constant).then(*_case.body_statements))
-                    other_compounds.append(constant)
+                    if isinstance(token, StatementCollection):
+                        parse_statement_collection(parse_stack, token)
 
-            elif isinstance(statement, InlineCall):
-                # TODO: support inline for jumpables units.
-                assert len(statement.called_unit.logic_cbas) == 1, "The inline-called function must not contain jumps"
-                statement.called_unit.is_inline = True
-                for command in statement.called_unit.logic_cbas[0].commands:
-                    commands.append(command)
+                    elif isinstance(token, Statement):
+                        statement = token
 
-            elif isinstance(statement, MainLogicJump):
-                # Lazy init some stuff.
-                commands.append(LazyCallbackSet(statement.wrapped))
-                commands.append(LazyJump(statement.wrapped))
-                logic_cbas.append(CBA(*commands))
-                commands = []
+                        if isinstance(statement, PassParameters):
+                            for param_id, parameter in enumerate(statement.parameters):
+                                add_parsed(parameter.shell.copy(statement.passed_unit.inputs[param_id]), commands)
 
-            else:
-                # regular statement
-                commands.append(statement)
+                        if isinstance(statement, Command):
+                            add_parsed(statement.wrapped, commands)
+
+                        elif isinstance(statement, If):
+                            # Unwrap the if statement.
+                            parse_stack.append(statement.condition_commands)
+                            parse_stack.append(statement.condition_body)
+
+                        elif isinstance(statement, Switch):
+                            switch = statement
+                            for _case in statement.cases:
+                                constant = Constant(_case.to_compare)
+                                parse_stack.append(If(switch.wrapped.shell == constant).then(*_case.body_statements.statements))
+                                other_compounds.append(constant)
+
+                        elif isinstance(statement, InlineCall):
+                            # TODO: support inline for jumpables units.
+                            assert len(statement.called_unit.logic_cbas) == 1, "The inline-called function must not contain jumps"
+                            statement.called_unit.is_inline = True
+                            for command in statement.called_unit.logic_cbas[0].commands:
+                                add_parsed(command, commands)
+                        else:
+                            assert False, "Invalid statement type."
+                    else:
+                        assert False, "Invalid token type"
+                else:
+                    parse_stack.append(Command(token))
 
     if len(commands) > 0:
         logic_cbas.append(CBA(*commands))
@@ -88,3 +95,19 @@ def parse(statement_generators):
     for cba in logic_cbas[:-1]:
         cba.cb_callback_reserved = logic_cbas[-1].cb_callback_reserved
     return logic_cbas, other_compounds
+
+
+def add_parsed(command, commands):
+    assert isinstance(command, str) or isinstance(command, CommandSuspender), "is not string or command suspender"
+    commands.append(command)
+
+
+def parse_statement_collection(parse_stack, token):
+    # If the statement collection is conditional  each inner statement is conditional.
+    if isinstance(token, Conditional):
+        for statement in token.statements:
+            statement.is_conditional = True
+    token.statements.reverse()
+    for statement in token.statements:
+        parse_stack.append(statement)
+

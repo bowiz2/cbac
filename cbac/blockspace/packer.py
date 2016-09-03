@@ -4,8 +4,8 @@ Note that this module does not account for the destination size.
 """
 from cbac.utils import Vector
 
-from .area_factory import area_factory
-from .assignment import BlockAssignment, AreaAssignment
+from cbac.blockspace.area_factory import area_factory
+from cbac.blockspace.assignment import BlockAssignment, AreaAssignment
 
 
 def pack(items):

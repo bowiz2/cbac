@@ -5,9 +5,8 @@ from cbac.constants.block_id import TRUE_BLOCK, names
 from cbac.constants.mc_direction import vectors as direction_vectors
 from cbac.constants.mc_direction import EAST
 from cbac.utils import format_realtive_location, format_location
-
-from .command_shell_base import CommandShell
-from .decorator import command
+from cbac.command_shell.command_shell_base import CommandShell
+from cbac.command_shell.decorator import command
 from utils import Vector
 
 

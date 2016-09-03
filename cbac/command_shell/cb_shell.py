@@ -1,8 +1,8 @@
 """
 Holds Command Block Shell for the Minecraft command block.
 """
-from .decorator import command
-from .location_shell import BlockShell
+from cbac.command_shell.decorator import command
+from cbac.command_shell.location_shell import BlockShell
 
 
 class CommandBlockShell(BlockShell):

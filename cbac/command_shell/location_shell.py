@@ -5,8 +5,8 @@ from cbac.constants.block_id import names as block_names, TRUE_BLOCK, FALSE_BLOC
 from cbac.utils import format_location, format_realtive_location
 from cbac.constants.mc_direction import vectors as direction_vectors
 from cbac.constants.mc_direction import EAST
-from .command_shell_base import CommandShell
-from .decorator import command
+from cbac.command_shell.command_shell_base import CommandShell
+from cbac.command_shell.decorator import command
 
 
 class LocationShell(CommandShell):

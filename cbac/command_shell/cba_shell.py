@@ -1,8 +1,8 @@
 """
 Holds Command Block Array shell.
 """
-from . import CompoundShell
-from .decorator import command
+from cbac.command_shell.compound_shell import CompoundShell
+from cbac.command_shell.decorator import command
 
 
 class CBAShell(CompoundShell):

@@ -7,7 +7,7 @@ from cbac.compound import Register
 from cbac.constants.entity_id import *
 from cbac.constants.mc_direction import *
 from cbac.entity import Entity
-from decorators import save_schematic
+from test.decorators import save_schematic
 
 
 class TestEntity(TestCase):

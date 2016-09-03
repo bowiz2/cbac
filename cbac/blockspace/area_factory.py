@@ -5,7 +5,7 @@ from cbac.blockbox import BlockBox
 from cbac.compound import CBA
 from pymclevel import MCSchematic
 
-from .area import LineArea, RawArea, BlockBoxArea, WindedArea
+from cbac.blockspace.area import LineArea, RawArea, BlockBoxArea, WindedArea
 
 
 def area_factory(obj):

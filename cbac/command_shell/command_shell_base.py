@@ -3,7 +3,7 @@ Holds abstract Command shell.
 """
 from cbac.utils import Vector
 
-from . import ShellContext
+from cbac.command_shell.shell_context import ShellContext
 
 
 class CommandShell(object):
@@ -41,5 +41,3 @@ class CommandShell(object):
             return str(obj)
 
         return " ".join([parse(item) for item in items if item is not None])
-
-

@@ -4,14 +4,20 @@ Statements are syntactic sugar for the definition of units.
 
 
 # TODO: implement switch statement.
+class Token(object):
+    """
+    This is the basic type of a statement and statement collection.
+    """
+    pass
 
 
-class Statement(object):
+class Statement(Token):
     """
     Wraps a command or other statements
     """
     def __init__(self, wrapped):
         self.wrapped = wrapped
+        self.is_conditional = False
 
 
 class Command(Statement):
@@ -21,7 +27,7 @@ class Command(Statement):
     pass
 
 
-class StatementCollection(object):
+class StatementCollection(Token):
     """
     Wraps multiple statements.
     """
@@ -58,6 +64,12 @@ class PassParameters(Statement):
         super(PassParameters, self).__init__(unit)
         self.parameters = parameters
 
+    @property
+    def passed_unit(self):
+        """
+        The unit to which the params are passed.
+        """
+        return self.wrapped
 
 class Call(Statement):
     """
@@ -90,7 +102,7 @@ class Switch(Statement):
         return self
 
 
-class _SwitchCase(object):
+class _SwitchCase(Token):
     def __init__(self, to_compare):
         self.to_compare = to_compare
 
