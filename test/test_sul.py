@@ -67,7 +67,7 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_fulladder(self):
-        self.block_space.add_unit(sul.FullAdderUnit(4))
+        self.block_space.add_unit(sul.FullAdderUnit(1))
 
     @named_schematic
     def test_negate_unit(self):

@@ -107,7 +107,7 @@ class _SwitchCase(Token):
         self.to_compare = to_compare
 
     def __call__(self, *body_statements):
-        self.body_statements = StatementCollection(body_statements)
+        self.body_statements = body_statements
         return self
 
 
@@ -157,8 +157,13 @@ class If(Statement):
 
     def __init__(self, condition_commands):
         super(If, self).__init__(None)
+
         if not (isinstance(condition_commands, tuple) or isinstance(condition_commands, list)):
             condition_commands = [condition_commands]
+
+        if isinstance(condition_commands, tuple):
+            condition_commands = list(condition_commands)
+
         self.condition_commands = condition_commands
         self.condition_body = None
         self.otherwise_body = None
