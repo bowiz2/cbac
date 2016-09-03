@@ -26,10 +26,14 @@ class StatementCollection(object):
     Wraps multiple statements.
     """
     def __init__(self, *statements):
+        new_statements = []
+
         for statement in statements:
             if not isinstance(statement, Statement):
                 statement = Command(statement)
-        self.statements = statements
+            new_statements.append(statement)
+
+        self.statements = new_statements
 
 
 class MainLogicJump(Statement):
