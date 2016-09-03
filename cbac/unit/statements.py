@@ -7,8 +7,29 @@ Statements are syntactic sugar for the definition of units.
 
 
 class Statement(object):
+    """
+    Wraps a command or other statements
+    """
     def __init__(self, wrapped):
         self.wrapped = wrapped
+
+
+class Command(Statement):
+    """
+    Wraps a command
+    """
+    pass
+
+
+class StatementCollection(object):
+    """
+    Wraps multiple statements.
+    """
+    def __init__(self, *statements):
+        for statement in statements:
+            if not isinstance(statement, Statement):
+                statement = Command(statement)
+        self.statements = statements
 
 
 class MainLogicJump(Statement):
@@ -18,51 +39,63 @@ class MainLogicJump(Statement):
     pass
 
 
-class Conditional(Statement):
-    def __init__(self, *commands):
-        super(Conditional, self).__init__(commands)
-
-    @property
-    def commands(self):
-        return self.wrapped
+class Conditional(StatementCollection):
+    """
+    All wrapped statements are now conditional.
+    """
+    pass
 
 
 class PassParameters(Statement):
+    """
+    Pass parameters to the unit.
+    """
     def __init__(self, unit, *parameters):
         super(PassParameters, self).__init__(unit)
         self.parameters = parameters
 
 
 class Call(Statement):
+    """
+    Calls a unit
+    """
     @property
     def called_unit(self):
+        """
+        The unit being called by this statements.
+        """
         return self.wrapped
 
 
 class STDCall(Call, PassParameters, MainLogicJump):
-    pass
-
-
-class StatementOption(object):
+    """
+    Copies parameter to function and then jumps to it.
+    """
     pass
 
 
 class Switch(Statement):
+    """
+    Switch statement.
+    """
     def by(self, *cases):
+        """
+        Construct the statements for this switch
+        """
         self.cases = cases
         return self
 
 
-class _SwitchCase(StatementOption):
+class _SwitchCase(object):
     def __init__(self, to_compare):
         self.to_compare = to_compare
 
     def __call__(self, *body_statements):
-        self.body_statements = body_statements
+        self.body_statements = StatementCollection(body_statements)
         return self
 
 
-class _SwitchCaseSugar(StatementOption):
+class _SwitchCaseSugar(object):
     """
     Singleton, just a get_item holder
 
@@ -80,6 +113,9 @@ case = _SwitchCaseSugar()
 
 
 class InlineCall(Call, PassParameters):
+    """
+    Calls a unit without jump. Just pushes its commands to the commands of the current cba.
+    """
     pass
 
 
