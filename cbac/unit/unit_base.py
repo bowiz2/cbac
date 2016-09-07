@@ -1,15 +1,18 @@
-import logic_parser
+from cbac.unit.logic_parser import UnitLogicParser
+import itertools
 from cbac.command_shell import UnitShell
 from cbac.compound import Register
 from cbac.utils import memoize
 
 
 class Unit(object):
-    def __init__(self, bits=None, logic_parser_instance=logic_parser):
+    def __init__(self, bits=None, logic_parser_instance=None):
         """
         Create a unit with an input base length.
         :param bits: The base length of the unit.
         """
+        if not logic_parser_instance:
+            logic_parser_instance = UnitLogicParser()
         self.bits = bits
         self._logic_parser = logic_parser_instance
         self.compounds = []
@@ -29,7 +32,7 @@ class Unit(object):
         """
 
         logic_cbas, other_compounds = self._logic_parser.parse(
-            [self.on_entry_init_commands(), self.main_logic_commands(), self.on_exit_commands()]
+            itertools.chain(self.on_entry_init_commands(), self.main_logic_commands(), self.on_exit_commands())
         )
         # Add the CBAs to the unit.
         for parsed_item in logic_cbas + other_compounds:
