@@ -80,35 +80,10 @@ class TestUnitStatementsParsing(TestLogicParser):
         self.assertTrue(all([item.__class__ in [CommandSuspender, str] for item in self.parser.parse_stack[1:]]))
         self.assertIsInstance(self.parser.parse_stack[0], Conditional)
 
-    def tes_command(self):
+    def test_command(self):
         self.parser.parse_statement(Command("/say hello"))
         self.assertEqual("/say Hello World", self.parser.commands[0])
-# class TestUnitStatements(TestCase):
-#
-#     def setUp(self):
-#         self.schematic_path = "test_schematic.schematic"
-#         self.block_space = BlockSpace((20, 20, 20))
-#
-#     def tearDown(self):
-#         self.block_space.pack()
-#         self.block_space.shrink()
-#         schematic = cbac.assembler.build(self.block_space)
-#         schematic.saveToFile(self.schematic_path)
-#
-#     @named_schematic
-#     def test_switch(self):
-#
-#         class SubjectUnit(Unit):
-#             def __init__(self):
-#                 super(SubjectUnit, self).__init__(8)
-#                 self.input = self.create_input(8)
-#                 self.output = self.create_output(2)
-#                 self.synthesis()
-#
-#             def main_logic_commands(self):
-#                 yield Switch(self.input).by(
-#                     case[4](self.output.blocks[0].shell.activate()),
-#                     case[2](self.output.blocks[1].shell.activate())
-#                 )
-#
-#         self.block_space.add_unit(SubjectUnit())
+
+    def test_inline_call(self):
+        called_unit = Unit(4)
+        self.parser.parse_statement(InlineCall(called_unit))

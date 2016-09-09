@@ -109,12 +109,13 @@ class UnitLogicParser(object):
 
         elif isinstance(statement, InlineCall):
             # TODO: support inline for jumpables units.
-            assert len(statement.called_unit.logic_cbas) == 1, "The inline-called function must not contain jumps"
+            assert len(statement.called_unit.logic_cbas) <= 1, "The inline-called function must not contain jumps"
             statement.called_unit.is_inline = True
-            for command in statement.called_unit.logic_cbas[0].commands:
-                if statement.is_conditional:
-                    command.is_conditional = True
-                self.add_parsed(command)
+            for cba in statement.called_unit.logic_cbas:
+                for command in cba.commands:
+                    if statement.is_conditional:
+                        command.is_conditional = True
+                    self.add_parsed(command)
         else:
             assert False, "Invalid statement type."
 
