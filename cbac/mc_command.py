@@ -18,7 +18,7 @@ class MCCommand(object):
         This is mainly used for testforblock commands.
         """
         self.is_conditional = is_conditional
-        self.is_creates_condition = creates_condition
+        self.creates_condition = creates_condition
 
     def compile(self):
         """
