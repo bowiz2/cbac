@@ -1,5 +1,5 @@
 import unittest
-from cbac.mc_command import MCCommand, SimpleCommand, LazyCommand
+from cbac.mc_command import MCCommand, SimpleCommand, LazyCommand, factory, MCCommandFactoryError
 
 
 class TestMCCommand(unittest.TestCase):
@@ -38,3 +38,32 @@ class TestLazyCommand(unittest.TestCase):
         self.undef = [1, 2, 34, 5]
         expected_result = "/say 1 2 12387 4"
         self.assertEqual(expected_result, self.lazy_command.compile())
+
+
+class TestFactory(unittest.TestCase):
+
+    def setUp(self):
+        self.sample_command = "/say hello"
+
+    def test_regular(self):
+        result = factory(self.sample_command)
+        self.assertFalse(result.is_conditional)
+        self.assertFalse(result.creates_condition)
+        self.assertTrue(self.sample_command, result.compile())
+
+    def test_condtional(self):
+        result = factory("?" + self.sample_command)
+        self.assertTrue(result.is_conditional)
+
+    def test_creates_condition(self):
+        result = factory("?!" + self.sample_command)
+        self.assertTrue(result.is_conditional)
+        self.assertTrue(result.creates_condition)
+        result = factory("!?" + self.sample_command)
+        self.assertTrue(result.is_conditional)
+        self.assertTrue(result.creates_condition)
+
+    def test_error(self):
+        self.assertRaises(MCCommandFactoryError, factory, "! say hello")
+        self.assertRaises(MCCommandFactoryError, factory, "1/say hello")
+

@@ -63,3 +63,35 @@ class LazyCommand(MCCommand):
         :return:
         """
         return self.func(*self.args, **self.kwargs)
+
+
+def factory(raw_command):
+    """
+    Convert a string into a simple command.
+    :param raw_command: string representing mc command.
+    :return: SimpleCommand.
+    """
+    assert isinstance(raw_command, str), "String must be a string."
+    conditional_operator = "?"
+    condition_creation_operator = "!"
+    command_start_prefix = "/"
+
+    try:
+        command_start_index = raw_command.index(command_start_prefix)
+    except ValueError:
+        raise MCCommandFactoryError("Missing command start prefix '{0}'".format(command_start_prefix))
+
+    command_operators = raw_command[:command_start_index]
+    conditional = conditional_operator in command_operators
+    creates_condition = condition_creation_operator in command_operators
+    for operator in command_operators:
+        if operator not in [condition_creation_operator, conditional_operator]:
+            raise MCCommandFactoryError("Invalid command operator '{0}'", operator)
+
+    return SimpleCommand(raw_command[:command_start_index], conditional, creates_condition)
+
+class MCCommandFactoryError(BaseException):
+    """
+    Thrown by the command factory.
+    """
+    pass
