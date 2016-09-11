@@ -4,7 +4,7 @@ This module parses the statement logic of a unit provided in its main logic comm
 from cbac.compound import CBA, Constant
 from cbac.mc_command import MCCommand
 from cbac.unit.statements import *
-
+import cbac.config
 
 class UnitLogicParser(object):
     """
@@ -91,7 +91,9 @@ class UnitLogicParser(object):
             if statement.is_conditional and isinstance(statement.wrapped, MCCommand):
                 statement.wrapped.is_conditional = True
             self.add_parsed(statement.wrapped)
-
+        elif isinstance(statement, Debug):
+            if cbac.config.DEBUG_BUILD:
+                self.parse_stack.append(statement.wrapped)
         elif isinstance(statement, If):
             # Unwrap the if statement.
             self.parse_stack.append(statement.condition_body)

@@ -21,6 +21,13 @@ class Statement(Token):
         self.is_conditional = False
 
 
+class Debug(Statement):
+    """
+    A debug statement will be ignored when the current build is run in debug mode.
+    """
+    pass
+
+
 class Command(Statement):
     """
     Wraps a command

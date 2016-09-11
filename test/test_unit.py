@@ -7,8 +7,7 @@ from cbac.unit.statements import *
 from cbac.blockspace import BlockSpace
 from cbac.compound import Register, Constant
 from cbac.command_shell.command_suspender import CommandSuspender
-import cbac.assembler
-from test.decorators import named_schematic
+import cbac.config
 from cbac.unit.logic_parser import UnitLogicParser
 
 
@@ -84,3 +83,14 @@ class TestUnitStatementsParsing(TestLogicParser):
     def test_inline_call(self):
         called_unit = Unit(4)
         self.parser.parse_statement(InlineCall(called_unit))
+
+    def test_debug(self):
+        cbac.config.DEBUG_BUILD = True
+        self.parser.parse_statement(Debug("/say hello"))
+        self.assertEqual(1, len(self.parser.parse_stack))
+        self.assertEquals(self.parser.parse_stack[0], "/say hello")
+
+    def test_debug_off(self):
+        cbac.config.DEBUG_BUILD = False
+        self.parser.parse_statement(Debug("/say hello"))
+        self.assertEqual(0, len(self.parser.parse_stack))
