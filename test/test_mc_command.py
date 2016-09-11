@@ -32,7 +32,7 @@ class TestLazyCommand(unittest.TestCase):
             undef = self.undef
             return "/say {} {} {} {}".format(a, b, c, len(undef))
 
-        self.lazy_command = LazyCommand(foo, True, "1", "2", c="12387")
+        self.lazy_command = LazyCommand(foo, True, False, "1", "2", c="12387")
 
     def test_compile(self):
         self.undef = [1, 2, 34, 5]
