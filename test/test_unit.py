@@ -31,10 +31,6 @@ class TestLogicParser(TestCase):
     def test_parse_cllection(self):
         pass
 
-    def test_parsed_str(self):
-        self.parser.add_parsed("/say Hello World")
-        self.assertEqual("/say Hello World", self.parser.commands[0])
-
     def test_parsed_suspended_command(self):
         dummy = Register(3)
         self.parser.add_parsed(dummy.shell.reset())
@@ -82,7 +78,8 @@ class TestUnitStatementsParsing(TestLogicParser):
 
     def test_command(self):
         self.parser.parse_statement(Command("/say hello"))
-        self.assertEqual("/say hello", self.parser.commands[0])
+        command  = self.parser.commands[0]
+        self.assertEqual("/say hello", command.compile())
 
     def test_inline_call(self):
         called_unit = Unit(4)

@@ -27,12 +27,13 @@ def tagged_cb(command_block, location, blockspace):
     # Parse the command of the command block.
     command = command_block.command
     if not isinstance(command, str):
-        context = command.command_shell.context
-        context.executor = command_block
-        context.blockspace = blockspace
+        if hasattr(command, "context"):
+            context = command.context
+            context.executor = command_block
+            context.blockspace = blockspace
         if command.is_conditional:
             command_block.conditional = True
-        command = command()
+        command = command.compile()
 
     root_tag["Command"] = nbt.TAG_String(command)
     root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)

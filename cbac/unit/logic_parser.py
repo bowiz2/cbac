@@ -3,6 +3,7 @@ This module parses the statement logic of a unit provided in its main logic comm
 """
 from cbac.compound import CBA, Constant
 from cbac.command_shell.command_suspender import CommandSuspender
+from cbac.mc_command import MCCommand
 from cbac.unit.statements import *
 
 
@@ -88,7 +89,7 @@ class UnitLogicParser(object):
             for param_id, parameter in enumerate(statement.parameters):
                 self.add_parsed(parameter.shell.copy(statement.passed_unit.inputs[param_id]))
         if isinstance(statement, Command):
-            if statement.is_conditional and isinstance(statement.wrapped, CommandSuspender):
+            if statement.is_conditional and isinstance(statement.wrapped, MCCommand):
                 statement.wrapped.is_conditional = True
             self.add_parsed(statement.wrapped)
 
@@ -125,7 +126,7 @@ class UnitLogicParser(object):
         :param command:
         :return:
         """
-        assert isinstance(command, str) or isinstance(command, CommandSuspender), "is not string or command suspender"
+        assert isinstance(command, MCCommand), "command must be of type MCCommand"
         self.commands.append(command)
 
 

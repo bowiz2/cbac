@@ -20,6 +20,13 @@ class CommandSuspender(LazyCommand):
         """
         return self.args[0]
 
+    @property
+    def context(self):
+        """
+        The context of the shell which created this command, and by an extent the context of this command.
+        """
+        return self.command_shell.context
+
     def __call__(self):
         return self.compile()
 

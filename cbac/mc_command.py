@@ -88,7 +88,7 @@ def factory(raw_command):
         if operator not in [condition_creation_operator, conditional_operator]:
             raise MCCommandFactoryError("Invalid command operator '{0}'", operator)
 
-    return SimpleCommand(raw_command[:command_start_index], conditional, creates_condition)
+    return SimpleCommand(raw_command[command_start_index:], conditional, creates_condition)
 
 class MCCommandFactoryError(BaseException):
     """
