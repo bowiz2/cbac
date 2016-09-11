@@ -2,7 +2,6 @@
 This module parses the statement logic of a unit provided in its main logic commands generation method.
 """
 from cbac.compound import CBA, Constant
-from cbac.command_shell.command_suspender import CommandSuspender
 from cbac.mc_command import MCCommand
 from cbac.unit.statements import *
 
