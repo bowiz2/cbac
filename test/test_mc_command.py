@@ -1,5 +1,5 @@
 import unittest
-from cbac.mc_command import MCCommand, SimpleCommand
+from cbac.mc_command import MCCommand, SimpleCommand, LazyCommand
 
 
 class TestMCCommand(unittest.TestCase):
@@ -23,3 +23,18 @@ class TestSimpleCommand(unittest.TestCase):
         self.assertTrue(command.is_conditional)
         self.assertEqual("/say Hello World", command.compile())
 
+
+class TestLazyCommand(unittest.TestCase):
+    def setUp(self):
+        self.undef = None
+
+        def foo(a, b, c):
+            undef = self.undef
+            return "/say {} {} {} {}".format(a, b, c, len(undef))
+
+        self.lazy_command = LazyCommand(foo, True, "1", "2", c="12387")
+
+    def test_compile(self):
+        self.undef = [1, 2, 34, 5]
+        expected_result = "/say 1 2 12387 4"
+        self.assertEqual(expected_result, self.lazy_command.compile())

@@ -34,3 +34,23 @@ class SimpleCommand(MCCommand):
         :return:
         """
         return self._body
+
+
+class LazyCommand(MCCommand):
+    """
+    This is a command which is lazy initialized and the uses a function which will be called with the supplied arguments
+    in the compilation process.
+    """
+    def __init__(self, func, is_conditional=False, *args, **kwargs):
+        assert isinstance(is_conditional, bool), "is_conditional parameter must be boolean"
+        super(LazyCommand, self).__init__(is_conditional)
+        self.args = args
+        self.kwargs = kwargs
+        self.func = func
+
+    def compile(self):
+        """
+        Compile the command.
+        :return:
+        """
+        return self.func(*self.args, **self.kwargs)
