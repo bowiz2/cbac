@@ -1,6 +1,7 @@
 """
 Statements are syntactic sugar for the definition of units.
 """
+import cbac.mc_command as mc_command
 
 
 # TODO: implement switch statement.
@@ -24,7 +25,10 @@ class Command(Statement):
     """
     Wraps a command
     """
-    pass
+    def __init__(self, raw_command):
+        if isinstance(raw_command, str):
+            raw_command = mc_command.factory(raw_command)
+        super(Command, self).__init__(raw_command)
 
 
 class StatementCollection(Token):
@@ -70,6 +74,7 @@ class PassParameters(Statement):
         The unit to which the params are passed.
         """
         return self.wrapped
+
 
 class Call(Statement):
     """
