@@ -1,5 +1,6 @@
 from cbac.compound import Register
 from cbac.unit.unit_base import Unit
+from cbac.unit.statements import *
 
 
 class IncrementUnit(Unit):
@@ -31,3 +32,8 @@ class IncrementUnit(Unit):
 
             yield self.carry_out.shell.move(self.carry_in)
             yield self.carry_out.shell.deactivate()
+            yield Debug("/say Incrementer {0}/{1} completed.".format(
+                self.input.blocks.index(inp_block) + 1, len(self.input.blocks)
+            ))
+
+        yield Debug("/say Increment complete successfully.")

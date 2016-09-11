@@ -5,7 +5,7 @@ from cbac.constants.block_id import FALSE_BLOCK
 from cbac.constants.entity_id import ARMOR_STAND
 from cbac.constants.mc_direction import *
 from cbac.entity import Entity
-from cbac.unit.statements import If, InlineCall
+from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
 from cbac.utils import Vector, inline_generators
 from cbac.command_shell.command_suspender import CommandSuspender
@@ -44,10 +44,12 @@ class MemoryAccessUnit(Unit):
     def main_logic_commands(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         # Reset the pivot.
+        yield Debug("/say Resetting pivot.")
         yield self.pivot.shell.kill()
         # Create the pivot.
         yield self.pivot.shell.summon(self.memory_box[0][0][0])
 
+        yield Debug("/say Moving pivot by address.")
         # Move it by to the address specified in the address register.
         for i, addres_bit in enumerate(self.address_input.blocks):
             if 2 ** i < self.ratio.x:
@@ -95,7 +97,7 @@ class ReadUnit(Unit):
         yield InlineCall(self.memory_access_unit)
         yield self.pivot.shell.clone_to_point_of_reference(self.word_size)
         yield self.read_output.shell.load_for_point_of_reference()
-        yield "/say done reading slot to the output."
+        yield Debug("?/say Read complete ok.")
 
 
 class WriteUnit(Unit):
@@ -122,5 +124,4 @@ class WriteUnit(Unit):
         yield InlineCall(self.memory_access_unit)
         yield self.data_input.shell.write_to_point_of_reference()
         yield self.pivot.shell.load_from_point_of_reference(self.word_size)
-
-        yield "/say done reading slot to the output."
+        yield Debug("?/say Write compete ok.")

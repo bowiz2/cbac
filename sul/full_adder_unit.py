@@ -1,5 +1,6 @@
 from cbac.unit.statements import Conditional
 from cbac.unit.unit_base import Unit
+from cbac.unit.statements import *
 
 
 class FullAdderUnit(Unit):
@@ -66,5 +67,9 @@ class FullAdderUnit(Unit):
                 cout.shell.activate(),
                 s.shell.activate()
             )
+
+            yield Debug("/say Full adder {0}/{1} completed".format(i+1, self.bits))
+
         if self.carry_flag is not None:
             self.carry.blocks[-1].copy(self.carry_flag)
+            yield Debug("?/say carry cloned successfully.")
