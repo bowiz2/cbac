@@ -5,6 +5,8 @@ from cbac.compound import CBA, Constant
 from cbac.mc_command import MCCommand
 from cbac.unit.statements import *
 import cbac.config
+import copy
+
 
 class UnitLogicParser(object):
     """
@@ -117,7 +119,7 @@ class UnitLogicParser(object):
                 for command in cba.commands:
                     if statement.is_conditional:
                         command.is_conditional = True
-                    self.add_parsed(command)
+                    self.add_parsed(copy.copy(command))
         else:
             assert False, "Invalid statement type."
 
