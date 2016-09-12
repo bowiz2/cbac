@@ -36,3 +36,11 @@ class CommandBlockShell(BlockShell):
         :return: CommandSuspender
         """
         return self.testforblock(self.wrapped.block_id, self.wrapped.data_value, {"SuccessCount": 1})()
+
+    @command(True)
+    def has_failed(self):
+        """
+        Check if this command block failed with the last execution of his command.
+        :return: CommandSuspender
+        """
+        return self.testforblock(self.wrapped.block_id, self.wrapped.data_value, {"SuccessCount": 0})()
