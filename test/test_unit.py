@@ -2,13 +2,15 @@
 Tests for the unit class. mainly unit statemtns.
 """
 from unittest import TestCase
-from cbac.unit import Unit
+from cbac.unit import Unit, SimpleUnit
 from cbac.unit.statements import *
 from cbac.blockspace import BlockSpace
 from cbac.compound import Register, Constant
 from cbac.command_shell.command_suspender import CommandSuspender
 import cbac.config
 from cbac.unit.logic_parser import UnitLogicParser, CommandCollection
+from test_sul import SULTestCase
+from test.decorators import named_schematic
 
 
 class TestLogicParser(TestCase):
@@ -38,6 +40,24 @@ class TestLogicParser(TestCase):
     def test_parsed_invalid(self):
         self.assertRaises(AssertionError, self.parser.add_parsed, [])
 
+
+class TestCallback(SULTestCase):
+    @named_schematic
+    def test_callback(self):
+
+        class A(SimpleUnit):
+            def main_logic_commands(self):
+                yield "/say im a"
+        a = A()
+
+        class B(SimpleUnit):
+            def main_logic_commands(self):
+                yield "/say im b first"
+                yield MainLogicJump(a)
+                yield "/say im b last"
+        print a.logic_cbas
+        self.block_space.add_unit(a)
+        self.block_space.add_unit(B())
 
 class TestUnitStatementsParsing(TestLogicParser):
     """
@@ -106,9 +126,22 @@ class TestUnitStatementsParsing(TestLogicParser):
 
         dummy_unit = DummyUnit()
         self.parser.parse_statement(MainLogicJump(dummy_unit))
+        # Check internal state.
         self.assertEqual(2, len(self.parser.all_commands))
         self.assertEqual(1, len(self.parser.jump_refs))
 
+    def test_main_logic_jump_full(self):
+        class DummyUnit(Unit):
+            def __init__(self):
+                super(DummyUnit, self).__init__()
+                self.synthesis()
+
+            def main_logic_commands(self):
+                yield "/say hey"
+
+        dummy_unit = DummyUnit()
+        logic_cbas, other_compounds = self.parser.parse([MainLogicJump(dummy_unit)])
+        self.assertEqual(2, len(logic_cbas))
 
 class TestCommandCollection(TestCase):
     def test_init(self):

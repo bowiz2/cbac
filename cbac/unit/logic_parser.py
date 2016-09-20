@@ -90,7 +90,9 @@ class UnitLogicParser(object):
             jumpback_cba = cba_mapping[jump_ref.jumpback]
             # TODO: auto include units which are jumped to if they have not been added to the parsed unit yet.
             # Use the callback reserved block to create the calback setting command for unit.
-            before_cba.cb_callback_reserved.command = jump_ref.destination.shell.set_callback(jumpback_cba)
+            cmd = jump_ref.destination.shell.set_callback(jumpback_cba)
+            #cmd.context.executor = before_cba.cb_callback_reserved
+            before_cba.cb_callback_reserved.command = cmd
 
         return logic_cbas, self.other_compounds
 
@@ -172,7 +174,7 @@ class UnitLogicParser(object):
         elif isinstance(statement, MainLogicJump):
             prev_commands = self.commands
             new_commands = CommandCollection()
-            jump_ref = JumpRef(prev_commands, statement.wrapped, self.commands)
+            jump_ref = JumpRef(prev_commands, statement.wrapped, new_commands)
             self.jump_refs.append(jump_ref)
             self.add_parsed(jump_ref.destination.shell.activate())
             self.all_commands.append(new_commands)

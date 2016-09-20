@@ -19,7 +19,7 @@ class CommandBlockShell(BlockShell):
         """
         if not isinstance(new_command, str):
             new_command.context = self.context
-            new_command = new_command()
+            new_command = new_command.compile()
         else:
             new_command = new_command
         return self.setblock(
@@ -36,3 +36,11 @@ class CommandBlockShell(BlockShell):
         :return: CommandSuspender
         """
         return self.testforblock(self.wrapped.block_id, self.wrapped.data_value, {"SuccessCount": 1})()
+
+    def set_call(self, target):
+        """
+        Makes that this block will activate target block.
+        :return: CommandSuspender
+        """
+
+        return self.change_command(target.shell.activate())

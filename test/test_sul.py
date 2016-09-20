@@ -10,7 +10,6 @@ from cbac.unit import Unit
 from cbac.unit.statements import *
 
 
-
 class SULTestCase(TestCase):
     """
     Test the standard unit library.

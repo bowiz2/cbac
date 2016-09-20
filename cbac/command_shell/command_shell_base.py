@@ -22,6 +22,8 @@ class CommandShell(object):
         # Coupling.
         if not isinstance(context, ShellContext):
             context = ShellContext(*context)
+        # This is the original context
+        self._real_context = context
         self.context = context
 
     @staticmethod

@@ -136,3 +136,12 @@ class Unit(object):
     @memoize
     def shell(self):
         return UnitShell(self)
+
+
+class SimpleUnit(Unit):
+    """
+    A simple unit has no input/output registers. it only preforms logic.
+    """
+    def __init__(self, bit=None, parser_instance=None):
+        super(SimpleUnit, self).__init__(bit, parser_instance)
+        self.synthesis()
