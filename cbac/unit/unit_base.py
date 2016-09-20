@@ -120,6 +120,8 @@ class Unit(object):
         The first cba which needs to be activated in-order of the unit to preform its task.
         :return: CBA
         """
+        if len(self.logic_cbas) < 1:
+            raise Exception("This unit has not entry point.")
         return self.logic_cbas[0]
 
     @property

@@ -8,7 +8,7 @@ from cbac.blockspace import BlockSpace
 from cbac.compound import Register, Constant
 from cbac.command_shell.command_suspender import CommandSuspender
 import cbac.config
-from cbac.unit.logic_parser import UnitLogicParser
+from cbac.unit.logic_parser import UnitLogicParser, CommandCollection
 
 
 class TestLogicParser(TestCase):
@@ -94,3 +94,31 @@ class TestUnitStatementsParsing(TestLogicParser):
         cbac.config.DEBUG_BUILD = False
         self.parser.parse_statement(Debug("/say hello"))
         self.assertEqual(0, len(self.parser.parse_stack))
+
+    def test_main_logic_jump(self):
+        class DummyUnit(Unit):
+            def __init__(self):
+                super(DummyUnit, self).__init__()
+                self.synthesis()
+
+            def main_logic_commands(self):
+                yield "/say hey"
+
+        dummy_unit = DummyUnit()
+        self.parser.parse_statement(MainLogicJump(dummy_unit))
+        self.assertEqual(2, len(self.parser.all_commands))
+        self.assertEqual(1, len(self.parser.jump_refs))
+
+
+class TestCommandCollection(TestCase):
+    def test_init(self):
+        collection1 = CommandCollection()
+        collection2 = CommandCollection()
+
+        my_dict = {}
+
+        my_dict[collection1] = "a"
+        my_dict[collection2] = "b"
+
+        self.assertEqual("a", my_dict[collection1])
+        self.assertEqual("b", my_dict[collection2])

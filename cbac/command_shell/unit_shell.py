@@ -13,3 +13,10 @@ class UnitShell(CommandShell):
         Set the callback of this unit to another dynamic calling object.
         """
         return self.wrapped.logic_cbas[-1].shell.set_callback(other)
+
+    def activate(self):
+        """
+        Activate the entry point of the unit.
+        :return:
+        """
+        return self.wrapped.entry_point.shell.activate()

@@ -7,6 +7,37 @@ from cbac.unit.statements import *
 import cbac.config
 import copy
 
+# TODO: restructure as a compiler.
+
+class ParseTreeNode(object):
+    pass
+
+class CommandCollection(list):
+    #used for hashing.
+    instance_count = 0
+
+    def __init__(self, iterable=[]):
+        self.my_id = CommandCollection.instance_count
+        CommandCollection.instance_count+=1
+        super(CommandCollection, self).__init__(iterable)
+
+    def __hash__(self):
+        return self.my_id
+
+class JumpRef(object):
+    """
+    This is a jump reference which is left behind when a jump is made by some statement.
+    """
+    def __init__(self, before, destination, jumpback):
+        """
+        :param before: The node which have initiated the jump
+        :param destination: the cba which is jumped to
+        :param jumpback: The node which continue the parsing from now on.
+        """
+        self.before = before
+        self.destination = destination
+        self.jumpback = jumpback
+
 
 class UnitLogicParser(object):
     """
@@ -14,18 +45,25 @@ class UnitLogicParser(object):
     """
 
     def __init__(self):
-        # List of parsed commands.
-        self.commands = []
         # Other compounds which were generated while parsing.
         self.other_compounds = []
         # The stack which is usd during parsing.
         self.parse_stack = []
+        # holds all the jump refs
+        self.jump_refs = []
+        # list of all the commands in their seperated thign.
+        # TODO: give better name.
+        self.all_commands = [CommandCollection()]
+
+    @property
+    def commands(self):
+        return self.all_commands[-1]
 
     def parse(self, tokens):
         """
         Parse the statements in the statement generator.
         """
-        self.commands = []
+        self.all_commands = [CommandCollection()]
         self.other_compounds = []
         self.parse_stack = []
 
@@ -40,8 +78,19 @@ class UnitLogicParser(object):
                 token = self.parse_stack.pop()
                 self.eat(token)
 
-        if len(self.commands) > 0:
-            logic_cbas.append(CBA(*self.commands))
+        cba_mapping = {}
+
+        for command_collection in self.all_commands:
+            cba = CBA(*command_collection)
+            cba_mapping[command_collection] = cba
+            logic_cbas.append(cba)
+
+        for jump_ref in self.jump_refs:
+            before_cba = cba_mapping[jump_ref.before]
+            jumpback_cba = cba_mapping[jump_ref.jumpback]
+            # TODO: auto include units which are jumped to if they have not been added to the parsed unit yet.
+            # Use the callback reserved block to create the calback setting command for unit.
+            before_cba.cb_callback_reserved.command = jump_ref.destination.shell.set_callback(jumpback_cba)
 
         return logic_cbas, self.other_compounds
 
@@ -120,6 +169,13 @@ class UnitLogicParser(object):
                     if statement.is_conditional:
                         command.is_conditional = True
                     self.add_parsed(copy.copy(command))
+        elif isinstance(statement, MainLogicJump):
+            prev_commands = self.commands
+            new_commands = CommandCollection()
+            jump_ref = JumpRef(prev_commands, statement.wrapped, self.commands)
+            self.jump_refs.append(jump_ref)
+            self.add_parsed(jump_ref.destination.shell.activate())
+            self.all_commands.append(new_commands)
         else:
             assert False, "Invalid statement type."
 
@@ -132,4 +188,12 @@ class UnitLogicParser(object):
         assert isinstance(command, MCCommand), "command must be of type MCCommand"
         self.commands.append(command)
 
+"""
+/say hey
+/say bye
+call adder
+/say what
 
+
+
+"""
