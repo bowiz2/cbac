@@ -9,8 +9,10 @@ import copy
 
 # TODO: restructure as a compiler.
 
+
 class ParseTreeNode(object):
     pass
+
 
 class CommandCollection(list):
     #used for hashing.
@@ -23,6 +25,7 @@ class CommandCollection(list):
 
     def __hash__(self):
         return self.my_id
+
 
 class JumpRef(object):
     """
@@ -88,11 +91,7 @@ class UnitLogicParser(object):
         for jump_ref in self.jump_refs:
             before_cba = cba_mapping[jump_ref.before]
             jumpback_cba = cba_mapping[jump_ref.jumpback]
-            # TODO: auto include units which are jumped to if they have not been added to the parsed unit yet.
-            # Use the callback reserved block to create the calback setting command for unit.
-            cmd = jump_ref.destination.shell.set_callback(jumpback_cba)
-            #cmd.context.executor = before_cba.cb_callback_reserved
-            before_cba.cb_callback_reserved.command = cmd
+            jump_ref.destination.logic_cbas[0].cb_callback_reserved.command = jumpback_cba.shell.activate()
 
         return logic_cbas, self.other_compounds
 
@@ -189,13 +188,3 @@ class UnitLogicParser(object):
         """
         assert isinstance(command, MCCommand), "command must be of type MCCommand"
         self.commands.append(command)
-
-"""
-/say hey
-/say bye
-call adder
-/say what
-
-
-
-"""
