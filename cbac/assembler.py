@@ -46,6 +46,7 @@ def tagged_cb(command_block, location, blockspace):
     # Return the tag which represents the entity of the command block.
     return root_tag
 
+
 def adjust(command_block, command):
     """
     Set the properties of the command block depending on the command inside of it.
