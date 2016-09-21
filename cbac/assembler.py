@@ -2,6 +2,7 @@ from block import CommandBlock
 from pymclevel import MCSchematic
 from pymclevel import TileEntity
 from pymclevel import nbt
+from cbac.mc_command import factory as command_factory
 
 
 def tagged_cb(command_block, location, blockspace):
@@ -26,20 +27,34 @@ def tagged_cb(command_block, location, blockspace):
     TileEntity.setpos(root_tag, location)
     # Parse the command of the command block.
     command = command_block.command
-    if not isinstance(command, str):
-        if hasattr(command, "context"):
-            context = command.context
-            context.executor = command_block
-            context.blockspace = blockspace
-        if command.is_conditional:
-            command_block.conditional = True
-        command = command.compile()
+
+    if isinstance(command, str):
+        command = command_factory(command)
+
+    if hasattr(command, "context"):
+        context = command.context
+        context.executor = command_block
+        context.blockspace = blockspace
+
+    adjust(command_block, command)
+
+    command = command.compile()
 
     root_tag["Command"] = nbt.TAG_String(command)
     root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)
 
     # Return the tag which represents the entity of the command block.
     return root_tag
+
+def adjust(command_block, command):
+    """
+    Set the properties of the command block depending on the command inside of it.
+    """
+    if command.is_conditional:
+        command_block.conditional = True
+
+    if command.is_repeated:
+        command_block.action = "repeat"
 
 
 def tagged_entity(entity, location, blockspace):

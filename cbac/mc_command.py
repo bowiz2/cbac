@@ -9,7 +9,7 @@ class MCCommand(object):
     Represents a lazy initialized command.
     To use this command, you need to call the compile function.
     """
-    def __init__(self, is_conditional=False, creates_condition=False):
+    def __init__(self, is_conditional=False, creates_condition=False, is_repeated=False):
         """
         :param is_conditional:  If the command is conditional, meaning it will execute only if the
         previously executed command was executed successfully.
@@ -19,6 +19,8 @@ class MCCommand(object):
         """
         self.is_conditional = is_conditional
         self.creates_condition = creates_condition
+        # If the command block holding this command will be repeated.
+        self.is_repeated = is_repeated
 
     def compile(self):
         """
@@ -45,6 +47,17 @@ class SimpleCommand(MCCommand):
         return self._body
 
 
+class EmptyCommand(MCCommand):
+    """
+    This is an empty command.
+    """
+    def compile(self):
+        """
+        :return: empty command string.
+        """
+        return "/say empty"
+
+
 class LazyCommand(MCCommand):
     """
     This is a command which is lazy initialized and the uses a function which will be called with the supplied arguments
@@ -56,6 +69,7 @@ class LazyCommand(MCCommand):
         self.args = args
         self.kwargs = kwargs
         self.func = func
+
 
     def compile(self):
         """
@@ -72,6 +86,9 @@ def factory(raw_command):
     :return: SimpleCommand.
     """
     assert isinstance(raw_command, str), "String must be a string."
+    if raw_command is '':
+        return EmptyCommand()
+
     conditional_operator = "?"
     condition_creation_operator = "!"
     command_start_prefix = "/"
@@ -79,7 +96,7 @@ def factory(raw_command):
     try:
         command_start_index = raw_command.index(command_start_prefix)
     except ValueError:
-        raise MCCommandFactoryError("Missing command start prefix '{0}'".format(command_start_prefix))
+        raise MCCommandFactoryError("Missing command start prefix '{0}' in the command '{1}'".format(command_start_prefix, raw_command))
 
     command_operators = raw_command[:command_start_index]
     conditional = conditional_operator in command_operators
@@ -89,6 +106,7 @@ def factory(raw_command):
             raise MCCommandFactoryError("Invalid command operator '{0}'", operator)
 
     return SimpleCommand(raw_command[command_start_index:], conditional, creates_condition)
+
 
 class MCCommandFactoryError(BaseException):
     """
