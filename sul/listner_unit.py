@@ -10,6 +10,7 @@ class Listener(Unit):
     """
     Listens on an event and fires off a callback when the event was reached.
     """
+
     def __init__(self, event_check, callback):
         """
         Construct the listner unit
@@ -21,13 +22,17 @@ class Listener(Unit):
         super(Listener, self).__init__(0)
         self.event_check = copy.copy(event_check)
         self.callback = callback
+        self.synthesis()
+        # TODO : fix hack, this makes the return command block conditional
+        self.logic_cbas[0].cb_callback_reserved.conditional = True
+        self.logic_cbas[0].cb_re_setter.conditional = True
+
 
     def main_logic_commands(self):
         self.event_check.is_repeated = True
         callback_command = self.callback.shell.activate()
-        # hack to disable the resetter ot reset the repeated command block.
-        callback_command.creates_condition = True
         yield If(self.event_check).then(callback_command)
+
 
 
 class IsActiveListener(Listener):

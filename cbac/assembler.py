@@ -13,6 +13,16 @@ def tagged_cb(command_block, location, blockspace):
     :param blockspace: the blockspace at which the command block is located.
     :return: nbt tag
     """
+    command = command_block.command
+    if isinstance(command, str):
+        command = command_factory(command)
+    if hasattr(command, "context"):
+        context = command.context
+        context.executor = command_block
+        context.blockspace = blockspace
+    adjust(command_block, command)
+    command = command.compile()
+
     root_tag = nbt.TAG_Compound()
 
     root_tag["id"] = nbt.TAG_String("Control")
@@ -26,26 +36,13 @@ def tagged_cb(command_block, location, blockspace):
     # Set the location of the command block.
     TileEntity.setpos(root_tag, location)
     # Parse the command of the command block.
-    command = command_block.command
 
-    if isinstance(command, str):
-        command = command_factory(command)
-
-    if hasattr(command, "context"):
-        context = command.context
-        context.executor = command_block
-        context.blockspace = blockspace
-
-    adjust(command_block, command)
-
-    command = command.compile()
 
     root_tag["Command"] = nbt.TAG_String(command)
     root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)
 
     # Return the tag which represents the entity of the command block.
     return root_tag
-
 
 def adjust(command_block, command):
     """
