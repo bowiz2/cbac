@@ -37,7 +37,6 @@ def tagged_cb(command_block, location, blockspace):
     TileEntity.setpos(root_tag, location)
     # Parse the command of the command block.
 
-
     root_tag["Command"] = nbt.TAG_String(command)
     root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)
 
@@ -103,16 +102,17 @@ def build(block_space):
 
     for block, location in block_space.packed_blocks.items():
         # Create the actual block.
-        schematic.setBlockAt(location[0], location[1], location[2], block.block_id)
-
-        data_value = calculate_data_value(block)
-        if data_value is not None:
-            schematic.setBlockDataAt(location[0], location[1], location[2], data_value)
-
         if block.has_tile_entity:
             # Create the tile entity of the block, if it has one.
             tile_entity = translate(block, location, blockspace=block_space)
             tile_entities_to_add.append(tile_entity)
+
+        schematic.setBlockAt(location[0], location[1], location[2], block.block_id)
+
+        data_value = calculate_data_value(block)
+
+        if data_value is not None:
+            schematic.setBlockDataAt(location[0], location[1], location[2], data_value)
 
     for tile_entity in tile_entities_to_add:
         schematic.addTileEntity(tile_entity)

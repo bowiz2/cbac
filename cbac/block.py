@@ -51,18 +51,20 @@ class CommandBlock(Block):
         self.conditional = conditional
         self.custom_name = custom_name
 
-        if self.action == "impulse":
-            block_id = ids.IMPULSE_COMMAND_BLOCK
-        elif self.action == "repeat":  # 'repeat'
-            block_id = ids.REPEATING_COMMAND_BLOCK
-        elif self.action == "chain":  # 'chain'
-            block_id = ids.CHAIN_COMMAND_BLOCK
-        else:
-            raise TypeError("No such action {0}.".format(action))
-
         block_data = 1 if self.always_active else 0
 
-        super(CommandBlock, self).__init__(block_id, block_data, has_tile_entity=True)
+        super(CommandBlock, self).__init__(self.block_id, block_data, has_tile_entity=True)
+
+    @property
+    def block_id(self):
+        if self.action == "impulse":
+            return ids.IMPULSE_COMMAND_BLOCK
+        elif self.action == "repeat":  # 'repeat'
+            return ids.REPEATING_COMMAND_BLOCK
+        elif self.action == "chain":  # 'chain'
+            return ids.CHAIN_COMMAND_BLOCK
+        else:
+            raise TypeError("No such action {0}.".format(action))
 
     @property
     def data_value(self):
