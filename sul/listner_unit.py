@@ -32,15 +32,15 @@ class Listener(Unit):
 
 class IsActiveListener(Listener):
     """
-    Listens on an object which has an "is active" bit and fires off the callback if the bit is set to "true"
+    Listens on a bit and fires off the callback if the bit is set to "true"
     """
-    def __init__(self, obj, callback):
-        super(IsActiveListener, self).__init__(obj.is_active_bit.shell == True, callback)
+    def __init__(self, bit, callback):
+        super(IsActiveListener, self).__init__(bit.shell == True, callback)
 
 
 class IsNotActiveListener(Listener):
     """
-    Listens on an object which has an "is active" bit and fires off the callback if the bit is set to "false"
+    Listens on a bit and fires off the callback if the bit is set to "false"
     """
-    def __init__(self, obj, callback):
-        super(IsNotActiveListener, self).__init__(obj.is_active_bit.shell == False, callback)
+    def __init__(self, bit, callback):
+        super(IsNotActiveListener, self).__init__(bit.shell == False, callback)
