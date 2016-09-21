@@ -128,6 +128,14 @@ class CBA(Compound):
         # TODO: create naming for units.
         return "CBA_n{0}".format(self.cba_id)
 
+    @property
+    def is_active_bit(self):
+        """
+        This bit indicates if the cba is currently active.
+        :return: Block
+        """
+        return self.activator
+
     def __add__(self, other):
         """
         Create a new cba out of this cba's commands and the other cba's commands.
