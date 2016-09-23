@@ -1,7 +1,8 @@
 """
 This is imulating unittest's test case.
 """
-from cbac import BlockSpace, Constant, CommandBlockArray, Register
+from cbac import BlockSpace, Constant, CommandBlockArray, Register, Unit
+from cbac.unit.statements import *
 from sul import IncrementUnit, FullAdderUnit
 import cbac.mc_command
 import cbac.assembler
@@ -19,6 +20,38 @@ class Assertion(object):
         self.command = assert_command
 
 
+class TesterUnit(Unit):
+    """
+    This is a unit which tests if a test passes or not.
+    """
+    def __init__(self, actions):
+        super(TesterUnit, self).__init__()
+        self.actions = actions
+        assertion_count = len(self.assertions)
+        assertions_log = int(math.ceil(math.log(assertion_count))) + 1
+        self.incrementer = self.add_unit(IncrementUnit(assertions_log))
+        self.success_count_register = self.create_output(assertions_log)
+        self.synthesis()
+
+    @property
+    def assertions(self):
+        """
+        The assertions made by the user.
+        :return:
+        """
+        return [isinstance(item, Assertion) for item in self.actions]
+
+    def main_logic_commands(self):
+        for action in self.actions:
+            if isinstance(action, Assertion):
+                assertion = action
+                yield If(assertion.command).then(
+                    STDCall(self.incrementer, self.success_count_register)
+                )
+            else:
+                yield action
+
+
 class McTestCase(object):
     """
     Imulating unittest's TestCase
@@ -27,7 +60,10 @@ class McTestCase(object):
     def __init__(self):
         self.incrementer = None
         self.actions = []
+        self.units = []
+        # compounds which were needed for assertions.
         self.compounds = []
+
         self.blockspace = BlockSpace((1000, 1000, 1000))
 
     def build(self, path):
@@ -48,25 +84,9 @@ class McTestCase(object):
             self.tearDown()
 
         if len(self.actions) > 0:
-            assertion_count = len([isinstance(item, Assertion) for item in self.actions])
-            assertions_log = int(math.ceil(math.log(assertion_count))) + 1
-            self.incrementer = IncrementUnit(assertions_log)
-            self.success_count_register = Register(assertions_log)
-            self.compounds.append(self.success_count_register)
-            self.add_unit(self.incrementer)
+            tester_unit = TesterUnit(self.actions)
+            self.blockspace.add_unit(tester_unit)
 
-            cmd_batch_1 = []
-            for action in self.actions:
-                if isinstance(action, Assertion):
-                    assertion = action
-                    cmd_batch_1.append(assertion.command)
-                    cmd_batch_1.append(self.success_count_register.shell.copy(self.incrementer.input))
-                    cmd_batch_1.append(self.incrementer.entry_point.shell.activate())
-                    cmd_batch_1.append(self.incrementer.output.shell.copy(self.success_count_register))
-                else:
-                    cmd_batch_1.append(action)
-            cba1 = CommandBlockArray(*cmd_batch_1)
-            self.compounds.append(cba1)
             #
             # cmd_batch_2 = []
             # for block in cba1.blocks:
@@ -77,11 +97,8 @@ class McTestCase(object):
             #
             # cba2 = CommandBlockArray(*cmd_batch_2)
             # self.compounds.append(cba2)
-
-        # Add the generated compounds to the blockspace.
         for compound in self.compounds:
             self.blockspace.add(compound)
-
         self.blockspace.pack()
         self.blockspace.shrink()
 
@@ -136,13 +153,14 @@ class Sample(McTestCase):
         adder = FullAdderUnit(4)
         self.add_unit(adder)
         self.assertEquals(adder.output, 0)
-        # num5 = Constant(5, 4)
-        # num3 = Constant(3, 4)
-        # self.blockspace.add(num5)
-        # self.blockspace.add(num3)
-        # self.actions.append(num5.shell.copy(adder.input_a))
-        # self.actions.append(num3.shell.copy(adder.input_b))
-        # self.actions.append(adder.activator.shell.activate())
+        num5 = Constant(5, 4)
+        num3 = Constant(3, 4)
+        self.blockspace.add(num5)
+        self.blockspace.add(num3)
+        self.actions.append(num5.shell.copy(adder.input_a))
+        self.actions.append(num3.shell.copy(adder.input_b))
+        self.actions.append(adder.activator.shell.activate())
+        self.assertEquals(adder.output, 8)
 
 s = Sample()
 s.build("C:/temp/x.schm")

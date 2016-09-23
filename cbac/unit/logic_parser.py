@@ -72,6 +72,8 @@ class UnitLogicParser(object):
                 self.eat(token)
 
         cba_mapping = {}
+        if len(self.commands) == 0:
+           self.commands.append(mc_command.factory("/say reserved"))
 
         for command_collection in self.all_commands:
             cba = CBA(*command_collection)
@@ -162,7 +164,7 @@ class UnitLogicParser(object):
             self.add_parsed(statement.destination.activator.shell.activate())
             self.make_jump(statement)
         else:
-            assert False, "Invalid statement type."
+            assert False, "'{}' Is an invalid statement type.".format(statement.__class__.__name__)
 
     def make_jump(self, jump_statement):
         """
