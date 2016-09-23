@@ -10,7 +10,6 @@ from cbac.unit import Unit
 from cbac.unit.statements import *
 
 
-
 class SULTestCase(TestCase):
     """
     Test the standard unit library.
@@ -76,6 +75,13 @@ class TestBitwiseUnits(SULTestCase):
     @named_schematic
     def test_subtract_unit(self):
         self.block_space.add_unit(sul.SubtractUnit(4))
+
+    @named_schematic
+    def test_listener(self):
+        from cbac.compound.register import Register
+        my_register = Register(2)
+        self.block_space.add(my_register)
+        self.block_space.add_unit(sul.IsActiveListener(my_register.blocks[0], my_register.blocks[1]))
 
 
 class TestSULMemory(SULTestCase):

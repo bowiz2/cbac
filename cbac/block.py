@@ -17,10 +17,22 @@ class Block(object):
         :param block_data: Block data value.
         :param has_tile_entity: If this block has a tile entity and needs to be translated to it.
         """
-        self.block_id = block_id
-        self.block_data = block_data
+        self._block_id = block_id
+        self._block_data = block_data
         self.has_tile_entity = has_tile_entity
         self._belongs_to_blockspace = False  # used for testign and debugging. TODO: consider removing
+
+    @property
+    def block_id(self):
+        """
+        The minecraft block type id of this block
+        :return: number
+        """
+        return self._block_id
+
+    @property
+    def block_data(self):
+        return self._block_data
 
     @property
     @memoize
@@ -50,19 +62,33 @@ class CommandBlock(Block):
         self.always_active = always_active
         self.conditional = conditional
         self.custom_name = custom_name
+        super(CommandBlock, self).__init__(self.block_id, 0, has_tile_entity=True)
 
+    @property
+    def block_id(self):
+        """
+        Minecraft block id of the command blocks
+        :note: depends on the action of the block.
+        """
         if self.action == "impulse":
-            block_id = ids.IMPULSE_COMMAND_BLOCK
+            return ids.IMPULSE_COMMAND_BLOCK
         elif self.action == "repeat":  # 'repeat'
-            block_id = ids.REPEATING_COMMAND_BLOCK
+            return ids.REPEATING_COMMAND_BLOCK
         elif self.action == "chain":  # 'chain'
-            block_id = ids.CHAIN_COMMAND_BLOCK
+            return ids.CHAIN_COMMAND_BLOCK
         else:
-            raise TypeError("No such action {0}.".format(action))
+            raise TypeError("No such action {0}.".format(self.action))
 
-        block_data = 1 if self.always_active else 0
-
-        super(CommandBlock, self).__init__(block_id, block_data, has_tile_entity=True)
+    @property
+    def block_data(self):
+        """
+        Minecraft block data
+        :note: depends on hte always_active property.
+        """
+        if self.always_active:
+            return 1
+        else :
+            return 0
 
     @property
     def data_value(self):

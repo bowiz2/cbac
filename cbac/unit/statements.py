@@ -53,12 +53,29 @@ class StatementCollection(Token):
         self.statements = new_statements
 
 
-class MainLogicJump(Statement):
+class Jump(Statement):
+    """jump to other location and return to the next logic cba after some logic."""
+    @property
+    def destination(self):
+        """
+        The destination of the jump.
+        """
+        return self.wrapped
+
+
+class MainLogicJump(Jump):
     """
     Main logic jump is a statement used in the main logic of a unit to jump to another item.
     """
     pass
 
+
+class HardJump(Jump):
+    """
+    The jumps are not dynamic and are hard-wired.
+    """
+    # TODO: implement
+    pass
 
 class Conditional(StatementCollection):
     """

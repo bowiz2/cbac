@@ -31,13 +31,14 @@ class Unit(object):
         :return: None
         """
 
-        logic_cbas, other_compounds = self._logic_parser.parse(
+        logic_cbas, other_compounds, other_units = self._logic_parser.parse(
             itertools.chain(self.on_entry_init_commands(), self.main_logic_commands(), self.on_exit_commands())
         )
         # Add the CBAs to the unit.
         for parsed_item in logic_cbas + other_compounds:
             self.add_compound(parsed_item)
-
+        for other_unit in other_units:
+            self.add_unit(other_unit)
         self.logic_cbas = logic_cbas
 
     def add_compound(self, compound):
@@ -120,6 +121,8 @@ class Unit(object):
         The first cba which needs to be activated in-order of the unit to preform its task.
         :return: CBA
         """
+        if len(self.logic_cbas) < 1:
+            raise Exception("This unit has not entry point.")
         return self.logic_cbas[0]
 
     @property
@@ -134,3 +137,12 @@ class Unit(object):
     @memoize
     def shell(self):
         return UnitShell(self)
+
+
+class SimpleUnit(Unit):
+    """
+    A simple unit has no input/output registers. it only preforms logic.
+    """
+    def __init__(self, bit=None, parser_instance=None):
+        super(SimpleUnit, self).__init__(bit, parser_instance)
+        self.synthesis()
