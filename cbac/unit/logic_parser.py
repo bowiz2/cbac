@@ -1,26 +1,27 @@
 """
 This module parses the statement logic of a unit provided in its main logic commands generation method.
 """
+import copy
+
+import cbac.config
 from cbac.compound import CBA, Constant
 from cbac.mc_command import MCCommand
 from cbac.unit.statements import *
-import cbac.config
-import copy
+
 
 # TODO: restructure as a compiler.
 
 
-class ParseTreeNode(object):
-    pass
-
-
 class CommandCollection(list):
-    #used for hashing.
+    """
+    A collection of commands which can be hashed.
+    """
+    # used for hashing.
     instance_count = 0
 
     def __init__(self, iterable=[]):
         self.my_id = CommandCollection.instance_count
-        CommandCollection.instance_count+=1
+        CommandCollection.instance_count += 1
         super(CommandCollection, self).__init__(iterable)
 
     def __hash__(self):
@@ -31,6 +32,7 @@ class UnitLogicParser(object):
     """
     Parses the main logic of a unit.
     """
+
     # TODO: refactor
     def __init__(self):
         # TODO: organize.
@@ -182,7 +184,7 @@ class UnitLogicParser(object):
         for i, jump in enumerate(self.jumps):
             # The cba from which the jump was made
             origin_cba = logic_cbas[i]
-            landing_cba = logic_cbas[i+1]
+            landing_cba = logic_cbas[i + 1]
             if isinstance(jump, MainLogicJump):
                 listener = IsNotActiveListener(jump.destination.activator, landing_cba)
                 # Activate the listener.
