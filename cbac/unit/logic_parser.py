@@ -31,7 +31,7 @@ class UnitLogicParser(object):
     """
     Parses the main logic of a unit.
     """
-
+    # TODO: refactor
     def __init__(self):
         # TODO: organize.
         # Other compounds which were generated while parsing.
