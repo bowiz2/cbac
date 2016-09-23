@@ -116,11 +116,7 @@ class TestUnitStatementsParsing(TestLogicParser):
         self.assertEqual(0, len(self.parser.parse_stack))
 
     def test_main_logic_jump(self):
-        class DummyUnit(Unit):
-            def __init__(self):
-                super(DummyUnit, self).__init__()
-                self.synthesis()
-
+        class DummyUnit(SimpleUnit):
             def main_logic_commands(self):
                 yield "/say hey"
 
@@ -128,19 +124,15 @@ class TestUnitStatementsParsing(TestLogicParser):
         self.parser.parse_statement(MainLogicJump(dummy_unit))
         # Check internal state.
         self.assertEqual(2, len(self.parser.all_commands))
-        self.assertEqual(1, len(self.parser.jump_refs))
+        self.assertEqual(1, len(self.parser.jumps))
 
     def test_main_logic_jump_full(self):
-        class DummyUnit(Unit):
-            def __init__(self):
-                super(DummyUnit, self).__init__()
-                self.synthesis()
-
+        class DummyUnit(SimpleUnit):
             def main_logic_commands(self):
                 yield "/say hey"
 
         dummy_unit = DummyUnit()
-        logic_cbas, other_compounds = self.parser.parse([MainLogicJump(dummy_unit)])
+        logic_cbas, other_compounds, other_units = self.parser.parse([MainLogicJump(dummy_unit)])
         self.assertEqual(2, len(logic_cbas))
 
 class TestCommandCollection(TestCase):

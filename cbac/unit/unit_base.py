@@ -31,13 +31,14 @@ class Unit(object):
         :return: None
         """
 
-        logic_cbas, other_compounds = self._logic_parser.parse(
+        logic_cbas, other_compounds, other_units = self._logic_parser.parse(
             itertools.chain(self.on_entry_init_commands(), self.main_logic_commands(), self.on_exit_commands())
         )
         # Add the CBAs to the unit.
         for parsed_item in logic_cbas + other_compounds:
             self.add_compound(parsed_item)
-
+        for other_unit in other_units:
+            self.add_unit(other_unit)
         self.logic_cbas = logic_cbas
 
     def add_compound(self, compound):

@@ -1,5 +1,5 @@
 from cbac.unit.statements import If
-from cbac.unit.unit_base import Unit
+from cbac.unit import Unit
 
 
 class AndUnit(Unit):

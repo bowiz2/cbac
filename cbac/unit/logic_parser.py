@@ -27,33 +27,21 @@ class CommandCollection(list):
         return self.my_id
 
 
-class JumpRef(object):
-    """
-    This is a jump reference which is left behind when a jump is made by some statement.
-    """
-    def __init__(self, before, destination, jumpback):
-        """
-        :param before: The node which have initiated the jump
-        :param destination: the cba which is jumped to
-        :param jumpback: The node which continue the parsing from now on.
-        """
-        self.before = before
-        self.destination = destination
-        self.jumpback = jumpback
-
-
 class UnitLogicParser(object):
     """
     Parses the main logic of a unit.
     """
 
     def __init__(self):
+        # TODO: organize.
         # Other compounds which were generated while parsing.
         self.other_compounds = []
+        # Listener units which were generated while parsing.
+        self.listeners = []
+        # contains all the jumps which are aought to be made. TODO: rewrite
+        self.jumps = []
         # The stack which is usd during parsing.
         self.parse_stack = []
-        # holds all the jump refs
-        self.jump_refs = []
         # list of all the commands in their seperated thign.
         # TODO: give better name.
         self.all_commands = [CommandCollection()]
@@ -88,12 +76,9 @@ class UnitLogicParser(object):
             cba_mapping[command_collection] = cba
             logic_cbas.append(cba)
 
-        for jump_ref in self.jump_refs:
-            before_cba = cba_mapping[jump_ref.before]
-            jumpback_cba = cba_mapping[jump_ref.jumpback]
-            jump_ref.destination.logic_cbas[0].cb_callback_reserved.command = jumpback_cba.shell.activate()
+        self.listeners = list(self.generate_listeners(logic_cbas))
 
-        return logic_cbas, self.other_compounds
+        return logic_cbas, self.other_compounds, self.listeners
 
     def eat(self, token):
         """
@@ -170,15 +155,39 @@ class UnitLogicParser(object):
                     if statement.is_conditional:
                         command.is_conditional = True
                     self.add_parsed(copy.copy(command))
-        elif isinstance(statement, MainLogicJump):
-            prev_commands = self.commands
-            new_commands = CommandCollection()
-            jump_ref = JumpRef(prev_commands, statement.wrapped, new_commands)
-            self.jump_refs.append(jump_ref)
-            self.add_parsed(jump_ref.destination.shell.activate())
-            self.all_commands.append(new_commands)
+
+        elif isinstance(statement, Jump):
+            self.add_parsed(statement.destination.activator.shell.activate())
+            self.make_jump(statement)
         else:
             assert False, "Invalid statement type."
+
+    def make_jump(self, jump_statement):
+        """
+        Create a jump.
+        Will be processed later when the logic cbas will be constructed.
+        :param jump_statement: The statement which caused the jump.
+        """
+        self.jumps.append(jump_statement)
+        new_commands = CommandCollection()
+        self.all_commands.append(new_commands)
+
+    def generate_listeners(self, logic_cbas):
+        """
+        generate all the needed preparation for a jump to work
+        :return: generated units which needed for the jump to work.
+        """
+        # TODO: fix that hack
+        from sul.listner_unit import IsNotActiveListener
+        for i, jump in enumerate(self.jumps):
+            # The cba from which the jump was made
+            origin_cba = logic_cbas[i]
+            landing_cba = logic_cbas[i+1]
+            if isinstance(jump, MainLogicJump):
+                listener = IsNotActiveListener(jump.destination.activator, landing_cba)
+                # Activate the listener.
+                origin_cba.cb_callback_reserved.command = listener.activator.shell.activate()
+                yield listener
 
     def add_parsed(self, command):
         """
