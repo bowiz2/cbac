@@ -48,6 +48,10 @@ class TesterUnit(Unit):
                 yield If(assertion.command).then(
                     STDCall(self.incrementer, self.success_count_register)
                 )
+                yield If(assertion.command).then(
+                    self.incrementer.output.shell.copy(self.success_count_register)
+                )
+                yield "/say end of main"
             else:
                 yield action
 
@@ -65,6 +69,8 @@ class McTestCase(object):
         self.compounds = []
 
         self.blockspace = BlockSpace((1000, 1000, 1000))
+        # used in the setup and tear down.
+        self.processed_method_name = None
 
     def build(self, path):
         """
@@ -79,9 +85,10 @@ class McTestCase(object):
 
         for pair in test_methods:
             method_name, unbound_method = pair
-            self.setUp()
-            unbound_method(self)
-            self.tearDown()
+            self.processed_method_name = method_name
+            self.actions += list(self.setUp())
+            self.actions += list(unbound_method(self))
+            self.actions += list(self.tearDown())
 
         if len(self.actions) > 0:
             tester_unit = TesterUnit(self.actions)
@@ -109,13 +116,13 @@ class McTestCase(object):
         """
         Will be added to the statements and executed before each.
         """
-        pass
+        yield "/say start {0} : {1}".format(self.__class__.__name__, self.processed_method_name)
 
     def tearDown(self):
         """"
         Will be executed and statements added after each function.
         """
-        pass
+        yield "/say end {0} : {1}".format(self.__class__.__name__, self.processed_method_name)
 
     def add_unit(self, unit):
         self.blockspace.add_unit(unit)
@@ -150,17 +157,12 @@ class McTestCase(object):
 
 class Sample(McTestCase):
     def test_ram(self):
-        adder = FullAdderUnit(4)
-        self.add_unit(adder)
-        self.assertEquals(adder.output, 0)
-        num5 = Constant(5, 4)
-        num3 = Constant(3, 4)
-        self.blockspace.add(num5)
-        self.blockspace.add(num3)
-        self.actions.append(num5.shell.copy(adder.input_a))
-        self.actions.append(num3.shell.copy(adder.input_b))
-        self.actions.append(adder.activator.shell.activate())
-        self.assertEquals(adder.output, 8)
+        increment = IncrementUnit(4)
+        self.add_unit(increment)
+        num4 = Constant(4, 4)
+        self.blockspace.add(num4)
+        yield STDCall(increment, num4)
+        self.assertEquals(increment.output, 5)
 
 s = Sample()
-s.build("C:/temp/x.schm")
+s.build("C:/temp/x.schematic")
