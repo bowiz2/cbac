@@ -1,28 +1,24 @@
 """
-This is imulating unittest's test case.
+This is similar to unittest's test case.
+see example.py for example
 """
-from cbac import BlockSpace, Constant, CommandBlockArray, Register, Unit
-from cbac.unit.statements import *
-from sul import IncrementUnit, FullAdderUnit
-import cbac.mc_command
-import cbac.assembler
 import inspect
 import math
 
+import cbac.assembler
+import cbac.mc_command
+from cbac import BlockSpace, Unit
+from cbac.unit.statements import *
+from mctest.assertion import Assertion
+from sul import IncrementUnit
+
 # TODO: auto deploy
-
-
-class Assertion(object):
-    def __init__(self, assert_command):
-        """
-        :param assert_command: This command determins if the assert was sucsessfull or not.
-        """
-        self.command = assert_command
 
 
 class TesterUnit(Unit):
     """
     This is a unit which tests if a test passes or not.
+    And contains all the in-game logic.
     """
     def __init__(self, actions):
         super(TesterUnit, self).__init__()
@@ -132,49 +128,3 @@ class McTestCase(object):
     def add_unit(self, unit):
         self.blockspace.add_unit(unit)
 
-
-def assertTrue(block):
-    """
-    Check whenever a block is activated.
-    :param block: Block
-    :return: None
-    """
-    return Assertion(block.shell == True)
-
-
-def assertFalse(block):
-    """
-    Check whenever a block is deactivated.
-    :param block: Block
-    :return:None
-    """
-    return Assertion(block.shell == False)
-
-
-def assertEquals(register, constant):
-    """
-    Checks whenever a value of a register equals a value.
-    :param register: Register you are checking
-    :param constant: The expected value of the register.
-    :return: None
-    """
-    return Assertion(register.shell == constant)
-
-
-class Sample(McTestCase):
-    def test_ram(self):
-        increment = IncrementUnit(4)
-        self.add_unit(increment)
-        num0 = Constant(0, 4)
-        num4 = Constant(4, 4)
-        num5 = Constant(5, 4)
-        self.blockspace.add(num0)
-        self.blockspace.add(num4)
-        self.blockspace.add(num5)
-        yield assertEquals(increment.output, num0)
-        yield STDCall(increment, num4)
-        yield assertEquals(increment.output, num5)
-
-
-s = Sample()
-s.build("C:/temp/x.schematic")
