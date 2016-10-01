@@ -49,9 +49,12 @@ class TesterUnit(Unit):
                     STDCall(self.incrementer, self.success_count_register)
                 )
                 yield If(assertion.command).then(
+                    "/say assertion ok"
+                )
+                yield If(assertion.command).then(
                     self.incrementer.output.shell.copy(self.success_count_register)
                 )
-                yield "/say end of main"
+
             else:
                 yield action
 
@@ -87,7 +90,9 @@ class McTestCase(object):
             method_name, unbound_method = pair
             self.processed_method_name = method_name
             self.actions += list(self.setUp())
-            self.actions += list(unbound_method(self))
+            unbound = unbound_method(self)
+            if unbound:
+                self.actions += list(unbound)
             self.actions += list(self.tearDown())
 
         if len(self.actions) > 0:
@@ -127,42 +132,49 @@ class McTestCase(object):
     def add_unit(self, unit):
         self.blockspace.add_unit(unit)
 
-    def assertTrue(self, block):
-        """
-        Check whenever a block is activated.
-        :param block: Block
-        :return: None
-        """
-        self.actions.append(Assertion(block.shell == True))
 
-    def assertFalse(self, block):
-        """
-        Check whenever a block is deactivated.
-        :param block: Block
-        :return:None
-        """
-        self.actions.append(Assertion(block.shell == False))
+def assertTrue(block):
+    """
+    Check whenever a block is activated.
+    :param block: Block
+    :return: None
+    """
+    return Assertion(block.shell == True)
 
-    def assertEquals(self, register, value):
-        """
-        Checks whenever a value of a register equals a value.
-        :param register: Register you are checking
-        :param value: The expected value of the register.
-        :return: None
-        """
-        const_to_compare = Constant(value)
-        self.compounds.append(const_to_compare)
-        self.actions.append(Assertion(register.shell == const_to_compare))
+
+def assertFalse(block):
+    """
+    Check whenever a block is deactivated.
+    :param block: Block
+    :return:None
+    """
+    return Assertion(block.shell == False)
+
+
+def assertEquals(register, constant):
+    """
+    Checks whenever a value of a register equals a value.
+    :param register: Register you are checking
+    :param constant: The expected value of the register.
+    :return: None
+    """
+    return Assertion(register.shell == constant)
 
 
 class Sample(McTestCase):
     def test_ram(self):
         increment = IncrementUnit(4)
         self.add_unit(increment)
+        num0 = Constant(0, 4)
         num4 = Constant(4, 4)
+        num5 = Constant(5, 4)
+        self.blockspace.add(num0)
         self.blockspace.add(num4)
+        self.blockspace.add(num5)
+        yield assertEquals(increment.output, num5)
         yield STDCall(increment, num4)
-        self.assertEquals(increment.output, 5)
+        yield assertEquals(increment.output, num5)
+
 
 s = Sample()
 s.build("C:/temp/x.schematic")
