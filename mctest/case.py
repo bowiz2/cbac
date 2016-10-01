@@ -171,7 +171,7 @@ class Sample(McTestCase):
         self.blockspace.add(num0)
         self.blockspace.add(num4)
         self.blockspace.add(num5)
-        yield assertEquals(increment.output, num5)
+        yield assertEquals(increment.output, num0)
         yield STDCall(increment, num4)
         yield assertEquals(increment.output, num5)
 
