@@ -100,12 +100,15 @@ class LocationShell(CommandShell):
         :return: CommandSuspender
         :note: Sees use in the RAM standard unit.
         """
+        area = self.context.get_absolute_area(self.wrapped)
+        formatted_area = [format_location(point) for point in area]
+        remote_area = " ".join(formatted_area)
         # TODO: fix this mess.
         return self._join_command(
             "/clone",
-            format_location((0, 0, 0)),
-            format_location(direction_vectors[EAST] * len(self.wrapped.blocks)),
-            self.location)
+            remote_area,
+            self.location
+        )
 
     @command()
     def write_to_point_of_reference(self):
