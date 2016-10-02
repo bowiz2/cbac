@@ -3,28 +3,28 @@ from utils import memoize
 import uuid
 
 
-class Entity(object):
+class MCEntity(object):
     def __init__(self, mc_type, custom_name=None, rotation=None, fall_distance=None, fire=None, air=None,
                  on_ground=None, no_gravity=None, custom_name_visible=None, silent=None, glowing=None, tags=None):
         """
-        :param mc_type: the minecraft type of this entity.
-        :param custom_name: The custom name of this entity. Appears in player death messages and villager trading
-        interfaces, as well as above the entity when your cursor is over it. May not exist, or may exist and be empty.
-        If no name was specified, a uuid string will be assigned to this entity.
+        :param mc_type: the minecraft type of this mcentity.
+        :param custom_name: The custom name of this mcentity. Appears in player death messages and villager trading
+        interfaces, as well as above the mcentity when your cursor is over it. May not exist, or may exist and be empty.
+        If no name was specified, a uuid string will be assigned to this mcentity.
         :param rotation: Two floats representing rotation in degrees.
-        :param fall_distance: Distance the entity has fallen. Larger values cause more damage when the entity lands.
-        :param fire: Number of ticks until the fire is put out. Negative values reflect how long the entity can stand
+        :param fall_distance: Distance the mcentity has fallen. Larger values cause more damage when the mcentity lands.
+        :param fire: Number of ticks until the fire is put out. Negative values reflect how long the mcentity can stand
         in fire before burning.
-        :param air:How much air the entity has, in ticks. Fills to a maximum of 300 in air, giving 15 seconds submerged
-        before the entity starts to drown, and a total of up to 35 seconds before the entity dies (if it has 20 health).
-        Decreases while underwater. If 0 while underwater, the entity loses 1 health per second.
-        :param on_ground: True if the entity is touching the ground.
-        :param no_gravity: If true, the entity will not fall if in the air.
-        :param custom_name_visible:if true, and this entity has a custom name, it will always appear above them,
-        whether or not the cursor is pointing at it. If the entity hasn't a custom name, a default name will be shown.
+        :param air:How much air the mcentity has, in ticks. Fills to a maximum of 300 in air, giving 15 seconds submerged
+        before the mcentity starts to drown, and a total of up to 35 seconds before the mcentity dies (if it has 20 health).
+        Decreases while underwater. If 0 while underwater, the mcentity loses 1 health per second.
+        :param on_ground: True if the mcentity is touching the ground.
+        :param no_gravity: If true, the mcentity will not fall if in the air.
+        :param custom_name_visible:if true, and this mcentity has a custom name, it will always appear above them,
+        whether or not the cursor is pointing at it. If the mcentity hasn't a custom name, a default name will be shown.
         May not exist.
-        :param silent: If true, this entity will not make sound. May not exist.
-        :param glowing: True if the entity has a glowing outline.
+        :param silent: If true, this mcentity will not make sound. May not exist.
+        :param glowing: True if the mcentity has a glowing outline.
         :param tags: List of custom string data.
         """
         self.mc_type = mc_type
@@ -66,7 +66,7 @@ class Entity(object):
     @property
     def selector(self):
         """
-        :return: Command selector of the entity. For example "@e[name=test_entity]"
+        :return: Command selector of the mcentity. For example "@e[name=test_entity]"
         """
         assert self.custom_name is not None
         return "@e[name={0}]".format(self.custom_name)

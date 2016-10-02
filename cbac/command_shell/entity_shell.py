@@ -12,13 +12,13 @@ from utils import Vector
 
 class EntityShell(CommandShell):
     """
-    Wraps the entity object and provides command iterface for it.
+    Wraps the mcentity object and provides command iterface for it.
     """
 
     @command()
     def kill(self):
         """
-        Kills this entity
+        Kills this mcentity
         :return: Kill command.
         """
         return self._join_command("/kill", self.wrapped.selector)
@@ -39,8 +39,8 @@ class EntityShell(CommandShell):
     @command()
     def summon(self, location):
         """
-        Summons an entity at a given location.
-        :param location: The location you want to spawn the entity at.
+        Summons an mcentity at a given location.
+        :param location: The location you want to spawn the mcentity at.
         :return: Summon command.
         """
         entity = self.wrapped
@@ -54,9 +54,9 @@ class EntityShell(CommandShell):
     @command()
     def move(self, direction, distance=1):
         """
-        Moves this entity in a direction by a distance
-        :param direction: The direction to move the entity.
-        :param distance: How far to move the entity.
+        Moves this mcentity in a direction by a distance
+        :param direction: The direction to move the mcentity.
+        :param distance: How far to move the mcentity.
         :return: Tp command.
         """
         direction_vector = direction_vectors[direction] * distance
@@ -64,7 +64,7 @@ class EntityShell(CommandShell):
 
     def activate(self):
         """
-        Set the block at which this entity is standing as true block.
+        Set the block at which this mcentity is standing as true block.
         :return: Execute command.
         """
         return self.execute("/setblock ~ ~ ~ {}".format(names[TRUE_BLOCK]))

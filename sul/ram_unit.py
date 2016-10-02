@@ -6,7 +6,7 @@ from cbac.constants.mc_direction import *
 from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
 from cbac.utils import Vector, inline_generators
-from cbac.entity.pivot import Pivot
+from cbac.mcentity.pivot import Pivot
 
 
 class MemoryAccessUnit(Unit):

@@ -1,10 +1,10 @@
 import cbac.constants.entity_id
-from cbac import Entity
+from cbac import MCEntity
 from cbac.utils import memoize
 from cbac.command_shell.entity_shell import PivotShell
 
 
-class Pivot(Entity):
+class Pivot(MCEntity):
     """
     An armor stand which can move in space and copy areas
     """

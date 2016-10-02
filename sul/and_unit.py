@@ -4,7 +4,6 @@ Holds AND unit.
 from cbac.unit.statements import If
 from cbac.unit import Unit
 
-
 class AndUnit(Unit):
     """
     This unit takes two memories, makes an AND logic function between them and store it to the output memory.

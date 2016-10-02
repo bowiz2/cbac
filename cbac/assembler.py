@@ -7,7 +7,7 @@ from cbac.mc_command import factory as command_factory
 
 def tagged_cb(command_block, location, blockspace):
     """
-    Translate a command block into a tile entity.
+    Translate a command block into a tile mcentity.
     :param command_block: The command block you want to translate.
     :param location: the location of the block in the blockspace.
     :param blockspace: the blockspace at which the command block is located.
@@ -40,7 +40,7 @@ def tagged_cb(command_block, location, blockspace):
     root_tag["Command"] = nbt.TAG_String(command)
     root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)
 
-    # Return the tag which represents the entity of the command block.
+    # Return the tag which represents the mcentity of the command block.
     return root_tag
 
 
@@ -105,7 +105,7 @@ def build(block_space):
     for block, location in block_space.packed_blocks.items():
         # Create the actual block.
         if block.has_tile_entity:
-            # Create the tile entity of the block, if it has one.
+            # Create the tile mcentity of the block, if it has one.
             tile_entity = translate(block, location, blockspace=block_space)
             tile_entities_to_add.append(tile_entity)
 

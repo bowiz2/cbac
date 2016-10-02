@@ -15,7 +15,7 @@ class Block(object):
         """
         :param block_id: The minecraft block id of this block, such as 0 for air and 1 for stone.
         :param block_data: Block data value.
-        :param has_tile_entity: If this block has a tile entity and needs to be translated to it.
+        :param has_tile_entity: If this block has a tile mcentity and needs to be translated to it.
         """
         self._block_id = block_id
         self._block_data = block_data
