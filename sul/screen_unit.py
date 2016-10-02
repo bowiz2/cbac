@@ -18,7 +18,7 @@ class ScreenUnit(Unit):
         if not isinstance(char_set, MCSchematic):
             char_set = MCSchematic(filename=char_set)
 
-        #self.char_set = self.add_compound(char_set)
+        self.char_set = self.add_compound(char_set)
         # How many different characters this screen can printout.
         self.char_set_size = int(char_set.size[1])
         # 2 dimensional area which is taken by a character.
@@ -26,10 +26,10 @@ class ScreenUnit(Unit):
 
         # This is the unit which will give us the way to navigate in the charecters.
         self.char_set_access_unit = self.add_unit(
-            MemoryAccessUnit((1, self.char_set_size, 1), self.character_sprite_size)
+            MemoryAccessUnit((1, self.char_set_size, 1), self.character_sprite_size, self.char_set)
         )
         assert self.char_set_access_unit.word_size == screen_access_unit.word_size, \
-            "char set word size must equal to the screen. {0} != {1} ".format(self.char_set_access_unit.word_size, screen_access_unit.word_size)
+            "char set word size must equal to the screen."
         self.print_value_input = self.add_input(self.char_set_access_unit.address_input)
         self.screen_access_unit = self.add_unit(screen_access_unit)
         self.location_input = self.add_input(self.screen_access_unit.address_input)

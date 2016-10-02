@@ -63,7 +63,7 @@ class MemoryAccessUnit(Unit):
         yield Debug("/say Resetting pivot.")
         yield self.pivot.shell.kill()
         # Create the pivot.
-        yield self.pivot.shell.summon(self.raw_memory[0][0][0])
+        yield self.pivot.shell.summon(self.raw_memory)
 
         yield Debug("/say Moving pivot by address.")
         # Move it by to the address specified in the address register.
