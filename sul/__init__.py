@@ -19,3 +19,4 @@ from substract_unit import SubtractUnit
 from xnor_unit import XnorUnit
 from xor_unit import XorUnit
 from listner_unit import Listener, IsActiveListener, IsNotActiveListener
+from screen_unit import ScreenUnit

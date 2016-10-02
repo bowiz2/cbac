@@ -153,3 +153,16 @@ class TestIntegration(SULTestCase):
         self.block_space.add_unit(write_unit)
         self.block_space.add_unit(increment_unit)
         self.block_space.add_unit(filler)
+
+
+class TestScreen(SULTestCase):
+    @named_schematic
+    def test_basic_screen(self):
+        screen_access = sul.MemoryAccessUnit((16, 1, 16), (6, 1, 8))
+        screen = sul.ScreenUnit("../schem/assci_chars.schematic", screen_access)
+        incrementer = sul.IncrementUnit(8)
+        filler= Filler(8, incrementer, screen)
+        self.block_space.add_unit(filler)
+        self.block_space.add_unit(incrementer)
+        self.block_space.add_unit(screen_access)
+        self.block_space.add_unit(screen)

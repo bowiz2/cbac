@@ -166,5 +166,8 @@ class RawArea(Area):
                     to_return.append(BlockAssignment(Block(block_id), Vector(x, y, z), None))
         return to_return
 
+    @property
+    def is_isolated(self):
+        return False
 
 __all__ = ["LineArea", "WindedArea", "BlockBoxArea", "RawArea"]
