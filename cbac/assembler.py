@@ -84,10 +84,11 @@ def calculate_data_value(block):
     :param block: Block
     :return: number
     """
+    # TODO: fix this mess.
     try:
         return block.data_value
     except AttributeError:
-        return 0
+        return block.block_data
 
 
 def build(block_space):
