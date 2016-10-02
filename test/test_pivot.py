@@ -64,12 +64,12 @@ class TestPivot(SULTestCase):
     def test_pivot_temp_movement(self):
         register = Register(8)
         self.block_space.add(register)
-        my_pivot = Pivot(self.block_space.get_area_of(register))
+        my_pivot = Pivot()
 
         self.block_space.add(CBA(
             my_pivot.shell.summon(register.blocks[0]),
-            my_pivot.shell.store_to_temp(),
+            my_pivot.shell.store_to_temp(register),
             my_pivot.shell.move(UP),
-            my_pivot.shell.load_from_temp(),
+            my_pivot.shell.load_from_temp(register),
             my_pivot.shell.kill()
         ))
