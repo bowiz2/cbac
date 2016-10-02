@@ -63,7 +63,9 @@ class MemoryAccessUnit(Unit):
                 yield If(
                     addres_bit.shell == True
                 ).then(
-                    self.pivot.shell.move(EAST, self.word_size.x * (2 ** i))
+                    self.pivot.shell.move(
+                        EAST,
+                        self.word_size.x * (2 ** i))
                 )
 
             elif 2 ** i < self.ratio.x + self.ratio.y - 1:
@@ -71,7 +73,7 @@ class MemoryAccessUnit(Unit):
                     addres_bit.shell == True
                 ).then(
                     self.pivot.shell.move(
-                        NORTH,
+                        UP,
                         self.word_size.y * int(2 ** (i - math.log(self.ratio.x, 2)))
                     )
                 )
@@ -80,7 +82,7 @@ class MemoryAccessUnit(Unit):
                     addres_bit.shell == True
                 ).then(
                     self.pivot.shell.move(
-                        UP,
+                        NORTH,
                         self.word_size.z * int(2 ** (i - math.log(self.ratio.x, 2) - math.log(self.ratio.y, 2)))
                     )
                 )

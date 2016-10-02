@@ -119,6 +119,11 @@ class TestSULMemory(SULTestCase):
         self.block_space.add_unit(write_unit)
         self.block_space.add_unit(read_unit)
 
+    @named_schematic
+    def test_weird_memory_shared(self):
+        access_unit = sul.MemoryAccessUnit((4, 1, 2), (4, 1, 4))
+        self.block_space.add_unit(access_unit)
+
 
 class Filler(Unit):
     def __init__(self, bits, incrementer, writer):
