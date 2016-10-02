@@ -1,4 +1,4 @@
 .idea/
-*.schematic
+test/*/*.schematic
 *.pyc
 *.egg-info
