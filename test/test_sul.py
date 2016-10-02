@@ -8,6 +8,7 @@ from cbac.blockspace import BlockSpace
 from test.decorators import named_schematic
 from cbac.unit import Unit
 from cbac.unit.statements import *
+from cbac.blockbox import BlockBox
 
 
 class SULTestCase(TestCase):
@@ -158,7 +159,10 @@ class TestIntegration(SULTestCase):
 class TestScreen(SULTestCase):
     @named_schematic
     def test_basic_screen(self):
-        screen_access = sul.MemoryAccessUnit((16, 1, 16), (6, 1, 8))
+        import pymclevel
+        screen_access = sul.MemoryAccessUnit(
+            (16, 1, 16), (6, 1, 8),
+            pymclevel.MCSchematic(filename="../schem/screen_128x128.schematic"))
         screen = sul.ScreenUnit("../schem/assci_chars.schematic", screen_access)
         incrementer = sul.IncrementUnit(8)
         filler= Filler(8, incrementer, screen)
