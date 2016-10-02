@@ -7,6 +7,8 @@ from cbac.constants.mc_direction import vectors as direction_vectors
 from cbac.constants.mc_direction import EAST
 from cbac.command_shell.command_shell_base import CommandShell
 from cbac.command_shell.decorator import command
+from cbac.utils import Vector, format_area
+from cbac.utils import absolute_area as abs_area
 
 
 class LocationShell(CommandShell):
@@ -93,34 +95,38 @@ class LocationShell(CommandShell):
         return self._join_command("/fill", self.area, block_names[block_id], data_value, block_handling, *options)
 
     @command()
-    def load_for_point_of_reference(self):
+    def load_from_temp(self, temp_location=(0, 0, 0)):
         """
         clone  from the point of reference  area to this point.
         "Point of reference" is the location (0,0,0) in this minecraft world.
         :return: CommandSuspender
         :note: Sees use in the RAM standard unit.
         """
+        # TODO: document good.
         area = self.context.get_absolute_area(self.wrapped)
-        formatted_area = [format_location(point) for point in area]
-        remote_area = " ".join(formatted_area)
+        area = abs_area(area)
+        temp_location = Vector(*temp_location)
+        temp_area = [Vector(*point) + temp_location for point in area]
+
         # TODO: fix this mess.
         return self._join_command(
             "/clone",
-            remote_area,
+            format_area(temp_area),
             self.location
         )
 
     @command()
-    def write_to_point_of_reference(self):
+    def store_to_temp(self, temp_location=(0, 0, 0)):
         """
         clone this area to the point of reference which is the location (0,0,0) in this minecraft world
         :return: CommandSuspender
         :note: Sees use in the RAM standard unit.
         """
+        # TODO: document good.
         return self._join_command(
             "/clone",
             self.area,
-            format_location((0, 0, 0)), )
+            format_location(temp_location), )
 
     def copy(self, other):
         """

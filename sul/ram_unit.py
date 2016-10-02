@@ -94,7 +94,7 @@ class ReadUnit(Unit):
         # We are not passing parameters because the inputs of the memory access unit are the same as this unit.
         yield InlineCall(self.memory_access_unit)
         yield self.pivot.shell.store_to_temp(self.read_output)
-        yield self.read_output.shell.load_for_point_of_reference()
+        yield self.read_output.shell.load_from_temp()
         yield Debug("?/say Read complete ok.")
 
 
@@ -120,6 +120,6 @@ class WriteUnit(Unit):
     def main_logic_commands(self):
         # We are not passing parameters because the inputs of the memory access unit are the same as this unit.
         yield InlineCall(self.memory_access_unit)
-        yield self.data_input.shell.write_to_point_of_reference()
+        yield self.data_input.shell.store_to_temp()
         yield self.pivot.shell.load_from_temp(self.data_input)
         yield Debug("?/say Write compete ok.")
