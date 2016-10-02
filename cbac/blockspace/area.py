@@ -161,8 +161,8 @@ class RawArea(Area):
         """
         to_return = []
         for x, block_plane in enumerate(self.schematic.Blocks):
-            for y, block_row in enumerate(block_plane):
-                for z, block_id in enumerate(block_row):
+            for z, block_row in enumerate(block_plane):
+                for y, block_id in enumerate(block_row):
                     to_return.append(BlockAssignment(Block(block_id), Vector(x, y, z), None))
         return to_return
 
