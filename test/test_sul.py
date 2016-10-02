@@ -165,7 +165,7 @@ class TestScreen(SULTestCase):
             pymclevel.MCSchematic(filename="../schem/screen_128x128.schematic"))
         screen = sul.ScreenUnit("../schem/assci_chars.schematic", screen_access)
         incrementer = sul.IncrementUnit(8)
-        filler= Filler(8, incrementer, screen)
+        filler = Filler(8, incrementer, screen)
         self.block_space.add_unit(filler)
         self.block_space.add_unit(incrementer)
         self.block_space.add_unit(screen_access)
