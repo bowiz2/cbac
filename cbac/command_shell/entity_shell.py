@@ -4,7 +4,7 @@ Holds Entity Shell
 from cbac.constants.block_id import TRUE_BLOCK, names
 from cbac.constants.mc_direction import vectors as direction_vectors
 from cbac.constants.mc_direction import EAST
-from cbac.utils import format_realtive_location, format_location
+from cbac.utils import format_realtive_location, format_location, format_relative_area, absolute_area, format_area
 from cbac.command_shell.command_shell_base import CommandShell
 from cbac.command_shell.decorator import command
 from utils import Vector
@@ -61,36 +61,6 @@ class EntityShell(CommandShell):
         direction_vector = direction_vectors[direction] * distance
         return self._join_command("/tp", self.wrapped.selector, format_realtive_location(direction_vector))
 
-    # TODO: standardise point of reference.
-    def clone_to_point_of_reference(self, word_size, point_of_reference=(0, 0, 0), word_direction=EAST):
-        """
-        Clone a word size area to the point of reference which is the location (0,0,0) in this minecraft world
-        :return: CommandSuspender
-        :note: Sees use in the RAM standard unit.
-        """
-        return self.execute(self._join_command(
-            "/clone",
-            format_realtive_location((0, 0, 0)),
-            format_realtive_location(direction_vectors[word_direction] * word_size),
-            format_location(point_of_reference)
-        ))
-
-    def load_from_point_of_reference(self, word_size, point_of_reference=(0, 0, 0), word_direction=EAST):
-        """
-        clone  from the point of reference area to the location at which the entity is staying.
-        "Point of reference" is the location (0,0,0) in this minecraft world.
-        :return: CommandSuspender
-        :note: Sees use in the RAM standard unit.
-        """
-        point_of_reference = Vector(*point_of_reference)
-        return self.execute(self._join_command(
-            "/clone",
-            format_location(point_of_reference),
-            format_location(point_of_reference + (direction_vectors[word_direction] * word_size)),
-            format_realtive_location((0, 0, 0))
-
-        ))
-
     def activate(self):
         """
         Set the block at which this entity is standing as true block.
@@ -104,32 +74,40 @@ class PivotShell(EntityShell):
     Provide command interface for the pivot, mainly to clone stuff to and from a temp location.
     """
 
-    # TODO: standardise point of reference.
-    def clone_to_temp(self, word_size, point_of_reference=(0, 0, 0), word_direction=EAST):
+    # TODO: Write very good documentation.
+    @command()
+    def store_to_temp(self, area, temp_location=(0, 0, 0)):
         """
-        Clone a word size area to the point of reference which is the location (0,0,0) in this minecraft world
-        :return: CommandSuspender
-        :note: Sees use in the RAM standard unit.
+        Save to temp location the area at the current position of the pivot.
+        :param area: Can be a tuple of points or an object which has area and can be gotten from a blockspace.
+        :param temp_location: The location to which save the area.
+        :return:
         """
-        return self.execute(self._join_command(
-            "/clone",
-            format_realtive_location((0, 0, 0)),
-            format_realtive_location(direction_vectors[word_direction] * word_size),
-            format_location(point_of_reference)
-        ))
+        # in case the object has an area and is not an area by itself.
+        if not isinstance(area, tuple):
+            area = self.context.blockspace.get_area_of(area)
+            area = absolute_area(area)
 
-    def load_from_temp(self, word_size, point_of_reference=(0, 0, 0), word_direction=EAST):
-        """
-        clone  from the point of reference area to the location at which the entity is staying.
-        "Point of reference" is the location (0,0,0) in this minecraft world.
-        :return: CommandSuspender
-        :note: Sees use in the RAM standard unit.
-        """
-        point_of_reference = Vector(*point_of_reference)
         return self.execute(self._join_command(
             "/clone",
-            format_location(point_of_reference),
-            format_location(point_of_reference + (direction_vectors[word_direction] * word_size)),
+            format_relative_area(area),
+            format_location(temp_location)
+        ))()
+
+    @command()
+    def load_from_temp(self, area, temp_location=(0, 0, 0)):
+        """
+        :param area:
+        :param temp_location:
+        :return:
+        """
+        if not isinstance(area, tuple):
+            area = self.context.blockspace.get_area_of(area)
+            area = absolute_area(area)
+        temp_location = Vector(*temp_location)
+        temp_area = [Vector(*point) + temp_location for point in area]
+        return self.execute(self._join_command(
+            "/clone",
+            format_area(temp_area),
             format_realtive_location((0, 0, 0))
-
-        ))
+        ))()

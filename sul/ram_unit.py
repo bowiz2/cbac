@@ -2,12 +2,11 @@ import math
 
 from cbac.blockbox import BlockBox
 from cbac.constants.block_id import FALSE_BLOCK
-from cbac.constants.entity_id import ARMOR_STAND
 from cbac.constants.mc_direction import *
 from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
 from cbac.utils import Vector, inline_generators
-from entity.entity_base import Entity
+from cbac.entity.pivot import Pivot
 
 
 class MemoryAccessUnit(Unit):
@@ -35,7 +34,7 @@ class MemoryAccessUnit(Unit):
 
         # This pivot is going to move in the memory.
         # TODO: create pivot class with generated names.
-        self.pivot = Entity(ARMOR_STAND, custom_name="RAM_PIVOT", no_gravity=True)
+        self.pivot = Pivot()
         # ==
         self.synthesis()
 
@@ -94,7 +93,7 @@ class ReadUnit(Unit):
     def main_logic_commands(self):
         # We are not passing parameters because the inputs of the memory access unit are the same as this unit.
         yield InlineCall(self.memory_access_unit)
-        yield self.pivot.shell.clone_to_point_of_reference(self.word_size)
+        yield self.pivot.shell.store_to_temp(self.read_output)
         yield self.read_output.shell.load_for_point_of_reference()
         yield Debug("?/say Read complete ok.")
 
@@ -122,5 +121,5 @@ class WriteUnit(Unit):
         # We are not passing parameters because the inputs of the memory access unit are the same as this unit.
         yield InlineCall(self.memory_access_unit)
         yield self.data_input.shell.write_to_point_of_reference()
-        yield self.pivot.shell.load_from_point_of_reference(self.word_size)
+        yield self.pivot.shell.load_from_temp(self.data_input)
         yield Debug("?/say Write compete ok.")
