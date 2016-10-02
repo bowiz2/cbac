@@ -38,32 +38,3 @@ class TestEntity(TestCase):
         tags = entity.parse_tags()
         self.assertEqual(tags["CustomName"], "p_pivot")
         self.assertEqual(tags["NoGravity"], True)
-
-    @save_schematic
-    def test_shell(self):
-
-        entity = Entity(ARMOR_STAND, no_gravity=True)
-        # The shell will throw an exception because a name is needed for the shell to work.
-        try:
-            _ = entity.shell
-        except Exception as e:
-            self.assertTrue(isinstance(e, AssertionError))
-
-        entity.custom_name = "test_pivot"
-        blockspace = BlockSpace((10, 10, 10))
-        memory = Register(8)
-        blockspace.add(memory)
-        blockspace.add(CBA(
-            entity.shell.summon(memory.blocks[0]),
-            entity.shell.activate(),
-            entity.shell.move(UP),
-            entity.shell.activate(),
-            entity.shell.move(UP),
-            entity.shell.activate(),
-            entity.shell.move(UP),
-            entity.shell.kill()))
-
-        blockspace.pack()
-        blockspace.shrink()
-        schematic = cbac.assembler.build(blockspace)
-        return schematic
