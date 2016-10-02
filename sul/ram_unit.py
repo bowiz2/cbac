@@ -23,6 +23,7 @@ class MemoryAccessUnit(Unit):
         for i in ratio:
             ratio_product *= i
         address_space_size = int(math.log(ratio_product, 2))
+
         super(MemoryAccessUnit, self).__init__(address_space_size)
 
         self.ratio = Vector(*ratio)
