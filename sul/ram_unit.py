@@ -16,7 +16,7 @@ class MemoryAccessUnit(Unit):
     See example of use in the ReadUnit.
     """
 
-    def __init__(self, ratio=(1, 16, 16), word_size=8):
+    def __init__(self, ratio=(1, 16, 16), word_size=(8, 1, 1)):
         """
         """
         ratio_product = 1
@@ -24,6 +24,7 @@ class MemoryAccessUnit(Unit):
             ratio_product *= i
         address_space_size = int(math.log(ratio_product, 2))
 
+        word_size= Vector(*word_size)
         super(MemoryAccessUnit, self).__init__(address_space_size)
 
         self.ratio = Vector(*ratio)
@@ -33,7 +34,11 @@ class MemoryAccessUnit(Unit):
         self.address_input = self.create_input(self.bits)
 
         # The size of the box in which the memory is stored.
-        memory_box_size = (self.ratio.x * self.word_size, self.ratio.y, self.ratio.z)
+        memory_box_size = (
+            self.ratio.x * self.word_size.x,
+            self.ratio.y * self.word_size.y,
+            self.ratio.z * self.word_size.z
+        )
         self.memory_box = self.add_compound(BlockBox(memory_box_size, FALSE_BLOCK))
 
         # This pivot is going to move in the memory.
@@ -58,26 +63,32 @@ class MemoryAccessUnit(Unit):
                 yield If(
                     addres_bit.shell == True
                 ).then(
-                    self.pivot.shell.move(EAST, self.word_size * (2 ** i))
+                    self.pivot.shell.move(EAST, self.word_size.x * (2 ** i))
                 )
 
             elif 2 ** i < self.ratio.x + self.ratio.y - 1:
                 yield If(
                     addres_bit.shell == True
                 ).then(
-                    self.pivot.shell.move(NORTH, int(2 ** (i - math.log(self.ratio.x, 2))))
+                    self.pivot.shell.move(
+                        NORTH,
+                        self.word_size.y * int(2 ** (i - math.log(self.ratio.x, 2)))
+                    )
                 )
             else:
                 yield If(
                     addres_bit.shell == True
                 ).then(
-                    self.pivot.shell.move(UP, int(2 ** (i - math.log(self.ratio.x, 2) - math.log(self.ratio.y, 2))))
+                    self.pivot.shell.move(
+                        UP,
+                        self.word_size.z * int(2 ** (i - math.log(self.ratio.x, 2) - math.log(self.ratio.y, 2)))
+                    )
                 )
 
 
 class ReadUnit(Unit):
     def __init__(self, word_size, memory_access_unit):
-        assert word_size == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
+        assert (word_size, 1, 1) == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
         super(ReadUnit, self).__init__(word_size)
         # Unit declaration.
         self.memory_access_unit = self.add_unit(memory_access_unit)
@@ -104,7 +115,7 @@ class ReadUnit(Unit):
 
 class WriteUnit(Unit):
     def __init__(self, word_size, memory_access_unit):
-        assert word_size == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
+        assert (word_size, 1, 1) == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
         super(WriteUnit, self).__init__(word_size)
         # Unit declaration.
         self.memory_access_unit = self.add_unit(memory_access_unit)
