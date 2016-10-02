@@ -71,6 +71,19 @@ class InlineGenerator(object):
         self.wrapped = wrapped
 
 
+def absolute_area(area):
+    """
+    Takes an area and converts it into absolute location
+    :param area:
+    :return: area
+    """
+    point_a, point_b = area
+    point_a = Vector(*point_a)
+    point_b = Vector(*point_b)
+    diff = point_b - point_a
+    return ((0, 0, 0), diff)
+
+
 def _from(value):
     assert isinstance(value, types.GeneratorType)
     return InlineGenerator(value)

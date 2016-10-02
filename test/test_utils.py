@@ -1,5 +1,5 @@
 from unittest import TestCase
-from utils import inline_generators, _from
+from utils import inline_generators, _from, absolute_area
 
 
 class TestUtils(TestCase):
@@ -16,3 +16,7 @@ class TestUtils(TestCase):
             yield "c"
 
         self.assertEqual(tuple(second()), ("a", "b", 0, 1, 2, 3, "c"))
+
+    def test_absolute_area(self):
+        non_absolute = ((2, 3, 4), (5, 5, 5))
+        self.assertEquals(absolute_area(non_absolute), ((0, 0, 0), (3, 2, 1)))
