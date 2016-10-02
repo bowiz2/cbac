@@ -16,10 +16,13 @@ class MemoryAccessUnit(Unit):
     See example of use in the ReadUnit.
     """
 
-    def __init__(self, address_space_size=8, ratio=(1, 16, 16), word_size=8):
+    def __init__(self, ratio=(1, 16, 16), word_size=8):
         """
-        :param address_space_size: The size of the address space in bits.
         """
+        ratio_product = 1
+        for i in ratio:
+            ratio_product *= i
+        address_space_size = int(math.log(ratio_product, 2))
         super(MemoryAccessUnit, self).__init__(address_space_size)
 
         self.ratio = Vector(*ratio)
