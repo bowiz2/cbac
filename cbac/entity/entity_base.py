@@ -1,6 +1,6 @@
 from command_shell import EntityShell
 from utils import memoize
-
+import cbac.constants.entity_id
 
 class Entity(object):
     def __init__(self, mc_type, custom_name=None, rotation=None, fall_distance=None, fire=None, air=None,
@@ -110,3 +110,15 @@ class CommandStats(object):
         self.affected_items_name = affected_items_name
         self.query_result_objective = query_result_objective
         self.qery_result_name = query_result_name
+
+
+class Pivot(Entity):
+    """
+    An armor stand which can move in space and copy areas
+    """
+    def __init__(self, area_of_effect):
+        """
+        :param area_of_effect: This is the area which is copied to and from the pivot.
+        """
+        super(Pivot, self).__init__(cbac.constants.entity_id.ARMOR_STAND, custom_name="RAM_PIVOT", no_gravity=True)
+        self.area_of_effect = area_of_effect

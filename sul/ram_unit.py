@@ -4,11 +4,10 @@ from cbac.blockbox import BlockBox
 from cbac.constants.block_id import FALSE_BLOCK
 from cbac.constants.entity_id import ARMOR_STAND
 from cbac.constants.mc_direction import *
-from cbac.entity import Entity
 from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
 from cbac.utils import Vector, inline_generators
-from cbac.command_shell.command_suspender import CommandSuspender
+from entity.entity_base import Entity
 
 
 class MemoryAccessUnit(Unit):

@@ -1,8 +1,8 @@
 from block import Block, CommandBlock
-from compound import Compound, CBA, Register, Constant
 from blockspace import BlockSpace
+from compound import Compound, CBA, Register, Constant
+from entity.entity_base import Entity
 from unit import Unit
-from entity import Entity
 
 CommandBlockArray = CBA
 __all__ = ["Block", "CommandBlock", "Compound", "CBA", "CommandBlockArray", "Register", "Constant", "BlockSpace",
