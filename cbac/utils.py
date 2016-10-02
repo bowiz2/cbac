@@ -42,6 +42,24 @@ def format_realtive_location(location):
     return " ".join(["~" + str(i) for i in location])
 
 
+def format_area(area):
+    """
+    ((1, 2, 3), (4, 5, 6)) --> 1 2 3 4 5 6
+    :param area:
+    :return:
+    """
+    return " ".join([format_location(point) for point in area])
+
+
+def format_relative_area(area):
+    """
+    Format an area to the format of minecraft relative position
+    aka
+    ((1, 2, 3), (4, 5, 6)) --> ~1 ~2 ~3 ~4 ~5 ~6
+    """
+    return " ".join([format_realtive_location(point) for point in area])
+
+
 def inline_generators(fn):
     """
     Used for implementing yield from in python.
