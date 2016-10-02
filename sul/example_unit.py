@@ -16,7 +16,7 @@ class ExampleUnit(Unit):
         # Dont forget to synthesises your nodule.
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         """
         Here you declare the commands of the main logic. each command must be yielded out.
         Each statement which is yielded out will be parsed.

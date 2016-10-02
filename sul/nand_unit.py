@@ -19,7 +19,7 @@ class NandUnit(Unit):
         for output in self.outputs:
             yield output.shell.set_max_value()
 
-    def main_logic_commands(self):
+    def architecture(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         for a_block, b_block, o_block, in zip(self.input_a.blocks, self.input_b.blocks, self.output.blocks):
             # note that the eq is overriden.

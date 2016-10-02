@@ -140,7 +140,7 @@ class Filler(Unit):
         # ==
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         """
         main logic commands.
         :return:

@@ -105,3 +105,23 @@ def absolute_area(area):
 def _from(value):
     assert isinstance(value, types.GeneratorType)
     return InlineGenerator(value)
+
+
+def flatten(l, levels=0):
+    """
+    Expend the list you have so you will not have iterators and list.
+    meaning this [(1, 2, 3), 4, 5, (6, 7), (8, (9, 10), 11)] --> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    """
+    for i in xrange(levels):
+        new_l = []
+        for item in l:
+            if hasattr(l, "__iter__"):
+                for x in item.__iter__():
+                    new_l.append(x)
+            new_l.append(item)
+        l = new_l
+    return l
+
+def compare(iter1, iter2):
+    return all(a == b for a, b in zip(iter1, iter2))
+

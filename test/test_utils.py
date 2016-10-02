@@ -1,6 +1,6 @@
 """Test the utilities which are shipped with cbac."""
 from unittest import TestCase
-from utils import inline_generators, _from, absolute_area
+from utils import *
 
 
 class TestUtils(TestCase):
@@ -27,3 +27,8 @@ class TestUtils(TestCase):
     def test_absolute_area(self):
         non_absolute = ((2, 3, 4), (5, 5, 5))
         self.assertEquals(absolute_area(non_absolute), ((0, 0, 0), (3, 2, 1)))
+
+    def test_flatten(self):
+        start = [(1, 2, 3), 4, 5, (6, 7), (8, (9, 10), 11)]
+        result = flatten(start, 2)
+        self.assertTrue(compare(result, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]))

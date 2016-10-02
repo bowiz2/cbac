@@ -44,13 +44,13 @@ class TestCallback(SULTestCase):
     @named_schematic
     def test_callback(self):
         class A(SimpleUnit):
-            def main_logic_commands(self):
+            def architecture(self):
                 yield "/say im a"
 
         a = A()
 
         class B(SimpleUnit):
-            def main_logic_commands(self):
+            def architecture(self):
                 yield "/say im b first"
                 yield MainLogicJump(a)
                 yield "/say im b last"
@@ -118,7 +118,7 @@ class TestUnitStatementsParsing(TestLogicParser):
 
     def test_main_logic_jump(self):
         class DummyUnit(SimpleUnit):
-            def main_logic_commands(self):
+            def architecture(self):
                 yield "/say hey"
 
         dummy_unit = DummyUnit()
@@ -129,7 +129,7 @@ class TestUnitStatementsParsing(TestLogicParser):
 
     def test_main_logic_jump_full(self):
         class DummyUnit(SimpleUnit):
-            def main_logic_commands(self):
+            def architecture(self):
                 yield "/say hey"
 
         dummy_unit = DummyUnit()

@@ -3,6 +3,9 @@ import itertools
 from cbac.command_shell import UnitShell
 from cbac.compound import Register
 from cbac.utils import memoize
+from cbac.unit import std_logic
+from cbac.block import Block
+from cbac.constants.block_id import FALSE_BLOCK
 
 
 class Unit(object):
@@ -32,22 +35,27 @@ class Unit(object):
         """
 
         logic_cbas, other_compounds, other_units = self._logic_parser.parse(
-            itertools.chain(self.on_entry_init_commands(), self.main_logic_commands(), self.on_exit_commands())
+            itertools.chain(self.on_entry_init_commands(), self.architecture(), self.on_exit_commands())
         )
         # Add the CBAs to the unit.
         for parsed_item in logic_cbas + other_compounds:
-            self.add_compound(parsed_item)
+            self.add(parsed_item)
         for other_unit in other_units:
             self.add_unit(other_unit)
         self.logic_cbas = logic_cbas
 
-    def add_compound(self, compound):
+    def add(self, item):
         """
         Add a compound to the compound list, meaning it will be compiled with the unit.
         :return: the added compound.
         """
-        self.compounds.append(compound)
-        return compound
+        if isinstance(item, std_logic.StdLogic):
+            if isinstance(item, std_logic.IORegister):
+                item = Register(self.bits)
+            if isinstance(item, std_logic.Port):
+                item = Block(FALSE_BLOCK)
+        self.compounds.append(item)
+        return item
 
     def add_unit(self, unit):
         """
@@ -61,16 +69,16 @@ class Unit(object):
         """
         Set a register as an input for this unit. And return it.
         """
+        register = self.add(register)
         self.inputs.append(register)
-        self.add_compound(register)
         return register
 
     def add_output(self, register):
         """
         Sets a register as an output of this unit. And return it.
         """
+        register = self.add(register)
         self.outputs.append(register)
-        self.add_compound(register)
         return register
 
     def create_input(self, bits):
@@ -93,12 +101,6 @@ class Unit(object):
         """
         for output_memory in self.outputs:
             yield output_memory.shell.reset()
-
-    def main_logic_commands(self):
-        """
-        Generates the main logic of the entry point cba.
-        """
-        pass
 
     def on_exit_commands(self):
         """
@@ -137,6 +139,22 @@ class Unit(object):
     @memoize
     def shell(self):
         return UnitShell(self)
+
+    def entity(self):
+        """
+        Entity is the description of the interface between a design and its external environment.
+        It may also specify the declarations and statements that are part of the design entity.
+        A given entity declaration may be shared by many design entities, each of which has a different architecture.
+        Thus, an entity declaration can potentially represent a class of design entities, each having the same interface.
+        """
+        pass
+
+    def architecture(self):
+        """
+        A body associated with an entity declaration to describe the internal organization or operation of a design entity.
+        An architecture body is used to describe the behavior, data flow, or structure of a design entity.
+        """
+        pass
 
 
 class SimpleUnit(Unit):

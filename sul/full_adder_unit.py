@@ -19,7 +19,7 @@ class FullAdderUnit(Unit):
         # ==
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         # TODO: If statement include
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         for i, a, b, cin, cout, s in zip(xrange(self.bits), self.input_a.blocks, self.input_b.blocks,

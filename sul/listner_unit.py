@@ -27,7 +27,7 @@ class Listener(Unit):
         self.logic_cbas[0].cb_callback_reserved.conditional = True
         self.logic_cbas[0].cb_re_setter.conditional = True
 
-    def main_logic_commands(self):
+    def architecture(self):
         self.event_check.is_repeated = True
         callback_command = self.callback.shell.activate()
         yield If(self.event_check).then(callback_command)

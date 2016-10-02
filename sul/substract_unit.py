@@ -26,7 +26,7 @@ class SubtractUnit(Unit):
         # ==
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         yield InlineCall(self.negate_unit, self.input_b)
         yield InlineCall(self.full_adder, self.input_a, self.negate_unit.output)

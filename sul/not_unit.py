@@ -11,7 +11,7 @@ class NotUnit(Unit):
         self.output = self.create_output(self.bits)
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         for a_block, o_block, in zip(self.input.blocks, self.output.blocks):
             # note that the eq is overriden.
             yield If(a_block.shell == False).then(o_block.shell.activate())

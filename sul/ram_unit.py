@@ -47,7 +47,7 @@ class MemoryAccessUnit(Unit):
             raw_memory = BlockBox(memory_box_size, FALSE_BLOCK)
 
         # raw memory is the actual blocks which represent the memory.
-        self.raw_memory = self.add_compound(raw_memory)
+        self.raw_memory = self.add(raw_memory)
 
         # This pivot is going to move in the memory.
         # TODO: create pivot class with generated names.
@@ -56,7 +56,7 @@ class MemoryAccessUnit(Unit):
         self.synthesis()
 
     @inline_generators
-    def main_logic_commands(self):
+    def architecture(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         # Reset the pivot.
         # TODO: document
@@ -117,7 +117,7 @@ class ReadUnit(Unit):
     def pivot(self):
         return self.memory_access_unit.pivot
 
-    def main_logic_commands(self):
+    def architecture(self):
         # We are not passing parameters because the inputs of the memory access unit are the same as this unit.
         yield InlineCall(self.memory_access_unit)
         yield self.pivot.shell.store_to_temp(self.read_output)
@@ -145,7 +145,7 @@ class WriteUnit(Unit):
     def pivot(self):
         return self.memory_access_unit.pivot
 
-    def main_logic_commands(self):
+    def architecture(self):
         # We are not passing parameters because the inputs of the memory access unit are the same as this unit.
         yield InlineCall(self.memory_access_unit)
         yield self.data_input.shell.store_to_temp()

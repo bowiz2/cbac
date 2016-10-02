@@ -18,7 +18,7 @@ class AndUnit(Unit):
 
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         """
         Describes the AND logic.
         """

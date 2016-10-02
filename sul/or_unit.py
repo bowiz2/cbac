@@ -12,7 +12,7 @@ class OrUnit(Unit):
 
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         for a_block, b_block, o_block, in zip(self.input_a.blocks, self.input_b.blocks, self.output.blocks):
             yield If(a_block.shell == True).then(o_block.shell.activate())
             yield If(b_block.shell == True).then(o_block.shell.activate())

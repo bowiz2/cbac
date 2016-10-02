@@ -24,7 +24,7 @@ class NegateUnit(Unit):
         # ==
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         yield InlineCall(self.not_unit, self.input)
         yield InlineCall(self.increment_unit, self.not_unit.output)

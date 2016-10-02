@@ -7,7 +7,7 @@ import cbac.config
 from cbac.compound import CBA, Constant
 from cbac.mc_command import MCCommand
 from cbac.unit.statements import *
-
+from cbac.unit.unit_base import Unit
 
 # TODO: restructure as a compiler.
 
@@ -52,6 +52,7 @@ class UnitLogicParser(object):
     def commands(self):
         return self.all_commands[-1]
 
+
     def parse(self, tokens):
         """
         Parse the statements in the statement generator.
@@ -90,6 +91,10 @@ class UnitLogicParser(object):
         :param token: Token you want to process.
         :return:
         """
+        if isinstance(token, Unit):
+            # means that this is a map result TODO: give better doc.
+            self.parse_stack.append(InlineCall(token))
+
         # Copy Parameters and rename the statemnt to a main logic jump
         if isinstance(token, Token):
             if isinstance(token, StatementCollection):

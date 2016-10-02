@@ -20,7 +20,7 @@ class ScreenUnit(Unit):
         if not isinstance(char_set, MCSchematic):
             char_set = MCSchematic(filename=char_set)
 
-        self.char_set = self.add_compound(char_set)
+        self.char_set = self.add(char_set)
         # How many different characters this screen can printout.
         self.char_set_size = int(char_set.size[1])
         # 2 dimensional area which is taken by a character.
@@ -39,7 +39,7 @@ class ScreenUnit(Unit):
         # What is the order over the char you want to print
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         yield InlineCall(self.char_set_access_unit)
         yield InlineCall(self.screen_access_unit)
         yield self.char_set_access_unit.pivot.shell.store_to_temp(

@@ -12,7 +12,7 @@ class XnorUnit(Unit):
         # ==
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         for inp_block_a, inp_block_b, out_block in zip(self.input_a.blocks, self.input_b.blocks, self.output.blocks):
             yield If(

@@ -26,6 +26,10 @@ class Register(Compound):
             to_return.append(Block(self.default_block))
         return to_return
 
+    @property
+    def ports(self):
+        return self.blocks
+
     def get_sub_memory(self, arange):
         """
         Get a sub memory of a memory.

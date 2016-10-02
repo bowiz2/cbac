@@ -39,7 +39,7 @@ class TesterUnit(Unit):
         """
         return [isinstance(item, Assertion) for item in self.actions]
 
-    def main_logic_commands(self):
+    def architecture(self):
         for action in self.actions:
             if isinstance(action, Assertion):
                 assertion = action

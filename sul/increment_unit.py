@@ -7,14 +7,14 @@ class IncrementUnit(Unit):
     def __init__(self, bits):
         super(IncrementUnit, self).__init__(bits)
         # in the carry we will remember the addition.
-        self.flags = self.add_compound(Register(2))
+        self.flags = self.add(Register(2))
         self.carry_in = self.flags.blocks[0]
         self.carry_out = self.flags.blocks[1]
         self.input = self.create_input(self.bits)
         self.output = self.create_output(self.bits)
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         # TODO: If statement include
         yield self.carry_in.shell.activate()
         for inp_block, out_block in zip(self.input.blocks, self.output.blocks):

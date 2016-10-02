@@ -16,7 +16,7 @@ class ReverseUnit(Unit):
 
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         for index in xrange(self.bits):
             yield If(
                 self.input_a.blocks[index].shell == True

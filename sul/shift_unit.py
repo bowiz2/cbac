@@ -11,13 +11,13 @@ class ShiftUnit(Unit):
         super(ShiftUnit, self).__init__()
         self.bits = bits
         # here will be saved the value you want to shift. and the shifting will accure on it.
-        self.buffer_register = self.add_compound(Register(bits * 2))
+        self.buffer_register = self.add(Register(bits * 2))
         self.operation_register = self.add_input(self.buffer_register.get_sub_memory(xrange(bits)))
         self.output = self.create_output(bits)
         self.input_shift_size = self.create_input(int(math.ceil(math.log(bits, 2))))
         self.synthesis()
 
-    def main_logic_commands(self):
+    def architecture(self):
         for i, shift_block in enumerate(self.input_shift_size.blocks):
             yield If(
                 shift_block.shell == True
