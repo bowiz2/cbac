@@ -16,8 +16,12 @@ class MemoryAccessUnit(Unit):
     See example of use in the ReadUnit.
     """
 
-    def __init__(self, ratio=(1, 16, 16), word_size=(8, 1, 1)):
+    def __init__(self, ratio=(1, 16, 16), word_size=(8, 1, 1), raw_memory=None):
         """
+        :param ratio: The ration of words distributed in 3D space.
+        :param word_size: the size of a word. by default it is a 8 bits facing east.
+        :param raw_memory: This is the actual "raw" memory on which this access unit is operating.
+        If no is specified, Memory block will be generated from the ratios multiplied by the word size.
         """
         ratio_product = 1
         for i in ratio:
@@ -33,13 +37,17 @@ class MemoryAccessUnit(Unit):
 
         self.address_input = self.create_input(self.bits)
 
-        # The size of the box in which the memory is stored.
-        memory_box_size = (
-            self.ratio.x * self.word_size.x,
-            self.ratio.y * self.word_size.y,
-            self.ratio.z * self.word_size.z
-        )
-        self.memory_box = self.add_compound(BlockBox(memory_box_size, FALSE_BLOCK))
+        if not raw_memory:
+            # The size of the box in which the memory is stored.
+            memory_box_size = (
+                self.ratio.x * self.word_size.x,
+                self.ratio.y * self.word_size.y,
+                self.ratio.z * self.word_size.z
+            )
+            raw_memory = BlockBox(memory_box_size, FALSE_BLOCK)
+
+        # raw memory is the actual blocks which represent the memory.
+        self.raw_memory = self.add_compound(raw_memory)
 
         # This pivot is going to move in the memory.
         # TODO: create pivot class with generated names.
@@ -51,10 +59,11 @@ class MemoryAccessUnit(Unit):
     def main_logic_commands(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         # Reset the pivot.
+        # TODO: document
         yield Debug("/say Resetting pivot.")
         yield self.pivot.shell.kill()
         # Create the pivot.
-        yield self.pivot.shell.summon(self.memory_box[0][0][0])
+        yield self.pivot.shell.summon(self.raw_memory[0][0][0])
 
         yield Debug("/say Moving pivot by address.")
         # Move it by to the address specified in the address register.
