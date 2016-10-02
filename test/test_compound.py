@@ -1,11 +1,7 @@
 import random
 from unittest import TestCase
 
-import cbac.assembler as assembler
 import cbac.block as block
-import test.decorators
-from cbac.blockspace import BlockSpace
-from cbac.compound import Compound, CBA
 from cbac.compound import Constant
 from cbac.compound import Register
 from cbac.constants.block_id import FALSE_BLOCK

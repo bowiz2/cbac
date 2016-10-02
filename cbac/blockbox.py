@@ -11,7 +11,8 @@ class BlockBox(object):
         self.size = size
         self.fill_material = fill_material
         self.blocks = [
-            [[Block(self.fill_material, block_data=fill_data) for _ in xrange(size[2])] for _ in xrange(size[1])] for _ in xrange(size[0])
+            [[Block(self.fill_material, block_data=fill_data) for _ in xrange(size[2])] for _ in xrange(size[1])] for _
+            in xrange(size[0])
             ]
 
     def __getitem__(self, item):

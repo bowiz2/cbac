@@ -16,6 +16,7 @@ class Statement(Token):
     """
     Wraps a command or other statements
     """
+
     def __init__(self, wrapped):
         self.wrapped = wrapped
         self.is_conditional = False
@@ -32,6 +33,7 @@ class Command(Statement):
     """
     Wraps a command
     """
+
     def __init__(self, raw_command):
         if isinstance(raw_command, str):
             raw_command = mc_command.factory(raw_command)
@@ -42,6 +44,7 @@ class StatementCollection(Token):
     """
     Wraps multiple statements.
     """
+
     def __init__(self, *statements):
         new_statements = []
 
@@ -55,6 +58,7 @@ class StatementCollection(Token):
 
 class Jump(Statement):
     """jump to other location and return to the next logic cba after some logic."""
+
     @property
     def destination(self):
         """
@@ -77,6 +81,7 @@ class HardJump(Jump):
     # TODO: implement
     pass
 
+
 class Conditional(StatementCollection):
     """
     All wrapped statements are now conditional.
@@ -88,6 +93,7 @@ class PassParameters(Statement):
     """
     Pass parameters to the unit.
     """
+
     def __init__(self, unit, *parameters):
         super(PassParameters, self).__init__(unit)
         self.parameters = parameters
@@ -104,6 +110,7 @@ class Call(Statement):
     """
     Calls a unit
     """
+
     @property
     def called_unit(self):
         """
@@ -123,6 +130,7 @@ class Switch(Statement):
     """
     Switch statement.
     """
+
     def by(self, *cases):
         """
         Construct the statements for this switch
@@ -151,8 +159,10 @@ class _SwitchCaseSugar(object):
         statement,
     )
     """
+
     def __getitem__(self, item):
         return _SwitchCase(item)
+
 
 case = _SwitchCaseSugar()
 

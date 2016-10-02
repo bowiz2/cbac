@@ -4,7 +4,6 @@ Tests for the unit class. mainly unit statemtns.
 from unittest import TestCase
 from cbac.unit import Unit, SimpleUnit
 from cbac.unit.statements import *
-from cbac.blockspace import BlockSpace
 from cbac.compound import Register, Constant
 from cbac.command_shell.command_suspender import CommandSuspender
 import cbac.config
@@ -44,10 +43,10 @@ class TestLogicParser(TestCase):
 class TestCallback(SULTestCase):
     @named_schematic
     def test_callback(self):
-
         class A(SimpleUnit):
             def main_logic_commands(self):
                 yield "/say im a"
+
         a = A()
 
         class B(SimpleUnit):
@@ -55,16 +54,18 @@ class TestCallback(SULTestCase):
                 yield "/say im b first"
                 yield MainLogicJump(a)
                 yield "/say im b last"
+
         print a.logic_cbas
         self.block_space.add_unit(a)
         self.block_space.add_unit(B())
+
 
 class TestUnitStatementsParsing(TestLogicParser):
     """
     Test the statement parsing.
     """
-    def test_switch(self):
 
+    def test_switch(self):
         target_register = Register(8)
         some_constant = Constant(31)
 
@@ -97,7 +98,7 @@ class TestUnitStatementsParsing(TestLogicParser):
 
     def test_command(self):
         self.parser.parse_statement(Command("/say hello"))
-        command  = self.parser.commands[0]
+        command = self.parser.commands[0]
         self.assertEqual("/say hello", command.compile())
 
     def test_inline_call(self):
@@ -134,6 +135,7 @@ class TestUnitStatementsParsing(TestLogicParser):
         dummy_unit = DummyUnit()
         logic_cbas, other_compounds, other_units = self.parser.parse([MainLogicJump(dummy_unit)])
         self.assertEqual(2, len(logic_cbas))
+
 
 class TestCommandCollection(TestCase):
     def test_init(self):

@@ -10,6 +10,7 @@ class CBAShell(CompoundShell):
     """
     Wraps Command block array object, and provides a command interface for it which command block objects can use.
     """
+
     def set_callback(self, other):
         """
         Set the callback of a command block array to another command block array.

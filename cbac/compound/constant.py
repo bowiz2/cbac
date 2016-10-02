@@ -3,6 +3,7 @@ from cbac.compound import Compound
 from cbac.constants import block_id
 from cbac.utils import memoize
 
+
 # TODO: create constant factory
 
 

@@ -1,6 +1,8 @@
 """
 In this module there is an abstract representation of minecraft commands.
 """
+
+
 # TODO: refactor creates condition to is_condition_creating. for now we use this because of a back comparability.
 
 
@@ -9,6 +11,7 @@ class MCCommand(object):
     Represents a lazy initialized command.
     To use this command, you need to call the compile function.
     """
+
     def __init__(self, is_conditional=False, creates_condition=False, is_repeated=False):
         """
         :param is_conditional:  If the command is conditional, meaning it will execute only if the
@@ -35,6 +38,7 @@ class SimpleCommand(MCCommand):
     """
     Represents a simple command which is not relied on some compile-time parameters.
     """
+
     def __init__(self, body, is_conditional=False, creates_condition=False):
         super(SimpleCommand, self).__init__(is_conditional, creates_condition)
         self._body = body
@@ -51,6 +55,7 @@ class EmptyCommand(MCCommand):
     """
     This is an empty command.
     """
+
     def compile(self):
         """
         :return: empty command string.
@@ -63,13 +68,13 @@ class LazyCommand(MCCommand):
     This is a command which is lazy initialized and the uses a function which will be called with the supplied arguments
     in the compilation process.
     """
+
     def __init__(self, func, is_conditional=False, creates_condition=False, *args, **kwargs):
         assert all([isinstance(item, bool) for item in [is_conditional, creates_condition]]), "must be bool"
         super(LazyCommand, self).__init__(is_conditional, creates_condition)
         self.args = args
         self.kwargs = kwargs
         self.func = func
-
 
     def compile(self):
         """
@@ -96,7 +101,8 @@ def factory(raw_command):
     try:
         command_start_index = raw_command.index(command_start_prefix)
     except ValueError:
-        raise MCCommandFactoryError("Missing command start prefix '{0}' in the command '{1}'".format(command_start_prefix, raw_command))
+        raise MCCommandFactoryError(
+            "Missing command start prefix '{0}' in the command '{1}'".format(command_start_prefix, raw_command))
 
     command_operators = raw_command[:command_start_index]
     conditional = conditional_operator in command_operators

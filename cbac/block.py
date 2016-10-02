@@ -87,7 +87,7 @@ class CommandBlock(Block):
         """
         if self.always_active:
             return 1
-        else :
+        else:
             return 0
 
     @property

@@ -14,6 +14,7 @@ class EntityShell(CommandShell):
     """
     Wraps the entity object and provides command iterface for it.
     """
+
     @command()
     def kill(self):
         """

@@ -9,6 +9,7 @@ class CommandSuspender(LazyCommand):
     Wraps a command generating function in a functor. Also holds meta-data of the generated command.
     such as its condition properties and the shell of that command.
     """
+
     def __init__(self, command_shell, command_function, *args, **kwargs):
         super(CommandSuspender, self).__init__(command_function, False, False, command_shell, *args, **kwargs)
 

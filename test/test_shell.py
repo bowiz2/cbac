@@ -1,6 +1,6 @@
 from unittest import TestCase
 from cbac.block import Block, CommandBlock
-from cbac.command_shell import LocationShell, ShellContext, CommandShell
+from cbac.command_shell import ShellContext, CommandShell
 from cbac.blockspace import BlockSpace
 from cbac.utils import Vector, memoize
 from cbac.constants.block_id import *

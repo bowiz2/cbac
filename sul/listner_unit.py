@@ -27,18 +27,17 @@ class Listener(Unit):
         self.logic_cbas[0].cb_callback_reserved.conditional = True
         self.logic_cbas[0].cb_re_setter.conditional = True
 
-
     def main_logic_commands(self):
         self.event_check.is_repeated = True
         callback_command = self.callback.shell.activate()
         yield If(self.event_check).then(callback_command)
 
 
-
 class IsActiveListener(Listener):
     """
     Listens on a bit and fires off the callback if the bit is set to "true"
     """
+
     def __init__(self, bit, callback):
         super(IsActiveListener, self).__init__(bit.shell == True, callback)
 
@@ -47,5 +46,6 @@ class IsNotActiveListener(Listener):
     """
     Listens on a bit and fires off the callback if the bit is set to "false"
     """
+
     def __init__(self, bit, callback):
         super(IsNotActiveListener, self).__init__(bit.shell == False, callback)

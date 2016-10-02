@@ -3,6 +3,8 @@ from pymclevel import MCSchematic
 from cbac.unit.statements import *
 from sul import MemoryAccessUnit
 from cbac.utils import Vector
+
+
 # TODO: explain what is a char set schematic
 # TODO: support vertical screens.
 
@@ -40,5 +42,7 @@ class ScreenUnit(Unit):
     def main_logic_commands(self):
         yield InlineCall(self.char_set_access_unit)
         yield InlineCall(self.screen_access_unit)
-        yield self.char_set_access_unit.pivot.shell.store_to_temp(((0, 0, 0), Vector(*self.character_sprite_size) - Vector(1,1,1)))
-        yield self.screen_access_unit.pivot.shell.load_from_temp(((0, 0, 0),  Vector(*self.character_sprite_size) - Vector(1,1,1)))
+        yield self.char_set_access_unit.pivot.shell.store_to_temp(
+            ((0, 0, 0), Vector(*self.character_sprite_size) - Vector(1, 1, 1)))
+        yield self.screen_access_unit.pivot.shell.load_from_temp(
+            ((0, 0, 0), Vector(*self.character_sprite_size) - Vector(1, 1, 1)))

@@ -163,11 +163,14 @@ class RawArea(Area):
         for x, block_plane in enumerate(self.schematic.Blocks):
             for z, block_row in enumerate(block_plane):
                 for y, block_id in enumerate(block_row):
-                    to_return.append(BlockAssignment(Block(block_id, block_data=self.schematic.Data[x][z][y]), Vector(x, y, z), None))
+                    to_return.append(
+                        BlockAssignment(Block(block_id, block_data=self.schematic.Data[x][z][y]), Vector(x, y, z),
+                                        None))
         return to_return
 
     @property
     def is_isolated(self):
         return False
+
 
 __all__ = ["LineArea", "WindedArea", "BlockBoxArea", "RawArea"]

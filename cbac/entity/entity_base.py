@@ -114,5 +114,3 @@ class CommandStats(object):
         self.affected_items_name = affected_items_name
         self.query_result_objective = query_result_objective
         self.qery_result_name = query_result_name
-
-

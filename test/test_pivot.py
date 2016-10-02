@@ -1,21 +1,16 @@
-
 from unittest import TestCase
 
-import cbac.assembler
-from cbac.blockspace import BlockSpace
 from cbac.compound import CBA
 from cbac.compound import Register
 from cbac.constants.entity_id import *
 from cbac.constants.mc_direction import *
 from entity.entity_base import Entity
-from test.decorators import save_schematic
 from test.test_sul import SULTestCase, named_schematic
 from cbac.entity.pivot import Pivot
 
 
 class TestEntity(TestCase):
     def test_ctor(self):
-
         ent = Entity(ARMOR_STAND, custom_name="a", no_gravity=True)
         self.assertEqual(ent.custom_name, "a")
         self.assertEqual(ent.no_gravity, 1)

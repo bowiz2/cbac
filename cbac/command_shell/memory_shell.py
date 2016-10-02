@@ -10,6 +10,7 @@ class RegisterShell(CompoundShell):
     """
     Wraps the register object and provides command interface for it.
     """
+
     def reset(self):
         """
         Set the memory to zero.

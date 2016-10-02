@@ -8,6 +8,7 @@ class Pivot(Entity):
     """
     An armor stand which can move in space and copy areas
     """
+
     def __init__(self, invisible=False):
         """
         :param area_of_affect: This is the area which is copied to and from the pivot.

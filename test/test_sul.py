@@ -1,14 +1,15 @@
+"""
+Test the units which are shipped in the sul package.
+"""
 from unittest import TestCase
 
 import cbac.assembler
 import sul
+
 from cbac.blockspace import BlockSpace
-
-
 from test.decorators import named_schematic
 from cbac.unit import Unit
 from cbac.unit.statements import *
-from cbac.blockbox import BlockBox
 
 
 class SULTestCase(TestCase):
@@ -19,7 +20,6 @@ class SULTestCase(TestCase):
     def setUp(self):
         self.schematic_path = "test_schematic.schematic"
         self.block_space = BlockSpace((100, 100, 100))
-
 
     def tearDown(self):
         self.block_space.pack()
@@ -127,6 +127,11 @@ class TestSULMemory(SULTestCase):
 
 
 class Filler(Unit):
+    """
+    Used to test the functionality of a given unit by iterating in minecraft-time over all the register values.
+    See use in test integration and test screen.
+    """
+
     def __init__(self, bits, incrementer, writer):
         super(Filler, self).__init__(bits)
         # == Here you declare all your memory slots.
@@ -136,13 +141,15 @@ class Filler(Unit):
         self.synthesis()
 
     def main_logic_commands(self):
-        # == Here you declare the commands wof the main logic. each command must be yielded out.
+        """
+        main logic commands.
+        :return:
+        """
         yield InlineCall(self.writer, self.incrementer.output, self.incrementer.output)
         yield InlineCall(self.incrementer, self.incrementer.output)
 
 
 class TestIntegration(SULTestCase):
-
     @named_schematic
     def test_write_increment(self):
         access_unit = sul.MemoryAccessUnit()

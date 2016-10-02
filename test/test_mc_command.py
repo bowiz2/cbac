@@ -41,7 +41,6 @@ class TestLazyCommand(unittest.TestCase):
 
 
 class TestFactory(unittest.TestCase):
-
     def setUp(self):
         self.sample_command = "/say hello"
 
@@ -66,4 +65,3 @@ class TestFactory(unittest.TestCase):
     def test_error(self):
         self.assertRaises(MCCommandFactoryError, factory, "! say hello")
         self.assertRaises(MCCommandFactoryError, factory, "1/say hello")
-

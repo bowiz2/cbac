@@ -73,7 +73,7 @@ class UnitLogicParser(object):
 
         cba_mapping = {}
         if len(self.commands) == 0:
-           self.commands.append(mc_command.factory("/say last"))
+            self.commands.append(mc_command.factory("/say last"))
 
         for command_collection in self.all_commands:
             cba = CBA(*command_collection)

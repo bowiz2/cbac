@@ -190,5 +190,6 @@ class LocationShell(CommandShell):
         except AttributeError:
             return self.testforblock(other)
 
+
 # A block has only a location. so it is very reasonable to have the same command_shell as the location command_shell.
 BlockShell = LocationShell

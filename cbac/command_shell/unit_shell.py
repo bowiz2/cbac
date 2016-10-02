@@ -8,6 +8,7 @@ class UnitShell(CommandShell):
     """
     Wraps a unit object with command interface.
     """
+
     def set_callback(self, other):
         """
         Set the callback of this unit to another dynamic calling object.

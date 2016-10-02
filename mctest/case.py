@@ -12,6 +12,7 @@ from cbac.unit.statements import *
 from mctest.assertion import Assertion
 from sul import IncrementUnit
 
+
 # TODO: auto deploy
 
 
@@ -20,6 +21,7 @@ class TesterUnit(Unit):
     This is a unit which tests if a test passes or not.
     And contains all the in-game logic.
     """
+
     def __init__(self, actions):
         super(TesterUnit, self).__init__()
         self.actions = actions
@@ -127,4 +129,3 @@ class McTestCase(object):
 
     def add_unit(self, unit):
         self.blockspace.add_unit(unit)
-

@@ -99,7 +99,8 @@ class MemoryAccessUnit(Unit):
 
 class ReadUnit(Unit):
     def __init__(self, word_size, memory_access_unit):
-        assert (word_size, 1, 1) == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
+        assert (word_size, 1,
+                1) == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
         super(ReadUnit, self).__init__(word_size)
         # Unit declaration.
         self.memory_access_unit = self.add_unit(memory_access_unit)
@@ -126,7 +127,8 @@ class ReadUnit(Unit):
 
 class WriteUnit(Unit):
     def __init__(self, word_size, memory_access_unit):
-        assert (word_size, 1, 1) == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
+        assert (word_size, 1,
+                1) == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
         super(WriteUnit, self).__init__(word_size)
         # Unit declaration.
         self.memory_access_unit = self.add_unit(memory_access_unit)
