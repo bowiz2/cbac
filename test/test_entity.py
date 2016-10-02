@@ -21,6 +21,18 @@ class TestEntity(TestCase):
         self.assertEqual(ent.custom_name, "b")
         self.assertEqual(ent.no_gravity, 0)
 
+    def test_uuid_name(self):
+        """
+        Check if two seperate entities without specifieng name will have a different uuid custom name.
+        :return:
+        """
+        ent1 = Entity(ARMOR_STAND, no_gravity=True)
+        ent2 = Entity(ARMOR_STAND, no_gravity=True)
+        self.assertIsInstance(ent1.custom_name, str)
+        self.assertIsInstance(ent2.custom_name, str)
+
+        self.assertNotEqual(ent1.custom_name, ent2.custom_name)
+
     def test_parsing(self):
         entity = Entity(ARMOR_STAND, custom_name="p_pivot", no_gravity=True)
         tags = entity.parse_tags()

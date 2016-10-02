@@ -1,6 +1,7 @@
 from command_shell import EntityShell
 from utils import memoize
-import cbac.constants.entity_id
+import uuid
+
 
 class Entity(object):
     def __init__(self, mc_type, custom_name=None, rotation=None, fall_distance=None, fire=None, air=None,
@@ -9,6 +10,7 @@ class Entity(object):
         :param mc_type: the minecraft type of this entity.
         :param custom_name: The custom name of this entity. Appears in player death messages and villager trading
         interfaces, as well as above the entity when your cursor is over it. May not exist, or may exist and be empty.
+        If no name was specified, a uuid string will be assigned to this entity.
         :param rotation: Two floats representing rotation in degrees.
         :param fall_distance: Distance the entity has fallen. Larger values cause more damage when the entity lands.
         :param fire: Number of ticks until the fire is put out. Negative values reflect how long the entity can stand
@@ -26,6 +28,8 @@ class Entity(object):
         :param tags: List of custom string data.
         """
         self.mc_type = mc_type
+        if not custom_name:
+            custom_name = str(uuid.uuid4())
         self.custom_name = custom_name
         self.rotation = rotation
         self.fall_distance = fall_distance
@@ -112,13 +116,3 @@ class CommandStats(object):
         self.qery_result_name = query_result_name
 
 
-class Pivot(Entity):
-    """
-    An armor stand which can move in space and copy areas
-    """
-    def __init__(self, area_of_effect):
-        """
-        :param area_of_effect: This is the area which is copied to and from the pivot.
-        """
-        super(Pivot, self).__init__(cbac.constants.entity_id.ARMOR_STAND, custom_name="RAM_PIVOT", no_gravity=True)
-        self.area_of_effect = area_of_effect
