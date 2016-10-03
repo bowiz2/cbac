@@ -5,6 +5,9 @@ from cbac.unit import std_logic
 
 
 class FullAdderUnit(Unit):
+    """
+    Preform
+    """
     @auto_synthesis
     def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out, cin=std_logic.In, cout=std_logic.Out):
         super(FullAdderUnit, self).__init__()
@@ -18,6 +21,7 @@ class FullAdderUnit(Unit):
         """
         Simple full adder architecture using a truth table.
         """
+        # TODO: create a truth table statement.
         yield self.a.shell == False
         yield self.b.shell == False
         yield self.cin.shell == True
@@ -63,11 +67,14 @@ class FullAdderUnit(Unit):
         )
 
 
-class FullAdderArray(Unit):
+class RippleCarryFullAdderArray(Unit):
+    """
+    Implement an array of full adders, resulting in a calculator.
+    """
     @auto_synthesis
     def __init__(self, bits, input_a=std_logic.InputRegister, input_b=std_logic.InputRegister,
                  output=std_logic.OutputRegister, full_adder_logic=FullAdderUnit, carry_flag=None):
-        super(FullAdderArray, self).__init__(bits)
+        super(RippleCarryFullAdderArray, self).__init__(bits)
         self.input_a = self.add(input_a)
         self.input_b = self.add(input_b)
         self.output = self.add(output)
