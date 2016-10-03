@@ -20,7 +20,7 @@ class ScreenUnit(Unit):
         if not isinstance(char_set, MCSchematic):
             char_set = MCSchematic(filename=char_set)
 
-        self.char_set = self.add(char_set)
+        self.char_set = self.add_compound(char_set)
         # How many different characters this screen can printout.
         self.char_set_size = int(char_set.size[1])
         # 2 dimensional area which is taken by a character.

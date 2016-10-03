@@ -115,10 +115,11 @@ def flatten(l, levels=0):
     for i in xrange(levels):
         new_l = []
         for item in l:
-            if hasattr(l, "__iter__"):
+            if hasattr(item, "__iter__"):
                 for x in item.__iter__():
                     new_l.append(x)
-            new_l.append(item)
+            else:
+                new_l.append(item)
         l = new_l
     return l
 

@@ -7,8 +7,7 @@ import cbac.config
 from cbac.compound import CBA, Constant
 from cbac.mc_command import MCCommand
 from cbac.unit.statements import *
-from cbac.unit.unit_base import Unit
-
+from cbac import utils
 # TODO: restructure as a compiler.
 
 
@@ -38,6 +37,8 @@ class UnitLogicParser(object):
         # TODO: organize.
         # Other compounds which were generated while parsing.
         self.other_compounds = []
+        # Other Units which were generated while parsing. # TODO: merge other units with listeners
+        self.other_units = []
         # Listener units which were generated while parsing.
         self.listeners = []
         # contains all the jumps which are aought to be made. TODO: rewrite
@@ -52,7 +53,6 @@ class UnitLogicParser(object):
     def commands(self):
         return self.all_commands[-1]
 
-
     def parse(self, tokens):
         """
         Parse the statements in the statement generator.
@@ -65,6 +65,7 @@ class UnitLogicParser(object):
 
         # Parse Statements
         pre_parsed_tokens = list(tokens)
+        pre_parsed_tokens = utils.flatten(pre_parsed_tokens, 2)
 
         while len(pre_parsed_tokens) > 0:
             self.parse_stack.append(pre_parsed_tokens.pop(0))
@@ -81,9 +82,9 @@ class UnitLogicParser(object):
             cba_mapping[command_collection] = cba
             logic_cbas.append(cba)
 
-        self.listeners = list(self.generate_listeners(logic_cbas))
+        self.listeners += list(self.generate_listeners(logic_cbas))
 
-        return logic_cbas, self.other_compounds, self.listeners
+        return logic_cbas, self.other_compounds, self.listeners + self.other_units
 
     def eat(self, token):
         """
@@ -91,10 +92,6 @@ class UnitLogicParser(object):
         :param token: Token you want to process.
         :return:
         """
-        if isinstance(token, Unit):
-            # means that this is a map result TODO: give better doc.
-            self.parse_stack.append(InlineCall(token))
-
         # Copy Parameters and rename the statemnt to a main logic jump
         if isinstance(token, Token):
             if isinstance(token, StatementCollection):

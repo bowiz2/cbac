@@ -7,7 +7,7 @@ class IncrementUnit(Unit):
     def __init__(self, bits):
         super(IncrementUnit, self).__init__(bits)
         # in the carry we will remember the addition.
-        self.flags = self.add(Register(2))
+        self.flags = self.add_compound(Register(2))
         self.carry_in = self.flags.blocks[0]
         self.carry_out = self.flags.blocks[1]
         self.input = self.create_input(self.bits)

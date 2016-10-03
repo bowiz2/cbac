@@ -1,11 +1,12 @@
 from cbac.unit.logic_parser import UnitLogicParser
+from cbac.unit.statements import InlineCall
 import itertools
 from cbac.command_shell import UnitShell
 from cbac.compound import Register
 from cbac.utils import memoize
 from cbac.unit import std_logic
-from cbac.block import Block
-from cbac.constants.block_id import FALSE_BLOCK
+import inspect
+# TODO: handle ports correctly.
 
 
 class Unit(object):
@@ -39,21 +40,57 @@ class Unit(object):
         )
         # Add the CBAs to the unit.
         for parsed_item in logic_cbas + other_compounds:
-            self.add(parsed_item)
+            self.add_compound(parsed_item)
         for other_unit in other_units:
             self.add_unit(other_unit)
         self.logic_cbas = logic_cbas
 
     def add(self, item):
         """
+        VOODOO for synthetic sugar.
+        Process the item and see if you can format it for the need of the unit.
+        :param item:
+        :return:
+        """
+        if inspect.isclass(item):
+            # Auto gen std components
+            if issubclass(item, std_logic.StdLogic):
+                # In-case a class was supplied.
+                if item == std_logic.InputRegister:
+                    item = std_logic.InputRegister(self.bits)
+                elif item == std_logic.OutputRegister:
+                    item = std_logic.OutputRegister(self.bits)
+
+                elif item == std_logic.In:
+                    item = std_logic.In()
+                elif item == std_logic.Out:
+                    item = std_logic.Out()
+
+            # Convert unit classes to Unit creators.
+            elif issubclass(item, Unit):
+                unit_class = item
+
+                def unit_creator(*args, **kwargs):
+                    generated_unit = unit_class(*args, **kwargs)
+                    self.add_unit(generated_unit)
+                    return InlineCall(generated_unit)
+                item = unit_creator
+
+        # Process inputs and outputs.
+        if isinstance(item, std_logic.StdLogic):
+            if isinstance(item, std_logic.IORegister):
+                if isinstance(item, std_logic.InputRegister):
+                    item = self.add_input(item)
+                elif isinstance(item, std_logic.OutputRegister):
+                    item = self.add_output(item)
+
+        return item
+
+    def add_compound(self, item):
+        """
         Add a compound to the compound list, meaning it will be compiled with the unit.
         :return: the added compound.
         """
-        if isinstance(item, std_logic.StdLogic):
-            if isinstance(item, std_logic.IORegister):
-                item = Register(self.bits)
-            if isinstance(item, std_logic.Port):
-                item = Block(FALSE_BLOCK)
         self.compounds.append(item)
         return item
 
@@ -69,7 +106,7 @@ class Unit(object):
         """
         Set a register as an input for this unit. And return it.
         """
-        register = self.add(register)
+        register = self.add_compound(register)
         self.inputs.append(register)
         return register
 
@@ -77,7 +114,7 @@ class Unit(object):
         """
         Sets a register as an output of this unit. And return it.
         """
-        register = self.add(register)
+        register = self.add_compound(register)
         self.outputs.append(register)
         return register
 

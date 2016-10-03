@@ -6,4 +6,4 @@ from pymclevel import MCSchematic
 class TestRawArea(SULTestCase):
     @named_schematic
     def test_schematic(self):
-        self.block_space.add(MCSchematic(filename="../schem/az_caps_compressed.schematic"))
+        self.block_space.add_compound(MCSchematic(filename="../schem/az_caps_compressed.schematic"))

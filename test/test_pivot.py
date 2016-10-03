@@ -44,8 +44,8 @@ class TestPivot(SULTestCase):
         blockspace = self.block_space
         memory = Register(8)
         my_pivot = Pivot()
-        blockspace.add(memory)
-        blockspace.add(CBA(
+        blockspace.add_compound(memory)
+        blockspace.add_compound(CBA(
             my_pivot.shell.summon(memory.blocks[0]),
             my_pivot.shell.activate(),
             my_pivot.shell.move(UP),
@@ -58,10 +58,10 @@ class TestPivot(SULTestCase):
     @named_schematic
     def test_pivot_temp_movement(self):
         register = Register(8)
-        self.block_space.add(register)
+        self.block_space.add_compound(register)
         my_pivot = Pivot()
 
-        self.block_space.add(CBA(
+        self.block_space.add_compound(CBA(
             my_pivot.shell.summon(register.blocks[0]),
             my_pivot.shell.store_to_temp(register),
             my_pivot.shell.move(UP),

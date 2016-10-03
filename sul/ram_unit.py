@@ -47,7 +47,7 @@ class MemoryAccessUnit(Unit):
             raw_memory = BlockBox(memory_box_size, FALSE_BLOCK)
 
         # raw memory is the actual blocks which represent the memory.
-        self.raw_memory = self.add(raw_memory)
+        self.raw_memory = self.add_compound(raw_memory)
 
         # This pivot is going to move in the memory.
         # TODO: create pivot class with generated names.
