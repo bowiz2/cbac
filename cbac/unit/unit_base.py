@@ -12,6 +12,9 @@ import inspect
 
 
 class Unit(object):
+    """
+    Now imitates a VHDL module.
+    """
     def __init__(self, bits=None, logic_parser_instance=None):
         """
         Create a unit with an input base length.
