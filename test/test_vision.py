@@ -6,5 +6,6 @@ from test.decorators import named_schematic
 class TestVision(SULTestCase):
     @named_schematic
     def test_a(self):
-        a = AndXBit(8)
+        a = AndXBit(8, auto_synthesis=False)
+        a.synthesis()
         self.block_space.add_unit(a)

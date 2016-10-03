@@ -27,6 +27,7 @@ class Unit(object):
         # Logic cbas are cbac which excecute the logic of the unit. the entry point is the first logic_cba
         self.logic_cbas = []
         self.is_inline = False
+        self.is_synthesized = False
 
     def synthesis(self):
         """
@@ -44,6 +45,7 @@ class Unit(object):
         for other_unit in other_units:
             self.add_unit(other_unit)
         self.logic_cbas = logic_cbas
+        self.is_synthesized = True
 
     def add(self, item):
         """
