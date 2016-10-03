@@ -34,10 +34,10 @@ class AND(Unit):
         )
 
 
-class AndXBit(Unit):
+class LogicArray(Unit):
     @auto_synthesis
     def __init__(self, bit, x=std_logic.InputRegister, y=std_logic.InputRegister, z=std_logic.OutputRegister, logic=AND):
-        super(AndXBit, self).__init__(bit)
+        super(LogicArray, self).__init__(bit)
         self.x = self.add(x)
         self.y = self.add(y)
         self.s = self.add(z)
