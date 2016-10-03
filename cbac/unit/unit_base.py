@@ -80,12 +80,13 @@ class Unit(object):
 
         # Process inputs and outputs.
         if isinstance(item, std_logic.StdLogic):
-            if isinstance(item, std_logic.IORegister):
+            if isinstance(item, std_logic.Register):
                 if isinstance(item, std_logic.InputRegister):
                     item = self.add_input(item)
                 elif isinstance(item, std_logic.OutputRegister):
                     item = self.add_output(item)
-
+                else:
+                    item = self.add_compound(item)
         return item
 
     def add_compound(self, item):

@@ -1,31 +1,21 @@
 """
 Holds AND unit.
 """
-from cbac.unit.statements import If
 from cbac.unit import Unit
+from unit import std_logic
+from unit.statements import If
+from unit.vision import auto_synthesis
+
 
 class AndUnit(Unit):
-    """
-    This unit takes two memories, makes an AND logic function between them and store it to the output memory.
-    """
-
-    def __init__(self, bits=8):
+    @auto_synthesis
+    def __init__(self, x=std_logic.In, y=std_logic.In, s=std_logic.Out):
         super(AndUnit, self).__init__()
-        self.bits = bits
-        self.input_a = self.create_input(self.bits)
-        self.input_b = self.create_input(self.bits)
-        self.output = self.create_output(self.bits)
-
-        self.synthesis()
+        self.x = self.add(x)
+        self.y = self.add(y)
+        self.s = self.add(s)
 
     def architecture(self):
-        """
-        Describes the AND logic.
-        """
-        for a_block, b_block, o_block, in zip(self.input_a.blocks, self.input_b.blocks, self.output.blocks):
-            # note that the eq is overriden.
-            yield If(
-                (a_block.shell == True) & (b_block.shell == True)
-            ).then(
-                o_block.shell.activate()
-            )
+        yield If((self.x.shell == True) & (self.y.shell == True)).then(
+            self.s.shell.activate()
+        )

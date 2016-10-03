@@ -1,6 +1,6 @@
 from cbac.block import Block
 from cbac.constants.block_id import FALSE_BLOCK
-from cbac.compound.register import Register
+import cbac.compound.register
 
 class StdLogic(object):
     pass
@@ -18,13 +18,13 @@ class Out(Port):
     pass
 
 
-class IORegister(Register, StdLogic):
+class Register(cbac.compound.register.Register, StdLogic):
     pass
 
 
-class InputRegister(IORegister):
+class InputRegister(Register):
     pass
 
 
-class OutputRegister(IORegister):
+class OutputRegister(Register):
     pass
