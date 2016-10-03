@@ -2,10 +2,12 @@ from cbac.block import Block
 from cbac.constants.block_id import FALSE_BLOCK
 import cbac.compound.register
 
+
 class StdLogic(object):
     pass
 
-class Port(Block,StdLogic):
+
+class Port(Block, StdLogic):
     def __init__(self):
         super(Port, self).__init__(FALSE_BLOCK)
 

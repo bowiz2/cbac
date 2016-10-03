@@ -6,6 +6,8 @@ from cbac.compound import Register
 from cbac.utils import memoize
 from cbac.unit import std_logic
 import inspect
+
+
 # TODO: handle ports correctly.
 
 
@@ -76,6 +78,7 @@ class Unit(object):
                     generated_unit = unit_class(*args, **kwargs)
                     self.add_unit(generated_unit)
                     return InlineCall(generated_unit)
+
                 item = unit_creator
 
         # Process inputs and outputs.
