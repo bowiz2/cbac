@@ -10,7 +10,6 @@ from cbac.command_shell.decorator import command
 from cbac.utils import Vector, format_area
 from cbac.utils import absolute_area as abs_area
 
-
 class LocationShell(CommandShell):
     """
     Provides commands for manipulating objects inside Minecraft which have location.
@@ -179,6 +178,7 @@ class LocationShell(CommandShell):
         :param other: some block you want to test against.
         :returns: A testforblock command.
         """
+        # TODO: add support for the equal command to support area comprensions.
         # Work only with boolean values.
         if other is True:
             other = TRUE_BLOCK

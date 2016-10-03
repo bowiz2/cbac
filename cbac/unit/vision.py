@@ -7,13 +7,15 @@ from cbac.unit.statements import *
 class AND(Unit):
     def __init__(self, x=std_logic.In, y=std_logic.In, s=std_logic.Out):
         super(AND, self).__init__()
-        self.x = self.add_compound(x)
-        self.y = self.add_compound(y)
-        self.s = self.add_compound(s)
+        self.x = self.add(x)
+        self.y = self.add(y)
+        self.s = self.add(s)
         self.synthesis()
 
     def architecture(self):
-        yield If(self.x.shell == self.y).then(self.s.shell.activate())
+        yield If((self.x.shell == True) & (self.y.shell == True)).then(
+            self.s.shell.activate()
+        )
 
 
 class AndXBit(Unit):
