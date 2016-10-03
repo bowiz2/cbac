@@ -20,3 +20,4 @@ from xnor_unit import XnorUnit
 from xor_unit import XorUnit
 from listner_unit import Listener, IsActiveListener, IsNotActiveListener
 from screen_unit import ScreenUnit
+from simple_array import SimpleArray

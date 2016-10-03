@@ -43,7 +43,7 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_and(self):
-        self.block_space.add_unit(sul.AndUnit(4))
+        self.block_space.add_unit(sul.SimpleArray(sul.AndUnit, 4))
 
     @named_schematic
     def test_nand(self):
@@ -75,7 +75,7 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_subtract_unit(self):
-        self.block_space.add_unit(sul.SubtractUnit(4))
+        self.block_space.add_unit(sul.SubtractUnit(4, full_adder=sul.full_adder.RippleCarryFullAdderArray(4)))
 
     @named_schematic
     def test_listener(self):

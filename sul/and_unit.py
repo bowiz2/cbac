@@ -2,9 +2,9 @@
 Holds AND unit.
 """
 from cbac.unit import Unit
-from unit import std_logic
-from unit.statements import If
-from unit.vision import auto_synthesis
+from cbac.unit import std_logic
+from cbac.unit.statements import If
+from cbac.unit.vision import auto_synthesis
 
 
 class AndUnit(Unit):
