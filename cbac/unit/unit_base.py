@@ -10,6 +10,7 @@ import inspect
 
 # TODO: handle ports correctly.
 # TODO: implement caching
+# TODO: add refcount for a unit. to know if it can be included as an inline.
 
 class Unit(object):
     """
