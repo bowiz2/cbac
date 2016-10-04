@@ -108,6 +108,8 @@ class Unit(object):
         Adds a unit to the dependent unit list.
         :return: The added unit.
         """
+        if inspect.isclass(unit):
+            unit = unit(self.bits)
         self.dependent_units.append(unit)
         return unit
 

@@ -3,12 +3,12 @@ SUL - Standard Unit Library.
 
 This is library which contains all the pre-written units for the use of CBAC developer.
 """
-from and_unit import AndUnit
+from and_unit import AndGate
 from callback_unit import CallbackUnit
 from example_unit import ExampleUnit
 from full_adder import FullAdderUnit
 from increment_unit import IncrementUnit
-from nand_unit import NandUnit
+from nand_unit import NandArray
 from negate_unit import NegateUnit
 from not_unit import NotUnit
 from or_unit import OrUnit

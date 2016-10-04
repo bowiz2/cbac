@@ -7,10 +7,10 @@ from cbac.unit.statements import If
 from cbac.unit.vision import auto_synthesis
 
 
-class AndUnit(Unit):
+class AndGate(Unit):
     @auto_synthesis
     def __init__(self, x=std_logic.In, y=std_logic.In, s=std_logic.Out):
-        super(AndUnit, self).__init__()
+        super(AndGate, self).__init__()
         self.x = self.add(x)
         self.y = self.add(y)
         self.s = self.add(s)

@@ -12,4 +12,5 @@ def auto_synthesis(f):
     wrapper.__name__ = f.__name__
     return wrapper
 
+
 # This is the vision for MHDL

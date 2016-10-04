@@ -43,11 +43,11 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_and(self):
-        self.block_space.add_unit(sul.SimpleArray(sul.AndUnit, 4))
+        self.block_space.add_unit(sul.SimpleArray(sul.AndGate, 4))
 
     @named_schematic
     def test_nand(self):
-        self.block_space.add_unit(sul.NandUnit(4))
+        self.block_space.add_unit(sul.NandArray(4))
 
     @named_schematic
     def test_shift(self):
