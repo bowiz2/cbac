@@ -1,33 +1,28 @@
 from cbac.unit.statements import InlineCall
 from cbac.unit.unit_base import Unit
-from sul import NegateUnit, FullAdderUnit
+from sul import NegateUnit, RippleCarryFullAdderArray
+from cbac.unit import std_logic, auto_synthesis
 
 
 class SubtractUnit(Unit):
-    def __init__(self, bits=8, negate_unit=None, full_adder=None):
+    """
+    Simple bitwise substract unit.
+    substract one register from another.
+    """
+    @auto_synthesis
+    def __init__(self, bits=8, input_a=std_logic.InputRegister, input_b=std_logic.InputRegister,
+                 output=std_logic.OutputRegister, negator=NegateUnit, adder=RippleCarryFullAdderArray):
         super(SubtractUnit, self).__init__(bits)
+        self.adder = self.add_unit(adder)
+        self.negator = self.add_unit(negator)
 
-        # == Here you declare all your memory slots.
-        if negate_unit is None:
-            negate_unit = NegateUnit(self.bits)
-
-        if full_adder is None:
-            full_adder = FullAdderUnit(self.bits)
-
-        assert negate_unit.bits == self.bits
-        assert full_adder.bits == self.bits
-
-        self.full_adder = self.add_unit(full_adder)
-        self.negate_unit = self.add_unit(negate_unit)
-
-        self.input_a = self.create_input(self.bits)
-        self.input_b = self.create_input(self.bits)
-        self.output = self.create_output(self.bits)
-        # ==
-        self.synthesis()
+        self.input_a = self.add(input_a)
+        self.input_b = self.add(input_b)
+        self.output = self.add(output)
 
     def architecture(self):
-        # == Here you declare the commands wof the main logic. each command must be yielded out.
-        yield InlineCall(self.negate_unit, self.input_b)
-        yield InlineCall(self.full_adder, self.input_a, self.negate_unit.output)
-        yield self.full_adder.output.shell.copy(self.output)
+        # First negate the first oprand.
+        yield InlineCall(self.negator, self.input_b)
+        # Then call the adder using the result of the negator as the second oprand.
+        yield InlineCall(self.adder, self.input_a, self.negator.output)
+        yield self.adder.output.shell.copy(self.output)

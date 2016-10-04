@@ -71,7 +71,7 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_subtract_unit(self):
-        self.block_space.add_unit(sul.SubtractUnit(4, full_adder=sul.full_adder.RippleCarryFullAdderArray(4)))
+        self.block_space.add_unit(sul.SubtractUnit(4))
 
     @named_schematic
     def test_listener(self):
