@@ -2,30 +2,27 @@ from cbac.unit.statements import STDCall, InlineCall
 from cbac.unit.unit_base import Unit
 from increment_unit import IncrementUnit
 from not_unit import NotUnit
+from cbac.unit import std_logic
+from cbac.unit.vision import auto_synthesis
 
 
 class NegateUnit(Unit):
-    def __init__(self, bits=8, not_unit=None, increment_unit=None):
+    """
+    Negate a number using 2s compliment.
+    """
+    @auto_synthesis
+    def __init__(self, bits=8, inp=std_logic.InputRegister, output=std_logic.OutputRegister, notter=NotUnit,
+                 incrementer=IncrementUnit):
         super(NegateUnit, self).__init__(bits)
         # == Here you declare all your memory slots.
 
-        if not_unit is None:
-            not_unit = NotUnit(self.bits)
-        if increment_unit is None:
-            increment_unit = IncrementUnit(self.bits)
-
-        assert not_unit.bits == self.bits
-        assert increment_unit.bits == self.bits
-
-        self.not_unit = self.add_unit(not_unit)
-        self.increment_unit = self.add_unit(increment_unit)
-        self.input = self.create_input(self.bits)
-        self.output = self.create_output(self.bits)
-        # ==
-        self.synthesis()
+        self.notter = self.add_unit(notter)
+        self.incrementer = self.add_unit(incrementer)
+        self.inp = self.add(inp)
+        self.output = self.add(output)
 
     def architecture(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
-        yield InlineCall(self.not_unit, self.input)
-        yield InlineCall(self.increment_unit, self.not_unit.output)
-        yield self.increment_unit.output.shell.copy(self.output)
+        yield InlineCall(self.notter, self.inp)
+        yield InlineCall(self.incrementer, self.notter.output)
+        yield self.incrementer.output.shell.copy(self.output)
