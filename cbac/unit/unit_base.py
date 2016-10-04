@@ -34,6 +34,13 @@ class Unit(object):
         self.is_inline = False
         self.is_synthesized = False
 
+    def architecture(self):
+        """
+        A body associated with an entity declaration to describe the internal organization or operation of a design entity.
+        An architecture body is used to describe the behavior, data flow, or structure of a design entity.
+        """
+        pass
+
     def synthesis(self):
         """
         Takes the entry commands main logic commands and exit commands, and compiles them into a collection of CBAs.
@@ -159,6 +166,15 @@ class Unit(object):
             yield input_memory.shell.reset()
 
     @property
+    def ticks(self):
+        """
+
+        :return: Number of mc ticks to preform the action of this unit.
+        """
+        # TODO: implement
+        return -1
+
+    @property
     def compounds_to_pack(self):
         if self.is_inline:
             return filter(lambda compound: compound not in self.logic_cbas, self.compounds)
@@ -187,23 +203,6 @@ class Unit(object):
     @memoize
     def shell(self):
         return UnitShell(self)
-
-    def entity(self):
-        """
-        Entity is the description of the interface between a design and its external environment.
-        It may also specify the declarations and statements that are part of the design entity.
-        A given entity declaration may be shared by many design entities, each of which has a different architecture.
-        Thus, an entity declaration can potentially represent a class of design entities, each having the same interface.
-        """
-        pass
-
-    def architecture(self):
-        """
-        A body associated with an entity declaration to describe the internal organization or operation of a design entity.
-        An architecture body is used to describe the behavior, data flow, or structure of a design entity.
-        """
-        pass
-
 
 class SimpleUnit(Unit):
     """

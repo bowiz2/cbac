@@ -10,7 +10,7 @@ from full_adder import FullAdderUnit
 from increment_unit import IncrementUnit
 from nand_unit import NandArray
 from negate_unit import NegateUnit
-from not_unit import NotUnit
+from not_unit import NotGate, NotGateArray
 from or_unit import OrUnit
 from ram_unit import MemoryAccessUnit, ReadUnit, WriteUnit
 from reverese_unit import ReverseUnit
@@ -20,4 +20,4 @@ from xnor_unit import XnorUnit
 from xor_unit import XorUnit
 from listner_unit import Listener, IsActiveListener, IsNotActiveListener
 from screen_unit import ScreenUnit
-from simple_array import SimpleArray
+from simple_array import Simple2pArray

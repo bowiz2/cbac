@@ -35,7 +35,7 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_not(self):
-        self.block_space.add_unit(sul.NotUnit(4))
+        self.block_space.add_unit(sul.NotGateArray(4))
 
     @named_schematic
     def test_reverse(self):
@@ -43,7 +43,7 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_and(self):
-        self.block_space.add_unit(sul.SimpleArray(sul.AndGate, 4))
+        self.block_space.add_unit(sul.Simple2pArray(sul.AndGate, 4))
 
     @named_schematic
     def test_nand(self):

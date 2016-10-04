@@ -1,18 +1,28 @@
 from cbac.unit.unit_base import Unit
 from cbac.unit.statements import If
+from cbac.unit import std_logic, auto_synthesis
+from sul.simple_array import Simple1pArray
 
 
-class NotUnit(Unit):
-    def __init__(self, bits=8):
-        # TODO: re-write to new format.
-        super(NotUnit, self).__init__()
-        self.bits = bits
-        self.input = self.create_input(self.bits)
-        self.output = self.create_output(self.bits)
-        self.synthesis()
+class NotGate(Unit):
+    """
+    Simple not gate implementation.
+    """
+    @auto_synthesis
+    def __init__(self, a=std_logic.In, s=std_logic.Out):
+        super(NotGate, self).__init__()
+        self.a = self.add(a)
+        self.s = self.add(s)
 
     def architecture(self):
-        for a_block, o_block, in zip(self.input.blocks, self.output.blocks):
-            # note that the eq is overriden.
-            yield If(a_block.shell == False).then(o_block.shell.activate())
-            yield If(a_block.shell == True).then(o_block.shell.deactivate())
+        yield If(self.a.shell == False).then(self.s.shell.activate())
+        yield If(self.a.shell == True).then(self.s.shell.deactivate())
+
+
+class NotGateArray(Simple1pArray):
+    """
+    Simple not gate array.
+    """
+    @auto_synthesis
+    def __init__(self, bits, a=std_logic.InputRegister, s=std_logic.OutputRegister):
+        super(NotGateArray, self).__init__(NotGate, bits, a, s)
