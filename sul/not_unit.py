@@ -23,6 +23,5 @@ class NotGateArray(Simple1pArray):
     """
     Simple not gate array.
     """
-    @auto_synthesis
     def __init__(self, bits, a=std_logic.InputRegister, s=std_logic.OutputRegister):
         super(NotGateArray, self).__init__(NotGate, bits, a, s)
