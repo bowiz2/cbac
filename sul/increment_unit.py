@@ -1,39 +1,42 @@
 from cbac.compound import Register
 from cbac.unit.unit_base import Unit
 from cbac.unit.statements import *
+from cbac.unit import std_logic, auto_synthesis
+
+
+class IncrementLogic(Unit):
+    """
+    Logic of increment of one bit.
+    """
+    @auto_synthesis
+    def __init__(self, a=std_logic.In, s=std_logic.Out, cin=std_logic.In, cout=std_logic.Out):
+        super(IncrementLogic, self).__init__()
+        self.a = self.add(a)
+        self.s = self.add(s)
+        self.cin = self.add(cin)
+        self.cout = self.add(cout)
+
+    def architecture(self):
+        yield If((self.a.shell == True) & (self.cin.shell == True)).then(self.cout.shell.activate())
+        yield If((self.a.shell == False) & (self.cin.shell == True)).then(self.s.shell.activate())
+        yield If((self.a.shell == True) & (self.cin.shell == False)).then(self.s.shell.activate())
 
 
 class IncrementUnit(Unit):
-    def __init__(self, bits):
+    """
+    Increments a register by 1.
+    """
+    @auto_synthesis
+    def __init__(self, bits, inp=std_logic.InputRegister, output=std_logic.OutputRegister, carry_out=None):
         super(IncrementUnit, self).__init__(bits)
         # in the carry we will remember the addition.
-        self.flags = self.add_compound(Register(2))
-        self.carry_in = self.flags.blocks[0]
-        self.carry_out = self.flags.blocks[1]
-        self.input = self.create_input(self.bits)
-        self.output = self.create_output(self.bits)
-        self.synthesis()
+        self.carry = self.add(std_logic.InputRegister(self.bits+1))
+        self.input = self.add(inp)
+        self.output = self.add(output)
+        self.carry_out = self.add(carry_out)
+        self.incrementer_logic = self.add(IncrementLogic)
 
     def architecture(self):
-        # TODO: If statement include
-        yield self.carry_in.shell.activate()
-        for inp_block, out_block in zip(self.input.blocks, self.output.blocks):
-            yield inp_block.shell == True
-            yield self.carry_in.shell == True
-            yield self.carry_out.shell.activate()
+        yield self.carry.ports[0].shell.activate()
+        yield map(self.incrementer_logic, self.input.ports, self.output.ports, self.carry.ports[:-1], self.carry.ports[1:])
 
-            yield inp_block.shell == True
-            yield self.carry_in.shell == False
-            yield out_block.shell.activate()
-
-            yield inp_block.shell == False
-            yield self.carry_in.shell == True
-            yield out_block.shell.activate()
-
-            yield self.carry_out.shell.move(self.carry_in)
-            yield self.carry_out.shell.deactivate()
-            yield Debug("/say Incrementer {0}/{1} completed.".format(
-                self.input.blocks.index(inp_block) + 1, len(self.input.blocks)
-            ))
-
-        yield Debug("/say Increment complete successfully.")
