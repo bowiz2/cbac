@@ -9,15 +9,12 @@ class ReverseUnit(Unit):
     """
     @auto_synthesis
     def __init__(self, bits=8, inp=std_logic.InputRegister, output=std_logic.OutputRegister):
-        # TODO: re-write to new format.
         super(ReverseUnit, self).__init__(bits)
         self.input = self.add(inp)
         self.output = self.add(output)
 
     def architecture(self):
         for index in xrange(self.bits):
-            yield If(
-                self.input.ports[index].shell == True
-            ).then(
+            yield If(self.input.ports[index].shell == True).then(
                 self.output.ports[self.bits - index - 1].shell.activate()
             )
