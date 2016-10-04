@@ -1,18 +1,21 @@
 from cbac.unit.statements import If
 from cbac.unit.unit_base import Unit
+from cbac.unit import std_logic, auto_synthesis
 
 
-class OrUnit(Unit):
-    def __init__(self, bits=8):
-        # TODO: re-write to new format
-        super(OrUnit, self).__init__(bits)
-        self.input_a = self.create_input(self.bits)
-        self.input_b = self.create_input(self.bits)
-        self.output = self.create_output(self.bits)
-
-        self.synthesis()
+class OrGate(Unit):
+    """
+    Simple Bitwise Or Gate
+    """
+    @auto_synthesis
+    def __init__(self, a=std_logic.In, b=std_logic.Out, s=std_logic.Out):
+        super(OrGate, self).__init__()
+        self.a = self.add(a)
+        self.b = self.add(b)
+        self.s = self.add(s)
 
     def architecture(self):
-        for a_block, b_block, o_block, in zip(self.input_a.blocks, self.input_b.blocks, self.output.blocks):
-            yield If(a_block.shell == True).then(o_block.shell.activate())
-            yield If(b_block.shell == True).then(o_block.shell.activate())
+        yield If(self.a.shell == True).then(self.s.shell.activate())
+        yield If(self.b.shell == True).then(self.s.shell.activate())
+
+

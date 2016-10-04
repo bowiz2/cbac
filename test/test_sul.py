@@ -31,7 +31,7 @@ class SULTestCase(TestCase):
 class TestBitwiseUnits(SULTestCase):
     @named_schematic
     def test_or(self):
-        self.block_space.add_unit(sul.OrUnit(8))
+        self.block_space.add_unit(sul.Simple2pArray(sul.OrGate, 4))
 
     @named_schematic
     def test_not(self):

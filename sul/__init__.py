@@ -11,7 +11,7 @@ from increment_unit import IncrementUnit
 from nand_unit import NandArray
 from negate_unit import NegateUnit
 from not_unit import NotGate, NotGateArray
-from or_unit import OrUnit
+from or_unit import OrGate
 from ram_unit import MemoryAccessUnit, ReadUnit, WriteUnit
 from reverese_unit import ReverseUnit
 from shift_unit import ShiftUnit
