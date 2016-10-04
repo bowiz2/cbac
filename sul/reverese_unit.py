@@ -5,7 +5,7 @@ from cbac.unit import std_logic,auto_synthesis
 
 class ReverseUnit(Unit):
     """
-    Reverses the given blocks.
+    Bitwise reverse the content of a register.
     """
     @auto_synthesis
     def __init__(self, bits=8, inp=std_logic.InputRegister, output=std_logic.OutputRegister):
