@@ -14,7 +14,6 @@ from not_unit import NotGate, NotGateArray
 from or_unit import OrGate
 from ram_unit import MemoryAccessUnit, ReadUnit, WriteUnit
 from reverese_unit import ReverseUnit
-from shift_unit import ShiftUnit
 from substract_unit import SubtractUnit
 from xnor_unit import XnorUnit
 from xor_unit import XorUnit

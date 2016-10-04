@@ -50,10 +50,6 @@ class TestBitwiseUnits(SULTestCase):
         self.block_space.add_unit(sul.NandArray(4))
 
     @named_schematic
-    def test_shift(self):
-        self.block_space.add_unit(sul.ShiftUnit(8))
-
-    @named_schematic
     def test_incrament(self):
         self.block_space.add_unit(sul.IncrementUnit(4))
 
