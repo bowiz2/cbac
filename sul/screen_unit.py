@@ -3,13 +3,13 @@ from pymclevel import MCSchematic
 from cbac.unit.statements import *
 from sul import MemoryAccessUnit
 from cbac.utils import Vector
-
+from cbac.unit import auto_synthesis
 
 # TODO: explain what is a char set schematic
 # TODO: support vertical screens.
 
-
 class ScreenUnit(Unit):
+    @auto_synthesis
     def __init__(self, char_set, screen_access_unit):
         """
         :param char_set: Path to a char-set schematic
@@ -35,9 +35,6 @@ class ScreenUnit(Unit):
         self.print_value_input = self.add_input(self.char_set_access_unit.address_input)
         self.screen_access_unit = self.add_unit(screen_access_unit)
         self.location_input = self.add_input(self.screen_access_unit.address_input)
-        # TODO: think of a better name.
-        # What is the order over the char you want to print
-        self.synthesis()
 
     def architecture(self):
         yield InlineCall(self.char_set_access_unit)
