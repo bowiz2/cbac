@@ -8,7 +8,14 @@ from cbac.unit import auto_synthesis
 # TODO: explain what is a char set schematic
 # TODO: support vertical screens.
 
+
 class ScreenUnit(Unit):
+    """
+    Implements a screen in minecraft.
+    This unit has two registers:
+        - character input: indicates which character in the char set will be printed
+        - position input: indicates the location on the screen at which the character will be printed.
+    """
     @auto_synthesis
     def __init__(self, char_set, screen_access_unit):
         """
@@ -32,9 +39,10 @@ class ScreenUnit(Unit):
         )
         assert self.char_set_access_unit.word_size == screen_access_unit.word_size, \
             "char set word size must equal to the screen."
-        self.print_value_input = self.add_input(self.char_set_access_unit.address_input)
+        self.input_character = self.add_input(self.char_set_access_unit.address_input)
+        self.input_location = self.add_input(self.screen_access_unit.address_input)
         self.screen_access_unit = self.add_unit(screen_access_unit)
-        self.location_input = self.add_input(self.screen_access_unit.address_input)
+
 
     def architecture(self):
         yield InlineCall(self.char_set_access_unit)

@@ -27,15 +27,15 @@ class MemoryAccessUnit(Unit):
         for i in ratio:
             ratio_product *= i
         address_space_size = int(math.log(ratio_product, 2))
-
         word_size = Vector(*word_size)
+
         super(MemoryAccessUnit, self).__init__(address_space_size)
+        # The address you want to access
+        self.input_address = self.create_input(self.bits)
 
         self.ratio = Vector(*ratio)
         self.word_size = word_size
         self.address_space = address_space_size
-
-        self.address_input = self.create_input(self.bits)
 
         if not raw_memory:
             # The size of the box in which the memory is stored.
@@ -67,7 +67,7 @@ class MemoryAccessUnit(Unit):
 
         yield Debug("/say Moving pivot by address.")
         # Move it by to the address specified in the address register.
-        for i, addres_bit in enumerate(self.address_input.blocks):
+        for i, addres_bit in enumerate(self.input_address.blocks):
             if 2 ** i < self.ratio.x:
                 yield If(
                     addres_bit.shell == True
