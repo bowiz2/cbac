@@ -105,7 +105,7 @@ class ReadUnit(Unit):
         # Unit declaration.
         self.memory_access_unit = self.add_unit(memory_access_unit)
 
-        self.address_input = self.add_input(self.memory_access_unit.address_input)
+        self.address_input = self.add_input(self.memory_access_unit.input_address)
         self.read_output = self.create_output(self.word_size)
         self.synthesis()
 
@@ -133,7 +133,7 @@ class WriteUnit(Unit):
         # Unit declaration.
         self.memory_access_unit = self.add_unit(memory_access_unit)
 
-        self.address_input = self.add_input(self.memory_access_unit.address_input)
+        self.address_input = self.add_input(self.memory_access_unit.input_address)
         self.data_input = self.create_input(self.word_size)
         self.synthesis()
 

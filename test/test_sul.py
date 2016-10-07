@@ -113,45 +113,45 @@ class TestGate(TestCase):
         self.assertEqual(array_instance.bits, 8)
 
 
-# class TestSULMemory(SULTestCase):
-#     @named_schematic
-#     def test_memory_access(self):
-#         self.block_space.add_unit(sul.MemoryAccessUnit())
-#
-#     @named_schematic
-#     def test_memory_read(self):
-#         """
-#         Test read unit
-#         """
-#         access_unit = sul.MemoryAccessUnit()
-#         read_unit = sul.ReadUnit(8, access_unit)
-#         self.block_space.add_unit(read_unit)
-#
-#     @named_schematic
-#     def test_memory_write(self):
-#         """
-#         Test WriteUnit
-#         """
-#         access_unit = sul.MemoryAccessUnit()
-#         write_unit = sul.WriteUnit(8, access_unit)
-#         self.block_space.add_unit(write_unit)
-#
-#     @named_schematic
-#     def test_read_write_shared(self):
-#         """
-#         Test the read and the write sharing the same memory box.
-#         """
-#         access_unit = sul.MemoryAccessUnit()
-#         write_unit = sul.WriteUnit(8, access_unit)
-#         read_unit = sul.ReadUnit(8, access_unit)
-#         self.block_space.add_unit(access_unit)
-#         self.block_space.add_unit(write_unit)
-#         self.block_space.add_unit(read_unit)
-#
-#     @named_schematic
-#     def test_weird_memory_shared(self):
-#         access_unit = sul.MemoryAccessUnit((4, 1, 2), (4, 1, 4))
-#         self.block_space.add_unit(access_unit)
+class TestSULMemory(SULTestCase):
+    @named_schematic
+    def test_memory_access(self):
+        self.block_space.add_unit(sul.MemoryAccessUnit())
+
+    @named_schematic
+    def test_memory_read(self):
+        """
+        Test read unit
+        """
+        access_unit = sul.MemoryAccessUnit()
+        read_unit = sul.ReadUnit(8, access_unit)
+        self.block_space.add_unit(read_unit)
+
+    @named_schematic
+    def test_memory_write(self):
+        """
+        Test WriteUnit
+        """
+        access_unit = sul.MemoryAccessUnit()
+        write_unit = sul.WriteUnit(8, access_unit)
+        self.block_space.add_unit(write_unit)
+
+    @named_schematic
+    def test_read_write_shared(self):
+        """
+        Test the read and the write sharing the same memory box.
+        """
+        access_unit = sul.MemoryAccessUnit()
+        write_unit = sul.WriteUnit(8, access_unit)
+        read_unit = sul.ReadUnit(8, access_unit)
+        self.block_space.add_unit(access_unit)
+        self.block_space.add_unit(write_unit)
+        self.block_space.add_unit(read_unit)
+
+    @named_schematic
+    def test_weird_memory_shared(self):
+        access_unit = sul.MemoryAccessUnit((4, 1, 2), (4, 1, 4))
+        self.block_space.add_unit(access_unit)
 
 
 class Filler(Unit):
