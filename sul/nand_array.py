@@ -1,23 +1,7 @@
-from cbac.unit.unit_base import Unit
-from cbac.unit.statements import If
-from cbac.unit.vision import auto_synthesis
 from cbac.unit import std_logic
-
-
-class NandGate(Unit):
-    """
-    Simple NAND logic.
-    """
-    @auto_synthesis
-    def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out):
-        super(NandGate, self).__init__()
-        self.a = self.add(a)
-        self.b = self.add(b)
-        self.s = self.add(s)
-
-    def architecture(self):
-        yield self.s.shell.activate()
-        yield If((self.a.shell == True) & (self.shell == True)).then(self.s.shell.deactivate())
+from cbac.unit.statements import If
+from cbac.unit.unit_base import Unit
+from cbac.unit.vision import auto_synthesis
 
 
 class NandArray(Unit):

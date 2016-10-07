@@ -1,7 +1,6 @@
 from cbac.unit.statements import STDCall, InlineCall
 from cbac.unit.unit_base import Unit
 from increment_unit import IncrementUnit
-from sul.not_unit import NotGateArray
 from cbac.unit import std_logic
 from cbac.unit.vision import auto_synthesis
 
@@ -11,7 +10,7 @@ class NegateUnit(Unit):
     Negate a number using 2s compliment.
     """
     @auto_synthesis
-    def __init__(self, bits=8, inp=std_logic.InputRegister, output=std_logic.OutputRegister, notter=NotGateArray,
+    def __init__(self, bits=8, inp=std_logic.InputRegister, output=std_logic.OutputRegister, notter=None,
                  incrementer=IncrementUnit):
         super(NegateUnit, self).__init__(bits)
         # == Here you declare all your memory slots.
