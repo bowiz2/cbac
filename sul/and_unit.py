@@ -8,6 +8,9 @@ from cbac.unit.vision import auto_synthesis
 
 
 class AndGate(Unit):
+    """
+    Simple bitwise and logic on two ports.
+    """
     @auto_synthesis
     def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out):
         super(AndGate, self).__init__()
