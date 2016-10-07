@@ -9,13 +9,13 @@ from cbac.unit.vision import auto_synthesis
 
 class AndGate(Unit):
     @auto_synthesis
-    def __init__(self, x=std_logic.In, y=std_logic.In, s=std_logic.Out):
+    def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out):
         super(AndGate, self).__init__()
-        self.x = self.add(x)
-        self.y = self.add(y)
+        self.a = self.add(a)
+        self.b = self.add(b)
         self.s = self.add(s)
 
     def architecture(self):
-        yield If((self.x.shell == True) & (self.y.shell == True)).then(
+        yield If((self.a.shell == True) & (self.b.shell == True)).then(
             self.s.shell.activate()
         )
