@@ -1,5 +1,6 @@
 """Holds example unit"""
 from cbac.unit.unit_base import Unit
+from cbac.unit import std_logic, auto_synthesis
 
 
 class ExampleUnit(Unit):
@@ -7,14 +8,14 @@ class ExampleUnit(Unit):
     This is an example of a basic structure of a command block array unit.
     """
 
-    def __init__(self, bits=8):
+    # Don't forget to synthesis, It will synthesis you unit after the constructor. You can also do it manually.
+    # By calling self.synthesis()
+    @auto_synthesis
+    def __init__(self, bits=8, inp=std_logic.InputRegister, output=std_logic.OutputRegister):
         super(ExampleUnit, self).__init__(bits)
         # == Here you declare all your memory slots.
-        self.my_input = self.create_input(self.bits)
-        self.my_output = self.create_output(self.bits)
-        # ==
-        # Dont forget to synthesises your nodule.
-        self.synthesis()
+        self.my_input = self.add(inp)
+        self.my_output = self.add(output)
 
     def architecture(self):
         """
