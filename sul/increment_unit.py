@@ -20,6 +20,13 @@ class IncrementLogic(Unit):
         yield If((self.a.shell == False) & (self.cin.shell == True)).then(self.s.shell.activate())
         yield If((self.a.shell == True) & (self.cin.shell == False)).then(self.s.shell.activate())
 
+    @classmethod
+    def Array(cls, size=None):
+        array_class = IncrementUnit
+        if size:
+            return array_class(size)
+        return array_class
+
 
 class IncrementUnit(Unit):
     """
