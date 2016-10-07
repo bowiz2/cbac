@@ -1,4 +1,3 @@
-from cbac.compound import Register
 from cbac.unit.unit_base import Unit
 from cbac.unit.statements import *
 from cbac.unit import std_logic, auto_synthesis
