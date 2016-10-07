@@ -66,6 +66,18 @@ class FullAdderUnit(Unit):
             self.s.shell.activate()
         )
 
+    @classmethod
+    def Array(cls, size=None):
+        """
+        Get the array of full adder.
+        :param size:
+        :return:
+        """
+        array = RippleCarryFullAdderArray
+        if size:
+            return array(size)
+        return array
+
 
 class RippleCarryFullAdderArray(Unit):
     """

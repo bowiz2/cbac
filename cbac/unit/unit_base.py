@@ -225,6 +225,16 @@ class Unit(object):
     def shell(self):
         return UnitShell(self)
 
+    @classmethod
+    def Array(cls, size=None):
+        """
+        Get the class of the hardware array of this unit if possible.
+        Array in the hardware sense.
+        If no size is provided, the class of a gate array of the correct type is provided,
+        If a size was provided an instance with the supplied size will be provided.
+        """
+        pass
+
 class SimpleUnit(Unit):
     """
     A simple unit has no input/output registers. it only preforms logic.
