@@ -1,4 +1,5 @@
 from sul.gate import Gate
+from sul.nand_array import NandArray
 from unit import auto_synthesis, std_logic
 from unit.statements import If
 
@@ -17,3 +18,13 @@ class NandGate(Gate):
     def architecture(self):
         yield self.s.shell.activate()
         yield If((self.a.shell == True) & (self.shell == True)).then(self.s.shell.deactivate())
+
+    @classmethod
+    def Array(cls, size=None):
+        """
+        Get an array of nand gates.
+        """
+        array_class = NandArray
+        if size:
+            return array_class(size)
+        return array_class
