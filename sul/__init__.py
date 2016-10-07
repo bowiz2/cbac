@@ -10,7 +10,6 @@ from xor_gate import XorGate
 from or_gate import OrGate
 from not_gate import NotGate
 from and_gate import AndGate
-from callback_unit import CallbackUnit
 from example_unit import ExampleUnit
 from full_adder import FullAdderUnit, RippleCarryFullAdderArray
 from increment_unit import IncrementUnit
