@@ -34,6 +34,7 @@ class TestBitwiseUnits(SULTestCase):
     def test_xxx(self):
         my_class = sul.NotGate.Array()
         self.block_space.add_unit(my_class(4))
+
     @named_schematic
     def test_or(self):
         self.block_space.add_unit(sul.OrGate.Array(4))
@@ -88,8 +89,10 @@ class TestBitwiseUnits(SULTestCase):
 
 class TestGate(TestCase):
     """Test the gate framework"""
+
     def test_naming(self):
         self.assertEqual(sul.NotGate.Array().__name__, "NotGateArray")
+
     def test_permutation(self):
         """
         check if
@@ -108,6 +111,7 @@ class TestGate(TestCase):
         self.assertEqual(array_instance.bits, 8)
         array_instance = MyGate.Array(8)
         self.assertEqual(array_instance.bits, 8)
+
 
 # class TestSULMemory(SULTestCase):
 #     @named_schematic

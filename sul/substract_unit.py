@@ -9,6 +9,7 @@ class SubtractUnit(Unit):
     Simple bitwise substract unit.
     substract one register from another.
     """
+
     @auto_synthesis
     def __init__(self, bits=8, input_a=std_logic.InputRegister, input_b=std_logic.InputRegister,
                  output=std_logic.OutputRegister, negator=NegateUnit, adder=RippleCarryFullAdderArray):

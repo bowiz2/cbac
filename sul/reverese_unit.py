@@ -1,12 +1,13 @@
 from cbac.unit.unit_base import Unit
 from cbac.unit.statements import If
-from cbac.unit import std_logic,auto_synthesis
+from cbac.unit import std_logic, auto_synthesis
 
 
 class ReverseUnit(Unit):
     """
     Bitwise reverse the content of a register.
     """
+
     @auto_synthesis
     def __init__(self, bits=8, inp=std_logic.InputRegister, output=std_logic.OutputRegister):
         super(ReverseUnit, self).__init__(bits)

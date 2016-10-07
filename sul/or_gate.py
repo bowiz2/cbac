@@ -7,6 +7,7 @@ class OrGate(Gate):
     """
     Simple Bitwise Or Gate
     """
+
     @auto_synthesis
     def __init__(self, a=std_logic.In, b=std_logic.Out, s=std_logic.Out):
         super(OrGate, self).__init__()
@@ -17,5 +18,3 @@ class OrGate(Gate):
     def architecture(self):
         yield If(self.a.shell == True).then(self.s.shell.activate())
         yield If(self.b.shell == True).then(self.s.shell.activate())
-
-

@@ -8,6 +8,7 @@ class FullAdderUnit(Unit):
     """
     Preform
     """
+
     @auto_synthesis
     def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out, cin=std_logic.In, cout=std_logic.Out):
         super(FullAdderUnit, self).__init__()
@@ -83,6 +84,7 @@ class RippleCarryFullAdderArray(Unit):
     """
     Implement an array of full adders, resulting in a calculator.
     """
+
     @auto_synthesis
     def __init__(self, bits, input_a=std_logic.InputRegister, input_b=std_logic.InputRegister,
                  output=std_logic.OutputRegister, full_adder_logic=FullAdderUnit, carry_flag=None):
@@ -90,7 +92,7 @@ class RippleCarryFullAdderArray(Unit):
         self.input_a = self.add(input_a)
         self.input_b = self.add(input_b)
         self.output = self.add(output)
-        self.carry = self.add(std_logic.InputRegister(self.bits+1))
+        self.carry = self.add(std_logic.InputRegister(self.bits + 1))
         self.carry_flag = self.add(carry_flag)
         self.full_adder_logic = self.add(full_adder_logic)
 

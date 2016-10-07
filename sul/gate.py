@@ -40,6 +40,7 @@ class Gate(Unit):
             """
             This is array which represents the gate array.
             """
+
             @auto_synthesis
             def __init__(self, size):
                 super(_GateArray, self).__init__(size, cls, auto_synthesis=False,

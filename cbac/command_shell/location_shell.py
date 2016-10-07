@@ -10,6 +10,7 @@ from cbac.command_shell.decorator import command
 from cbac.utils import Vector, format_area
 from cbac.utils import absolute_area as abs_area
 
+
 class LocationShell(CommandShell):
     """
     Provides commands for manipulating objects inside Minecraft which have location.

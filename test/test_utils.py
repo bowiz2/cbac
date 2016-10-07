@@ -3,6 +3,7 @@ from unittest import TestCase
 from utils import *
 from utils import _from
 
+
 class TestUtils(TestCase):
     def test_yield_from(self):
         def some():

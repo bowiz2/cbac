@@ -8,6 +8,7 @@ class NandGate(Gate):
     """
     Simple NAND logic.
     """
+
     @auto_synthesis
     def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out):
         super(NandGate, self).__init__()

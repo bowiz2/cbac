@@ -7,6 +7,7 @@ class IncrementLogic(Unit):
     """
     Logic of increment of one bit.
     """
+
     @auto_synthesis
     def __init__(self, a=std_logic.In, s=std_logic.Out, cin=std_logic.In, cout=std_logic.Out):
         super(IncrementLogic, self).__init__()
@@ -32,6 +33,7 @@ class IncrementUnit(Unit):
     """
     Increments a register by 1.
     """
+
     @auto_synthesis
     def __init__(self, bits, inp=std_logic.InputRegister, output=std_logic.OutputRegister, carry_out=None):
         super(IncrementUnit, self).__init__(bits)
@@ -44,5 +46,5 @@ class IncrementUnit(Unit):
 
     def architecture(self):
         yield self._carry.ports[0].shell.activate()
-        yield map(self.incrementer_logic, self.input.ports, self.output.ports, self._carry.ports[:-1], self._carry.ports[1:])
-
+        yield map(self.incrementer_logic, self.input.ports, self.output.ports, self._carry.ports[:-1],
+                  self._carry.ports[1:])

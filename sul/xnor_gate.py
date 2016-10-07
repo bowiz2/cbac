@@ -7,6 +7,7 @@ class XnorGate(Gate):
     """
     Preform simple xor logic on 2 ports.
     """
+
     def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out):
         super(XnorGate, self).__init__()
         self.a = self.add(a)
@@ -28,4 +29,3 @@ class XnorGate(Gate):
         ).then(
             self.s.shell.activate()
         )
-

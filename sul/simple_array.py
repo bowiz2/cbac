@@ -7,6 +7,7 @@ class SimpleArray(Unit):
     """
     Maps a unit logic over a fixed number of ports.
     """
+
     @auto_synthesis
     def __init__(self, bits, gate, *interfaces):
         """

@@ -14,6 +14,7 @@ class Port(Block, StdLogic):
     """
     Represents a block.
     """
+
     def __init__(self):
         super(Port, self).__init__(FALSE_BLOCK)
 

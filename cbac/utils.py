@@ -123,6 +123,6 @@ def flatten(l, levels=0):
         l = new_l
     return l
 
+
 def compare(iter1, iter2):
     return all(a == b for a, b in zip(iter1, iter2))
-

@@ -5,6 +5,7 @@ from sul import MemoryAccessUnit
 from cbac.utils import Vector
 from cbac.unit import auto_synthesis
 
+
 # TODO: explain what is a char set schematic
 # TODO: support vertical screens.
 
@@ -16,6 +17,7 @@ class ScreenUnit(Unit):
         - character input: indicates which character in the char set will be printed
         - position input: indicates the location on the screen at which the character will be printed.
     """
+
     @auto_synthesis
     def __init__(self, char_set, screen_access_unit):
         """

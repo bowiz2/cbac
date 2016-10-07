@@ -10,6 +10,7 @@ class NegateUnit(Unit):
     """
     Negate a number using 2s compliment.
     """
+
     @auto_synthesis
     def __init__(self, bits=8, inp=std_logic.InputRegister, output=std_logic.OutputRegister, notter=NotGate.Array(),
                  incrementer=IncrementUnit):

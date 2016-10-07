@@ -18,6 +18,7 @@ class Unit(object):
     """
     Now imitates a VHDL module.
     """
+
     def __init__(self, bits=None, logic_parser_instance=None):
         """
         Create a unit with an input base length.
@@ -119,7 +120,6 @@ class Unit(object):
                 self.ports.append(item)
             if isinstance(item, std_logic.Out):
                 self.ports.append(item)
-
 
         return item
 
@@ -234,6 +234,7 @@ class Unit(object):
         If a size was provided an instance with the supplied size will be provided.
         """
         pass
+
 
 class SimpleUnit(Unit):
     """
