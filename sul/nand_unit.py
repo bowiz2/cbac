@@ -27,12 +27,12 @@ class NandArray(Unit):
     @auto_synthesis
     def __init__(self, bits=8, a=std_logic.InputRegister, b=std_logic.InputRegister, s=std_logic.OutputRegister):
         super(NandArray, self).__init__(bits)
-        self.a = self.add(a)
-        self.b = self.add(b)
-        self.s = self.add(s)
+        self.input_a = self.add(a)
+        self.input_b = self.add(b)
+        self.output = self.add(s)
 
     def architecture(self):
-        yield self.s.shell.set_max_value()
-        for a_port, b_port, s_port, in zip(self.a.ports, self.b.ports, self.s.ports):
+        yield self.output.shell.set_max_value()
+        for a_port, b_port, s_port, in zip(self.input_a.ports, self.input_b.ports, self.output.ports):
             yield If((a_port.shell == True) & (b_port.shell == True)).then(s_port.shell.deactivate())
 
