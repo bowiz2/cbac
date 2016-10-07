@@ -44,8 +44,6 @@ class ScreenUnit(Unit):
         self.input_character = self.add_input(self.char_set_access_unit.input_address)
         self.input_location = self.add_input(self.screen_access_unit.input_address)
 
-
-
     def architecture(self):
         yield InlineCall(self.char_set_access_unit)
         yield InlineCall(self.screen_access_unit)
