@@ -1,9 +1,9 @@
-from cbac import Unit
+from sul.gate import Gate
 from unit import auto_synthesis, std_logic
 from unit.statements import If
 
 
-class NandGate(Unit):
+class NandGate(Gate):
     """
     Simple NAND logic.
     """

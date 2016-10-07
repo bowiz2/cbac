@@ -9,6 +9,7 @@ import sul
 from cbac.blockspace import BlockSpace
 from test.decorators import named_schematic
 from cbac.unit import Unit
+from cbac.unit import std_logic
 from cbac.unit.statements import *
 
 
@@ -30,12 +31,16 @@ class SULTestCase(TestCase):
 
 class TestBitwiseUnits(SULTestCase):
     @named_schematic
+    def test_xxx(self):
+        my_class = sul.NotGate.Array()
+        self.block_space.add_unit(my_class(4))
+    @named_schematic
     def test_or(self):
-        self.block_space.add_unit(sul.Simple2pArray(sul.OrGate, 4))
+        self.block_space.add_unit(sul.OrGate.Array(4))
 
     @named_schematic
     def test_not(self):
-        self.block_space.add_unit(sul.NotGateArray(4))
+        self.block_space.add_unit(sul.NotGate.Array(4))
 
     @named_schematic
     def test_reverse(self):
@@ -43,7 +48,7 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_and(self):
-        self.block_space.add_unit(sul.Simple2pArray(sul.AndGate, 4))
+        self.block_space.add_unit(sul.AndGate.Array(4))
 
     @named_schematic
     def test_nand(self):
@@ -55,11 +60,11 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_xor(self):
-        self.block_space.add_unit(sul.XorUnit(4))
+        self.block_space.add_unit(sul.XorGate.Array(4))
 
     @named_schematic
     def test_xnor(self):
-        self.block_space.add_unit(sul.XnorUnit(4))
+        self.block_space.add_unit(sul.XnorGate.Array(4))
 
     @named_schematic
     def test_fulladder(self):
@@ -80,6 +85,29 @@ class TestBitwiseUnits(SULTestCase):
         self.block_space.add(my_register)
         self.block_space.add_unit(sul.IsActiveListener(my_register.blocks[0], my_register.blocks[1]))
 
+
+class TestGate(TestCase):
+    """Test the gate framework"""
+    def test_naming(self):
+        self.assertEqual(sul.NotGate.Array().__name__, "NotGateArray")
+    def test_permutation(self):
+        """
+        check if
+            my_array_class = MyGate.Array()
+            array_instance = my_array_class(8)
+        is equal to
+            array_instance = MyGate.Array()(8)
+        is equal to
+            array_instance = MyGate.Array(8)
+        """
+        MyGate = sul.NotGate
+        my_array_class = MyGate.Array()
+        array_instance = my_array_class(8)
+        self.assertEqual(array_instance.bits, 8)
+        array_instance = MyGate.Array()(8)
+        self.assertEqual(array_instance.bits, 8)
+        array_instance = MyGate.Array(8)
+        self.assertEqual(array_instance.bits, 8)
 
 # class TestSULMemory(SULTestCase):
 #     @named_schematic

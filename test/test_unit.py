@@ -3,6 +3,7 @@ Tests for the unit class. mainly unit statemtns.
 """
 from unittest import TestCase
 from cbac.unit import Unit, SimpleUnit
+from cbac.unit import std_logic, auto_synthesis
 from cbac.unit.statements import *
 from cbac.compound import Register, Constant
 from cbac.command_shell.command_suspender import CommandSuspender
@@ -10,6 +11,22 @@ import cbac.config
 from cbac.unit.logic_parser import UnitLogicParser, CommandCollection
 from test_sul import SULTestCase
 from test.decorators import named_schematic
+
+
+class TestUniProperties(TestCase):
+    def test_ports_signature(self):
+        class SampleUnit(Unit):
+            @auto_synthesis
+            def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out):
+                super(SampleUnit, self).__init__()
+                self.a = self.add(a)
+                self.b = self.add(b)
+                self.s = self.add(s)
+
+        self.assertEqual(len(SampleUnit.ports_signature()), 3, "unexpected size")
+        self.assertEqual(SampleUnit.ports_signature()[0], std_logic.In)
+        self.assertEqual(SampleUnit.ports_signature()[1], std_logic.In)
+        self.assertEqual(SampleUnit.ports_signature()[2], std_logic.Out)
 
 
 class TestLogicParser(TestCase):

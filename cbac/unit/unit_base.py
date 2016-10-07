@@ -11,6 +11,8 @@ import inspect
 # TODO: handle ports correctly.
 # TODO: implement caching
 # TODO: add refcount for a unit. to know if it can be included as an inline.
+# TODO: organize the class, mainly the methods.
+
 
 class Unit(object):
     """
@@ -26,6 +28,8 @@ class Unit(object):
         self.bits = bits
         self._logic_parser = logic_parser_instance
         self.compounds = []
+        # keep track of the ports in the unit.
+        self.ports = []
         self.inputs = []
         self.outputs = []
         # Units which are needed for this unit to function.
@@ -34,6 +38,15 @@ class Unit(object):
         self.logic_cbas = []
         self.is_inline = False
         self.is_synthesized = False
+
+    @classmethod
+    def ports_signature(cls):
+        """
+        defiend by the default ports provided in the __init__ of the unit.
+        :return: list of the classes of the ports.
+        """
+        signature = [port for port in cls.__init__.func_defaults if issubclass(port, std_logic.Port)]
+        return signature
 
     def architecture(self):
         """
@@ -101,6 +114,13 @@ class Unit(object):
                     item = self.add_output(item)
                 else:
                     item = self.add_compound(item)
+
+            if isinstance(item, std_logic.In):
+                self.ports.append(item)
+            if isinstance(item, std_logic.Out):
+                self.ports.append(item)
+
+
         return item
 
     def add_compound(self, item):

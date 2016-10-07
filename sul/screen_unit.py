@@ -39,9 +39,11 @@ class ScreenUnit(Unit):
         )
         assert self.char_set_access_unit.word_size == screen_access_unit.word_size, \
             "char set word size must equal to the screen."
-        self.input_character = self.add_input(self.char_set_access_unit.address_input)
-        self.input_location = self.add_input(self.screen_access_unit.address_input)
         self.screen_access_unit = self.add_unit(screen_access_unit)
+
+        self.input_character = self.add_input(self.char_set_access_unit.input_address)
+        self.input_location = self.add_input(self.screen_access_unit.input_address)
+
 
 
     def architecture(self):

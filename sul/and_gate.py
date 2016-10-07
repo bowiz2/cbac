@@ -1,13 +1,13 @@
 """
 Holds AND unit.
 """
-from cbac.unit import Unit
+from sul.gate import Gate
 from cbac.unit import std_logic
 from cbac.unit.statements import If
 from cbac.unit.vision import auto_synthesis
 
 
-class AndGate(Unit):
+class AndGate(Gate):
     """
     Simple bitwise and logic on two ports.
     """

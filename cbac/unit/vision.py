@@ -8,7 +8,7 @@ def auto_synthesis(f):
         f(u_self, *args, **kwargs)
         if do_synthesise:
             u_self.synthesis()
-
+    wrapper.func_defaults = f.func_defaults
     wrapper.__name__ = f.__name__
     return wrapper
 
