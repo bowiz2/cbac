@@ -29,14 +29,14 @@ class IncrementUnit(Unit):
     @auto_synthesis
     def __init__(self, bits, inp=std_logic.InputRegister, output=std_logic.OutputRegister, carry_out=None):
         super(IncrementUnit, self).__init__(bits)
-        # in the carry we will remember the addition.
-        self.carry = self.add(std_logic.InputRegister(self.bits+1))
         self.input = self.add(inp)
         self.output = self.add(output)
         self.carry_out = self.add(carry_out)
+        # in the carry we will remember the addition.
+        self._carry = self.add(std_logic.InputRegister(self.bits + 1))
         self.incrementer_logic = self.add(IncrementLogic)
 
     def architecture(self):
-        yield self.carry.ports[0].shell.activate()
-        yield map(self.incrementer_logic, self.input.ports, self.output.ports, self.carry.ports[:-1], self.carry.ports[1:])
+        yield self._carry.ports[0].shell.activate()
+        yield map(self.incrementer_logic, self.input.ports, self.output.ports, self._carry.ports[:-1], self._carry.ports[1:])
 
