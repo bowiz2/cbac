@@ -88,10 +88,12 @@ class BlockSpace(object):
         # if item is a location, return itself.
         if isinstance(item, Vector):
             return item
-        try:
+        if item in self.packed_blocks.keys():
             location = self.packed_blocks[item]
-        except KeyError:
+        elif item in self.packed_items.keys():
             location = self.packed_items[item].location
+        else:
+            raise Exception("The unit, compound or block {0} was not added to this blockspace.".format(item))
 
         return location
 
