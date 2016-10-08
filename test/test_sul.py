@@ -211,9 +211,7 @@ class TestSubRegisterOperation(SULTestCase):
     @named_schematic
     def test_slice(self):
         my_Register = cbac.Register(8)
-        my_slice = my_Register.slice(xrange(2, 4))
         self.block_space.add(my_Register)
-        self.block_space.add(my_slice)
         self.block_space.add(cbac.CBA(
-            my_slice.shell.activate()
+            my_Register.slice(xrange(2, 5)).shell.set_max_value()
         ))
