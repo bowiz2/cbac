@@ -30,7 +30,7 @@ class Register(Compound):
     def ports(self):
         return self.blocks
 
-    def get_sub_memory(self, arange):
+    def slice(self, arange):
         """
         Get a sub memory of a memory.
         :param range: iterator over the blocks you want to add to the sub memory.

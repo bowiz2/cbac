@@ -32,6 +32,6 @@ class TestCompound(TestCase):
     def test_get_sub_memory(self):
         BITS = 8
         big_memory = Register(BITS)
-        sub = big_memory.get_sub_memory(xrange(BITS / 2))
+        sub = big_memory.slice(xrange(BITS / 2))
         self.assertIsNotNone(sub)
         self.assertEqual(len(sub.blocks), BITS / 2)
