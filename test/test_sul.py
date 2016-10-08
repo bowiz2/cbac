@@ -86,6 +86,10 @@ class TestBitwiseUnits(SULTestCase):
         self.block_space.add(my_register)
         self.block_space.add_unit(sul.IsActiveListener(my_register.blocks[0], my_register.blocks[1]))
 
+    @named_schematic
+    def test_shift(self):
+        self.block_space.add_unit(sul.ShiftUnit(8, 1))
+        self.block_space.add_unit(sul.ShiftUnit(8, 7))
 
 class TestGate(TestCase):
     """Test the gate framework"""
