@@ -3,6 +3,7 @@ Holds the blockspace Class.
 """
 import packer
 from cbac.utils import Vector
+from cbac import utils
 
 
 class BlockSpace(object):
@@ -59,27 +60,27 @@ class BlockSpace(object):
     # Getters
     def get_area_of(self, item):
         """
-        Gets the area of a compound.
+        Gets the area of an item.
         """
-
-        if item in self.packed_items:
-            # If the item was a compound, Calculate the minimal vectors.
-            location, block_packings = self.packed_items[item]
-            # TODO: Write unit test for it.
-            block_locations = [self.packed_blocks[block] for block, location, direction in block_packings]
-
-            sort_by_x = sorted(block_locations, key=lambda obj: obj[0])
-            sort_by_y = sorted(block_locations, key=lambda obj: obj[1])
-            sort_by_z = sorted(block_locations, key=lambda obj: obj[2])
-
-            min_location = Vector(sort_by_x[0].x, sort_by_y[0].y, sort_by_z[0].z)
-            max_location = Vector(sort_by_x[-1].x, sort_by_y[-1].y, sort_by_z[-1].z)
-
-            return min_location, max_location
-        else:
+        # Check if the item is actuall a block.
+        if item in self.packed_blocks:
             # If the item provided was a block, just return its location in an area form.
             location = self.packed_blocks[item]
             return location, location
+
+        # If the item was packed.
+        if item in self.packed_items:
+            # If the item was a compound, Calculate the minimal vectors.
+            location, block_packings = self.packed_items[item]
+            block_locations = [self.packed_blocks[block] for block, location, direction in block_packings]
+
+        # In the case the item was constructed from an already packed item.
+        elif hasattr(item, "blocks") and all(block in self.packed_blocks for block in item.blocks):
+            block_locations = [self.packed_blocks[block] for block in item.blocks]
+        else:
+            raise Exception("Item was nor packed or constructed from a packed item.")
+
+        return utils.min_corner(block_locations), utils.max_corner(block_locations)
 
     def get_location_of(self, item):
         """
@@ -93,7 +94,10 @@ class BlockSpace(object):
         elif item in self.packed_items.keys():
             location = self.packed_items[item].location
         else:
-            raise Exception("The unit, compound or block {0} was not added to this blockspace.".format(item))
+            if hasattr(item, "blocks") and all(block in self.packed_blocks for block in item.blocks):
+                location = utils.min_corner([self.packed_blocks[block] for block in item.blocks])
+            else:
+                raise Exception("The unit, compound or block {0} was not added to this blockspace.".format(item))
 
         return location
 
