@@ -21,19 +21,22 @@ class Register(Compound):
     @property
     @memoize
     def blocks(self):
-        to_return = []
-        for i in xrange(self.size):
-            to_return.append(Block(self.default_block))
-        return to_return
+        """
+        :return: List of blocks which compose the register.
+        """
+        return [Block(self.default_block) for _ in xrange(self.size)]
 
     @property
     def ports(self):
+        """
+        :return: All the ports in this register.
+        """
         return self.blocks
 
     def slice(self, arange):
         """
         Get a sub memory of a memory.
-        :param range: iterator over the blocks you want to add to the sub memory.
+        :param arange: iterator over the blocks you want to add to the sub memory.
         :return: new memory compound which shares blocks with this memory.
         """
         sub_memory = Register(size=len(arange))
