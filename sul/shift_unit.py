@@ -10,7 +10,7 @@ class ShiftUnit(Unit):
 
     @auto_synthesis
     def __init__(self, bits=8, times=1, inp=std_logic.InputRegister, output=std_logic.OutputRegister, carry_out=None,
-                 register_work=None):
+                 register_work=None, no_reset=False):
         """
         :param bits: size of the input and the output.
         :param times: how many times to shift the input.
@@ -19,21 +19,20 @@ class ShiftUnit(Unit):
         :param carry_out: Pass port which will be set true if the shifted out bit is true.
         :param register_work: On this register all the operations will be preformed.
         """
-        super(ShiftUnit, self).__init__(bits)
+        super(ShiftUnit, self).__init__(bits, no_reset=no_reset)
 
         if not register_work:
             register_work = std_logic.InputRegister(self.bits+times)
 
         self.input = self.add(inp)
+        self.output = self.add(output)
 
         # On this register all the operations will be preformed.
         self.register_work = self.add(register_work)
         # This is the register to which the input will be copied.
         self.register_target = self.register_work.slice(xrange(times, self.bits+times))
         # From this register the output will be copied.
-        self.register_product = self.register_work.slice(xrange(self.bits))
-
-        self.output = self.add(output)
+        self.register_product = self.register_work.slice(xrange(min(self.output.size, self.register_work.size)))
 
         self.carry_out = self.add(carry_out)
 

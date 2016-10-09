@@ -91,6 +91,10 @@ class TestBitwiseUnits(SULTestCase):
         self.block_space.add_unit(sul.ShiftUnit(8, 1))
         self.block_space.add_unit(sul.ShiftUnit(8, 7))
 
+    @named_schematic
+    def test_multi(self):
+        self.block_space.add_unit((sul.MultiUnit(3)))
+
 class TestGate(TestCase):
     """Test the gate framework"""
 

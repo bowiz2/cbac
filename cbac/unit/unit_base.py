@@ -19,10 +19,11 @@ class Unit(object):
     Now imitates a VHDL module.
     """
 
-    def __init__(self, bits=None, logic_parser_instance=None):
+    def __init__(self, bits=None, logic_parser_instance=None, no_reset=False):
         """
         Create a unit with an input base length.
         :param bits: The base length of the unit.
+        :param no_reset: indicates that this unit will not reset its inputs and outputs.
         """
         if not logic_parser_instance:
             logic_parser_instance = UnitLogicParser()
@@ -39,6 +40,7 @@ class Unit(object):
         self.logic_cbas = []
         self.is_inline = False
         self.is_synthesized = False
+        self.no_reset = no_reset
 
     @classmethod
     def ports_signature(cls):
@@ -175,16 +177,18 @@ class Unit(object):
         """
         Generate the commands which are executed when the entry pointed activated.
         """
-        for output_memory in self.outputs:
-            yield output_memory.shell.reset()
+        if not self.no_reset:
+            for output_memory in self.outputs:
+                yield output_memory.shell.reset()
 
     def on_exit_commands(self):
         """
         Generate the commands which will be called when the main activation of the entry point is finished.
         :return:
         """
-        for input_memory in self.inputs:
-            yield input_memory.shell.reset()
+        if not self.no_reset:
+            for input_memory in self.inputs:
+                yield input_memory.shell.reset()
 
     @property
     def ticks(self):
