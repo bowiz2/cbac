@@ -15,7 +15,7 @@ class MultiUnit(Unit):
     # Don't forget to synthesis, It will synthesis you unit after the constructor. You can also do it manually.
     # By calling self.synthesis()
     @auto_synthesis
-    def __init__(self, bits=8, input_a=std_logic.InputRegister, input_b=std_logic.InputRegister, adder_class=RippleCarryFullAdderArray):
+    def __init__(self, bits=8, input_a=std_logic.InputRegister, input_b=std_logic.InputRegister, adder_class=RippleCarryFullAdderArray, inline_adder=True):
         super(MultiUnit, self).__init__(bits)
 
         self.input_a = self.add(input_a)
@@ -26,9 +26,8 @@ class MultiUnit(Unit):
         self.shifters = [self.add_unit(ShiftUnit(self.bits, i, inp=self.input_a, output=self.shift_results[i], no_reset=True)) for i in xrange(1, self.bits)]
 
         # Not we are not synthesizing them yet.
-        self.adders = [self.add_unit(adder_class(self.bits*2)) for _ in xrange(self.bits-1)]
-
-        # Rewire their inputs and outputs.
+        self.adder = self.add_unit(adder_class(self.bits*2))
+        self.inline_adder = inline_adder
 
 
     def architecture(self):
@@ -55,12 +54,15 @@ class MultiUnit(Unit):
 
         for i in xrange(self.bits - 1):
             if i == 0:
-                yield self.shift_results[i].shell.copy(self.adders[i].input_a)
-                yield self.shift_results[i+1].shell.copy(self.adders[i].input_b)
+                yield self.shift_results[i].shell.copy(self.adder.input_a)
+                yield self.shift_results[i+1].shell.copy(self.adder.input_b)
             else:
-                yield self.adders[i - 1].output.shell.copy(self.adders[i].input_b)
-                yield self.shift_results[i+1].shell.copy(self.adders[i].input_a)
+                yield self.adder.output.shell.copy(self.adder.input_b)
+                yield self.shift_results[i+1].shell.copy(self.adder.input_a)
 
-            yield MainLogicJump(self.adders[i])
+            if self.inline_adder:
+                yield InlineCall(self.adder)
+            else:
+                yield MainLogicJump(self.adder)
         # for adder in self.adders:
         #     yield MainLogicJump(adder)
