@@ -23,49 +23,17 @@ class FullAdderUnit(Unit):
         Simple full adder architecture using a truth table.
         """
         # TODO: create a truth table statement.
-        yield self.a.shell == False
-        yield self.b.shell == False
-        yield self.cin.shell == True
-        yield Conditional(
-            self.s.shell.activate()
-        )
-        yield self.a.shell == False
-        yield self.b.shell == True
-        yield self.cin.shell == False
-        yield Conditional(
-            self.s.shell.activate()
-        )
-        yield self.a.shell == False
-        yield self.b.shell == True
-        yield self.cin.shell == True
-        yield Conditional(
-            self.cout.shell.activate()
-        )
-        yield self.a.shell == True
-        yield self.b.shell == False
-        yield self.cin.shell == False
-        yield Conditional(
-            self.s.shell.activate()
-        )
-        yield self.a.shell == True
-        yield self.b.shell == False
-        yield self.cin.shell == True
-        yield Conditional(
-            self.cout.shell.activate()
-        )
-        yield self.a.shell == True
-        yield self.b.shell == True
-        yield self.cin.shell == False
-        yield Conditional(
-            self.cout.shell.activate()
-        )
-        yield self.a.shell == True
-        yield self.b.shell == True
-        yield self.cin.shell == True
-        yield Conditional(
-            self.cout.shell.activate(),
-            self.s.shell.activate()
-        )
+        yield TruthTable([
+            [self.a, self.b, self.cin, self.s, self.cout],
+            [False,  False,  True,     True,   False],
+            [False,  True,   False,    True,   False],
+            [False,  True,   True,     False,  True],
+            [True,   False,  False,    True,   False],
+            [True,   False,  True,     False,  True],
+            [True,   True,   False,    False,  True],
+            [True,   True,   True,     True,   True],
+        ])
+
 
     @classmethod
     def Array(cls, size=None):
