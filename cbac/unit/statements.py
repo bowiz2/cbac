@@ -2,6 +2,7 @@
 Statements are syntactic sugar for the definition of units.
 """
 import cbac.mc_command as mc_command
+# TODO: move parsing logic inside the statement.
 
 
 class Token(object):
@@ -212,3 +213,24 @@ class If(Statement):
 
     def otherwise(self, *statements):
         assert False, "otherwise is not implemented."
+
+
+class TruthTable(Statement):
+    """
+    Aught to represent a truth table of ports.
+
+    Format is as fallowes.
+    yield TruthTable( [in_a,  in_b,  in_c,  out_a, out_b],
+                      "---------------------------------" // This is a decorator.
+                      [True,  True,  False, True,  True],
+                      [False, False, False, True,  False],
+                      [True,  True,  False, True,  True])6
+    """
+
+    @property
+    def table(self):
+        """
+        This is the table which holds the rules for comprehention.
+        :return: dict
+        """
+        return self.wrapped
