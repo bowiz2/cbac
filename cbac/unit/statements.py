@@ -4,7 +4,6 @@ Statements are syntactic sugar for the definition of units.
 import cbac.mc_command as mc_command
 
 
-# TODO: implement switch statement.
 class Token(object):
     """
     This is the basic type of a statement and statement collection.

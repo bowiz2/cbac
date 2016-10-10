@@ -19,5 +19,4 @@ class Pivot(MCEntity):
     @property
     @memoize
     def shell(self):
-        # TODO: convert each shell property to class method.
         return PivotShell(self)
