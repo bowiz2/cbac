@@ -95,6 +95,7 @@ class TestBitwiseUnits(SULTestCase):
     def test_multi(self):
         self.block_space.add_unit((sul.MultiUnit(2, inline_adder=True)))
 
+
 class TestGate(TestCase):
     """Test the gate framework"""
 

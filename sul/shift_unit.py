@@ -22,7 +22,7 @@ class ShiftUnit(Unit):
         super(ShiftUnit, self).__init__(bits, no_reset=no_reset)
 
         if not register_work:
-            register_work = std_logic.InputRegister(self.bits+times)
+            register_work = std_logic.InputRegister(self.bits + times)
 
         self.input = self.add(inp)
         self.output = self.add(output)
@@ -30,7 +30,7 @@ class ShiftUnit(Unit):
         # On this register all the operations will be preformed.
         self.register_work = self.add(register_work)
         # This is the register to which the input will be copied.
-        self.register_target = self.register_work.slice(xrange(times, self.bits+times))
+        self.register_target = self.register_work.slice(xrange(times, self.bits + times))
         # From this register the output will be copied.
         self.register_product = self.register_work.slice(xrange(min(self.output.size, self.register_work.size)))
 
@@ -45,5 +45,4 @@ class ShiftUnit(Unit):
         yield self.input.shell.copy(self.register_target)
         yield self.register_product.shell.copy(self.output)
         if self.carry_out:
-            yield self.register_work.ports[self.bits+1].shell.copy(self.carry_out)
-
+            yield self.register_work.ports[self.bits + 1].shell.copy(self.carry_out)
