@@ -1,7 +1,7 @@
 from cbac.block import Block
 from cbac.constants.block_id import FALSE_BLOCK
 import cbac.compound.register
-
+# TODO: fix the major bug.
 
 class StdLogic(object):
     """
@@ -45,7 +45,10 @@ class InputRegister(Register):
     """
     Register which is an input, used in a call statement.
     """
-    pass
+    @property
+    def ports(self):
+        for port in super(InputRegister, self).ports:
+
 
 
 class OutputRegister(Register):
