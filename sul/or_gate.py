@@ -9,7 +9,7 @@ class OrGate(Gate):
     """
 
     @auto_synthesis
-    def __init__(self, a=std_logic.In, b=std_logic.Out, s=std_logic.Out):
+    def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out):
         super(OrGate, self).__init__()
         self.a = self.add(a)
         self.b = self.add(b)
