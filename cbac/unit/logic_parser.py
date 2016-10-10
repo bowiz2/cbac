@@ -146,14 +146,6 @@ class UnitLogicParser(object):
             for command in statement.condition_commands:
                 self.parse_stack.append(command)
 
-        elif isinstance(statement, Switch):
-            switch = statement
-            for _case in statement.cases:
-                constant = Constant(_case.to_compare)
-                body = _case.body_statements
-                self.parse_stack.append(If(switch.wrapped.shell == constant).then(*body))
-                self.other_compounds.append(constant)
-
         elif isinstance(statement, InlineCall):
             # TODO: support inline for jumpables units.
             assert len(statement.called_unit.logic_cbas) <= 1, "The inline-called function must not contain jumps"
