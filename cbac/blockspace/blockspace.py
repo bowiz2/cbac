@@ -25,15 +25,16 @@ class BlockSpace(object):
 
         self.unpacked_items = []
 
-    def add(self, item):
+    def add(self, *items):
         """
         Schedule an item for packing.
         :param item: Item you want to pack in this blockspace.
         :return: None
         """
-        if item in self.unpacked_items:
-            return
-        self.unpacked_items.append(item)
+        for item in items:
+            if item in self.unpacked_items:
+                continue
+            self.unpacked_items.append(item)
 
     def add_unit(self, unit):
         """

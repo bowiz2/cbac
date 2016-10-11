@@ -69,9 +69,11 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_fulladder(self):
-        register = cbac.Register(5)
-        self.block_space.add(register)
-        self.block_space.add_unit(sul.FullAdderUnit(*register.ports))
+        inp = cbac.unit.std_logic.InputRegister(3)
+        output = cbac.unit.std_logic.OutputRegister(2)
+        self.block_space.add(inp, output)
+        self.block_space.add_unit(sul.FullAdderUnit(inp.ports[0], inp.ports[1], output.ports[0], inp.ports[2],
+                                                    output.ports[1]))
 
     @named_schematic
     def test_ripple_carry_adder(self):
