@@ -87,15 +87,10 @@ class Unit(object):
             # Auto gen std components
             if issubclass(item, std_logic.StdLogic):
                 # In-case a class was supplied.
-                if item == std_logic.InputRegister:
-                    item = std_logic.InputRegister(self.bits)
-                elif item == std_logic.OutputRegister:
-                    item = std_logic.OutputRegister(self.bits)
-
-                elif item == std_logic.In:
-                    item = std_logic.In()
-                elif item == std_logic.Out:
-                    item = std_logic.Out()
+                if item == std_logic.Register:
+                    item = item(self.bits)
+                else:
+                    item = item()
 
             # Convert unit classes to Unit creators.
             elif issubclass(item, Unit):
@@ -111,12 +106,7 @@ class Unit(object):
         # Process inputs and outputs.
         if isinstance(item, std_logic.StdLogic):
             if isinstance(item, std_logic.Register):
-                if isinstance(item, std_logic.InputRegister):
-                    item = self.add_input(item)
-                elif isinstance(item, std_logic.OutputRegister):
-                    item = self.add_output(item)
-                else:
-                    item = self.add_compound(item)
+                item = self.add_compound(item)
 
             if isinstance(item, std_logic.In):
                 self.ports.append(item)
@@ -147,7 +137,7 @@ class Unit(object):
         """
         Set a register as an input for this unit. And return it.
         """
-        register = self.add_compound(register)
+        register = self.add(register)
         self.inputs.append(register)
         return register
 
@@ -155,7 +145,7 @@ class Unit(object):
         """
         Sets a register as an output of this unit. And return it.
         """
-        register = self.add_compound(register)
+        register = self.add(register)
         self.outputs.append(register)
         return register
 
