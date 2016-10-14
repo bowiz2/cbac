@@ -133,21 +133,21 @@ class Unit(object):
         self.dependent_units.append(unit)
         return unit
 
-    def add_input(self, register):
+    def add_input(self, interface):
         """
         Set a register as an input for this unit. And return it.
         """
-        register = self.add(register)
-        self.inputs.append(register)
-        return register
+        interface = self.add(interface)
+        self.inputs.append(interface)
+        return interface
 
-    def add_output(self, register):
+    def add_output(self, interface):
         """
         Sets a register as an output of this unit. And return it.
         """
-        register = self.add(register)
-        self.outputs.append(register)
-        return register
+        interface = self.add(interface)
+        self.outputs.append(interface)
+        return interface
 
     def create_input(self, bits):
         """

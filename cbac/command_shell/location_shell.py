@@ -148,6 +148,13 @@ class LocationShell(CommandShell):
         """
         return self.setblock(FALSE_BLOCK)
 
+    def reset(self):
+        """
+        resets the port
+        :return: deactivation command
+        """
+        return self.deactivate()
+
     def replace(self, block_id, other_block_id, block_data_value=0, other_block_data_value=0):
         """
         Replaces all the blocks in this area with a given id in a specific area with another block id.
