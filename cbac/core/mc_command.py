@@ -119,3 +119,124 @@ class MCCommandFactoryError(BaseException):
     Thrown by the command factory.
     """
     pass
+
+
+class TargetSelector(object):
+    """
+    A target selector variable identifies the broad category of targets to select. There are four variables: p r a and e
+    """
+
+    @classmethod
+    def p(cls, *args, **kwargs):
+        """
+        @p
+        Targets the nearest player. If there are multiple nearest players, caused by them being precisely the same
+        distance away, the player who most recently joined the server is selected.
+        Target selector arguments may be used to reduce the set of players from which the nearest player will be
+        selected. For example, @p[team=Red] will target the nearest player on team Red even if there are other players
+        closer.
+        The c target selector argument can be used to increase the number of nearest players targeted
+        (for example, @p[c=3] will target the three nearest players).
+        When negative, c will reverse the order of targeting (for example, @p[c=-1]will target the farthest player).
+        """
+        return TargetSelector('p', *args, **kwargs)
+
+    @classmethod
+    def r(cls, *args, **kwargs):
+        """
+        Targets a random player (or entity with the type target selector argument).
+        Target selector arguments may be used to reduce the set of players from which a random player will be targeted.
+        For example, @r[team=Red] will only target a random player from team Red.
+        The c target selector argument can be used to increase the number of random players targeted. For example,
+        @r[c=3] will target three random players.
+        When used without the type argument, @r always targets a random player. The type argument can be used to target
+        non-player entities (for example, @r[type=Zombie] will target a random zombie, @r[type=!Player] will target
+        a random non-player entity, @r[type=!Zombie] will target a random non-zombie, etc.).
+        """
+        return TargetSelector('r', *args, **kwargs)
+
+    @classmethod
+    def a(cls, *args, **kwargs):
+        """
+        Targets all players, including dead players. No other selector will find dead players.
+        Target selector arguments may be used to reduce the set of players targeted. For example,
+         @a[team=Red] will only target players on team Red.
+        """
+        return TargetSelector('a', *args, **kwargs)
+
+    @classmethod
+    def e(cls, *args, **kwargs):
+        """
+        Targets all entities (including players).
+        Target selector arguments may be used to reduce the set of entities targeted. For example, @e[type=Cow] will
+        only target cows.
+        """
+        return TargetSelector('e', *args, **kwargs)
+
+    def __init__(self, variable, coordinate=(None, None, None), radius=(None, None),
+                 volume_dimensions=(None, None, None), score_name=None,
+                 score_name_min=None, scoreboard_tag=None, team_name=None, count=None, experience_level=(None, None),
+                 game_mode=None, name=None, vertical_rotation=(None, None), horizontal_rotation=(None, None),
+                 entity_type=None,
+                 *args, **kwargs):
+        """
+        :param variable:
+        :param coordinate: x, y, z
+        :param radius: r, rm (min, max)
+        :param volume_dimensions: dx, dy, dz
+        :param score_name: max score
+        :param score_name_min: min score
+        :param scoreboard_tag: tag
+        :param team_name: team
+        :param count: c
+        :param experience_level: l, lm (min, max)
+        :param game_mode: m
+        :param name: entity name
+        :param vertical_rotation: rx, rxm (max, min)
+        :param horizontal_rotation: ry, rym (max, min)
+        :param entity_type: type
+        :param args:
+        :param kwargs: you can use it to pass the minecraft notation
+        """
+
+        self.variable = variable
+        self.coordinate = (
+            kwargs.get('x', coordinate[0]),
+            kwargs.get('y', coordinate[1]),
+            kwargs.get('z', coordinate[2])
+        )
+        self.radius = (
+            kwargs.get('r', radius[0]),
+            kwargs.get('rm', radius[1])
+        )
+        self.volume_dimensions = (
+            kwargs.get('dx', volume_dimensions[0]),
+            kwargs.get('dy', volume_dimensions[1]),
+            kwargs.get('dz', volume_dimensions[2])
+        )
+
+        self.score_name = score_name
+        self.score_name_min = score_name_min
+        self.scoreboard_tag = kwargs.get('tag', scoreboard_tag)
+        self.team_name = kwargs.get('team', team_name)
+        self.cout = kwargs.get('c', count)
+
+        self.experience_level = (
+            kwargs.get('l', experience_level[0]),
+            kwargs.get('lm', experience_level[1])
+        )
+
+        self.game_mode = kwargs.get('m', game_mode)
+        self.name = name
+
+        self.vertical_rotation = (
+            kwargs.get('rx', vertical_rotation[0]),
+            kwargs.get('rxm', vertical_rotation[1])
+        )
+
+        self.horizontal_rotation = (
+            kwargs.get('ry', horizontal_rotation[0]),
+            kwargs.get('rym', horizontal_rotation[1])
+        )
+
+        self.entity_type = kwargs.get('type', entity_type)
