@@ -4,9 +4,10 @@ Holds AND unit.
 from cbac.unit.decorators import auto_synthesis
 from cbac.unit.statements import If
 from cbac import std_logic
+from cbac import std_unit
 
 
-class AndGate(std_logic.Gate):
+class AndGate(std_unit.Gate):
     """
     Simple bitwise and logic on two ports.
     """

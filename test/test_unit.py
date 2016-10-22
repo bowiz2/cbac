@@ -9,7 +9,7 @@ from cbac.unit import Unit, SimpleUnit
 from cbac.unit import auto_synthesis
 from cbac.unit.logic_parser import UnitLogicParser, CommandCollection
 from cbac.unit.statements import *
-from std_logic import io
+from cbac import std_logic
 from test.decorators import named_schematic
 from test_sul import SULTestCase
 
@@ -18,16 +18,16 @@ class TestUniProperties(TestCase):
     def test_ports_signature(self):
         class SampleUnit(Unit):
             @auto_synthesis
-            def __init__(self, a=io.In, b=io.In, s=io.Out):
+            def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out):
                 super(SampleUnit, self).__init__()
                 self.a = self.add(a)
                 self.b = self.add(b)
                 self.s = self.add(s)
 
         self.assertEqual(len(SampleUnit.ports_signature()), 3, "unexpected size")
-        self.assertEqual(SampleUnit.ports_signature()[0], io.In)
-        self.assertEqual(SampleUnit.ports_signature()[1], io.In)
-        self.assertEqual(SampleUnit.ports_signature()[2], io.Out)
+        self.assertEqual(SampleUnit.ports_signature()[0], std_logic.In)
+        self.assertEqual(SampleUnit.ports_signature()[1], std_logic.In)
+        self.assertEqual(SampleUnit.ports_signature()[2], std_logic.Out)
 
 
 class TestLogicParser(TestCase):
@@ -125,9 +125,9 @@ class TestUnitStatementsParsing(TestLogicParser):
         self.assertEqual(2, len(logic_cbas))
 
     def test_truth_table(self):
-        a = io.In()
-        b = io.In()
-        c = io.Out()
+        a = std_logic.In()
+        b = std_logic.In()
+        c = std_logic.Out()
         self.parser.parse_statement(TruthTable([
             [[a, b], [c]],
             [[0, 0], [1]],
@@ -142,7 +142,7 @@ class TestCommandCollection(TestCase):
         collection1 = CommandCollection()
         collection2 = CommandCollection()
 
-        my_dict = {}
+        my_dict = dict()
 
         my_dict[collection1] = "a"
         my_dict[collection2] = "b"
