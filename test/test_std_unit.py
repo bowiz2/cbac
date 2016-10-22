@@ -212,7 +212,7 @@ class TestScreen(StdUnitTestCase):
         screen_access = std_unit.MemoryAccessUnit(
             (16, 1, 16), (6, 1, 8),
             pymclevel.MCSchematic(filename="../schem/screen_128x128.schematic"))
-        screen = std_unit.ScreenUnit("../schem/assci_chars.schematic", screen_access)
+        screen = std_unit.ScreenUnit("../schem/ascii.schematic", screen_access)
         incrementer = std_unit.IncrementUnit(8)
         filler = Filler(8, incrementer, screen)
         self.block_space.add_unit(filler)

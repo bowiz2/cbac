@@ -8,4 +8,5 @@ setup(name='cbac',
       author_email='sasha@paticon.com',
       license='MIT',
       packages=['cbac'],
-      zip_safe=False)
+      zip_safe=False,
+      package_data={'': ['*.schematic']})
