@@ -1,11 +1,11 @@
 from cbac import std_logic
-from cbac import std_unit
-from sul.nand_array import NandArray
+from cbac.std_unit.gate import Gate
+from cbac.std_unit.nand_array import NandArray
 from unit import auto_synthesis
 from unit.statements import If
 
 
-class NandGate(std_unit.Gate):
+class NandGate(Gate):
     """
     Simple NAND logic.
     """

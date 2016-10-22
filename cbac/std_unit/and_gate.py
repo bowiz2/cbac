@@ -1,27 +1,25 @@
+"""
+Holds AND unit.
+"""
+from cbac.unit.decorators import auto_synthesis
 from cbac.unit.statements import If
 from cbac import std_logic
-from std_unit.gate import Gate
+from cbac.std_unit.gate import Gate
 
 
-class XnorGate(Gate):
+class AndGate(Gate):
     """
-    Preform simple xor logic on 2 ports.
+    Simple bitwise and logic on two ports.
     """
 
+    @auto_synthesis
     def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out):
-        super(XnorGate, self).__init__()
+        super(AndGate, self).__init__()
         self.a = self.add(a)
         self.b = self.add(b)
         self.s = self.add(s)
 
     def architecture(self):
-        """
-        Implement simple xor using a truth table.
-        """
-
-        yield If((self.a.shell == False) & (self.b.shell == False)).then(
-            self.s.shell.activate()
-        )
         yield If((self.a.shell == True) & (self.b.shell == True)).then(
             self.s.shell.activate()
         )

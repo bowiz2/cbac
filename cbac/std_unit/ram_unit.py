@@ -1,3 +1,6 @@
+"""
+Holds all memory access and manipulation units.
+"""
 import math
 
 from cbac.core.blockbox import BlockBox
@@ -58,6 +61,9 @@ class MemoryAccessUnit(Unit):
 
     @inline_generators
     def architecture(self):
+        """
+        Describe hardware behavior
+        """
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         # Reset the pivot.
         # TODO: document
@@ -117,9 +123,15 @@ class ReadUnit(Unit):
 
     @property
     def pivot(self):
+        """
+        :return: Pivot instance which preforms the read operation.
+        """
         return self.memory_access_unit.pivot
 
     def architecture(self):
+        """
+        Describe hardware behavior
+        """
         # We are not passing parameters because the inputs of the memory access unit are the same as this unit.
         yield InlineCall(self.memory_access_unit)
         yield self.pivot.shell.store_to_temp(self.read_output)
@@ -156,9 +168,15 @@ class WriteUnit(Unit):
 
     @property
     def pivot(self):
+        """
+        :return: Pivot instance which preforms the write operation.
+        """
         return self.memory_access_unit.pivot
 
     def architecture(self):
+        """
+        Describe hardware behavior
+        """
         # We are not passing parameters because the inputs of the memory access unit are the same as this unit.
         yield InlineCall(self.memory_access_unit)
         yield self.data_input.shell.store_to_temp()

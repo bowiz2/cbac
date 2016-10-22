@@ -3,8 +3,8 @@ from cbac.unit import auto_synthesis
 from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
 from cbac import std_logic
-from sul.full_adder import RippleCarryFullAdderArray
-from sul.shift_unit import ShiftUnit
+from cbac.std_unit.full_adder import RippleCarryFullAdderArray
+from cbac.std_unit.shift_unit import ShiftUnit
 
 
 class MultiUnit(Unit):

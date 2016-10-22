@@ -7,7 +7,7 @@ from cbac.core.mcentity.mcentity_base import MCEntity
 from cbac import CBA
 from cbac import Register
 from cbac.core.mcentity.pivot import Pivot
-from test.test_sul import SULTestCase, named_schematic
+from test.test_std_unit import StdUnitTestCase, named_schematic
 
 
 class TestEntity(TestCase):
@@ -39,7 +39,7 @@ class TestEntity(TestCase):
         self.assertEqual(tags["NoGravity"], True)
 
 
-class TestPivot(SULTestCase):
+class TestPivot(StdUnitTestCase):
     @named_schematic
     def test_pivot_basic(self):
         blockspace = self.block_space

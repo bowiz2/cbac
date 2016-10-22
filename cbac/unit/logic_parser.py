@@ -218,7 +218,7 @@ class UnitLogicParser(object):
         :return: generated units which needed for the jump to work.
         """
         # TODO: fix that hack
-        from sul.listner_unit import IsNotActiveListener
+        from cbac.std_unit.listner_unit import IsNotActiveListener
         for i, jump in enumerate(self.jumps):
             # The cba from which the jump was made
             origin_cba = logic_cbas[i]

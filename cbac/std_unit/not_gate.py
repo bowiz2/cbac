@@ -1,10 +1,10 @@
 from cbac.unit import auto_synthesis
 from cbac.unit.statements import If
 from cbac import std_logic
-from cbac import std_unit
+from cbac.std_unit.gate import Gate
 
 
-class NotGate(std_unit.Gate):
+class NotGate(Gate):
     """
     Simple not gate implementation.
     """

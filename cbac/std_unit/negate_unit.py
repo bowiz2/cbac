@@ -2,8 +2,8 @@ from cbac.unit.decorators import auto_synthesis
 from cbac.unit.statements import InlineCall
 from cbac.unit.unit_base import Unit
 from cbac import std_logic
-from sul.increment_unit import IncrementUnit
-from sul.not_gate import NotGate
+from cbac.std_unit.increment_unit import IncrementUnit
+from cbac.std_unit.not_gate import NotGate
 
 
 class NegateUnit(Unit):

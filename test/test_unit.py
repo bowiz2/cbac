@@ -11,7 +11,7 @@ from cbac.unit.logic_parser import UnitLogicParser, CommandCollection
 from cbac.unit.statements import *
 from cbac import std_logic
 from test.decorators import named_schematic
-from test_sul import SULTestCase
+from test_std_unit import StdUnitTestCase
 
 
 class TestUniProperties(TestCase):
@@ -58,7 +58,7 @@ class TestLogicParser(TestCase):
         self.assertRaises(AssertionError, self.parser.add_parsed, [])
 
 
-class TestCallback(SULTestCase):
+class TestCallback(StdUnitTestCase):
     @named_schematic
     def test_callback(self):
         class A(SimpleUnit):
