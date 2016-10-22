@@ -19,8 +19,19 @@ class Port(Block, StdLogic):
     def __init__(self, fill_block_id=FALSE_BLOCK):
         super(Port, self).__init__(fill_block_id)
 
-In = Port
-Out = Port
+
+class In(Port):
+    """
+    Semantic class for object generation
+    """
+    pass
+
+
+class Out(Port):
+    """
+    Semantic class for object generation
+    """
+    pass
 
 
 class Register(cbac.compound.register.Register, StdLogic):
@@ -31,5 +42,16 @@ class Register(cbac.compound.register.Register, StdLogic):
     pass
 
 
-InputRegister = Register
-OutputRegister = Register
+class InputRegister(Register):
+    """
+    Semantic class for object generation
+    """
+    pass
+
+
+class OutputRegister(Register):
+    """
+    Semantic class for object generation
+    """
+    pass
+

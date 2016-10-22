@@ -16,7 +16,7 @@ class SimpleArray(Unit):
         :param registers: list of input registers and the last register is an output register.
         """
         super(SimpleArray, self).__init__(bits)
-        self.interfaces = [self.add(interface) for interface in interfaces]
+        self.interfaces = [self._add_io(interface) for interface in interfaces]
         self.gate = self.add(gate)
 
     def architecture(self):

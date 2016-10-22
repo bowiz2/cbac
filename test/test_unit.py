@@ -140,10 +140,10 @@ class TestUnitStatementsParsing(TestLogicParser):
         b = std_logic.In()
         c = std_logic.Out()
         self.parser.parse_statement(TruthTable([
-            [a, b, c],
-            [0, 0, 1],
-            [1, 1, 1],
-            [1, 0, 0],
+            [[a, b], [c]],
+            [[0, 0], [1]],
+            [[1, 1], [1]],
+            [[1, 0], [0]],
         ]))
         self.assertEqual(len(self.parser.parse_stack), 2)
 

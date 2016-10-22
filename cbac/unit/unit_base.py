@@ -87,11 +87,12 @@ class Unit(object):
             # Auto gen std components
             if issubclass(item, std_logic.StdLogic):
                 # In-case a class was supplied.
-                if item == std_logic.Register:
-                    item = item(self.bits)
+                if issubclass(item, std_logic.Register):
+                    item = std_logic.Register(self.bits)
+                elif issubclass(item, std_logic.Port):
+                    item = std_logic.Port()
                 else:
                     item = item()
-
             # Convert unit classes to Unit creators.
             elif issubclass(item, Unit):
                 unit_class = item
@@ -148,6 +149,18 @@ class Unit(object):
         interface = self.add(interface)
         self.outputs.append(interface)
         return interface
+
+    def _add_io(self, interface):
+        """
+        determine if the interface is input or output and use the correct function on it
+        Note: internal use only for auto-generation. strongly discouraged.
+        """
+        if issubclass(interface, std_logic.InputRegister) or issubclass(interface, std_logic.InputRegister):
+            return self.add_input(interface)
+        elif issubclass(interface, std_logic.OutputRegister) or issubclass(interface, std_logic.OutputRegister):
+            return self.add_output(interface)
+        else:
+            assert False, "Unexpected interface type"
 
     def create_input(self, bits):
         """
