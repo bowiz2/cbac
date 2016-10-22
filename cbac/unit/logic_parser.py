@@ -168,25 +168,34 @@ class UnitLogicParser(object):
 
             assert len(truth_table) > 1, "Truth table must contain at-least one port row and one value row."
 
-            ports = truth_table[0]
-            states = truth_table[1:]
+            in_ports, out_ports = truth_table[0]
 
-            assert all(len(ports) is len(state) for state in states),\
-                "All state rows must be the same length of ports row."
+            in_states = []
+            out_states = []
+
+            for state_pair in truth_table[1:]:
+                in_state, out_state = state_pair
+                in_states.append(in_state)
+                out_states.append(out_state)
+
+            assert all(len(in_ports) is len(in_state)for in_state in in_states), \
+                "in state must be equal to in ports"
+            assert all(len(out_ports) is len(out_state) for out_state in out_states), \
+                "out state must be equal to out ports"
+
             ports_dict = {}
 
-            for i, port in enumerate(ports):
-                ports_dict[port] = [state[i] for state in states]
+            for i, port in enumerate(in_ports):
+                ports_dict[port] = [state[i] for state in in_states]
 
-            input_ports = filter(lambda x: isinstance(x, std_logic.In), ports)
-            output_ports = filter(lambda x: isinstance(x, std_logic.Out), ports)
+            for i, port in enumerate(out_ports):
+                ports_dict[port] = [state[i] for state in out_states]
 
-            for i in lrange(states):
-
-                actions = [output_port.shell.activate() for output_port in output_ports if ports_dict[output_port][i]]
+            for i in lrange(in_states):
+                actions = [output_port.shell.activate() for output_port in out_ports if ports_dict[output_port][i]]
                 if len(actions) > 0:
                     condition_cmds = []
-                    for input_port in input_ports:
+                    for input_port in in_ports:
                         if ports_dict[input_port][i]:
                             condition_cmds.append(input_port.shell == True)
                         else:

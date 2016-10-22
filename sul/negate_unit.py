@@ -19,8 +19,8 @@ class NegateUnit(Unit):
 
         self.notter = self.add_unit(notter)
         self.incrementer = self.add_unit(incrementer)
-        self.inp = self.add(inp)
-        self.output = self.add(output)
+        self.inp = self.add_input(inp)
+        self.output = self.add_output(output)
 
     def architecture(self):
         # == Here you declare the commands wof the main logic. each command must be yielded out.

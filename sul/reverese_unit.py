@@ -11,8 +11,8 @@ class ReverseUnit(Unit):
     @auto_synthesis
     def __init__(self, bits=8, inp=std_logic.InputRegister, output=std_logic.OutputRegister):
         super(ReverseUnit, self).__init__(bits)
-        self.input = self.add(inp)
-        self.output = self.add(output)
+        self.input = self.add_input(inp)
+        self.output = self.add_output(output)
 
     def architecture(self):
         for index in xrange(self.bits):

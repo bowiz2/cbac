@@ -19,8 +19,8 @@ class MultiUnit(Unit):
                  adder_class=RippleCarryFullAdderArray, inline_adder=True):
         super(MultiUnit, self).__init__(bits)
 
-        self.input_a = self.add(input_a)
-        self.input_b = self.add(input_b)
+        self.input_a = self.add_input(input_a)
+        self.input_b = self.add_input(input_b)
 
         # TODO: dependency injection
         self.shift_results = [self.add(std_logic.OutputRegister(self.bits * 2)) for _ in xrange(self.bits)]

@@ -37,11 +37,11 @@ class IncrementUnit(Unit):
     @auto_synthesis
     def __init__(self, bits, inp=std_logic.InputRegister, output=std_logic.OutputRegister, carry_out=None):
         super(IncrementUnit, self).__init__(bits)
-        self.input = self.add(inp)
-        self.output = self.add(output)
+        self.input = self.add_input(inp)
+        self.output = self.add_output(output)
         self.carry_out = self.add(carry_out)
         # in the carry we will remember the addition.
-        self._carry = self.add(std_logic.InputRegister(self.bits + 1))
+        self._carry = self.add_input(std_logic.InputRegister(self.bits + 1))
         self.incrementer_logic = self.add(IncrementLogic)
 
     def architecture(self):

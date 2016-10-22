@@ -24,11 +24,11 @@ class ShiftUnit(Unit):
         if not register_work:
             register_work = std_logic.InputRegister(self.bits + times)
 
-        self.input = self.add(inp)
-        self.output = self.add(output)
+        self.input = self.add_input(inp)
+        self.output = self.add_output(output)
 
         # On this register all the operations will be preformed.
-        self.register_work = self.add(register_work)
+        self.register_work = self.add_input(register_work)
         # This is the register to which the input will be copied.
         self.register_target = self.register_work.slice(xrange(times, self.bits + times))
         # From this register the output will be copied.
