@@ -156,20 +156,6 @@ class Unit(object):
         else:
             assert False, "Unexpected interface type"
 
-    def create_input(self, bits):
-        """
-        Creates a memory compound, adds it to the "inputs" list and returns it.
-        """
-        inp = Register(size=bits)
-        return self.add_input(inp)
-
-    def create_output(self, bits):
-        """
-        Creates a memory compound, adds it to the "inputs" list and returns it.
-        """
-        output = Register(size=bits)
-        return self.add_output(output)
-
     def on_entry_init_commands(self):
         """
         Generate the commands which are executed when the entry pointed activated.
