@@ -7,6 +7,7 @@ from cbac.core.constants.block_id import REDSTONE_BLOCK
 from test.decorators import save_schematic
 import cbac
 
+
 class BlockBoxTest(TestCase):
     def test_creation(self):
         my_blockbox = BlockBox((10, 3, 4), REDSTONE_BLOCK)

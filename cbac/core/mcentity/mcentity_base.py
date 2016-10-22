@@ -10,6 +10,7 @@ class MCEntity(object):
     """
     Logical Representation of minecraft entity.
     """
+
     def __init__(self, mc_type, custom_name=None, rotation=None, fall_distance=None, fire=None, air=None,
                  on_ground=None, no_gravity=None, custom_name_visible=None, silent=None, glowing=None, tags=None):
         """

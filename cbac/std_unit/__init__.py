@@ -35,7 +35,7 @@ from .ram_unit import MemoryAccessUnit, WriteUnit, ReadUnit
 from .listner_unit import Listener, IsActiveListener, IsNotActiveListener
 from .screen_unit import ScreenUnit
 
-__all__ =['AndGate', 'NandGate', 'NotGate', 'OrGate', 'XnorGate', 'XorGate',
-          'IncrementUnit', 'FullAdderUnit', 'RippleCarryFullAdderArray', 'NegateUnit', 'SubtractUnit', 'MultiUnit',
-          'ShiftUnit', 'ReverseUnit', 'MemoryAccessUnit', 'WriteUnit', 'ReadUnit',
-          'Listener', 'IsActiveListener', 'IsNotActiveListener', 'ScreenUnit']
+__all__ = ['AndGate', 'NandGate', 'NotGate', 'OrGate', 'XnorGate', 'XorGate',
+           'IncrementUnit', 'FullAdderUnit', 'RippleCarryFullAdderArray', 'NegateUnit', 'SubtractUnit', 'MultiUnit',
+           'ShiftUnit', 'ReverseUnit', 'MemoryAccessUnit', 'WriteUnit', 'ReadUnit',
+           'Listener', 'IsActiveListener', 'IsNotActiveListener', 'ScreenUnit']

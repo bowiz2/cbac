@@ -82,7 +82,7 @@ class MemoryAccessUnit(Unit):
             elif 2 ** i < self.ratio.x + self.ratio.y - 1:
                 yield If(addres_bit.shell == True).then(
                     self.pivot.shell.move(UP, self.word_size.y * int(2 ** (i - math.log(self.ratio.x, 2)))
-                    )
+                                          )
                 )
             else:
                 yield If(addres_bit.shell == True).then(
