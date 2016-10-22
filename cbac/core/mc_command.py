@@ -174,11 +174,9 @@ class TargetSelector(object):
         return TargetSelector('e', *args, **kwargs)
 
     def __init__(self, variable, coordinate=(None, None, None), radius=(None, None),
-                 volume_dimensions=(None, None, None), score_name=None,
-                 score_name_min=None, scoreboard_tag=None, team_name=None, count=None, experience_level=(None, None),
-                 game_mode=None, name=None, vertical_rotation=(None, None), horizontal_rotation=(None, None),
-                 entity_type=None,
-                 *args, **kwargs):
+                 volume_dimensions=(None, None, None), score_name=None,score_name_min=None, scoreboard_tag=None,
+                 team_name=None, count=None, experience_level=(None, None), game_mode=None, name=None,
+                 vertical_rotation=(None, None), horizontal_rotation=(None, None), entity_type=None, **kwargs):
         """
         :param variable:
         :param coordinate: x, y, z
