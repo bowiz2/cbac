@@ -9,6 +9,7 @@ from cbac.utils import Vector, inline_generators
 from cbac.mcentity.pivot import Pivot
 from cbac.unit import std_logic
 
+
 class MemoryAccessUnit(Unit):
     """
     This unit provides basic functionality for accessing memory and preforming some user-defined action.
