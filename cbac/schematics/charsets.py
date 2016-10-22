@@ -1,11 +1,11 @@
 """
 Holds all the char set schematics.
 """
-from pymclevel import MCSchematic
+import pymclevel
 from pkg_resources import resource_filename
-from cbac.schematics.common import SCHEMATIC_RESOURCES_MODULE
+from cbac.schematics.common import RESOURCE_MODULE
 
 
-AZ_CAPS = MCSchematic(filename=resource_filename(SCHEMATIC_RESOURCES_MODULE, 'az_caps.schematic'))
-AZ_CAPS_COMPRESSED = MCSchematic(filename=resource_filename(SCHEMATIC_RESOURCES_MODULE, 'az_caps_compressed.schematic'))
-ASCII = MCSchematic(filename=resource_filename(SCHEMATIC_RESOURCES_MODULE, 'ascii.schematic'))
+AZ_CAPS = pymclevel.MCSchematic(filename=resource_filename(RESOURCE_MODULE, 'az_caps.schematic'))
+AZ_CAPS_COMPRESSED = pymclevel.MCSchematic(filename=resource_filename(RESOURCE_MODULE, 'az_caps_compressed.schematic'))
+ASCII = pymclevel.MCSchematic(filename=resource_filename(RESOURCE_MODULE, 'ascii.schematic'))
