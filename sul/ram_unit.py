@@ -7,7 +7,7 @@ from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
 from cbac.utils import Vector, inline_generators
 from cbac.mcentity.pivot import Pivot
-
+from cbac.unit import std_logic
 
 class MemoryAccessUnit(Unit):
     """
@@ -16,7 +16,7 @@ class MemoryAccessUnit(Unit):
     See example of use in the ReadUnit.
     """
 
-    def __init__(self, ratio=(1, 16, 16), word_size=(8, 1, 1), raw_memory=None):
+    def __init__(self, input_address=std_logic.InputRegister, ratio=(1, 16, 16), word_size=(8, 1, 1), raw_memory=None):
         """
         :param ratio: The ration of words distributed in 3D space.
         :param word_size: the size of a word. by default it is a 8 bits facing east.
@@ -31,7 +31,7 @@ class MemoryAccessUnit(Unit):
 
         super(MemoryAccessUnit, self).__init__(address_space_size)
         # The address you want to access
-        self.input_address = self.create_input(self.bits)
+        self.input_address = self.add_input(input_address)
 
         self.ratio = Vector(*ratio)
         self.word_size = word_size
