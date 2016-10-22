@@ -12,9 +12,9 @@ class NandArray(Unit):
     @auto_synthesis
     def __init__(self, bits=8, a=std_logic.InputRegister, b=std_logic.InputRegister, s=std_logic.OutputRegister):
         super(NandArray, self).__init__(bits)
-        self.input_a = self.add(a)
-        self.input_b = self.add(b)
-        self.output = self.add(s)
+        self.input_a = self.add_input(a)
+        self.input_b = self.add_input(b)
+        self.output = self.add_output(s)
 
     def architecture(self):
         yield self.output.shell.set_max_value()

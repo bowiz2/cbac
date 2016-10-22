@@ -3,6 +3,9 @@ from cbac.constants.block_id import FALSE_BLOCK
 import cbac.compound.register
 
 
+# TODO: fix the major bug.
+
+
 class StdLogic(object):
     """
     Every std logic item is derived from this class.
@@ -15,20 +18,20 @@ class Port(Block, StdLogic):
     Represents a block.
     """
 
-    def __init__(self):
-        super(Port, self).__init__(FALSE_BLOCK)
+    def __init__(self, fill_block_id=FALSE_BLOCK):
+        super(Port, self).__init__(fill_block_id)
 
 
 class In(Port):
     """
-    Ports which are used as input.
+    Semantic class for object generation
     """
     pass
 
 
 class Out(Port):
     """
-    Ports which are used as output.
+    Semantic class for object generation
     """
     pass
 
@@ -43,13 +46,13 @@ class Register(cbac.compound.register.Register, StdLogic):
 
 class InputRegister(Register):
     """
-    Register which is an input, used in a call statement.
+    Semantic class for object generation
     """
     pass
 
 
 class OutputRegister(Register):
     """
-    Register which is an output.
+    Semantic class for object generation
     """
     pass

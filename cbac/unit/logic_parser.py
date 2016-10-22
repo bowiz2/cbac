@@ -8,6 +8,8 @@ from cbac.compound import CBA, Constant
 from cbac.mc_command import MCCommand
 from cbac.unit.statements import *
 from cbac import utils
+from cbac.utils import lrange
+from cbac.unit import std_logic
 
 
 # TODO: restructure as a compiler.
@@ -146,14 +148,6 @@ class UnitLogicParser(object):
             for command in statement.condition_commands:
                 self.parse_stack.append(command)
 
-        elif isinstance(statement, Switch):
-            switch = statement
-            for _case in statement.cases:
-                constant = Constant(_case.to_compare)
-                body = _case.body_statements
-                self.parse_stack.append(If(switch.wrapped.shell == constant).then(*body))
-                self.other_compounds.append(constant)
-
         elif isinstance(statement, InlineCall):
             # TODO: support inline for jumpables units.
             assert len(statement.called_unit.logic_cbas) <= 1, "The inline-called function must not contain jumps"
@@ -167,6 +161,48 @@ class UnitLogicParser(object):
         elif isinstance(statement, Jump):
             self.add_parsed(statement.destination.activator.shell.activate())
             self.make_jump(statement)
+
+        elif isinstance(statement, TruthTable):
+            truth_table = statement.table
+            # Sort out sugar strings.
+            truth_table = filter(lambda x: not isinstance(x, str), truth_table)
+
+            assert len(truth_table) > 1, "Truth table must contain at-least one port row and one value row."
+
+            in_ports, out_ports = truth_table[0]
+
+            in_states = []
+            out_states = []
+
+            for state_pair in truth_table[1:]:
+                in_state, out_state = state_pair
+                in_states.append(in_state)
+                out_states.append(out_state)
+
+            assert all(len(in_ports) is len(in_state) for in_state in in_states), \
+                "in state must be equal to in ports"
+            assert all(len(out_ports) is len(out_state) for out_state in out_states), \
+                "out state must be equal to out ports"
+
+            ports_dict = {}
+
+            for i, port in enumerate(in_ports):
+                ports_dict[port] = [state[i] for state in in_states]
+
+            for i, port in enumerate(out_ports):
+                ports_dict[port] = [state[i] for state in out_states]
+
+            for i in lrange(in_states):
+                actions = [output_port.shell.activate() for output_port in out_ports if ports_dict[output_port][i]]
+                if len(actions) > 0:
+                    condition_cmds = []
+                    for input_port in in_ports:
+                        if ports_dict[input_port][i]:
+                            condition_cmds.append(input_port.shell == True)
+                        else:
+                            condition_cmds.append(input_port.shell == False)
+                    self.parse_stack.append(If(condition_cmds).then(*actions))
+
         else:
             assert False, "'{}' Is an invalid statement type.".format(statement.__class__.__name__)
 

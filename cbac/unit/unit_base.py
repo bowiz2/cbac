@@ -87,16 +87,12 @@ class Unit(object):
             # Auto gen std components
             if issubclass(item, std_logic.StdLogic):
                 # In-case a class was supplied.
-                if item == std_logic.InputRegister:
-                    item = std_logic.InputRegister(self.bits)
-                elif item == std_logic.OutputRegister:
-                    item = std_logic.OutputRegister(self.bits)
-
-                elif item == std_logic.In:
-                    item = std_logic.In()
-                elif item == std_logic.Out:
-                    item = std_logic.Out()
-
+                if issubclass(item, std_logic.Register):
+                    item = std_logic.Register(self.bits)
+                elif issubclass(item, std_logic.Port):
+                    item = std_logic.Port()
+                else:
+                    assert False, "Unexpected std_logic item"
             # Convert unit classes to Unit creators.
             elif issubclass(item, Unit):
                 unit_class = item
@@ -111,18 +107,7 @@ class Unit(object):
         # Process inputs and outputs.
         if isinstance(item, std_logic.StdLogic):
             if isinstance(item, std_logic.Register):
-                if isinstance(item, std_logic.InputRegister):
-                    item = self.add_input(item)
-                elif isinstance(item, std_logic.OutputRegister):
-                    item = self.add_output(item)
-                else:
-                    item = self.add_compound(item)
-
-            if isinstance(item, std_logic.In):
-                self.ports.append(item)
-            if isinstance(item, std_logic.Out):
-                self.ports.append(item)
-
+                item = self.add_compound(item)
         return item
 
     def add_compound(self, item):
@@ -143,35 +128,33 @@ class Unit(object):
         self.dependent_units.append(unit)
         return unit
 
-    def add_input(self, register):
+    def add_input(self, interface):
         """
         Set a register as an input for this unit. And return it.
         """
-        register = self.add_compound(register)
-        self.inputs.append(register)
-        return register
+        interface = self.add(interface)
+        self.inputs.append(interface)
+        return interface
 
-    def add_output(self, register):
+    def add_output(self, interface):
         """
         Sets a register as an output of this unit. And return it.
         """
-        register = self.add_compound(register)
-        self.outputs.append(register)
-        return register
+        interface = self.add(interface)
+        self.outputs.append(interface)
+        return interface
 
-    def create_input(self, bits):
+    def _add_io(self, interface):
         """
-        Creates a memory compound, adds it to the "inputs" list and returns it.
+        determine if the interface is input or output and use the correct function on it
+        Note: internal use only for auto-generation. strongly discouraged.
         """
-        inp = Register(size=bits)
-        return self.add_input(inp)
-
-    def create_output(self, bits):
-        """
-        Creates a memory compound, adds it to the "inputs" list and returns it.
-        """
-        output = Register(size=bits)
-        return self.add_output(output)
+        if issubclass(interface, std_logic.InputRegister) or issubclass(interface, std_logic.InputRegister):
+            return self.add_input(interface)
+        elif issubclass(interface, std_logic.OutputRegister) or issubclass(interface, std_logic.OutputRegister):
+            return self.add_output(interface)
+        else:
+            assert False, "Unexpected interface type"
 
     def on_entry_init_commands(self):
         """

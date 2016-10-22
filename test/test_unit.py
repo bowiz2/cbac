@@ -11,6 +11,7 @@ import cbac.config
 from cbac.unit.logic_parser import UnitLogicParser, CommandCollection
 from test_sul import SULTestCase
 from test.decorators import named_schematic
+from cbac.unit import std_logic
 
 
 class TestUniProperties(TestCase):
@@ -82,25 +83,6 @@ class TestUnitStatementsParsing(TestLogicParser):
     Test the statement parsing.
     """
 
-    def test_switch(self):
-        target_register = Register(8)
-        some_constant = Constant(31)
-
-        self.parser.parse_statement(Switch(target_register).by(
-            case[0](
-                target_register.shell.reset()
-            ),
-            case[1](
-                target_register.shell.fill(0)
-            ),
-            case[2](
-                target_register.shell.copy(some_constant)
-            )
-
-        ))
-        for frame in self.parser.parse_stack:
-            self.assertIsInstance(frame, If)
-
     def test_if(self):
         subject_shell = Register(2).blocks[0].shell
 
@@ -152,6 +134,18 @@ class TestUnitStatementsParsing(TestLogicParser):
         dummy_unit = DummyUnit()
         logic_cbas, other_compounds, other_units = self.parser.parse([MainLogicJump(dummy_unit)])
         self.assertEqual(2, len(logic_cbas))
+
+    def test_truth_table(self):
+        a = std_logic.In()
+        b = std_logic.In()
+        c = std_logic.Out()
+        self.parser.parse_statement(TruthTable([
+            [[a, b], [c]],
+            [[0, 0], [1]],
+            [[1, 1], [1]],
+            [[1, 0], [0]],
+        ]))
+        self.assertEqual(len(self.parser.parse_stack), 2)
 
 
 class TestCommandCollection(TestCase):

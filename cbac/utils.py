@@ -155,3 +155,10 @@ def max_corner(locations):
     # TODO: write test
     sort_by_x, sort_by_y, sort_by_z = sort_locations(locations)
     return Vector(sort_by_x[-1].x, sort_by_y[-1].y, sort_by_z[-1].z)
+
+
+def lrange(iterator):
+    """
+    equivalent for xrange(len(iterator))
+    """
+    return xrange(len(iterator))

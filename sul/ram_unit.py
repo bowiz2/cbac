@@ -7,6 +7,7 @@ from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
 from cbac.utils import Vector, inline_generators
 from cbac.mcentity.pivot import Pivot
+from cbac.unit import std_logic
 
 
 class MemoryAccessUnit(Unit):
@@ -16,7 +17,7 @@ class MemoryAccessUnit(Unit):
     See example of use in the ReadUnit.
     """
 
-    def __init__(self, ratio=(1, 16, 16), word_size=(8, 1, 1), raw_memory=None):
+    def __init__(self, ratio=(1, 16, 16), word_size=(8, 1, 1), raw_memory=None, input_address=std_logic.InputRegister):
         """
         :param ratio: The ration of words distributed in 3D space.
         :param word_size: the size of a word. by default it is a 8 bits facing east.
@@ -31,7 +32,7 @@ class MemoryAccessUnit(Unit):
 
         super(MemoryAccessUnit, self).__init__(address_space_size)
         # The address you want to access
-        self.input_address = self.create_input(self.bits)
+        self.input_address = self.add_input(input_address)
 
         self.ratio = Vector(*ratio)
         self.word_size = word_size
@@ -98,7 +99,16 @@ class MemoryAccessUnit(Unit):
 
 
 class ReadUnit(Unit):
-    def __init__(self, word_size, memory_access_unit):
+    """
+    Reads data from memory.
+    """
+
+    def __init__(self, word_size, memory_access_unit, read_output=std_logic.OutputRegister):
+        """
+        :param word_size: The size of the words this unit can read. (8 bits for example)
+        :param memory_access_unit: Unit which can access memory.
+        :param read_output: Register to which the read data will be saved.
+        """
         assert (word_size, 1,
                 1) == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
         super(ReadUnit, self).__init__(word_size)
@@ -106,11 +116,14 @@ class ReadUnit(Unit):
         self.memory_access_unit = self.add_unit(memory_access_unit)
 
         self.address_input = self.add_input(self.memory_access_unit.input_address)
-        self.read_output = self.create_output(self.word_size)
+        self.read_output = self.add_output(read_output)
         self.synthesis()
 
     @property
     def word_size(self):
+        """
+        The size of the words this unit can read. (8 bits for example)
+        """
         return self.bits
 
     @property
@@ -126,7 +139,16 @@ class ReadUnit(Unit):
 
 
 class WriteUnit(Unit):
-    def __init__(self, word_size, memory_access_unit):
+    """
+    Writes data to memory
+    """
+
+    def __init__(self, word_size, memory_access_unit, data_input=std_logic.InputRegister):
+        """
+        :param word_size: What is the size of the data this unit can write
+        :param memory_access_unit: Unit which can access memory.
+        :param data_input: Register from which the data will be take for writing.
+        """
         assert (word_size, 1,
                 1) == memory_access_unit.word_size, "read unit word-size must be equal to memory word size."
         super(WriteUnit, self).__init__(word_size)
@@ -134,11 +156,14 @@ class WriteUnit(Unit):
         self.memory_access_unit = self.add_unit(memory_access_unit)
 
         self.address_input = self.add_input(self.memory_access_unit.input_address)
-        self.data_input = self.create_input(self.word_size)
+        self.data_input = self.add_input(data_input)
         self.synthesis()
 
     @property
     def word_size(self):
+        """
+        What is the size of the data this unit can write
+        """
         return self.bits
 
     @property
