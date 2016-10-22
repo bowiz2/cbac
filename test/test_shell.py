@@ -1,9 +1,11 @@
 from unittest import TestCase
-from cbac.block import Block, CommandBlock
-from cbac.command_shell import ShellContext, CommandShell
-from cbac.blockspace import BlockSpace
-from cbac.utils import Vector, memoize
-from cbac.constants.block_id import *
+
+from cbac.core.block import Block, CommandBlock
+from cbac.core.blockspace import BlockSpace
+from cbac.core.command_shell import ShellContext, CommandShell
+from cbac.core.constants.block_id import *
+
+from cbac.core.utils import Vector, memoize
 
 
 class BlockspaceMock(BlockSpace):

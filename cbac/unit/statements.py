@@ -1,7 +1,7 @@
 """
 Statements are syntactic sugar for the definition of units.
 """
-import cbac.mc_command as mc_command
+import cbac.core.mc_command as mc_command
 
 
 # TODO: move parsing logic inside the statement.
@@ -22,13 +22,6 @@ class Statement(Token):
     def __init__(self, wrapped):
         self.wrapped = wrapped
         self.is_conditional = False
-
-
-class Debug(Statement):
-    """
-    A debug statement will be ignored when the current build is run in debug mode.
-    """
-    pass
 
 
 class Command(Statement):

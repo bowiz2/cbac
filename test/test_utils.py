@@ -1,7 +1,8 @@
 """Test the utilities which are shipped with cbac."""
 from unittest import TestCase
-from utils import *
-from utils import _from
+
+from cbac.core.utils import *
+from cbac.core.utils import _from
 
 
 class TestUtils(TestCase):

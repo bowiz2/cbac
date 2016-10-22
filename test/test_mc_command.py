@@ -1,5 +1,6 @@
 import unittest
-from cbac.mc_command import MCCommand, SimpleCommand, LazyCommand, factory, MCCommandFactoryError
+
+from cbac.core.mc_command import MCCommand, SimpleCommand, LazyCommand, factory, MCCommandFactoryError
 
 
 class TestMCCommand(unittest.TestCase):

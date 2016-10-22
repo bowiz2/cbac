@@ -2,15 +2,12 @@
 Test the units which are shipped in the sul package.
 """
 from unittest import TestCase
-
-import cbac.assembler
 import sul
-
-from cbac.blockspace import BlockSpace
-from test.decorators import named_schematic
+import cbac
+from cbac import assembler, BlockSpace
 from cbac.unit import Unit
-from cbac.unit import std_logic
 from cbac.unit.statements import *
+from test.decorators import named_schematic
 
 
 class SULTestCase(TestCase):
@@ -25,7 +22,7 @@ class SULTestCase(TestCase):
     def tearDown(self):
         self.block_space.pack()
         self.block_space.shrink()
-        schematic = cbac.assembler.build(self.block_space)
+        schematic = assembler.build(self.block_space)
         schematic.saveToFile(self.schematic_path)
 
 
@@ -89,7 +86,7 @@ class TestBitwiseUnits(SULTestCase):
 
     @named_schematic
     def test_listener(self):
-        from cbac.compound.register import Register
+        from cbac.core.compound import Register
         my_register = Register(2)
         self.block_space.add(my_register)
         self.block_space.add_unit(sul.IsActiveListener(my_register.blocks[0], my_register.blocks[1]))

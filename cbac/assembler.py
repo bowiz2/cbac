@@ -1,8 +1,9 @@
-from block import CommandBlock
 from pymclevel import MCSchematic
 from pymclevel import TileEntity
 from pymclevel import nbt
-from cbac.mc_command import factory as command_factory
+
+from cbac.core.block import CommandBlock
+from cbac.core.mc_command import factory as command_factory
 
 
 def tagged_cb(command_block, location, blockspace):

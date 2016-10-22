@@ -1,12 +1,13 @@
 from unittest import TestCase
 
-from cbac.compound import CBA
-from cbac.compound import Register
-from cbac.constants.entity_id import *
-from cbac.constants.mc_direction import *
-from mcentity.mcentity_base import MCEntity
+from cbac.core.constants.entity_id import *
+from cbac.core.constants.mc_direction import *
+from cbac.core.mcentity.mcentity_base import MCEntity
+
+from cbac import CBA
+from cbac import Register
+from cbac.core.mcentity.pivot import Pivot
 from test.test_sul import SULTestCase, named_schematic
-from cbac.mcentity.pivot import Pivot
 
 
 class TestEntity(TestCase):

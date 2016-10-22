@@ -1,11 +1,12 @@
+import inspect
+import itertools
+
+from cbac.core.command_shell import UnitShell
+
+from cbac.unit import std_logic
 from cbac.unit.logic_parser import UnitLogicParser
 from cbac.unit.statements import InlineCall
-import itertools
-from cbac.command_shell import UnitShell
-from cbac.compound import Register
-from cbac.utils import memoize
-from cbac.unit import std_logic
-import inspect
+from cbac.core.utils import memoize
 
 
 # TODO: handle ports correctly.

@@ -1,13 +1,14 @@
 import math
 
-from cbac.blockbox import BlockBox
-from cbac.constants.block_id import FALSE_BLOCK
-from cbac.constants.mc_direction import *
+from cbac.core.blockbox import BlockBox
+from cbac.core.constants.block_id import FALSE_BLOCK
+from cbac.core.constants.mc_direction import *
+from cbac.core.utils import Vector, inline_generators
+
+from cbac.unit import std_logic
 from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
-from cbac.utils import Vector, inline_generators
-from cbac.mcentity.pivot import Pivot
-from cbac.unit import std_logic
+from cbac.core.mcentity.pivot import Pivot
 
 
 class MemoryAccessUnit(Unit):
@@ -61,36 +62,25 @@ class MemoryAccessUnit(Unit):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         # Reset the pivot.
         # TODO: document
-        yield Debug("/say Resetting pivot.")
+        # Reset the pivot.
         yield self.pivot.shell.kill()
-        # Create the pivot.
+        # Create a new pivot.
         yield self.pivot.shell.summon(self.raw_memory)
 
-        yield Debug("/say Moving pivot by address.")
         # Move it by to the address specified in the address register.
         for i, addres_bit in enumerate(self.input_address.blocks):
             if 2 ** i < self.ratio.x:
-                yield If(
-                    addres_bit.shell == True
-                ).then(
-                    self.pivot.shell.move(
-                        EAST,
-                        self.word_size.x * (2 ** i))
+                yield If(addres_bit.shell == True).then(
+                    self.pivot.shell.move(EAST, self.word_size.x * (2 ** i))
                 )
 
             elif 2 ** i < self.ratio.x + self.ratio.y - 1:
-                yield If(
-                    addres_bit.shell == True
-                ).then(
-                    self.pivot.shell.move(
-                        UP,
-                        self.word_size.y * int(2 ** (i - math.log(self.ratio.x, 2)))
+                yield If(addres_bit.shell == True).then(
+                    self.pivot.shell.move(UP, self.word_size.y * int(2 ** (i - math.log(self.ratio.x, 2)))
                     )
                 )
             else:
-                yield If(
-                    addres_bit.shell == True
-                ).then(
+                yield If(addres_bit.shell == True).then(
                     self.pivot.shell.move(
                         NORTH,
                         self.word_size.z * int(2 ** (i - math.log(self.ratio.x, 2) - math.log(self.ratio.y, 2)))
@@ -135,7 +125,6 @@ class ReadUnit(Unit):
         yield InlineCall(self.memory_access_unit)
         yield self.pivot.shell.store_to_temp(self.read_output)
         yield self.read_output.shell.load_from_temp()
-        yield Debug("?/say Read complete ok.")
 
 
 class WriteUnit(Unit):
@@ -175,4 +164,3 @@ class WriteUnit(Unit):
         yield InlineCall(self.memory_access_unit)
         yield self.data_input.shell.store_to_temp()
         yield self.pivot.shell.load_from_temp(self.data_input)
-        yield Debug("?/say Write compete ok.")

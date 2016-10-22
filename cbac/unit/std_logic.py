@@ -1,6 +1,7 @@
-from cbac.block import Block
-from cbac.constants.block_id import FALSE_BLOCK
-import cbac.compound.register
+from cbac.core.constants.block_id import FALSE_BLOCK
+
+import cbac.core.compound.register
+import cbac.core.block
 
 
 # TODO: fix the major bug.
@@ -13,7 +14,7 @@ class StdLogic(object):
     pass
 
 
-class Port(Block, StdLogic):
+class Port(cbac.core.block.Block, StdLogic):
     """
     Represents a block.
     """
@@ -36,7 +37,7 @@ class Out(Port):
     pass
 
 
-class Register(cbac.compound.register.Register, StdLogic):
+class Register(cbac.core.compound.register.Register, StdLogic):
     """
     Register inside the unit.
     soon all the registers must be of this type.

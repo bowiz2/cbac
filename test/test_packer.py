@@ -2,8 +2,8 @@
 from unittest import TestCase
 
 from cbac import Block, Compound
-from cbac.blockspace import packer
-from cbac.constants.block_id import SNOW_BLOCK
+from cbac.core.blockspace import packer
+from cbac.core.constants.block_id import SNOW_BLOCK
 
 
 class TestPacker(TestCase):

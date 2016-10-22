@@ -1,10 +1,10 @@
-import random
 from unittest import TestCase
 
-import cbac.block as block
-from cbac.compound import Constant
-from cbac.compound import Register
-from cbac.constants.block_id import FALSE_BLOCK
+from cbac.core.constants.block_id import FALSE_BLOCK
+
+import cbac.core.block as block
+from cbac.core.compound import Constant
+from cbac.core.compound import Register
 
 
 class TestCompound(TestCase):

@@ -2,16 +2,17 @@
 Tests for the unit class. mainly unit statemtns.
 """
 from unittest import TestCase
+
+from cbac.core.command_shell.command_suspender import CommandSuspender
+
 from cbac.unit import Unit, SimpleUnit
-from cbac.unit import std_logic, auto_synthesis
-from cbac.unit.statements import *
-from cbac.compound import Register, Constant
-from cbac.command_shell.command_suspender import CommandSuspender
-import cbac.config
-from cbac.unit.logic_parser import UnitLogicParser, CommandCollection
-from test_sul import SULTestCase
-from test.decorators import named_schematic
+from cbac.unit import auto_synthesis
 from cbac.unit import std_logic
+from cbac.unit.logic_parser import UnitLogicParser, CommandCollection
+from cbac.unit.statements import *
+from cbac.core.compound import Register
+from test.decorators import named_schematic
+from test_sul import SULTestCase
 
 
 class TestUniProperties(TestCase):
@@ -103,17 +104,6 @@ class TestUnitStatementsParsing(TestLogicParser):
     def test_inline_call(self):
         called_unit = Unit(4)
         self.parser.parse_statement(InlineCall(called_unit))
-
-    def test_debug(self):
-        cbac.config.DEBUG_BUILD = True
-        self.parser.parse_statement(Debug("/say hello"))
-        self.assertEqual(1, len(self.parser.parse_stack))
-        self.assertEquals(self.parser.parse_stack[0], "/say hello")
-
-    def test_debug_off(self):
-        cbac.config.DEBUG_BUILD = False
-        self.parser.parse_statement(Debug("/say hello"))
-        self.assertEqual(0, len(self.parser.parse_stack))
 
     def test_main_logic_jump(self):
         class DummyUnit(SimpleUnit):

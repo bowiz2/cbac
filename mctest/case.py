@@ -5,8 +5,7 @@ see example.py for example
 import inspect
 import math
 
-import cbac.assembler
-import cbac.mc_command
+import assembler
 from cbac import BlockSpace, Unit
 from cbac.unit.statements import *
 from mctest.assertion import Assertion
@@ -112,7 +111,7 @@ class McTestCase(object):
         self.blockspace.pack()
         self.blockspace.shrink()
 
-        schematic = cbac.assembler.build(self.blockspace)
+        schematic = assembler.build(self.blockspace)
         schematic.saveToFile(path)
 
     def setUp(self):

@@ -3,13 +3,12 @@ This module parses the statement logic of a unit provided in its main logic comm
 """
 import copy
 
-import cbac.config
-from cbac.compound import CBA, Constant
-from cbac.mc_command import MCCommand
+from cbac.core.utils import lrange
+
+from cbac.core import utils
 from cbac.unit.statements import *
-from cbac import utils
-from cbac.utils import lrange
-from cbac.unit import std_logic
+from cbac.core.compound import CBA
+from cbac.core.mc_command import MCCommand
 
 
 # TODO: restructure as a compiler.
@@ -138,9 +137,6 @@ class UnitLogicParser(object):
             if statement.is_conditional and isinstance(statement.wrapped, MCCommand):
                 statement.wrapped.is_conditional = True
             self.add_parsed(statement.wrapped)
-        elif isinstance(statement, Debug):
-            if cbac.config.DEBUG_BUILD:
-                self.parse_stack.append(statement.wrapped)
         elif isinstance(statement, If):
             # Unwrap the if statement.
             self.parse_stack.append(statement.condition_body)

@@ -1,7 +1,8 @@
 from unittest import TestCase
 
-from cbac.constants.entity_id import *
-from mcentity.mcentity_base import MCEntity
+from cbac.core.constants.entity_id import *
+
+from cbac.core.mcentity import MCEntity
 
 
 class TestEntity(TestCase):
