@@ -1,7 +1,9 @@
+from cbac.unit import auto_synthesis
 from cbac.unit.statements import InlineCall
 from cbac.unit.unit_base import Unit
-from sul import NegateUnit, RippleCarryFullAdderArray
-from cbac.unit import std_logic, auto_synthesis
+from cbac import std_logic
+from sul.negate_unit import NegateUnit
+from sul.full_adder import RippleCarryFullAdderArray
 
 
 class SubtractUnit(Unit):

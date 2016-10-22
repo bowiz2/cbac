@@ -1,10 +1,10 @@
-from sul.gate import Gate
+from cbac import std_logic
 from sul.nand_array import NandArray
-from unit import auto_synthesis, std_logic
+from unit import auto_synthesis
 from unit.statements import If
 
 
-class NandGate(Gate):
+class NandGate(std_logic.Gate):
     """
     Simple NAND logic.
     """

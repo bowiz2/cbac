@@ -3,12 +3,11 @@ import math
 from cbac.core.blockbox import BlockBox
 from cbac.core.constants.block_id import FALSE_BLOCK
 from cbac.core.constants.mc_direction import *
+from cbac.core.mcentity.pivot import Pivot
 from cbac.core.utils import Vector, inline_generators
-
-from cbac.unit import std_logic
 from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
-from cbac.core.mcentity.pivot import Pivot
+from cbac import std_logic
 
 
 class MemoryAccessUnit(Unit):

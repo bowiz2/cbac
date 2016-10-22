@@ -4,7 +4,7 @@ from cbac.unit import auto_synthesis
 from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
 from cbac.core.utils import Vector
-from sul import MemoryAccessUnit
+from sul.ram_unit import MemoryAccessUnit
 
 
 # TODO: explain what is a char set schematic

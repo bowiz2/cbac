@@ -1,6 +1,5 @@
 from cbac import Unit
-from cbac.unit import std_logic
-from cbac.unit.vision import auto_synthesis
+from cbac.unit.decorators import auto_synthesis
 
 
 class SimpleArray(Unit):

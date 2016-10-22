@@ -1,9 +1,8 @@
-from sul.gate import Gate
 from cbac.unit.statements import If
-from cbac.unit import std_logic
+from cbac import std_logic
 
 
-class XorGate(Gate):
+class XorGate(std_logic.Gate):
     """
     Preform simple xor logic on 2 ports.
     """

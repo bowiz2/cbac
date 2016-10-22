@@ -1,9 +1,9 @@
-from cbac.unit.statements import STDCall, InlineCall
+from cbac.unit.decorators import auto_synthesis
+from cbac.unit.statements import InlineCall
 from cbac.unit.unit_base import Unit
+from cbac import std_logic
 from sul.increment_unit import IncrementUnit
 from sul.not_gate import NotGate
-from cbac.unit import std_logic
-from cbac.unit.vision import auto_synthesis
 
 
 class NegateUnit(Unit):

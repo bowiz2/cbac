@@ -1,7 +1,7 @@
 from cbac.unit import Unit
-import functools
-from sul.simple_array import SimpleArray
-from cbac.unit import std_logic, auto_synthesis
+from cbac.unit import auto_synthesis
+from cbac import std_logic
+from cbac.std_unit.simple_array import SimpleArray
 
 
 class Gate(Unit):

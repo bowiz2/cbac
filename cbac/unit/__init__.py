@@ -1,2 +1,5 @@
+"""
+Framework for describing electronic circuits.
+"""
 from .unit_base import Unit, SimpleUnit
-from .vision import auto_synthesis
+from .decorators import auto_synthesis

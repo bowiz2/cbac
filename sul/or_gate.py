@@ -1,9 +1,9 @@
+from cbac.unit import auto_synthesis
 from cbac.unit.statements import If
-from sul.gate import Gate
-from cbac.unit import std_logic, auto_synthesis
+from cbac import std_logic
 
 
-class OrGate(Gate):
+class OrGate(std_logic.Gate):
     """
     Simple Bitwise Or Gate
     """

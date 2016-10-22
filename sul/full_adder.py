@@ -1,7 +1,7 @@
-from cbac.unit.unit_base import Unit
+from cbac.unit.decorators import auto_synthesis
 from cbac.unit.statements import *
-from cbac.unit.vision import auto_synthesis
-from cbac.unit import std_logic
+from cbac.unit.unit_base import Unit
+from cbac import std_logic
 
 
 class FullAdderUnit(Unit):

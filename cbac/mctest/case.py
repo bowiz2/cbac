@@ -9,7 +9,7 @@ import assembler
 from cbac import BlockSpace, Unit
 from cbac.unit.statements import *
 from mctest.assertion import Assertion
-from sul import IncrementUnit
+from sul.increment_unit import IncrementUnit
 
 
 # TODO: auto deploy

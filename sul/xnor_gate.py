@@ -1,6 +1,6 @@
-from sul.gate import Gate
 from cbac.unit.statements import If
-from cbac.unit import std_logic
+from std_logic import io
+from std_unit.gate import Gate
 
 
 class XnorGate(Gate):
@@ -8,7 +8,7 @@ class XnorGate(Gate):
     Preform simple xor logic on 2 ports.
     """
 
-    def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out):
+    def __init__(self, a=io.In, b=io.In, s=io.Out):
         super(XnorGate, self).__init__()
         self.a = self.add(a)
         self.b = self.add(b)

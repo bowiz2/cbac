@@ -1,6 +1,7 @@
-from cbac.unit.unit_base import Unit
+from cbac.unit import auto_synthesis
 from cbac.unit.statements import If
-from cbac.unit import std_logic, auto_synthesis
+from cbac.unit.unit_base import Unit
+from cbac import std_logic
 
 
 class ReverseUnit(Unit):
