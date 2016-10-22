@@ -86,31 +86,37 @@ class TestUnitStatementsParsing(TestLogicParser):
     def test_if(self):
         subject_shell = Register(2).blocks[0].shell
 
-        self.parser.parse_statement(
-            If(self.sample_condition_command).then(
-                self.sample_command,
-                self.other_sample_command
-            )
-        )
+
+        If(self.sample_condition_command).then(
+            self.sample_command,
+            self.other_sample_command
+        ).parse(self.parser)
+
         self.assertTrue(all([item.__class__ in [CommandSuspender, str] for item in self.parser.parse_stack[1:]]))
         self.assertIsInstance(self.parser.parse_stack[0], Conditional)
 
     def test_command(self):
-        self.parser.parse_statement(Command("/say hello"))
+        Command("/say hello").parse(self.parser)
         command = self.parser.commands[0]
         self.assertEqual("/say hello", command.compile())
 
     def test_inline_call(self):
         called_unit = Unit(4)
-        self.parser.parse_statement(InlineCall(called_unit))
+        InlineCall(called_unit).parse(self.parser)
 
     def test_main_logic_jump(self):
         class DummyUnit(SimpleUnit):
+            """
+            Unit which is used for testing
+            """
             def architecture(self):
+                """
+                just say hey
+                """
                 yield "/say hey"
 
         dummy_unit = DummyUnit()
-        self.parser.parse_statement(MainLogicJump(dummy_unit))
+        MainLogicJump(dummy_unit).parse(self.parser)
         # Check internal state.
         self.assertEqual(2, len(self.parser.all_commands))
         self.assertEqual(1, len(self.parser.jumps))
@@ -128,12 +134,14 @@ class TestUnitStatementsParsing(TestLogicParser):
         a = std_logic.In()
         b = std_logic.In()
         c = std_logic.Out()
-        self.parser.parse_statement(TruthTable([
+
+        TruthTable([
             [[a, b], [c]],
             [[0, 0], [1]],
             [[1, 1], [1]],
             [[1, 0], [0]],
-        ]))
+        ]).parse(self.parser)
+
         self.assertEqual(len(self.parser.parse_stack), 2)
 
 

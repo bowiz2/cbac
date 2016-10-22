@@ -2,7 +2,8 @@
 Statements are syntactic sugar for the definition of units.
 """
 import cbac.core.mc_command as mc_command
-
+import copy
+from cbac.core.utils import lrange
 
 # TODO: move parsing logic inside the statement.
 
@@ -12,6 +13,13 @@ class Token(object):
     This is the basic type of a statement and statement collection.
     """
     pass
+
+
+    def parse(self, parser_instance):
+        """
+        Parse this statement in the parser.
+        """
+        pass
 
 
 class Statement(Token):
@@ -24,6 +32,8 @@ class Statement(Token):
         self.is_conditional = False
 
 
+
+
 class Command(Statement):
     """
     Wraps a command
@@ -33,6 +43,15 @@ class Command(Statement):
         if isinstance(raw_command, str):
             raw_command = mc_command.factory(raw_command)
         super(Command, self).__init__(raw_command)
+
+    def parse(self, parser_instance):
+        """
+        Parse logic
+        """
+        super(Command, self).parse(parser_instance)
+        if self.is_conditional and isinstance(self.wrapped, mc_command.MCCommand):
+            self.wrapped.is_conditional = True
+        parser_instance.add_parsed(self.wrapped)
 
 
 class StatementCollection(Token):
@@ -50,6 +69,18 @@ class StatementCollection(Token):
 
         self.statements = new_statements
 
+    def parse(self, parser_instance):
+        """
+        Parse logic.
+        """
+        super(StatementCollection, self).parse(parser_instance)
+        # If the statement collection is conditional  each inner statement is conditional.
+        if isinstance(self, Conditional):
+            for statement in self.statements:
+                statement.is_conditional = True
+        self.statements.reverse()
+        for statement in self.statements:
+            parser_instance.parse_stack.append(statement)
 
 class Jump(Statement):
     """jump to other location and return to the next logic cba after some logic."""
@@ -60,6 +91,14 @@ class Jump(Statement):
         The destination of the jump.
         """
         return self.wrapped
+
+    def parse(self, parser_instance):
+        """
+        Parse logic
+        """
+        super(Jump, self).parse(parser_instance)
+        parser_instance.add_parsed(self.destination.activator.shell.activate())
+        parser_instance.make_jump(self)
 
 
 class MainLogicJump(Jump):
@@ -99,6 +138,14 @@ class PassParameters(Statement):
         The unit to which the params are passed.
         """
         return self.wrapped
+
+    def parse(self, parser_instance):
+        """
+        parsing logic
+        """
+        super(PassParameters, self).parse(parser_instance)
+        for param_id, parameter in enumerate(self.parameters):
+            parser_instance.add_parsed(parameter.shell.copy(self.passed_unit.inputs[param_id]))
 
 
 class Call(Statement):
@@ -166,7 +213,19 @@ class InlineCall(Call, PassParameters):
     """
     Calls a unit without jump. Just pushes its commands to the commands of the current cba.
     """
-    pass
+    def parse(self, parser_instance):
+        """
+        Parse logic.
+        """
+        # TODO: support inline for jumpables units.
+        PassParameters.parse(self, parser_instance)
+        assert len(self.called_unit.logic_cbas) <= 1, "The inline-called function must not contain jumps"
+        self.called_unit.is_inline = True
+        for cba in self.called_unit.logic_cbas:
+            for command in cba.commands:
+                if self.is_conditional:
+                    command.is_conditional = True
+                parser_instance.add_parsed(copy.copy(command))
 
 
 class If(Statement):
@@ -207,7 +266,20 @@ class If(Statement):
         return self
 
     def otherwise(self, *statements):
+        """
+        Not used
+        """
         assert False, "otherwise is not implemented."
+
+    def parse(self, parser_instance):
+        """
+        parse logic.
+        """
+        super(If, self).parse(parser_instance)
+        parser_instance.parse_stack.append(self.condition_body)
+        self.condition_commands.reverse()
+        for command in self.condition_commands:
+            parser_instance.parse_stack.append(command)
 
 
 class TruthTable(Statement):
@@ -215,11 +287,11 @@ class TruthTable(Statement):
     Aught to represent a truth table of ports.
 
     Format is as fallowes.
-    yield TruthTable( [in_a,  in_b,  in_c,  out_a, out_b],
+    yield TruthTable( [[in_a,  in_b,  in_c],  [out_a, out_b]],
                       "---------------------------------" // This is a decorator.
-                      [True,  True,  False, True,  True],
-                      [False, False, False, True,  False],
-                      [True,  True,  False, True,  True])6
+                      [[True,  True,  False], [True,  [True]],
+                      [[False, False, False], [True,  False]],
+                      [[True,  True,  False], [True,  True]])
     """
 
     @property
@@ -229,3 +301,49 @@ class TruthTable(Statement):
         :return: dict
         """
         return self.wrapped
+
+    def parse(self, parser_instance):
+        """
+        Parse logic
+        """
+        super(TruthTable, self).parse(parser_instance)
+        truth_table = self.table
+        # Sort out sugar strings.
+        truth_table = filter(lambda x: not isinstance(x, str), truth_table)
+
+        assert len(truth_table) > 1, "Truth table must contain at-least one port row and one value row."
+
+        in_ports, out_ports = truth_table[0]
+
+        in_states = []
+        out_states = []
+
+        for state_pair in truth_table[1:]:
+            in_state, out_state = state_pair
+            in_states.append(in_state)
+            out_states.append(out_state)
+
+        assert all(len(in_ports) is len(in_state) for in_state in in_states), \
+            "in state must be equal to in ports"
+        assert all(len(out_ports) is len(out_state) for out_state in out_states), \
+            "out state must be equal to out ports"
+
+        ports_dict = {}
+
+        for i, port in enumerate(in_ports):
+            ports_dict[port] = [state[i] for state in in_states]
+
+        for i, port in enumerate(out_ports):
+            ports_dict[port] = [state[i] for state in out_states]
+
+        for i in lrange(in_states):
+            actions = [output_port.shell.activate() for output_port in out_ports if ports_dict[output_port][i]]
+            if len(actions) > 0:
+                condition_cmds = []
+                for input_port in in_ports:
+                    if ports_dict[input_port][i]:
+                        condition_cmds.append(input_port.shell == True)
+                    else:
+                        condition_cmds.append(input_port.shell == False)
+                parser_instance.parse_stack.append(If(condition_cmds).then(*actions))
+
