@@ -25,15 +25,14 @@ class FullAdderUnit(Unit):
         # TODO: create a truth table statement.
         yield TruthTable([
             [[self.a, self.b, self.cin], [self.s, self.cout]],
-            [[False,  False,  True],     [True,   False]],
-            [[False,  True,   False],    [True,   False]],
-            [[False,  True,   True],     [False,  True]],
-            [[True,   False,  False],    [True,   False]],
-            [[True,   False,  True],     [False,  True]],
-            [[True,   True,   False],    [False,  True]],
-            [[True,   True,   True],     [True,   True]],
+            [[False, False, True], [True, False]],
+            [[False, True, False], [True, False]],
+            [[False, True, True], [False, True]],
+            [[True, False, False], [True, False]],
+            [[True, False, True], [False, True]],
+            [[True, True, False], [False, True]],
+            [[True, True, True], [True, True]],
         ])
-
 
     @classmethod
     def Array(cls, size=None):

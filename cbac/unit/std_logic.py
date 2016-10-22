@@ -1,6 +1,8 @@
 from cbac.block import Block
 from cbac.constants.block_id import FALSE_BLOCK
 import cbac.compound.register
+
+
 # TODO: fix the major bug.
 
 
@@ -54,4 +56,3 @@ class OutputRegister(Register):
     Semantic class for object generation
     """
     pass
-

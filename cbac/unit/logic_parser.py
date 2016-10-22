@@ -11,6 +11,7 @@ from cbac import utils
 from cbac.utils import lrange
 from cbac.unit import std_logic
 
+
 # TODO: restructure as a compiler.
 
 
@@ -178,7 +179,7 @@ class UnitLogicParser(object):
                 in_states.append(in_state)
                 out_states.append(out_state)
 
-            assert all(len(in_ports) is len(in_state)for in_state in in_states), \
+            assert all(len(in_ports) is len(in_state) for in_state in in_states), \
                 "in state must be equal to in ports"
             assert all(len(out_ports) is len(out_state) for out_state in out_states), \
                 "out state must be equal to out ports"

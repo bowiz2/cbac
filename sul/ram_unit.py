@@ -102,6 +102,7 @@ class ReadUnit(Unit):
     """
     Reads data from memory.
     """
+
     def __init__(self, word_size, memory_access_unit, read_output=std_logic.OutputRegister):
         """
         :param word_size: The size of the words this unit can read. (8 bits for example)
@@ -141,6 +142,7 @@ class WriteUnit(Unit):
     """
     Writes data to memory
     """
+
     def __init__(self, word_size, memory_access_unit, data_input=std_logic.InputRegister):
         """
         :param word_size: What is the size of the data this unit can write
