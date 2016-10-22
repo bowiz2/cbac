@@ -23,5 +23,3 @@ class AndGate(Gate):
         yield If((self.a.shell == True) & (self.b.shell == True)).then(
             self.s.shell.activate()
         )
-
-print AndGate.ports_signature()

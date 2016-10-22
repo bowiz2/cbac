@@ -92,7 +92,7 @@ class Unit(object):
                 elif issubclass(item, std_logic.Port):
                     item = std_logic.Port()
                 else:
-                    item = item()
+                    assert False, "Unexpected std_logic item"
             # Convert unit classes to Unit creators.
             elif issubclass(item, Unit):
                 unit_class = item
@@ -108,12 +108,6 @@ class Unit(object):
         if isinstance(item, std_logic.StdLogic):
             if isinstance(item, std_logic.Register):
                 item = self.add_compound(item)
-
-            if isinstance(item, std_logic.In):
-                self.ports.append(item)
-            if isinstance(item, std_logic.Out):
-                self.ports.append(item)
-
         return item
 
     def add_compound(self, item):

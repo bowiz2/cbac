@@ -10,7 +10,7 @@ class FullAdderUnit(Unit):
     """
 
     @auto_synthesis
-    def __init__(self, a=std_logic.In, b=std_logic.In, cin=std_logic.In, s=std_logic.Out, cout=std_logic.Out):
+    def __init__(self, a=std_logic.In, b=std_logic.In, s=std_logic.Out, cin=std_logic.In, cout=std_logic.Out):
         super(FullAdderUnit, self).__init__()
         self.a = self.add(a)
         self.b = self.add(b)
