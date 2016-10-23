@@ -12,7 +12,7 @@ class MCCommand(object):
     To use this command, you need to call the compile function.
     """
 
-    def __init__(self, is_conditional=False, creates_condition=False, is_repeated=False):
+    def __init__(self, is_conditional=False, creates_condition=False, is_repeated=False, target_selector=None):
         """
         :param is_conditional:  If the command is conditional, meaning it will execute only if the
         previously executed command was executed successfully.
@@ -25,6 +25,8 @@ class MCCommand(object):
         # If the command block holding this command will be repeated.
         self.is_repeated = is_repeated
 
+        self.target_selector = target_selector
+
     def compile(self):
         """
         Compile this mc command, for use in the minecraft world.
@@ -32,6 +34,7 @@ class MCCommand(object):
         :note: must be implemented.
         """
         assert False, "compile function was not implemented"
+
 
 
 class SimpleCommand(MCCommand):
@@ -240,36 +243,46 @@ class TargetSelector(object):
 
         self.entity_type = kwargs.get('type', entity_type)
 
+    def inject(self, raw_command):
+        """
+        Inject the target selector into the compiled command string, useful in simple commands.
+        """
+        parts = raw_command.split(' ')
+        inject_body = self.compile()
+        return " ".join([parts[0], inject_body] + parts[1:])
+
     def compile(self):
         """
         :return: Compiled string of this selector (for example @a[x=10,y=20,z=30,r=4]) that can be used in commands.
         """
 
         # Translate the fields to their minecraft name.
-        arguments = {
-            'x': self.coordinate[0],
-            'y': self.coordinate[1],
-            'z': self.coordinate[2],
-            'r': self.radius,
-            'rm': self.radius,
-            'dx': self.volume_dimensions[0],
-            'dy': self.volume_dimensions[1],
-            'dz': self.volume_dimensions[2],
-            'score_name': self.score_name,
-            'score_name_mim' : self.score_name_min,
-            'tag': self.scoreboard_tag,
-            'team': self.team_name,
-            'c': self.count,
-            'l': self.experience_level[0],
-            'lm': self.experience_level[1],
-            'm': self.game_mode,
-            'name': self.name,
-            'rx': self.vertical_rotation[0],
-            'rxm': self.vertical_rotation[1],
-            'ry': self.horizontal_rotation[0],
-            'rym': self.horizontal_rotation[1],
-            'type': self.entity_type
-        }
+        # The reason a tuple list is used instead of a dict is to preserve the order of the keys in the product.
+        arguments = [
+            ('x', self.coordinate[0]),
+            ('y', self.coordinate[1]),
+            ('z', self.coordinate[2]),
+            ('r', self.radius),
+            ('rm', self.radius_min),
+            ('dx', self.volume_dimensions[0]),
+            ('dy', self.volume_dimensions[1]),
+            ('dz', self.volume_dimensions[2]),
+            ('score_name', self.score_name),
+            ('score_name_mim', self.score_name_min),
+            ('tag', self.scoreboard_tag),
+            ('team', self.team_name),
+            ('c', self.count),
+            ('l', self.experience_level[0]),
+            ('lm', self.experience_level[1]),
+            ('m', self.game_mode),
+            ('name', self.name),
+            ('rx', self.vertical_rotation[0]),
+            ('rxm', self.vertical_rotation[1]),
+            ('ry', self.horizontal_rotation[0]),
+            ('rym', self.horizontal_rotation[1]),
+            ('type', self.entity_type)
+        ]
         # Filter out the empty fields and join the arguments in the correct format.
-        arguments = ",".join(["{0}={1}".format(k, v) for k, v in arguments.items() if v])
-        return "@{0}[{1}]".format(self.variable, arguments)
+        arguments = ",".join(["{0}={1}".format(k, v) for k, v in arguments if v])
+        product = "@{0}[{1}]".format(self.variable, arguments)
+        return product

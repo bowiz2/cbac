@@ -83,4 +83,10 @@ class TestTargetSelector(unittest.TestCase):
     def test_formatting(self):
         # @a[x=10,y=20,z=30,r=4]
         a = TargetSelector('a', coordinate=(10, 20, 30), radius=4)
-        self.assertEquals(a.compile(), "@a[rm=4,r=4,y=20,x=10,z=30]")
+        self.assertEquals(a.compile(), "@a[x=10,y=20,z=30,r=4]")
+
+    def test_inject(self):
+        raw_command = "/say what is up"
+        selector = TargetSelector('a', coordinate=(1, 2, 3))
+        after_inject = selector.inject(raw_command)
+        self.assertEquals(after_inject, "/say @a[x=1,y=2,z=3] what is up")
