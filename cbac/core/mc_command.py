@@ -1,9 +1,22 @@
 """
 In this module there is an abstract representation of minecraft commands.
 """
-
-
 # TODO: refactor creates condition to is_condition_creating. for now we use this because of a back comparability.
+
+
+def target_selector_inject(f):
+    """
+    injects the target selector of the command into the product.
+    Used in MCCommand Classes
+    :param f: compile function of the command
+    :return: decorator.
+    """
+    def _wrapper(self, *args, **kwargs):
+        product = f(self, *args, **kwargs)
+        if self.target_selector:
+            product = self.target_selector.inject(product)
+        return product
+    return _wrapper
 
 
 class MCCommand(object):
@@ -27,6 +40,7 @@ class MCCommand(object):
 
         self.target_selector = target_selector
 
+    @target_selector_inject
     def compile(self):
         """
         Compile this mc command, for use in the minecraft world.
@@ -34,7 +48,6 @@ class MCCommand(object):
         :note: must be implemented.
         """
         assert False, "compile function was not implemented"
-
 
 
 class SimpleCommand(MCCommand):
@@ -46,6 +59,7 @@ class SimpleCommand(MCCommand):
         super(SimpleCommand, self).__init__(is_conditional, creates_condition)
         self._body = body
 
+    @target_selector_inject
     def compile(self):
         """
         Create the simple command.
@@ -79,6 +93,7 @@ class LazyCommand(MCCommand):
         self.kwargs = kwargs
         self.func = func
 
+    @target_selector_inject
     def compile(self):
         """
         Compile the command.
@@ -286,3 +301,4 @@ class TargetSelector(object):
         arguments = ",".join(["{0}={1}".format(k, v) for k, v in arguments if v])
         product = "@{0}[{1}]".format(self.variable, arguments)
         return product
+

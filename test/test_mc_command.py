@@ -90,3 +90,9 @@ class TestTargetSelector(unittest.TestCase):
         selector = TargetSelector('a', coordinate=(1, 2, 3))
         after_inject = selector.inject(raw_command)
         self.assertEquals(after_inject, "/say @a[x=1,y=2,z=3] what is up")
+
+    def test_inject_decorator(self):
+        simple = SimpleCommand("/say hello")
+        selector = TargetSelector('p', dx=3, dy=4, dz=5, count=6)
+        simple.target_selector = selector
+        self.assertEquals(simple.compile(), "/say @p[dx=3,dy=4,dz=5,c=6] hello")
