@@ -12,7 +12,7 @@ from cbac.core.utils import format_realtive_location, format_location, format_re
 
 class EntityShell(CommandShell):
     """
-    Wraps the mcentity object and provides command iterface for it.
+    Wraps the mcentity object and provides command interface for it.
     """
 
     @command()
