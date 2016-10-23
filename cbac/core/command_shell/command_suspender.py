@@ -33,6 +33,9 @@ class CommandSuspender(LazyCommand):
         self.command_shell.context = value
 
     def __call__(self):
+        """
+        Compiles the command
+        """
         return self.compile()
 
     def __and__(self, other):
