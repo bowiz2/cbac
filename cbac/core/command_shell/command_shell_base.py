@@ -28,8 +28,15 @@ class CommandShell(object):
 
     @staticmethod
     def _join_command(*items):
+        """
+        Joins the items into a minecraft compatible format.
+
+        """
         # TODO: implement test.
         def parse(obj):
+            """
+            Gets rid of null items, and formats dictionaries in the minecraft format.
+            """
             if isinstance(obj, Vector):
                 return " ".join([str(i) for i in obj])
             if isinstance(obj, dict):
