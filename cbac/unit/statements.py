@@ -32,8 +32,6 @@ class Statement(Token):
         self.is_conditional = False
 
 
-
-
 class Command(Statement):
     """
     Wraps a command
@@ -81,6 +79,7 @@ class StatementCollection(Token):
         self.statements.reverse()
         for statement in self.statements:
             parser_instance.parse_stack.append(statement)
+
 
 class Jump(Statement):
     """jump to other location and return to the next logic cba after some logic."""

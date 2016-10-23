@@ -54,6 +54,9 @@ class UnitLogicParser(object):
 
     @property
     def commands(self):
+        """
+        :return: Last cba which we are working on.
+        """
         return self.all_commands[-1]
 
     def parse(self, tokens):

@@ -57,6 +57,12 @@ def adjust(command_block, command):
 
 
 def tagged_entity(entity, location, blockspace):
+    """
+    :param entity:
+    :param location:
+    :param blockspace:
+    :return:
+    """
     # TODO: implemnet.
     pass
 

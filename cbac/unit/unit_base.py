@@ -8,7 +8,6 @@ from cbac.unit.statements import InlineCall
 from cbac import std_logic
 
 
-# TODO: handle ports correctly.
 # TODO: implement caching
 # TODO: add refcount for a unit. to know if it can be included as an inline.
 # TODO: organize the class, mainly the methods.
@@ -210,6 +209,9 @@ class Unit(object):
     @property
     @memoize
     def shell(self):
+        """
+        :return: Minecraft command interface.
+        """
         return UnitShell(self)
 
     @classmethod
