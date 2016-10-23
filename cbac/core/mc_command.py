@@ -173,14 +173,15 @@ class TargetSelector(object):
         """
         return TargetSelector('e', *args, **kwargs)
 
-    def __init__(self, variable, coordinate=(None, None, None), radius=(None, None),
+    def __init__(self, variable, coordinate=(None, None, None), radius=None, radius_min=None,
                  volume_dimensions=(None, None, None), score_name=None, score_name_min=None, scoreboard_tag=None,
                  team_name=None, count=None, experience_level=(None, None), game_mode=None, name=None,
                  vertical_rotation=(None, None), horizontal_rotation=(None, None), entity_type=None, **kwargs):
         """
         :param variable:
         :param coordinate: x, y, z
-        :param radius: r, rm (min, max)
+        :param radius: r
+        :param radius_min: rm
         :param volume_dimensions: dx, dy, dz
         :param score_name: max score
         :param score_name_min: min score
@@ -203,10 +204,10 @@ class TargetSelector(object):
             kwargs.get('y', coordinate[1]),
             kwargs.get('z', coordinate[2])
         )
-        self.radius = (
-            kwargs.get('r', radius[0]),
-            kwargs.get('rm', radius[1])
-        )
+
+        self.radius = kwargs.get('r', radius)
+        self.radius_min = kwargs.get('rm', radius_min)
+
         self.volume_dimensions = (
             kwargs.get('dx', volume_dimensions[0]),
             kwargs.get('dy', volume_dimensions[1]),
@@ -217,7 +218,7 @@ class TargetSelector(object):
         self.score_name_min = score_name_min
         self.scoreboard_tag = kwargs.get('tag', scoreboard_tag)
         self.team_name = kwargs.get('team', team_name)
-        self.cout = kwargs.get('c', count)
+        self.count = kwargs.get('c', count)
 
         self.experience_level = (
             kwargs.get('l', experience_level[0]),
@@ -238,3 +239,37 @@ class TargetSelector(object):
         )
 
         self.entity_type = kwargs.get('type', entity_type)
+
+    def compile(self):
+        """
+        :return: Compiled string of this selector (for example @a[x=10,y=20,z=30,r=4]) that can be used in commands.
+        """
+
+        # Translate the fields to their minecraft name.
+        arguments = {
+            'x': self.coordinate[0],
+            'y': self.coordinate[1],
+            'z': self.coordinate[2],
+            'r': self.radius,
+            'rm': self.radius,
+            'dx': self.volume_dimensions[0],
+            'dy': self.volume_dimensions[1],
+            'dz': self.volume_dimensions[2],
+            'score_name': self.score_name,
+            'score_name_mim' : self.score_name_min,
+            'tag': self.scoreboard_tag,
+            'team': self.team_name,
+            'c': self.count,
+            'l': self.experience_level[0],
+            'lm': self.experience_level[1],
+            'm': self.game_mode,
+            'name': self.name,
+            'rx': self.vertical_rotation[0],
+            'rxm': self.vertical_rotation[1],
+            'ry': self.horizontal_rotation[0],
+            'rym': self.horizontal_rotation[1],
+            'type': self.entity_type
+        }
+        # Filter out the empty fields and join the arguments in the correct format.
+        arguments = ",".join(["{0}={1}".format(k, v) for k, v in arguments.items() if v])
+        return "@{0}[{1}]".format(self.variable, arguments)
