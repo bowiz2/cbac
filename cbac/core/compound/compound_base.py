@@ -12,9 +12,15 @@ class Compound(object):
     @property
     @memoize
     def blocks(self):
+        """
+        :return: collection of blocks which compose this compound.
+        """
         return []
 
     @property
     @memoize
     def shell(self):
+        """
+        :return: Minecraft command interface for the compound
+        """
         return CompoundShell(self)
