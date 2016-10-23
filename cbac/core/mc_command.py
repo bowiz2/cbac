@@ -38,7 +38,21 @@ class MCCommand(object):
         # If the command block holding this command will be repeated.
         self.is_repeated = is_repeated
 
-        self.target_selector = target_selector
+        self._target_selector = target_selector
+
+    @property
+    def target_selector(self):
+        """
+        :return: The target selector for this command.
+        """
+        return self._target_selector
+
+    @target_selector.setter
+    def target_selector(self, value):
+        """
+        :param value: new target selector instance.
+        """
+        self._target_selector = value
 
     @target_selector_inject
     def compile(self):
