@@ -19,7 +19,7 @@ class RegisterShell(CompoundShell):
 
     def set_value(self, number):
         """
-        Sets the value of the memory, can be done to a limited set of numebrs
+        Sets the value of the memory, can be done to a limited set of numbers
         """
 
         # TODO: work on the set value feature.
@@ -32,7 +32,7 @@ class RegisterShell(CompoundShell):
 
     def set_max_value(self):
         """
-        Sets the momeries value to the maximum possible value
+        Sets the memories value to the maximum possible value
         :return:
         """
         return self.set_value(2 ** self.wrapped.size)
