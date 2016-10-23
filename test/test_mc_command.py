@@ -1,6 +1,6 @@
 import unittest
 
-from cbac.core.mc_command import MCCommand, SimpleCommand, LazyCommand, factory, MCCommandFactoryError
+from cbac.core.mc_command import MCCommand, SimpleCommand, LazyCommand, factory, MCCommandFactoryError, TargetSelector
 
 
 class TestMCCommand(unittest.TestCase):
@@ -66,3 +66,21 @@ class TestFactory(unittest.TestCase):
     def test_error(self):
         self.assertRaises(MCCommandFactoryError, factory, "! say hello")
         self.assertRaises(MCCommandFactoryError, factory, "1/say hello")
+
+
+class TestTargetSelector(unittest.TestCase):
+    def test_simple(self):
+
+        a = TargetSelector.a(x=4, y=5, z=6)
+
+        self.assertEquals(a.variable, 'a')
+        self.assertEquals(a.coordinate, (4, 5, 6))
+
+        e = TargetSelector('e', coordinate=(3, 5, 6), r=9)
+
+        self.assertEquals(e.radius, 9)
+
+    def test_formatting(self):
+        # @a[x=10,y=20,z=30,r=4]
+        a = TargetSelector('a', coordinate=(10, 20, 30), radius=4)
+        self.assertEquals(a.compile(), "@a[rm=4,r=4,y=20,x=10,z=30]")
