@@ -38,21 +38,7 @@ class MCCommand(object):
         # If the command block holding this command will be repeated.
         self.is_repeated = is_repeated
 
-        self._target_selector = target_selector
-
-    @property
-    def target_selector(self):
-        """
-        :return: The target selector for this command.
-        """
-        return self._target_selector
-
-    @target_selector.setter
-    def target_selector(self, value):
-        """
-        :param value: new target selector instance.
-        """
-        self._target_selector = value
+        self.target_selector = target_selector
 
     @target_selector_inject
     def compile(self):
@@ -106,6 +92,14 @@ class LazyCommand(MCCommand):
         self.args = args
         self.kwargs = kwargs
         self.func = func
+
+    def __call__(self, *args, **kwargs):
+        """
+        Makes the lazy command as a decorator.
+        """
+        self.args = args
+        self.kwargs =kwargs
+        return self
 
     @target_selector_inject
     def compile(self):
@@ -316,3 +310,13 @@ class TargetSelector(object):
         product = "@{0}[{1}]".format(self.variable, arguments)
         return product
 
+
+@LazyCommand
+def testfor(target_selector):
+    """
+    :param target_selector: what you are testing for.
+    :return: Lazy command.
+    """
+    if hasattr(target_selector, 'compile'):
+        target_selector = target_selector.compile()
+    return "/testfor {}".format(target_selector)
