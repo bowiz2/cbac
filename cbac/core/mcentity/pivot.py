@@ -20,4 +20,7 @@ class Pivot(MCEntity):
     @property
     @memoize
     def shell(self):
+        """
+        :return: Minecraft command interface.
+        """
         return PivotShell(self)

@@ -21,6 +21,10 @@ Location = Vector
 
 
 def memoize(function):
+    """
+    decorator.
+    Memoize the function output
+    """
     memo = {}
 
     def wrapper(*args):
@@ -35,10 +39,20 @@ def memoize(function):
 
 
 def format_location(location):
+    """
+    Turn a tuple of numbers into its minecraft equivalent.
+    :param location: (1,2,3)
+    :return: 1 2 3
+    """
     return " ".join([str(i) for i in location])
 
 
-def format_realtive_location(location):
+def format_relative_location(location):
+    """
+    Foramat a tuple location into the relative minecraft representation.
+    :param location: (1,2,3)
+    :return: ~1 ~2 ~3
+    """
     return " ".join(["~" + str(i) for i in location])
 
 
@@ -57,7 +71,7 @@ def format_relative_area(area):
     aka
     ((1, 2, 3), (4, 5, 6)) --> ~1 ~2 ~3 ~4 ~5 ~6
     """
-    return " ".join([format_realtive_location(point) for point in area])
+    return " ".join([format_relative_location(point) for point in area])
 
 
 def inline_generators(fn):
@@ -85,6 +99,9 @@ def inline_generators(fn):
 
 
 class InlineGenerator(object):
+    """
+    Used in the _from util keeyword.
+    """
     def __init__(self, wrapped):
         self.wrapped = wrapped
 
@@ -99,7 +116,7 @@ def absolute_area(area):
     point_a = Vector(*point_a)
     point_b = Vector(*point_b)
     diff = point_b - point_a
-    return ((0, 0, 0), diff)
+    return (0, 0, 0), diff
 
 
 def _from(value):

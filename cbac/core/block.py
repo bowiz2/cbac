@@ -1,3 +1,6 @@
+"""
+Holds Minecraft block class.
+"""
 from command_shell import CommandBlockShell
 from command_shell.location_shell import BlockShell
 from constants import block_id as ids
@@ -32,11 +35,17 @@ class Block(object):
 
     @property
     def block_data(self):
+        """
+        :return: Minecraft block data.
+        """
         return self._block_data
 
     @property
     @memoize
     def shell(self):
+        """
+        :return: Minecraft command interface.
+        """
         return BlockShell(self)
 
 
@@ -112,4 +121,7 @@ class CommandBlock(Block):
     @property
     @memoize
     def shell(self):
+        """
+        :return: Minecraft command interface.
+        """
         return CommandBlockShell(self)

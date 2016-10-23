@@ -7,7 +7,7 @@ from cbac.core.constants.block_id import names as block_names, TRUE_BLOCK, FALSE
 
 from cbac.core.utils import Vector, format_area
 from cbac.core.utils import absolute_area as abs_area
-from cbac.core.utils import format_location, format_realtive_location
+from cbac.core.utils import format_location, format_relative_location
 
 
 class LocationShell(CommandShell):
@@ -27,7 +27,7 @@ class LocationShell(CommandShell):
             location = self.context.get_relative_location(self.wrapped)
 
         if self.context.executor is not None:
-            return format_realtive_location(location)
+            return format_relative_location(location)
 
         return format_location(location)
 
@@ -43,7 +43,7 @@ class LocationShell(CommandShell):
             formatted_area = [format_location(point) for point in area]
         else:
             area = self.context.get_relative_area(self.wrapped)
-            formatted_area = [format_realtive_location(point) for point in area]
+            formatted_area = [format_relative_location(point) for point in area]
 
         return " ".join(formatted_area)
 

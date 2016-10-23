@@ -1,3 +1,6 @@
+"""
+Holds BlockBox class
+"""
 from cbac.core.block import Block
 
 

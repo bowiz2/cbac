@@ -7,7 +7,7 @@ from cbac.core.constants.block_id import TRUE_BLOCK, names
 from cbac.core.constants.mc_direction import vectors as direction_vectors
 
 from cbac.core.utils import Vector
-from cbac.core.utils import format_realtive_location, format_location, format_relative_area, absolute_area, format_area
+from cbac.core.utils import format_relative_location, format_location, format_relative_area, absolute_area, format_area
 
 
 class EntityShell(CommandShell):
@@ -47,7 +47,7 @@ class EntityShell(CommandShell):
         return self._join_command(
             "/summon",
             entity.mc_type,
-            format_realtive_location(self.context.get_relative_location(location)),
+            format_relative_location(self.context.get_relative_location(location)),
             entity.parse_tags()
         )
 
@@ -60,7 +60,7 @@ class EntityShell(CommandShell):
         :return: Tp command.
         """
         direction_vector = direction_vectors[direction] * distance
-        return self._join_command("/tp", self.wrapped.selector, format_realtive_location(direction_vector))
+        return self._join_command("/tp", self.wrapped.selector, format_relative_location(direction_vector))
 
     def activate(self):
         """
@@ -110,5 +110,5 @@ class PivotShell(EntityShell):
         return self.execute(self._join_command(
             "/clone",
             format_area(temp_area),
-            format_realtive_location((0, 0, 0))
+            format_relative_location((0, 0, 0))
         ))()
