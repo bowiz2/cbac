@@ -1,3 +1,6 @@
+"""
+Holds Constant class.
+"""
 from cbac.core.block import Block
 from cbac.core.constants import block_id
 
@@ -15,7 +18,8 @@ class Constant(Compound):
 
     def __init__(self, number, buffer_size=8):
         """
-        :param number: The constat value you want to store in the world, the bits of the consstant represent this number,
+        :param number: The constant value you want to store in the world, the bits of the constant represent this
+        number,
         :param buffer_size: the number of the blocks will be completed to this size if exits.
         """
         super(Constant, self).__init__(isolated=False)
@@ -26,6 +30,9 @@ class Constant(Compound):
     @property
     @memoize
     def blocks(self):
+        """
+        :return: Collection of blocks which compose this constant in the space.
+        """
         to_return = []
         for bit in self.bits:
             if bit:
