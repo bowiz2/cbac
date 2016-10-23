@@ -181,7 +181,7 @@ class LocationShell(CommandShell):
 
     def __eq__(self, other):
         """
-        This is used for conditionning in the condition unit.
+        This is used for conditioning in the condition unit.
         :param other: some block you want to test against.
         :returns: A testforblock command.
         """
