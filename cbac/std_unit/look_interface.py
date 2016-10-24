@@ -40,7 +40,6 @@ class LookPlane(object):
             m_range_vertical.append(angle(a, b, c))
         return m_range_vertical, m_range_horizontal
 
-
 class LookInterfaceUnit(Unit):
     """
     This is an example of a basic structure of a command block array unit.
@@ -56,12 +55,20 @@ class LookInterfaceUnit(Unit):
         self.player_location = player_location
         self.look_planes = look_planes
         #self.interface_schematic = self.add_compound(interface_schematic)
+        self.resetter = std_unit.ListenerReSetter([])
         self.listners = []
         for plain in self.look_planes:
             vertical, horizontal = plain.get_look_boundries(self.player_location)
-            vertical_listner = self.add_unit(std_unit.Listener(player.shell.test_rotation_vertical(int(min(vertical)), int(max(vertical))), mc_command.say("plain match for" + str(plain))))
+            vertical_listner = self.add_unit(std_unit.Listener(
+                player.shell.test_rotation_vertical(int(min(vertical)), int(max(vertical))),
+                [mc_command.say("plain match for" + str(plain)), self.resetter.shell.activate()]))
             self.listners.append(vertical_listner)
+        self.resetter.listeners = self.listners
 
+    def synthesis(self):
+        self.resetter.synthesis()
+        print "synth"
+        super(LookInterfaceUnit, self).synthesis()
 
     def architecture(self):
         """
@@ -70,4 +77,3 @@ class LookInterfaceUnit(Unit):
         you can read about the statement which can be used here in the cbac.unit.statement module.
         """
         yield mc_command.say("hoooo")
-

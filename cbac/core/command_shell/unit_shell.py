@@ -21,3 +21,10 @@ class UnitShell(CommandShell):
         :return:
         """
         return self.wrapped.entry_point.shell.activate()
+
+    def reset(self):
+        """
+        Reset the entry point of the unit.
+        :return:
+        """
+        self.wrapped.entry_point.shell.deactivate()
