@@ -34,8 +34,9 @@ from .ram_unit import MemoryAccessUnit, WriteUnit, ReadUnit
 # Misc
 from .listner_unit import Listener, IsActiveListener, IsNotActiveListener
 from .screen_unit import ScreenUnit
+from .view_detector import ViewDetectorVerticalUnit, ViewDetectorHorizonatlUnit
 
 __all__ = ['AndGate', 'NandGate', 'NotGate', 'OrGate', 'XnorGate', 'XorGate',
            'IncrementUnit', 'FullAdderUnit', 'RippleCarryFullAdderArray', 'NegateUnit', 'SubtractUnit', 'MultiUnit',
            'ShiftUnit', 'ReverseUnit', 'MemoryAccessUnit', 'WriteUnit', 'ReadUnit',
-           'Listener', 'IsActiveListener', 'IsNotActiveListener', 'ScreenUnit']
+           'Listener', 'IsActiveListener', 'IsNotActiveListener', 'ScreenUnit', 'ViewDetectorVerticalUnit']

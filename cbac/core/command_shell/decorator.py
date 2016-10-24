@@ -10,6 +10,7 @@ def command(creates_condition=None):
     :return: command decorator.
     """
 
+    # TODO: merge lazy command and this decorator
     def command_decorator(f):
         """
         Makes this function a suspended method. decorator

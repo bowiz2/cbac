@@ -8,6 +8,7 @@ from cbac import std_unit
 from cbac.unit import Unit
 from cbac.unit.statements import *
 from test.decorators import named_schematic
+import cbac
 
 
 class StdUnitTestCase(TestCase):
@@ -228,3 +229,16 @@ class TestSubRegisterOperation(StdUnitTestCase):
         self.block_space.add(cbac.CBA(
             my_Register.slice(xrange(2, 5)).shell.set_max_value()
         ))
+
+
+class TestMisc(StdUnitTestCase):
+
+    @named_schematic
+    def test_view_detector(self):
+        self.block_space.size = (20, 200, 20)
+        self.block_space.add_unit(std_unit.ViewDetectorVerticalUnit(cbac.Player(all_players=True)))
+
+    @named_schematic
+    def test_view_detector_horizontal(self):
+        self.block_space.size = (20, 200, 20)
+        self.block_space.add_unit(std_unit.ViewDetectorHorizonatlUnit(cbac.Player(all_players=True)))

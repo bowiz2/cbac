@@ -4,9 +4,9 @@ from cbac.core.block import Block, CommandBlock
 from cbac.core.blockspace import BlockSpace
 from cbac.core.command_shell import ShellContext, CommandShell
 from cbac.core.constants.block_id import *
-
+from cbac.core.command_shell.player_shell import PlayerShell
 from cbac.core.utils import Vector, memoize
-
+from cbac.core.mcentity import Player
 
 class BlockspaceMock(BlockSpace):
     """
@@ -92,3 +92,22 @@ class TestCommandBlockShell(TestLocationShell):
     def test_has_succeeded(self):
         command_result = self.subject_shell.has_succeeded()()
         self.assertEqual("/testforblock ~1 ~0 ~-1 command_block 1 {SuccessCount: 1}", command_result)
+
+
+class TestPlayerShell(TestShell):
+    @property
+    def subject_shell(self):
+        return Player("test_player").shell
+
+    def test_exists(self):
+        self.assertEquals("/testfor @a[name=test_player]", self.subject_shell.test_exists().compile())
+
+    def test_coordinates(self):
+        self.assertEquals("/testfor @a[x=1,y=2,z=3,name=test_player]",
+                          self.subject_shell.test_coordinate((1, 2, 3)).compile())
+
+    def test_rotation(self):
+        self.assertEquals("/testfor @a[name=test_player,rx=2,rxm=1]",
+                          self.subject_shell.test_rotation_vertical(1,2).compile())
+        self.assertEquals("/testfor @a[name=test_player,ry=2,rym=1]",
+                          self.subject_shell.test_rotation_horizontal(1, 2).compile())

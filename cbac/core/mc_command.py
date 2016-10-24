@@ -77,7 +77,7 @@ class EmptyCommand(MCCommand):
         """
         :return: empty command string.
         """
-        return "/say empty"
+        return ""
 
 
 class LazyCommand(MCCommand):
@@ -209,8 +209,8 @@ class TargetSelector(object):
         :param experience_level: l, lm (min, max)
         :param game_mode: m
         :param name: entity name
-        :param vertical_rotation: rx, rxm (max, min)
-        :param horizontal_rotation: ry, rym (max, min)
+        :param vertical_rotation: rx, rxm (min, max)
+        :param horizontal_rotation: ry, rym (min, max)
         :param entity_type: type
         :param args:
         :param kwargs: you can use it to pass the minecraft notation
@@ -247,13 +247,13 @@ class TargetSelector(object):
         self.name = name
 
         self.vertical_rotation = (
-            kwargs.get('rx', vertical_rotation[0]),
-            kwargs.get('rxm', vertical_rotation[1])
+            kwargs.get('rxm', vertical_rotation[0]),
+            kwargs.get('rx', vertical_rotation[1])
         )
 
         self.horizontal_rotation = (
-            kwargs.get('ry', horizontal_rotation[0]),
-            kwargs.get('rym', horizontal_rotation[1])
+            kwargs.get('rym', horizontal_rotation[0]),
+            kwargs.get('ry', horizontal_rotation[1])
         )
 
         self.entity_type = kwargs.get('type', entity_type)
@@ -291,14 +291,51 @@ class TargetSelector(object):
             ('lm', self.experience_level[1]),
             ('m', self.game_mode),
             ('name', self.name),
-            ('rx', self.vertical_rotation[0]),
-            ('rxm', self.vertical_rotation[1]),
-            ('ry', self.horizontal_rotation[0]),
-            ('rym', self.horizontal_rotation[1]),
+            ('rxm', self.vertical_rotation[0]),
+            ('rx', self.vertical_rotation[1]),
+            ('rym', self.horizontal_rotation[0]),
+            ('ry', self.horizontal_rotation[1]),
             ('type', self.entity_type)
         ]
         # Filter out the empty fields and join the arguments in the correct format.
-        arguments = ",".join(["{0}={1}".format(k, v) for k, v in arguments if v])
+        arguments = ",".join(["{0}={1}".format(k, v) for k, v in arguments if v is not None])
         product = "@{0}[{1}]".format(self.variable, arguments)
         return product
 
+
+def lazy_command(f):
+    """
+    Transforms a function into a lazy command
+    """
+    def _wrapper(*args, **kwargs):
+        return LazyCommand(f, False, False, *args, **kwargs)
+    return _wrapper
+
+
+def lazy_command_condition(f):
+    """
+    Transforms a function into a lazy command which creates condition
+    """
+    def _wrapper(*args, **kwargs):
+        return LazyCommand(f, False, True, *args, **kwargs)
+    return _wrapper
+
+
+@lazy_command_condition
+def testfor(target_selector):
+    """
+    :param target_selector: what you are testing for.
+    :return: Lazy command.
+    """
+    if hasattr(target_selector, 'compile'):
+        target_selector = target_selector.compile()
+    return "/testfor {}".format(target_selector)
+
+
+@lazy_command
+def say(message):
+    """
+    Display message to players
+    :param message: message you want to display.
+    """
+    return "/say {0}".format(message)
