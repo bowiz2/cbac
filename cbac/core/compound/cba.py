@@ -7,7 +7,7 @@ from cbac.core.constants.block_id import FALSE_BLOCK
 
 from cbac.core.compound import Compound
 from cbac.core.utils import memoize
-
+import cbac.core.mc_command
 
 class CBA(Compound):
     """
@@ -31,7 +31,6 @@ class CBA(Compound):
         # This block responsible for deactivating the activator block.
         self.cb_re_setter = CommandBlock(self.activator.shell.deactivate(), None, "chain", True)
         # This command block is reserved for callback use.
-        self.cb_callback_reserved = CommandBlock("", None, "chain", True)
 
         super(CBA, self).__init__(isolated=True)
 
@@ -119,7 +118,7 @@ class CBA(Compound):
         """
         :return: Blocks which follow the user command blocks.
         """
-        return [self.cb_callback_reserved, self.cb_re_setter]
+        return [self.cb_re_setter]
 
     @property
     def name(self):

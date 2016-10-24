@@ -11,26 +11,30 @@ class Listener(Unit):
     Listens on an event and fires off a callback when the event was reached.
     """
 
-    def __init__(self, event_check, callback):
+    def __init__(self, conditions, callback):
         """
         Construct the listner unit
         This unit will be active as long as the event was not reached.
         note the supplied event command will be changed.
-        :param event_check: a command which tests something, and when the test is true, meaning we reached the event.
+        :param conditions: a command which tests something, and when the test is true, meaning we reached the event.
         :param callback: what item to activate when the even the reached.
         """
         super(Listener, self).__init__(0)
-        self.event_check = copy.copy(event_check)
+        if not isinstance(conditions, list):
+            conditions = [conditions]
+        self.conditions = [copy.copy(condition) for condition in conditions]
         self.callback = callback
         self.synthesis()
         # TODO : fix hack, this makes the return command block conditional
-        self.logic_cbas[0].cb_callback_reserved.conditional = True
         self.logic_cbas[0].cb_re_setter.conditional = True
 
     def architecture(self):
-        self.event_check.is_repeated = True
-        callback_command = self.callback.shell.activate()
-        yield If(self.event_check).then(callback_command)
+        self.conditions[0].is_repeated = True
+        if hasattr(self.callback, "shell"):
+            callback_command = self.callback.shell.activate()
+        else:
+            callback_command = self.callback
+        yield If(self.conditions).then(callback_command)
 
 
 class IsActiveListener(Listener):

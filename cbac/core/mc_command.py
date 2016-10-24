@@ -77,7 +77,7 @@ class EmptyCommand(MCCommand):
         """
         :return: empty command string.
         """
-        return ""
+        return say("empty").compile()
 
 
 class LazyCommand(MCCommand):

@@ -230,15 +230,21 @@ class TestSubRegisterOperation(StdUnitTestCase):
             my_Register.slice(xrange(2, 5)).shell.set_max_value()
         ))
 
+from cbac.std_unit.look_interface import *
+from cbac import Player
 
-# class TestMisc(StdUnitTestCase):
-#
-#     @named_schematic
-#     def test_view_detector(self):
-#         self.block_space.size = (20, 200, 20)
-#         self.block_space.add_unit(std_unit.ViewDetectorVerticalUnit(cbac.Player(all_players=True)))
-#
-#     @named_schematic
-#     def test_view_detector_horizontal(self):
-#         self.block_space.size = (20, 200, 20)
-#         self.block_space.add_unit(std_unit.ViewDetectorHorizonatlUnit(cbac.Player(all_players=True)))
+
+class TestMisc(StdUnitTestCase):
+    @named_schematic
+    def test_look(self):
+        a = LookPlane(Vector(1, 0, 4), Vector(1, 1, 0))
+        self.block_space.add_unit(LookInterfaceUnit(Player(all_players=True), Vector(0, 0, 0), [a]))
+    # @named_schematic
+    # def test_view_detector(self):
+    #     self.block_space.size = (20, 200, 20)
+    #     self.block_space.add_unit(std_unit.ViewDetectorVerticalUnit(cbac.Player(all_players=True)))
+    #
+    # @named_schematic
+    # def test_view_detector_horizontal(self):
+    #     self.block_space.size = (20, 200, 20)
+    #     self.block_space.add_unit(std_unit.ViewDetectorHorizonatlUnit(cbac.Player(all_players=True)))
