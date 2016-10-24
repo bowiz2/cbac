@@ -44,7 +44,7 @@ def generate_rows(blocks, row_length):
     for i, block in enumerate(blocks):
 
         if len(construction_row) is row_length - 1:
-            construction_row.append(CommandBlock("/say padding", action="chain"))
+            construction_row.append(CommandBlock("", action="chain"))
 
         if len(construction_row) is row_length:
             rows.append(construction_row)

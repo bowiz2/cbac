@@ -55,7 +55,7 @@ class PlayerShell(CommandShell):
         :return: testfor lazy command.
         """
         selector = self.base_selector
-        selector.vertical_rotation = (maximum, minimum)
+        selector.vertical_rotation = (minimum, maximum)
         return testfor(selector)
 
     def test_rotation_horizontal(self, minimum, maximum):
@@ -66,5 +66,5 @@ class PlayerShell(CommandShell):
                 :return: testfor lazy command.
                 """
         selector = self.base_selector
-        selector.horizontal_rotation = (maximum, minimum)
+        selector.horizontal_rotation = (minimum, maximum)
         return testfor(selector)
