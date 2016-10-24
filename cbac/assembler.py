@@ -99,7 +99,7 @@ def calculate_data_value(block):
         return block.block_data
 
 
-def build(block_space):
+def assemble(block_space):
     """
     Build a blockspace into a schematic
     :param block_space: Blockspace

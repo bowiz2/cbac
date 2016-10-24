@@ -1,5 +1,7 @@
-from cbac import std_unit
+import cbac
 
-std_unit_gates = [std_unit.AndGate, std_unit.OrGate, std_unit.NandGate, std_unit.XorGate, std_unit.XnorGate]
-std_unit_arithmetics = [std_unit.RippleCarryFullAdderArray, std_unit.IncrementUnit, std_unit.NegateUnit,
-                        std_unit.SubtractUnit, std_unit, std_unit.MultiUnit]
+std_unit_gates = [cbac.std_unit.AndGate, cbac.std_unit.OrGate, cbac.std_unit.NandGate, cbac.std_unit.XorGate,
+                  cbac.std_unit.XnorGate]
+
+std_unit_arithmetics = [cbac.std_unit.RippleCarryFullAdderArray, cbac.std_unit.IncrementUnit, cbac.std_unit.NegateUnit,
+                        cbac.std_unit.SubtractUnit, cbac.std_unit.MultiUnit]

@@ -111,7 +111,7 @@ class McTestCase(object):
         self.blockspace.pack()
         self.blockspace.shrink()
 
-        schematic = assembler.build(self.blockspace)
+        schematic = assembler.assemble(self.blockspace)
         schematic.saveToFile(path)
 
     def setUp(self):

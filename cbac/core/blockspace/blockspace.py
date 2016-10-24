@@ -136,3 +136,11 @@ class BlockSpace(object):
             max_y = sorted(block_locations, key=lambda item: item[1])[-1].y
             max_z = sorted(block_locations, key=lambda item: item[2])[-1].z
             self.size = (max_x + 1, max_y + 1, max_z + 1)
+
+    def pack_shrink(self):
+        """
+        Packs and shrinks the blockspace.
+        """
+        self.pack()
+        self.shrink()
+

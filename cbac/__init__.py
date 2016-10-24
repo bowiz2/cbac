@@ -8,6 +8,7 @@ import assembler
 import std_logic
 import std_unit
 import schematics
+import shortcuts
 
 CommandBlockArray = CBA
 __all__ = ["Block", "CommandBlock", "Compound", "CBA", "CommandBlockArray", "Register", "Constant", "BlockSpace",

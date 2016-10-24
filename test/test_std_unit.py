@@ -22,7 +22,7 @@ class StdUnitTestCase(TestCase):
     def tearDown(self):
         self.block_space.pack()
         self.block_space.shrink()
-        schematic = assembler.build(self.block_space)
+        schematic = assembler.assemble(self.block_space)
         schematic.saveToFile(self.schematic_path)
 
 

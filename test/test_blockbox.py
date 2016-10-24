@@ -26,4 +26,4 @@ class BlockBoxTest(TestCase):
         my_blockspace = BlockSpace((20, 20, 20))
         my_blockspace.add(my_blockbox)
         my_blockspace.pack()
-        return cbac.assembler.build(my_blockspace)
+        return cbac.assembler.assemble(my_blockspace)
