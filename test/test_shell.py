@@ -107,7 +107,7 @@ class TestPlayerShell(TestShell):
                           self.subject_shell.test_coordinate((1, 2, 3)).compile())
 
     def test_rotation(self):
-        self.assertEquals("/testfor @a[name=test_player,rx=2,rxm=1]",
-                          self.subject_shell.test_rotation_vertical(1,2).compile())
-        self.assertEquals("/testfor @a[name=test_player,ry=2,rym=1]",
+        self.assertEquals("/testfor @a[name=test_player,rxm=1,rx=2]",
+                          self.subject_shell.test_rotation_vertical(1, 2).compile())
+        self.assertEquals("/testfor @a[name=test_player,rym=1,ry=2]",
                           self.subject_shell.test_rotation_horizontal(1, 2).compile())
