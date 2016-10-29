@@ -2,7 +2,7 @@
 from unittest import TestCase
 
 from cbac.core.utils import *
-
+from cbac.core.utils import _from
 
 class TestUtils(TestCase):
     def test_yield_from(self):
