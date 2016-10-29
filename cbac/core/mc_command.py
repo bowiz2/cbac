@@ -377,6 +377,8 @@ def say(message):
     """
     return "/say {0}".format(message)
 
+# TODO: write tests for these commands.
+
 
 @lazy_command
 def clone(area, location, mask_mode="replace", clone_mode="normal", tile_name=None):
@@ -421,3 +423,19 @@ def fill(area, block_id, data_value=None, block_handling=None, *options):
         area = utils.format_area(area)
 
     return _join_command("/fill", area, block_ids.names[block_id], data_value, block_handling, *options)
+
+
+@lazy_command
+def set_block(location, block_id, data_value=0, block_handling=None, tags=None):
+    """
+    Sets a block to a new block id with some more advanced options.
+    """
+    return _join_command("/setblock", location, block_ids.names[block_id], data_value, block_handling, tags)
+
+
+@lazy_command_condition
+def testforblock(location, block_id, data_value=0, tags=None):
+    """
+    Check if a block at this location is of a certain signature.
+    """
+    return _join_command("/testforblock", location, block_ids.names[block_id], data_value, tags)
