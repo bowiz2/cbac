@@ -13,17 +13,18 @@ from cbac.core.utils import memoize
 
 class Constant(Compound):
     """
+    Hardware representation of a number in bits.
     When compiled, holds the binary representation of a number.
     """
 
-    def __init__(self, number, buffer_size=8):
+    def __init__(self, number, word_size=8):
         """
         :param number: The constant value you want to store in the world, the bits of the constant represent this
         number,
-        :param buffer_size: the number of the blocks will be completed to this size if exits.
+        :param word_size: the number of the blocks will be completed to this size if exits.
         """
         super(Constant, self).__init__(isolated=False)
-        self.buffer_size = buffer_size
+        self.word_size = word_size
         self.number = number
         self.bits = [bool(int(x)) for x in reversed(bin(number)[2:])]
 
@@ -42,7 +43,27 @@ class Constant(Compound):
 
             to_return.append(Block(material))
 
-        if self.buffer_size is not None:
-            for i in xrange(self.buffer_size - len(self.bits)):
+        if self.word_size is not None:
+            for i in xrange(self.word_size - len(self.bits)):
                 to_return.append(Block(block_id.FALSE_BLOCK))
         return to_return
+
+
+class ConstantFactory(object):
+    """
+    Creates Hardware constant objects using cache.
+    """
+    def __init__(self, word_size):
+        """
+        :param word_size: Word size of the constant.
+        For example a number can be 2 but the word size is 8 resulting in 00000010
+        """
+        self.word_size = word_size
+        self.cache = {}
+
+def factory(number, word_size=8):
+    """
+    Get a constant by this number. use cache to reduce the duplication of same hardware constants.
+    :param number: The value of the constant.
+
+    """
