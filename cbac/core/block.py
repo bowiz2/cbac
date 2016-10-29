@@ -23,7 +23,6 @@ class Block(object):
         self._block_id = block_id
         self._block_data = block_data
         self.has_tile_entity = has_tile_entity
-        self._belongs_to_blockspace = False  # used for testign and debugging. TODO: consider removing
 
     @property
     def block_id(self):
