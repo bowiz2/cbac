@@ -118,7 +118,7 @@ class LocationShell(CommandShell):
         :return: CommandSuspender
         :note: Sees use in the RAM standard unit.
         """
-        return mc_command.clone(self.area, temp_location)
+        return mc_command.clone(self.area, temp_location).compile()
 
     def copy(self, other):
         """
