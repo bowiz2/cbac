@@ -17,16 +17,15 @@ class MultiUnit(Unit):
     # By calling self.synthesis()
     @auto_synthesis
     def __init__(self, bits=8, input_a=std_logic.InputRegister, input_b=std_logic.InputRegister,
-                 adder_class=RippleCarryFullAdderArray, inline_adder=True):
+                 adder_class=RippleCarryFullAdderArray, inline_adder=True, shifter=ShiftUnit):
         super(MultiUnit, self).__init__(bits)
 
         self.input_a = self.add_input(input_a)
         self.input_b = self.add_input(input_b)
 
-        # TODO: dependency injection
         self.shift_results = [self.add(std_logic.OutputRegister(self.bits * 2)) for _ in xrange(self.bits)]
         self.shifters = [
-            self.add_unit(ShiftUnit(self.bits, i, inp=self.input_a, output=self.shift_results[i], no_reset=True)) for i
+            self.add_unit(shifter(self.bits, i, inp=self.input_a, output=self.shift_results[i], no_reset=True)) for i
             in xrange(1, self.bits)]
 
         # Not we are not synthesizing them yet.
