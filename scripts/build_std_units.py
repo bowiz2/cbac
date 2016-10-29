@@ -41,9 +41,9 @@ def build_simple_unit(build_folder, unit_class, bits):
     blockspace.add_unit(unit_class(bits))
 
     # Save the blockspace to a schematic file.
-    blockspace.pack_shrink()
-    schematic = cbac.assembler.assemble(blockspace)
-    schematic.saveToFile(os.path.join(build_folder, get_unit_filename(unit_class)))
+    blockspace.build(os.path.join(build_folder, get_unit_filename(unit_class)))
+
+    # Print progress.
     print "  - {0} : {1}".format(unit_class.__name__, get_unit_filename(unit_class))
 
 

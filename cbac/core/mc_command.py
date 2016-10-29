@@ -112,24 +112,32 @@ def factory(raw_command):
     if raw_command is '':
         return EmptyCommand()
 
+    # Some prefixes of the commands.
     conditional_operator = "?"
     condition_creation_operator = "!"
     command_start_prefix = "/"
 
+    # Get the end of the command prefixes and the start of the body of the command.
     try:
         command_start_index = raw_command.index(command_start_prefix)
     except ValueError:
         raise MCCommandFactoryError(
             "Missing command start prefix '{0}' in the command '{1}'".format(command_start_prefix, raw_command))
 
+    # Extract the command operators such as '?' and '!'
     command_operators = raw_command[:command_start_index]
-    conditional = conditional_operator in command_operators
-    creates_condition = condition_creation_operator in command_operators
+    # Check if the created command is conditional.
+    is_conditional = conditional_operator in command_operators
+    # Check if the created command creates condition.
+    is_creates_condition = condition_creation_operator in command_operators
+
+    # Check if all the command operators are valid.
     for operator in command_operators:
         if operator not in [condition_creation_operator, conditional_operator]:
             raise MCCommandFactoryError("Invalid command operator '{0}'", operator)
 
-    return SimpleCommand(raw_command[command_start_index:], conditional, creates_condition)
+    # Return a simple command constructed with the parameters of the command.
+    return SimpleCommand(raw_command[command_start_index:], is_conditional, is_creates_condition)
 
 
 class MCCommandFactoryError(BaseException):
@@ -217,6 +225,7 @@ class TargetSelector(object):
         """
 
         self.variable = variable
+        # Extract the coordinate of the selected player.
         self.coordinate = (
             kwargs.get('x', coordinate[0]),
             kwargs.get('y', coordinate[1]),
@@ -327,6 +336,7 @@ def testfor(target_selector):
     :param target_selector: what you are testing for.
     :return: Lazy command.
     """
+    # Check if you can compile the target selector, or is it just a string.
     if hasattr(target_selector, 'compile'):
         target_selector = target_selector.compile()
     return "/testfor {}".format(target_selector)

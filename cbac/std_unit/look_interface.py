@@ -8,6 +8,8 @@ from cbac import std_unit
 from cbac.core import mc_command
 import math
 
+# TODO: Refactor to  be reasonable quality
+
 
 def angle (a, b, c):
     return math.degrees(math.acos((c**2 - b**2 - a**2)/(-2.0 * a * b)))
@@ -40,6 +42,7 @@ class LookPlane(object):
             m_range_vertical.append(angle(a, b, c))
         return m_range_vertical, m_range_horizontal
 
+
 class LookInterfaceUnit(Unit):
     """
     This is an example of a basic structure of a command block array unit.
@@ -49,26 +52,19 @@ class LookInterfaceUnit(Unit):
     # By calling self.synthesis()
 
     @auto_synthesis
-    def __init__(self, player, player_location, look_planes, interface_schematic=None):
+    def __init__(self, player, player_location, look_planes):
         super(LookInterfaceUnit, self).__init__(0)
         self.player = player
         self.player_location = player_location
         self.look_planes = look_planes
-        #self.interface_schematic = self.add_compound(interface_schematic)
         self.resetter = std_unit.ListenerReSetter([])
         self.listners = []
         for plain in self.look_planes:
             vertical, horizontal = plain.get_look_boundries(self.player_location)
             vertical_listner = self.add_unit(std_unit.Listener(
-                player.shell.test_rotation_vertical(int(min(vertical)), int(max(vertical))),
-                [mc_command.say("plain match for" + str(plain)), self.resetter.shell.activate()]))
+                player.shell.test_rotation_vertical(int(min(vertical)), int(max(vertical))), mc_command.say("found")))
             self.listners.append(vertical_listner)
         self.resetter.listeners = self.listners
-
-    def synthesis(self):
-        self.resetter.synthesis()
-        print "synth"
-        super(LookInterfaceUnit, self).synthesis()
 
     def architecture(self):
         """

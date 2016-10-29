@@ -128,7 +128,7 @@ class UnitLogicParser(object):
             if isinstance(jump, MainLogicJump):
                 listener = IsNotActiveListener(jump.destination.activator, landing_cba)
                 # Activate the listener.
-                origin_cba.cb_callback_reserved.command = listener.activator.shell.activate()
+                origin_cba.cb_reserved.command = listener.activator.shell.activate()
                 yield listener
 
     def add_parsed(self, command):
@@ -137,5 +137,6 @@ class UnitLogicParser(object):
         :param command:
         :return:
         """
-        assert isinstance(command, MCCommand), "command must be of type MCCommand"
+        assert isinstance(command, MCCommand), "command must be of type MCCommand instead got {0}".format(
+            command.__class__.__name__)
         self.commands.append(command)

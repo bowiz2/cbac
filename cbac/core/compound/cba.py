@@ -9,6 +9,7 @@ from cbac.core.compound import Compound
 from cbac.core.utils import memoize
 import cbac.core.mc_command
 
+
 class CBA(Compound):
     """
     Command Block Array
@@ -28,9 +29,9 @@ class CBA(Compound):
         # An empty block which when activated. will fire up this cba.
         self.activator = Block(FALSE_BLOCK)
 
-        # This block responsible for deactivating the activator block.
+        self.cb_reserved = CommandBlock("/say reserved", None, "chain", True)
+        # This block responsible for deactivating the activator block. if the cba is not repeated.
         self.cb_re_setter = CommandBlock(self.activator.shell.deactivate(), None, "chain", True)
-        # This command block is reserved for callback use.
 
         super(CBA, self).__init__(isolated=True)
 
@@ -44,6 +45,19 @@ class CBA(Compound):
             if hasattr(block, "custom_name"):
                 block.custom_name = "{cba_name}[{i}]".format(cba_name=self.name, i=i)
         return blocks
+
+    def set_repeat(self):
+        """
+        Turns this cba into a repeater. Meaning the first block of this compound is a repeat command block which is
+        going to execute its command and all subsequent command each game tick as long as this compound is activated.
+        :return:
+        """
+        assert len(self.blocks) > 2 and isinstance(self.blocks[0], CommandBlock),\
+            "There must be at least 1 command block in this CBA."
+        # Disable the re-setter
+        self.cb_re_setter = None
+        # Set the first command block to the repeat block.
+        self.blocks[1].action = "repeat"
 
     @staticmethod
     def bind_conditions(blocks):
@@ -80,9 +94,10 @@ class CBA(Compound):
         :return: CommandBlock generator.
         """
         assert len(commands) > 0
-
+        # The first block must be an impulse block.
         yield CommandBlock(commands[0], facing=None, action="impulse")
 
+        # And each one after that must be chain
         for command in commands[1:]:
             yield CommandBlock(command, facing=None, action="chain", always_active=True)
 
@@ -118,7 +133,7 @@ class CBA(Compound):
         """
         :return: Blocks which follow the user command blocks.
         """
-        return [self.cb_re_setter]
+        return filter(lambda item: item is not None, [self.cb_re_setter])
 
     @property
     def name(self):
@@ -135,6 +150,17 @@ class CBA(Compound):
         :return: Block
         """
         return self.activator
+
+    @property
+    def is_repeat(self):
+        """
+        :return: True if the type of this cba is a repeater.
+        """
+        # The length of this cba is 1 or less it cannot be repeated.
+        if len(self.blocks) <= 1:
+            return False
+
+        return isinstance(self.blocks[1], CommandBlock) and self.blocks[1].action is "repeat"
 
     def __add__(self, other):
         """

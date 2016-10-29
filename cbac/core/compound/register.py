@@ -41,6 +41,7 @@ class Register(Compound):
         :return: new memory compound which shares blocks with this memory.
         """
         sub_memory = Register(size=len(arange))
+        # Set the corresponding blocks in the range to the blocks in the slice.
         for i, block_index in enumerate(arange):
             sub_memory.blocks[i] = self.blocks[block_index]
         return sub_memory

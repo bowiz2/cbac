@@ -14,40 +14,56 @@ def tagged_cb(command_block, location, blockspace):
     :param blockspace: the blockspace at which the command block is located.
     :return: nbt tag
     """
+    # Extarct the command from the command block.
     command = command_block.command
+
+    # If it is an old-school string command. create a MCCommand object out of it.
     if isinstance(command, str):
         command = command_factory(command)
+
+    # Adjust the context of the command.
     if hasattr(command, "context"):
         context = command.context
         context.executor = command_block
         context.blockspace = blockspace
-    adjust(command_block, command)
+
+    # Adjust the properties of the command block as the properties of the command itself.
+    adjust_cb_to_command(command_block, command)
+
+    # Compile the command.
     command = command.compile()
 
+    # Create the root tag of the command block.
     root_tag = nbt.TAG_Compound()
 
+    # Set the id to that of the command block which is "Control"
     root_tag["id"] = nbt.TAG_String("Control")
 
+    # Set the custom name of the command block tag if needed.
     if command_block.custom_name is not None:
         root_tag["CustomName"] = nbt.TAG_String(command_block.custom_name)
+
     if command_block.always_active:
+        # Set the always active property of the command block tag
         root_tag['auto'] = nbt.TAG_Byte(1)
 
+    # Set the direction of the command block tag.
     root_tag["facing"] = nbt.TAG_String(command_block.facing)
-    # Set the location of the command block.
+
+    # Set the location of the command block tag.
     TileEntity.setpos(root_tag, location)
-    # Parse the command of the command block.
 
     root_tag["Command"] = nbt.TAG_String(command)
+
     root_tag["conditional"] = nbt.TAG_Byte(1 if command_block.conditional else 0)
 
     # Return the tag which represents the mcentity of the command block.
     return root_tag
 
 
-def adjust(command_block, command):
+def adjust_cb_to_command(command_block, command):
     """
-    Set the properties of the command block depending on the command inside of it.
+    Set the properties of the command block (host) depending on the command inside of it.
     """
     if command.is_conditional:
         command_block.conditional = True
@@ -127,3 +143,5 @@ def assemble(block_space):
         schematic.addTileEntity(tile_entity)
 
     return schematic
+
+__all__ = ["assemble"]

@@ -6,6 +6,7 @@ import copy
 from cbac.core.utils import lrange
 
 # TODO: move parsing logic inside the statement.
+# TODO: implement wait statement
 
 
 class Token(object):

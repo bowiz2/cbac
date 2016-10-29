@@ -36,9 +36,11 @@ def pack_areas(areas):
     :return: dict of area and the location inside the blockspace.
     """
     assignments = {}
+    # The start position to which the packers will decide the relational position of the reset of the areas.
     pivot = Vector(0, 0, 0)
-    # TODO: adjust to build direction
+
     for area in areas:
+        # Assign new location for the area.
         assignments[area] = pivot
         if area.is_isolated:
             pivot += Vector(0, 0, 1)

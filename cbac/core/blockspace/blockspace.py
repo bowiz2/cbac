@@ -4,6 +4,7 @@ Holds the blockspace Class.
 from cbac.core.blockspace import packer
 from cbac.core import utils
 from cbac.core.utils import Vector
+from cbac import assembler
 
 
 class BlockSpace(object):
@@ -11,7 +12,7 @@ class BlockSpace(object):
     Logical representation of blocks in the world
     """
 
-    def __init__(self, size, packer_instance=packer):
+    def __init__(self, size, packer_instance=packer, assembler_instance=assembler):
         """
         :param size: The size of the blockspace, for packing purposes.
         :param packer_instance: an instance of an object which can pack compounds. is a dependency injection.
@@ -20,6 +21,7 @@ class BlockSpace(object):
         self.size = size
 
         self.packer = packer_instance
+        self.assembler = assembler_instance
         # An item can be a compound, block-box or anything else.
         self.packed_items = {}
 
@@ -144,3 +146,11 @@ class BlockSpace(object):
         self.pack()
         self.shrink()
 
+    def build(self, filename):
+        """
+        Builds this blockspace into a schematic file.
+        :param filename: path of the schematic file.
+        """
+        self.pack_shrink()
+        schematic = self.assembler.assemble(self)
+        schematic.saveToFile(filename=filename)
