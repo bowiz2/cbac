@@ -8,6 +8,7 @@ from cbac.core.constants.block_id import names as block_names, TRUE_BLOCK, FALSE
 from cbac.core.utils import Vector, format_area
 from cbac.core.utils import absolute_area as abs_area
 from cbac.core.utils import format_location, format_relative_location
+from cbac.core import mc_command
 
 
 class LocationShell(CommandShell):
@@ -108,11 +109,7 @@ class LocationShell(CommandShell):
         temp_area = [Vector(*point) + temp_location for point in area]
 
         # TODO: fix this mess.
-        return self._join_command(
-            "/clone",
-            format_area(temp_area),
-            self.location
-        )
+        return self._join_command("/clone", format_area(temp_area), self.location)
 
     @command()
     def store_to_temp(self, temp_location=(0, 0, 0)):
@@ -121,11 +118,7 @@ class LocationShell(CommandShell):
         :return: CommandSuspender
         :note: Sees use in the RAM standard unit.
         """
-        # TODO: document good.
-        return self._join_command(
-            "/clone",
-            self.area,
-            format_location(temp_location), )
+        return mc_command.clone(self.area, temp_location)
 
     def copy(self, other):
         """
