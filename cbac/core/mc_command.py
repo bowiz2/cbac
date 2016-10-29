@@ -2,7 +2,7 @@
 In this module there is an abstract representation of minecraft commands.
 """
 # TODO: refactor creates condition to is_condition_creating. for now we use this because of a back comparability.
-import utils
+from cbac.core import utils
 
 
 def target_selector_inject(f):
@@ -330,6 +330,31 @@ def lazy_command_condition(f):
         return LazyCommand(f, False, True, *args, **kwargs)
     return _wrapper
 
+from cbac.shortcuts import block_ids
+def _join_command(*items):
+    """
+    Joins the items into a minecraft compatible format.
+    """
+
+    # TODO: implement test.
+    def parse(obj):
+        """
+        Gets rid of null items, and formats dictionaries in the minecraft format.
+        """
+        if isinstance(obj, utils.Vector):
+            return " ".join([str(i) for i in obj])
+        if isinstance(obj, dict):
+            new_dict = {}
+            for key, value in obj.items():
+                if value is not None:
+                    new_dict[key] = value
+
+            return str(new_dict).replace("'", "")
+
+        return str(obj)
+
+    return " ".join([parse(item) for item in items if item is not None])
+
 
 @lazy_command_condition
 def testfor(target_selector):
@@ -360,6 +385,27 @@ def clone(area, location):
     :param location: the location to which you are copying the location to.
     :return: LazyCommand
     """
-    return "/clone {0} {1}".format(utils.format_area(area), location)
+    if not isinstance(area, str):
+        area = utils.format_area(area)
+    if not isinstance(location, str):
+        location = utils.format_location(location)
+
+    return _join_command("/clone", area, utils.format_location(location))
 
 copy = clone
+
+
+@lazy_command
+def fill(area, block_id, data_value=None, block_handling=None, *options):
+    """
+    Fill an area with a block of a specific id.
+    :param area: Area you want to fill
+    :param block_id: id of the block
+    :param data_value: data value of the block
+    :param block_handling: fill mode
+    :param options:
+    """
+    if not isinstance(area, str):
+        area = utils.format_area(area)
+
+    return _join_command("/fill", area, block_ids.names[block_id], data_value, block_handling, *options)
