@@ -361,3 +361,5 @@ def clone(area, location):
     :return: LazyCommand
     """
     return "/clone {0} {1}".format(utils.format_area(area), location)
+
+copy = clone
