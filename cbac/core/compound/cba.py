@@ -7,7 +7,6 @@ from cbac.core.constants.block_id import FALSE_BLOCK
 
 from cbac.core.compound import Compound
 from cbac.core.utils import memoize
-import cbac.core.mc_command
 
 
 class CBA(Compound):
