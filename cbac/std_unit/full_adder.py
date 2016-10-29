@@ -22,7 +22,6 @@ class FullAdderUnit(Unit):
         """
         Simple full adder architecture using a truth table.
         """
-        # TODO: create a truth table statement.
         yield TruthTable([
             [[self.a, self.b, self.cin], [self.s, self.cout]],
             [[False, False, True], [True, False]],
