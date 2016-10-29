@@ -147,9 +147,8 @@ def compare(iter1, iter2):
 
 def sort_locations(locations):
     """
-    sort these locations and return 3 vectors of these locations sorted by their corresponding coordinates.
+    Sort these locations and return 3 vectors of these locations sorted by their corresponding coordinates.
     """
-    # TODO: write test
     sort_by_x = sorted(locations, key=lambda obj: obj[0])
     sort_by_y = sorted(locations, key=lambda obj: obj[1])
     sort_by_z = sorted(locations, key=lambda obj: obj[2])
@@ -160,7 +159,6 @@ def min_corner(locations):
     """
     Calculate the minimal corner of the bounding box of these locations which is the nearest to (0,0,0)
     """
-    # TODO: write test
     sort_by_x, sort_by_y, sort_by_z = sort_locations(locations)
     return Vector(sort_by_x[0].x, sort_by_y[0].y, sort_by_z[0].z)
 
