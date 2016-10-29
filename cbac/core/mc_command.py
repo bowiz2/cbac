@@ -330,7 +330,7 @@ def lazy_command_condition(f):
         return LazyCommand(f, False, True, *args, **kwargs)
     return _wrapper
 
-from cbac.shortcuts import block_ids
+from cbac.core.constants import block_id as block_ids
 
 def _join_command(*items):
     """
