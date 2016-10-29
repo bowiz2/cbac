@@ -331,6 +331,7 @@ def lazy_command_condition(f):
     return _wrapper
 
 from cbac.shortcuts import block_ids
+
 def _join_command(*items):
     """
     Joins the items into a minecraft compatible format.
@@ -378,19 +379,30 @@ def say(message):
 
 
 @lazy_command
-def clone(area, location):
+def clone(area, location, mask_mode="replace", clone_mode="normal", tile_name=None):
     """
-    Clones an area to a location.
-    :param area: are you want to copy
-    :param location: the location to which you are copying the location to.
-    :return: LazyCommand
+    Clones blocks from region to another.
+    :param area: from were to clone the blocks.
+    :param location: Specifies the lower northwest corner (i.e., the smallest coordinates of each axis)
+    of the destination region. May use tilde notation to specify a distance relative to the command's execution.
+    :param mask_mode: Specifies whether to filter the blocks being cloned. Can be filtered, masked or replace.
+    :param clone_mode: Specifies how to treat the source region. Can be force, move and normal.
+    :param tile_name: Specifies the block id to copy when maskMode is set to filtered. Required by filtered mode.
+    :return: Clone command suspender.
     """
+
     if not isinstance(area, str):
         area = utils.format_area(area)
     if not isinstance(location, str):
         location = utils.format_location(location)
 
-    return _join_command("/clone", area, utils.format_location(location))
+    assert mask_mode in ["filtered", "masked", "replace"]
+    assert clone_mode in ["force", "move", "normal"]
+
+    if mask_mode == "filtered":
+        assert tile_name is not None
+
+    return _join_command("/clone", area, location, mask_mode, clone_mode, tile_name)
 
 copy = clone
 
