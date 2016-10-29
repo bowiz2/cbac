@@ -91,8 +91,7 @@ class LocationShell(CommandShell):
         :param block_handling: fill mode
         :param options:
         """
-
-        return self._join_command("/fill", self.area, block_names[block_id], data_value, block_handling, *options)
+        return mc_command.fill(self.area, block_names[block_id], data_value, block_handling, *options).compile()
 
     @command()
     def load_from_temp(self, temp_location=(0, 0, 0)):
