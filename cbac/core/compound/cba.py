@@ -12,6 +12,7 @@ from cbac.core.utils import memoize
 class CBA(Compound):
     """
     Command Block Array
+    This is a very important class! this is the base for all the logic inside the framework.
     """
     # Track the number of cbas created. used for doc. The number is in list to become immutable.
     created_count = [0]
