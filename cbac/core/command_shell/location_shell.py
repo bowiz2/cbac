@@ -53,14 +53,14 @@ class LocationShell(CommandShell):
         """
         Check if a block at this location is of a certain signature.
         """
-        return self._join_command("/testforblock", self.location, block_names[block_id], data_value, tags)
+        return mc_command.testforblock(self.location, block_id, data_value, tags).compile()
 
     @command()
     def setblock(self, block_id, data_value=0, block_handling=None, tags=None):
         """
         Sets a block to a new block id with some more advanced options.
         """
-        return self._join_command("/setblock", self.location, block_names[block_id], data_value, block_handling, tags)
+        return mc_command.set_block(self.location, block_id, data_value, block_handling, tags).compile()
 
     @command()
     def clone(self, other, mask_mode="replace", clone_mode="normal", tile_name=None):
@@ -73,14 +73,8 @@ class LocationShell(CommandShell):
         :param tile_name: Specifies the block id to copy when maskMode is set to filtered. Required by filtered mode.
         :return: Clone command suspender.
         """
-        assert mask_mode in ["filtered", "masked", "replace"]
-        assert clone_mode in ["force", "move", "normal"]
-
-        if mask_mode == "filtered":
-            assert tile_name is not None
-
-        other.shell.context = self.context
-        return self._join_command("/clone", self.area, other.shell.location, mask_mode, clone_mode, tile_name)
+        other.shell.context = self.context  # TODO: Think if necessary
+        return mc_command.clone(self.area, other.shell.location, mask_mode, clone_mode, tile_name).compile()
 
     @command()
     def fill(self, block_id, data_value=None, block_handling=None, *options):
@@ -91,7 +85,7 @@ class LocationShell(CommandShell):
         :param block_handling: fill mode
         :param options:
         """
-        return mc_command.fill(self.area, block_names[block_id], data_value, block_handling, *options).compile()
+        return mc_command.fill(self.area, block_id, data_value, block_handling, *options).compile()
 
     @command()
     def load_from_temp(self, temp_location=(0, 0, 0)):
@@ -108,7 +102,7 @@ class LocationShell(CommandShell):
         temp_area = [Vector(*point) + temp_location for point in area]
 
         # TODO: fix this mess.
-        return self._join_command("/clone", format_area(temp_area), self.location)
+        return mc_command.clone(format_area(temp_area), self.location).compile()
 
     @command()
     def store_to_temp(self, temp_location=(0, 0, 0)):
