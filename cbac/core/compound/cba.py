@@ -17,10 +17,6 @@ class CBA(Compound):
     created_count = 0
 
     def __init__(self, *commands):
-        # TODO: clarify padding doc.
-        # The size to which this compound command blocks must be padded to not interfere with the conditional commands
-        self.padding = None
-
         self.cba_id = self.created_count
         self.created_count += 1
 
