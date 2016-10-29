@@ -1,4 +1,4 @@
-from cbac import Constant
+from cbac import HardwareConstant
 from mctest.case import McTestCase
 from mctest.assertion import assertEquals
 from sul import IncrementUnit
@@ -9,9 +9,9 @@ class Sample(McTestCase):
     def test_ram(self):
         increment = IncrementUnit(4)
         self.add_unit(increment)
-        num0 = Constant(0, 4)
-        num4 = Constant(4, 4)
-        num5 = Constant(5, 4)
+        num0 = HardwareConstant(0, 4)
+        num4 = HardwareConstant(4, 4)
+        num5 = HardwareConstant(5, 4)
         self.blockspace.add_compound(num0)
         self.blockspace.add_compound(num4)
         self.blockspace.add_compound(num5)

@@ -4,7 +4,7 @@ Compounds are objects which consist of an array of blocks.
 """
 from .compound_base import Compound
 from .cba import CBA
-from .constant import Constant
+from .hardware_constant import HardwareConstant
 from .register import Register
 
-__all__ = ["Compound", "CBA", "Register", "Constant"]
+__all__ = ["Compound", "CBA", "Register", "HardwareConstant"]

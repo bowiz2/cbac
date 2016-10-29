@@ -11,7 +11,7 @@ from cbac.core.utils import memoize
 # TODO: create constant factory
 
 
-class Constant(Compound):
+class HardwareConstant(Compound):
     """
     Hardware representation of a number in bits.
     When compiled, holds the binary representation of a number.
@@ -23,7 +23,7 @@ class Constant(Compound):
         number,
         :param word_size: the number of the blocks will be completed to this size if exits.
         """
-        super(Constant, self).__init__(isolated=False)
+        super(HardwareConstant, self).__init__(isolated=False)
         self.word_size = word_size
         self.number = number
         self.bits = [bool(int(x)) for x in reversed(bin(number)[2:])]

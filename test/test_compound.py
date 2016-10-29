@@ -3,14 +3,14 @@ from unittest import TestCase
 from cbac.core.constants.block_id import FALSE_BLOCK
 
 import cbac.core.block as block
-from cbac.core.compound import Constant
+from cbac.core.compound import HardwareConstant
 from cbac.core.compound import Register
 
 
 class TestCompound(TestCase):
     def test_constant(self):
         NUM = 5
-        const = Constant(NUM)
+        const = HardwareConstant(NUM)
         self.assertEqual(const.number, NUM)
 
         excpected = (True, False, True, False, False, False, False, False)

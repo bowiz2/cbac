@@ -20,7 +20,7 @@ class ViewDetectorVerticalUnit(Unit):
         super(ViewDetectorVerticalUnit, self).__init__(int(math.ceil(math.log(len(xrange(-90, 89)), 2))))
         self.player = player
         self.output = self.add_output(output)
-        self.constants = [self.add_compound(cbac.Constant(i, self.bits)) for i in xrange(180)]
+        self.constants = [self.add_compound(cbac.HardwareConstant(i, self.bits)) for i in xrange(180)]
 
     def architecture(self):
         """
@@ -49,7 +49,7 @@ class ViewDetectorHorizonatlUnit(Unit):
         super(ViewDetectorHorizonatlUnit, self).__init__(int(math.ceil(math.log(len(xrange(-180, 178)), 2))))
         self.player = player
         self.output = self.add_output(output)
-        self.constants = [self.add_compound(cbac.Constant(i, self.bits)) for i in xrange(360)]
+        self.constants = [self.add_compound(cbac.HardwareConstant(i, self.bits)) for i in xrange(360)]
 
     def architecture(self):
         """
