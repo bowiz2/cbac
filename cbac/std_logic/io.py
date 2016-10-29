@@ -1,10 +1,10 @@
+"""
+Holds the io sugar.
+"""
 from cbac.core.constants.block_id import FALSE_BLOCK
 
 import cbac.core.compound.register
 import cbac.core.block
-
-
-# TODO: fix the major bug.
 
 
 class StdLogic(object):
