@@ -108,11 +108,9 @@ def calculate_data_value(block):
     :param block: Block
     :return: number
     """
-    # TODO: fix this mess.
-    try:
+    if hasattr(block, 'data_value'):
         return block.data_value
-    except AttributeError:
-        return block.block_data
+    return block.block_data
 
 
 def assemble(block_space):
