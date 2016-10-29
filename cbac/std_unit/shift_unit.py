@@ -35,6 +35,7 @@ class ShiftUnit(Unit):
         # From this register the output will be copied.
         self.register_product = self.register_work.slice(xrange(min(self.output.size, self.register_work.size)))
 
+        # The carry out bit.
         self.carry_out = self.add(carry_out)
 
     def architecture(self):

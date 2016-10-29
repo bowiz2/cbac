@@ -16,6 +16,9 @@ class ReverseUnit(Unit):
         self.output = self.add_output(output)
 
     def architecture(self):
+        """
+        Simple reversing architecture implementation..
+        """
         for index in xrange(self.bits):
             yield If(self.input.ports[index].shell == True).then(
                 self.output.ports[self.bits - index - 1].shell.activate()
