@@ -8,9 +8,6 @@ from cbac.core.compound import Compound
 from cbac.core.utils import memoize
 
 
-# TODO: create constant factory
-
-
 class HardwareConstant(Compound):
     """
     Hardware representation of a number in bits.
@@ -49,7 +46,7 @@ class HardwareConstant(Compound):
         return to_return
 
 
-class ConstantFactory(object):
+class HardwareConstantFactory(object):
     """
     Creates Hardware constant objects using cache.
     """
@@ -61,10 +58,14 @@ class ConstantFactory(object):
         self.word_size = word_size
         self.cache = {}
 
-def factory(number, word_size=8):
-    """
-    Get a constant by this number. use cache to reduce the duplication of same hardware constants.
-    :param number: The value of the constant.
+    def create_hardware_constant(self, value):
+        """
+        Create a hardware constant with a value 'value'
+        :param value: value of the hardware constant.
+        :return: HardwareConstant.
+        """
+        if value not in self.cache:
+            self.cache[value] = HardwareConstant(value, word_size=self.word_size)
 
-    """
-    pass
+        return self.cache
+
