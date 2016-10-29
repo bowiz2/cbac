@@ -2,6 +2,7 @@
 In this module there is an abstract representation of minecraft commands.
 """
 # TODO: refactor creates condition to is_condition_creating. for now we use this because of a back comparability.
+import utils
 
 
 def target_selector_inject(f):
@@ -349,3 +350,14 @@ def say(message):
     :param message: message you want to display.
     """
     return "/say {0}".format(message)
+
+
+@lazy_command
+def clone(area, location):
+    """
+    Clones an area to a location.
+    :param area: are you want to copy
+    :param location: the location to which you are copying the location to.
+    :return: LazyCommand
+    """
+    return "/clone {0} {1}".format(utils.format_area(area), location)
