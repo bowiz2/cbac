@@ -167,7 +167,6 @@ def max_corner(locations):
     """
     Calculate the maximal corner of the bounding box of these locations which is the nearest to (0,0,0)
     """
-    # TODO: write test
     sort_by_x, sort_by_y, sort_by_z = sort_locations(locations)
     return Vector(sort_by_x[-1].x, sort_by_y[-1].y, sort_by_z[-1].z)
 
