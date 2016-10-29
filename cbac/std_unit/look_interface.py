@@ -1,4 +1,4 @@
-"""Holds example unit"""
+"""Holds look interface."""
 from cbac.unit import auto_synthesis
 from cbac.unit.unit_base import Unit
 from cbac import std_logic
@@ -11,7 +11,14 @@ import math
 # TODO: Refactor to  be reasonable quality
 
 
-def angle (a, b, c):
+def angle(a, b, c):
+    """
+    Calculate the angle between a b and c in a trinangle.
+    :param a:
+    :param b:
+    :param c:
+    :return:
+    """
     return math.degrees(math.acos((c**2 - b**2 - a**2)/(-2.0 * a * b)))
 
 
@@ -46,6 +53,7 @@ class LookPlane(object):
 class LookInterfaceUnit(Unit):
     """
     This is an example of a basic structure of a command block array unit.
+    I wrote this when I was drunk...
     """
 
     # Don't forget to synthesis, It will synthesis you unit after the constructor. You can also do it manually.
