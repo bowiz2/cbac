@@ -67,3 +67,4 @@ def factory(number, word_size=8):
     :param number: The value of the constant.
 
     """
+    pass
