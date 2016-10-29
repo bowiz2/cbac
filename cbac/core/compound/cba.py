@@ -13,11 +13,12 @@ class CBA(Compound):
     """
     Command Block Array
     """
-    created_count = 0
+    # Track the number of cbas created. used for doc. The number is in list to become immutable.
+    created_count = [0]
 
     def __init__(self, *commands):
-        self.cba_id = self.created_count
-        self.created_count += 1
+        self.cba_id = self.created_count[0]
+        self.created_count[0] += 1
 
         self.commands = commands
 
