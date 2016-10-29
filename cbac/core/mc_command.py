@@ -332,6 +332,7 @@ def lazy_command_condition(f):
 
 from cbac.core.constants import block_id as block_ids
 
+
 def _join_command(*items):
     """
     Joins the items into a minecraft compatible format.
