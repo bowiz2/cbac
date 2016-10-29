@@ -137,7 +137,6 @@ class CBA(Compound):
         """
         :return: The name of the cba.
         """
-        # TODO: create naming for units.
         return "CBA_n{0}".format(self.cba_id)
 
     @property
