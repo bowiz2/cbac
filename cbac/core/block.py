@@ -105,16 +105,19 @@ class CommandBlock(Block):
         """
         if self.facing is None:
             return 0
-        faceindex = [DOWN, UP, NORTH, SOUTH, WEST, EAST].index(self.facing)
 
-        # TODO: refactor
-        try:
-            conditional = self.conditional or self.command.is_conditional
-        except AttributeError:
-            conditional = self.conditional
+        # The data value depends on the direction the command block is facing.
+        face_index = [DOWN, UP, NORTH, SOUTH, WEST, EAST].index(self.facing)
 
+        conditional = self.conditional
+
+        if hasattr(self.command, "is_conditional"):
+            conditional = conditional or self.command.is_conditional
+
+        # This is a weir data value computation required by minecraft. not this is bitwise calculation.
         conditional_num = 0x8 if conditional else 0
-        data_value = faceindex | conditional_num
+        data_value = face_index | conditional_num
+
         return data_value
 
     @property
