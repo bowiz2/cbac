@@ -12,11 +12,13 @@ def target_selector_inject(f):
     :param f: compile function of the command
     :return: decorator.
     """
+
     def _wrapper(self, *args, **kwargs):
         product = f(self, *args, **kwargs)
         if self.target_selector:
             product = self.target_selector.inject(product)
         return product
+
     return _wrapper
 
 
@@ -317,8 +319,10 @@ def lazy_command(f):
     """
     Transforms a function into a lazy command
     """
+
     def _wrapper(*args, **kwargs):
         return LazyCommand(f, False, False, *args, **kwargs)
+
     return _wrapper
 
 
@@ -326,9 +330,12 @@ def lazy_command_condition(f):
     """
     Transforms a function into a lazy command which creates condition
     """
+
     def _wrapper(*args, **kwargs):
         return LazyCommand(f, False, True, *args, **kwargs)
+
     return _wrapper
+
 
 from cbac.core.constants import block_id as block_ids
 
@@ -378,6 +385,7 @@ def say(message):
     """
     return "/say {0}".format(message)
 
+
 # TODO: write tests for these commands.
 
 
@@ -406,6 +414,7 @@ def clone(area, location, mask_mode="replace", clone_mode="normal", tile_name=No
         assert tile_name is not None
 
     return _join_command("/clone", area, location, mask_mode, clone_mode, tile_name)
+
 
 copy = clone
 
