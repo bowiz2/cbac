@@ -11,9 +11,6 @@ from cbac.core.compound import CBA
 from cbac.core.mc_command import MCCommand
 
 
-# TODO: restructure as a compiler.
-
-
 class CommandCollection(list):
     """
     A collection of commands which can be hashed.
