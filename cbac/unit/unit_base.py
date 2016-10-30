@@ -6,7 +6,7 @@ from cbac.core.utils import memoize
 from cbac.unit.logic_parser import UnitLogicParser
 from cbac.unit.statements import InlineCall
 from cbac import std_logic
-from cbac.core.compound.hardware_constant import HardwareConstantFactory
+from cbac.core.compound.hardware_constant import HardwareConstant
 
 
 # TODO: implement caching
@@ -41,7 +41,26 @@ class Unit(object):
         self.is_inline = False
         self.is_synthesized = False
         self.no_reset = no_reset
-        self.constant_factory = HardwareConstantFactory(self.bits)
+
+        self._hardware_constant_cache = {}
+
+    def constant_factory(self, value):
+        """
+        Create a hardware constant with a value 'value'
+        :param value: value of the hardware constant.
+        :return: HardwareConstant.
+        """
+        # If this constant was never accessed before, add it to the cache.
+        if value not in self._hardware_constant_cache:
+            self._hardware_constant_cache[value] = HardwareConstant(value, word_size=self.bits)
+
+        # Get the constant from the cache.
+        constant = self._hardware_constant_cache[value]
+
+        # Add it to the unit.
+        self.add_compound(constant)
+
+        return constant
 
     @classmethod
     def ports_signature(cls):
