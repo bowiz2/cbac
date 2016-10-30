@@ -120,10 +120,9 @@ class BlockSpace(object):
         to_return = {}
         for compound in self.packed_items.values():
             for block, location, build_direction in compound.block_assignments:
-                try:
+                if hasattr(block, "facing"):
                     block.facing = build_direction
-                except AttributeError:
-                    pass
+
                 to_return[block] = location
         return to_return
 
