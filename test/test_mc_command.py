@@ -3,6 +3,7 @@ import unittest
 from cbac.core.mc_command import MCCommand, SimpleCommand, LazyCommand, factory, MCCommandFactoryError, TargetSelector
 from cbac.core.mc_command import testfor
 
+
 class TestMCCommand(unittest.TestCase):
     def setUp(self):
         self.command = MCCommand()
@@ -70,7 +71,6 @@ class TestFactory(unittest.TestCase):
 
 class TestTargetSelector(unittest.TestCase):
     def test_simple(self):
-
         a = TargetSelector.a(x=4, y=5, z=6)
 
         self.assertEquals(a.variable, 'a')
