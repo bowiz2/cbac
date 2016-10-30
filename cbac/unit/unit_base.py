@@ -1,3 +1,6 @@
+"""
+Holds the Unit class.
+"""
 import inspect
 import itertools
 
@@ -118,6 +121,9 @@ class Unit(object):
                 unit_class = item
 
                 def unit_creator(*args, **kwargs):
+                    """
+                    The unit is wrapped withing this method. and this method is returned into the creation scope.
+                    """
                     generated_unit = unit_class(*args, **kwargs)
                     self.add_unit(generated_unit)
                     return InlineCall(generated_unit)
