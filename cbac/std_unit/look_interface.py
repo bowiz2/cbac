@@ -70,14 +70,16 @@ class LookInterfaceUnit(Unit):
         for plain in self.look_planes:
             vertical, horizontal = plain.get_look_boundries(self.player_location)
             vertical_listner = self.add_unit(std_unit.Listener(
-                player.shell.test_rotation_vertical(int(min(vertical)), int(max(vertical))), mc_command.say("found")))
+                [
+                    player.shell.test_rotation_vertical(int(min(vertical)), int(max(vertical))),
+                    player.shell.test_rotation_vertical(int(min(horizontal)), int(max(horizontal)))
+                ],
+                mc_command.say("found")))
             self.listners.append(vertical_listner)
         self.resetter.listeners = self.listners
 
     def architecture(self):
         """
-        Here you declare the commands of the main logic. each command must be yielded out.
-        Each statement which is yielded out will be parsed.
-        you can read about the statement which can be used here in the cbac.unit.statement module.
+        Ticks the view handler once
         """
-        yield mc_command.say("hoooo")
+        pass
