@@ -37,14 +37,6 @@ class CommandBlockShell(BlockShell):
         """
         return self.testforblock(self.wrapped.block_id, self.wrapped.data_value, {"SuccessCount": 1})()
 
-    def set_call(self, target):
-        """
-        Makes that this block will activate target block.
-        :return: CommandSuspender
-        """
-
-        return self.change_command(target.shell.activate())
-
     @command(True)
     def has_failed(self):
         """
@@ -52,3 +44,11 @@ class CommandBlockShell(BlockShell):
         :return: CommandSuspender
         """
         return self.testforblock(self.wrapped.block_id, self.wrapped.data_value, {"SuccessCount": 0})()
+
+    def set_call(self, target):
+        """
+        Makes that this block will activate target block.
+        :return: CommandSuspender
+        """
+
+        return self.change_command(target.shell.activate())
