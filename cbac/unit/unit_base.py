@@ -47,40 +47,6 @@ class Unit(object):
 
         self._hardware_constant_cache = {}
 
-    def constant_factory(self, value):
-        """
-        Create a hardware constant with a value 'value'
-        :param value: value of the hardware constant.
-        :return: HardwareConstant.
-        """
-        # If this constant was never accessed before, add it to the cache.
-        if value not in self._hardware_constant_cache:
-            self._hardware_constant_cache[value] = HardwareConstant(value, word_size=self.bits)
-
-        # Get the constant from the cache.
-        constant = self._hardware_constant_cache[value]
-
-        # Add it to the unit.
-        self.add_compound(constant)
-
-        return constant
-
-    @classmethod
-    def ports_signature(cls):
-        """
-        defiend by the default ports provided in the __init__ of the unit.
-        :return: list of the classes of the ports.
-        """
-        signature = [port for port in cls.__init__.func_defaults if issubclass(port, std_logic.Port)]
-        return signature
-
-    def architecture(self):
-        """
-        A body associated with an entity declaration to describe the internal organization or operation of a design entity.
-        An architecture body is used to describe the behavior, data flow, or structure of a design entity.
-        """
-        pass
-
     def synthesis(self):
         """
         Takes the entry commands main logic commands and exit commands, and compiles them into a collection of CBAs.
@@ -89,7 +55,7 @@ class Unit(object):
         """
 
         logic_cbas, other_compounds, other_units = self._logic_parser.parse(
-            itertools.chain(self.on_entry_init_commands(), self.architecture(), self.on_exit_commands())
+            itertools.chain(self.on_entry_commands(), self.architecture(), self.on_exit_commands())
         )
         # Add the CBAs to the unit.
         for parsed_item in logic_cbas + other_compounds:
@@ -98,6 +64,30 @@ class Unit(object):
             self.add_unit(other_unit)
         self.logic_cbas = logic_cbas
         self.is_synthesized = True
+
+    def on_entry_commands(self):
+        """
+        Generate the commands which are executed when the entry pointed activated.
+        """
+        if not self.no_reset:
+            for output_memory in self.outputs:
+                yield output_memory.shell.reset()
+
+    def architecture(self):
+        """
+        A body associated with an entity declaration to describe the internal organization or operation of a design entity.
+        An architecture body is used to describe the behavior, data flow, or structure of a design entity.
+        """
+        pass
+
+    def on_exit_commands(self):
+        """
+        Generate the commands which will be called when the main activation of the entry point is finished.
+        :return:
+        """
+        if not self.no_reset:
+            for input_memory in self.inputs:
+                yield input_memory.shell.reset()
 
     def add(self, item):
         """
@@ -182,22 +172,32 @@ class Unit(object):
         else:
             assert False, "Unexpected interface type"
 
-    def on_entry_init_commands(self):
+    def constant_factory(self, value):
         """
-        Generate the commands which are executed when the entry pointed activated.
+        Create a hardware constant with a value 'value'
+        :param value: value of the hardware constant.
+        :return: HardwareConstant.
         """
-        if not self.no_reset:
-            for output_memory in self.outputs:
-                yield output_memory.shell.reset()
+        # If this constant was never accessed before, add it to the cache.
+        if value not in self._hardware_constant_cache:
+            self._hardware_constant_cache[value] = HardwareConstant(value, word_size=self.bits)
 
-    def on_exit_commands(self):
+        # Get the constant from the cache.
+        constant = self._hardware_constant_cache[value]
+
+        # Add it to the unit.
+        self.add_compound(constant)
+
+        return constant
+
+    @classmethod
+    def ports_signature(cls):
         """
-        Generate the commands which will be called when the main activation of the entry point is finished.
-        :return:
+        defiend by the default ports provided in the __init__ of the unit.
+        :return: list of the classes of the ports.
         """
-        if not self.no_reset:
-            for input_memory in self.inputs:
-                yield input_memory.shell.reset()
+        signature = [port for port in cls.__init__.func_defaults if issubclass(port, std_logic.Port)]
+        return signature
 
     @property
     def ticks(self):
