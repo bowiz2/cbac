@@ -6,6 +6,7 @@ from cbac.core.utils import memoize
 from cbac.unit.logic_parser import UnitLogicParser
 from cbac.unit.statements import InlineCall
 from cbac import std_logic
+from cbac.core.compound.hardware_constant import HardwareConstantFactory
 
 
 # TODO: implement caching
@@ -40,6 +41,7 @@ class Unit(object):
         self.is_inline = False
         self.is_synthesized = False
         self.no_reset = no_reset
+        self.constant_factory = HardwareConstantFactory(self.bits)
 
     @classmethod
     def ports_signature(cls):
