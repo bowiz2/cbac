@@ -20,7 +20,6 @@ class ViewDetectorVerticalUnit(Unit):
         super(ViewDetectorVerticalUnit, self).__init__(int(math.ceil(math.log(len(xrange(-90, 89)), 2))))
         self.player = player
         self.output = self.add_output(output)
-        self.constants = [self.add_compound(cbac.HardwareConstant(i, self.bits)) for i in xrange(180)]
 
     def architecture(self):
         """
@@ -32,8 +31,7 @@ class ViewDetectorVerticalUnit(Unit):
             j = i + 1
             m_range = i, j
             yield If(self.player.shell.test_rotation_vertical(*m_range)).then(
-                self.constants[i+90].shell.copy(self.output)
-
+                self.constant_factory(i+90).shell.copy(self.output)
             )
 
 
@@ -49,7 +47,6 @@ class ViewDetectorHorizonatlUnit(Unit):
         super(ViewDetectorHorizonatlUnit, self).__init__(int(math.ceil(math.log(len(xrange(-180, 178)), 2))))
         self.player = player
         self.output = self.add_output(output)
-        self.constants = [self.add_compound(cbac.HardwareConstant(i, self.bits)) for i in xrange(360)]
 
     def architecture(self):
         """
@@ -61,5 +58,5 @@ class ViewDetectorHorizonatlUnit(Unit):
             j = i + 1
             m_range = i, j
             yield If(self.player.shell.test_rotation_horizontal(*m_range)).then(
-                self.constants[i+180].shell.copy(self.output)
+                self.constant_factory(i+180).shell.copy(self.output)
             )
