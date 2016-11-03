@@ -21,6 +21,7 @@ class Unit(object):
     """
     Now imitates a VHDL module.
     """
+    callback_pivot_home = HardwareConstant(1, 1)
 
     def __init__(self, bits=None, logic_parser_instance=None, no_reset=False):
         """
@@ -92,7 +93,7 @@ class Unit(object):
 
         yield self.callback_pivot.shell.activate()
         yield self.callback_pivot.shell.kill()
-        yield self.callback_pivot.shell.summon()
+        yield self.callback_pivot.shell.summon(self.callback_pivot_home)
 
     def add(self, item):
         """

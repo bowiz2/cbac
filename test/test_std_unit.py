@@ -19,6 +19,7 @@ class StdUnitTestCase(TestCase):
     def setUp(self):
         self.schematic_path = "test_schematic.schematic"
         self.block_space = BlockSpace((100, 100, 100))
+        self.block_space.add(Unit.callback_pivot_home)
 
     def tearDown(self):
         self.block_space.pack()
@@ -99,7 +100,7 @@ class TestBitwiseUnits(StdUnitTestCase):
 
     @named_schematic
     def test_multi(self):
-        self.block_space.add_unit((std_unit.MultiUnit(2, inline_adder=True)))
+        self.block_space.add_unit((std_unit.MultiUnit(4, inline_adder=False)))
 
 
 class TestGate(TestCase):

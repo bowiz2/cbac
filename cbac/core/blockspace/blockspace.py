@@ -49,6 +49,7 @@ class BlockSpace(object):
         for other_unit in unit.dependent_units:
             self.add_unit(other_unit)
 
+
     # Checkers
     def is_location_out_of_bounds(self, location):
         """
