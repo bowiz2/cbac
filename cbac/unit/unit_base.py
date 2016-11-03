@@ -10,7 +10,7 @@ from cbac.unit.logic_parser import UnitLogicParser
 from cbac.unit.statements import InlineCall
 from cbac import std_logic
 from cbac.core.compound.hardware_constant import HardwareConstant
-
+from cbac.core.mcentity import Pivot
 
 # TODO: implement caching
 # TODO: add refcount for a unit. to know if it can be included as an inline.
@@ -46,6 +46,7 @@ class Unit(object):
         self.no_reset = no_reset
 
         self._hardware_constant_cache = {}
+        self.callback_pivot = Pivot()
 
     def synthesis(self):
         """
@@ -88,6 +89,10 @@ class Unit(object):
         if not self.no_reset:
             for input_memory in self.inputs:
                 yield input_memory.shell.reset()
+
+        yield self.callback_pivot.shell.activate()
+        yield self.callback_pivot.shell.kill()
+        yield self.callback_pivot.shell.summon()
 
     def add(self, item):
         """

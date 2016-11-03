@@ -63,17 +63,16 @@ class TestCallback(StdUnitTestCase):
     def test_callback(self):
         class A(SimpleUnit):
             def architecture(self):
-                yield "/say im a"
+                yield "/say im body"
 
         a = A()
 
         class B(SimpleUnit):
             def architecture(self):
-                yield "/say im b first"
+                yield "/say im begin"
                 yield MainLogicJump(a)
-                yield "/say im b last"
+                yield "/say im end"
 
-        print a.logic_cbas
         self.block_space.add_unit(a)
         self.block_space.add_unit(B())
 

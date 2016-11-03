@@ -26,7 +26,7 @@ class CBA(Compound):
         # An empty block which when activated. will fire up this cba.
         self.activator = Block(FALSE_BLOCK)
 
-        self.cb_reserved = CommandBlock("/say reserved", None, "chain", True)
+        self.cb_reserved = CommandBlock("/say", None, "chain", True)
         # This block responsible for deactivating the activator block. if the cba is not repeated.
         self.cb_re_setter = CommandBlock(self.activator.shell.deactivate(), None, "chain", True)
 
@@ -130,7 +130,7 @@ class CBA(Compound):
         """
         :return: Blocks which follow the user command blocks.
         """
-        return filter(lambda item: item is not None, [self.cb_re_setter])
+        return filter(lambda item: item is not None, [self.cb_re_setter, self.cb_reserved])
 
     @property
     def name(self):

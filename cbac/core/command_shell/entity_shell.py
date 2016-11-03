@@ -37,7 +37,7 @@ class EntityShell(CommandShell):
         return self._join_command("/execute", self.wrapped.selector, location, to_execute_command)
 
     @command()
-    def summon(self, location):
+    def summon(self, location=Vector(0, 0, 0)):
         """
         Summons an mcentity at a given location.
         :param location: The location you want to spawn the mcentity at.
@@ -61,6 +61,16 @@ class EntityShell(CommandShell):
         """
         direction_vector = direction_vectors[direction] * distance
         return self._join_command("/tp", self.wrapped.selector, format_relative_location(direction_vector))
+
+    @command()
+    def tp(self, thing):
+        """
+        teleport this pivot to a locatable item
+        :param location:
+        :return:
+        """
+        location = self.context.get_absolute_location(thing)
+        return self._join_command("/tp", self.wrapped.selector, format_relative_location(location))
 
     def activate(self):
         """

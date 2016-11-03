@@ -85,7 +85,7 @@ class UnitLogicParser(object):
             cba_mapping[command_collection] = cba
             logic_cbas.append(cba)
 
-        self.listeners += list(self.generate_listeners(logic_cbas))
+        self.process_jumps(logic_cbas)
 
         return logic_cbas, self.other_compounds, self.listeners + self.other_units
 
@@ -111,7 +111,7 @@ class UnitLogicParser(object):
         new_commands = CommandCollection()
         self.all_commands.append(new_commands)
 
-    def generate_listeners(self, logic_cbas):
+    def process_jumps(self, logic_cbas):
         """
         generate all the needed preparation for a jump to work
         :return: generated units which needed for the jump to work.
@@ -123,10 +123,9 @@ class UnitLogicParser(object):
             origin_cba = logic_cbas[i]
             landing_cba = logic_cbas[i + 1]
             if isinstance(jump, MainLogicJump):
-                listener = IsNotActiveListener(jump.destination.activator, landing_cba)
                 # Activate the listener.
-                origin_cba.cb_reserved.command = listener.activator.shell.activate()
-                yield listener
+                origin_cba.cb_reserved.command = jump.destination.callback_pivot.shell.tp(landing_cba)
+
 
     def add_parsed(self, command):
         """
