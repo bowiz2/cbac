@@ -239,7 +239,10 @@ class TestMisc(StdUnitTestCase):
     @named_schematic
     def test_look(self):
         a = LookPlane(Vector(1, 0, 4), Vector(1, 1, 0))
-        self.block_space.add_unit(LookInterfaceUnit(Player(all_players=True), Vector(0, 0, 0), [a]))
+        self.block_space.add_unit(LookInterfaceUnit(8, Player(all_players=True), Vector(0, 0, 0), {1: a}))
+    @named_schematic
+    def test_keyboard(self):
+        self.blocwk_space.add_unit(KeyboardInterfaceUnit(Player(all_players=True), Vector(0, 0, 0)))
     # @named_schematic
     # def test_view_detector(self):
     #     self.block_space.size = (20, 200, 20)

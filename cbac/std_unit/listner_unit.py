@@ -20,6 +20,7 @@ class Listener(Unit):
         :param callbacks: what item to activate when the even the reached.
         """
         super(Listener, self).__init__(0)
+        self.callback_pivot = None
         if not isinstance(conditions, list):
             conditions = [conditions]
         self.conditions = [copy.copy(condition) for condition in conditions]

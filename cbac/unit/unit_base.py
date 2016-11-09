@@ -90,10 +90,10 @@ class Unit(object):
         if not self.no_reset:
             for input_memory in self.inputs:
                 yield input_memory.shell.reset()
-
-        yield self.callback_pivot.shell.activate()
-        yield self.callback_pivot.shell.kill()
-        yield self.callback_pivot.shell.summon(self.callback_pivot_home)
+        if self.callback_pivot:
+            yield self.callback_pivot.shell.activate()
+            yield self.callback_pivot.shell.kill()
+            yield self.callback_pivot.shell.summon(self.callback_pivot_home)
 
     def add(self, item):
         """
