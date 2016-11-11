@@ -187,6 +187,7 @@ class TestStdUnitMemory(StdUnitTestCase):
         """
         Test the read and the write sharing the same memory box.
         """
+        import copy
         access_unit = std_unit.MemoryAccessUnit()
         write_unit = std_unit.WriteUnit(8, access_unit)
         read_unit = std_unit.ReadUnit(8, access_unit)

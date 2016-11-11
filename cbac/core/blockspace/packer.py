@@ -41,15 +41,14 @@ def pack_areas(areas):
 
     for area in areas:
         # Assign new location for the area.
-        assignments[area] = pivot
         if area.is_isolated:
+            prev_area_index = areas.index(area) - 1
+            if not areas[prev_area_index].is_isolated:
+                pivot += Vector(0, 0, 1)
+            assignments[area] = pivot
             pivot += Vector(0, 0, 1)
         else:
-            prev_area_index = areas.index(area) - 1
-            if prev_area_index >= 0:
-                if areas[prev_area_index].is_isolated:
-                    pivot += Vector(0, 0, 1)
-
+            assignments[area] = pivot
         pivot += Vector(0, 0, area.dimensions.z + 1)
 
     return assignments

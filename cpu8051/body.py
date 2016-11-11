@@ -9,18 +9,18 @@ class MemoryFetcher(cbac.Unit):
     """
     Fetches the next byte to a register
     """
-    def __init__(self, cpu):
+    @cbac.unit.auto_synthesis
+    def __init__(self, cpu, fetch_destination=cbac.std_logic.InputRegister):
         super(MemoryFetcher, self).__init__()
         self.cpu = cpu
+        self.fetch_destination = self.add_input(fetch_destination)
 
     def architecture(self):
-        self.read_unit
-        PassParameters(self.increment_unit, self.accumulator),
-        self.increment_unit.shell.activate(),
-        self.increment_unit.callback_pivot.shell.tp(self.procedure(
-                self.increment_unit.output.shell.copy(self.accumulator),
-                self.done_opcode.shell.activate()
-            ))
+        yield STDCall(self.cpu.read_unit, self.cpu.ip_register)
+        yield self.cpu.read_unit.read_output.shell.copy(self.fetch_destination)
+        # yield STDCall(self.cpu.increment_unit, self.cpu.ip_register)
+        # yield self.cpu.increment_unit.output.shell.copy(self.cpu.ip_register)
+
 
 class Cpu8051(cbac.Unit):
     """
@@ -30,6 +30,7 @@ class Cpu8051(cbac.Unit):
     def __init__(self):
         super(Cpu8051, self).__init__(bits=8)
         self.ip_register = self.add_compound(Register(8))
+        self.process_registers = [self.add_compound(Register(8)) for _ in xrange(2)]
         self.general_registers = [self.add_compound(Register(8)) for _ in xrange(8)]
         self.accumulator = self.add_compound(Register(self.bits))
         self.opcode = self.add_compound(Register(self.bits))
@@ -38,56 +39,58 @@ class Cpu8051(cbac.Unit):
         # this register is signaled when the opcode operation is complete.
         self.done_opcode = self.add_compound(Register(1))
 
-        self.access_unit = std_unit.MemoryAccessUnit()
-        self.write_unit = self.add_unit(std_unit.WriteUnit(8, self.access_unit))
+        self.access_unit = self.add_unit(std_unit.MemoryAccessUnit())
+
+        #self.write_unit = self.add_unit(std_unit.WriteUnit(8, self.access_unit))
         self.read_unit = self.add_unit(std_unit.ReadUnit(8, self.access_unit))
 
     def architecture(self):
 
         yield mc_command.say("hello and welcome!")
+        #yield MainLogicJump(self.read_unit)
+        # yield MainLogicJump(self.add_unit(MemoryFetcher(self, self.process_registers[0])))
+        # yield mc_command.say("after increment")
+        # yield If(self.opcode_is(0x00)).then(
+        #     self.done_opcode.shell.activate()
+        # )
 
-        yield If(self.opcode_is(0x00)).then(
-            self.done_opcode.shell.activate()
-        )
+        # # MOV A, RX
+        # base = 0xE8
+        # for i in xrange(base, base+8):
+        #     yield If(self.opcode.shell.testforblocks(self.constant_factory(i))).then(
+        #         self.accumulator.shell.copy(self.general_registers[i - base]),
+        #         self.done_opcode.shell.activate()
+        #     )
+        #
+        # base = 0xF8
+        # for i in xrange(base, base+8):
+        #     yield If(self.opcode_is(i)).then(
+        #         self.general_registers[i - base].shell.copy(self.accumulator),
+        #         self.done_opcode.shell.activate()
+        #     )
+        # # INC RX
+        # base = 0x08
+        # for i in xrange(base, base+8):
+        #     yield If(self.opcode_is(i)).then(
+        #         PassParameters(self.increment_unit, self.general_registers[i - base]),
+        #         self.increment_unit.shell.activate(),
+        #         self.increment_unit.callback_pivot.shell.tp(self.procedure(
+        #                 self.increment_unit.output.shell.copy(self.general_registers[i - base]),
+        #                 self.done_opcode.shell.activate()
+        #             )
+        #         )
+        #     )
+        # # TODO: fix code duplication.
+        # yield If(self.opcode_is(0x04)).then(
+        #     PassParameters(self.increment_unit, self.accumulator),
+        #     self.increment_unit.shell.activate(),
+        #     self.increment_unit.callback_pivot.shell.tp(self.procedure(
+        #             self.increment_unit.output.shell.copy(self.accumulator),
+        #             self.done_opcode.shell.activate()
+        #         ))
+        # )
 
-        # MOV A, RX
-        base = 0xE8
-        for i in xrange(base, base+8):
-            yield If(self.opcode.shell.testforblocks(self.constant_factory(i))).then(
-                self.accumulator.shell.copy(self.general_registers[i - base]),
-                self.done_opcode.shell.activate()
-            )
 
-        base = 0xF8
-        for i in xrange(base, base+8):
-            yield If(self.opcode_is(i)).then(
-                self.general_registers[i - base].shell.copy(self.accumulator),
-                self.done_opcode.shell.activate()
-            )
-        # INC RX
-        base = 0x08
-        for i in xrange(base, base+8):
-            yield If(self.opcode_is(i)).then(
-                PassParameters(self.increment_unit, self.general_registers[i - base]),
-                self.increment_unit.shell.activate(),
-                self.increment_unit.callback_pivot.shell.tp(self.procedure(
-                        self.increment_unit.output.shell.copy(self.general_registers[i - base]),
-                        self.done_opcode.shell.activate()
-                    )
-                )
-            )
-        # TODO: fix code duplication.
-        yield If(self.opcode_is(0x04)).then(
-            PassParameters(self.increment_unit, self.accumulator),
-            self.increment_unit.shell.activate(),
-            self.increment_unit.callback_pivot.shell.tp(self.procedure(
-                    self.increment_unit.output.shell.copy(self.accumulator),
-                    self.done_opcode.shell.activate()
-                ))
-        )
-
-    def procedure(self, *commands):
-        return self.add_compound(CBA(*commands))
 
     def opcode_is(self, value):
         return self.opcode.shell.testforblocks(self.constant_factory(value))

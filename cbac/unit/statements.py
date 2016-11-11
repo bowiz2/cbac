@@ -226,7 +226,9 @@ class InlineCall(Call, PassParameters):
         PassParameters.parse(self, parser_instance)
         assert len(self.called_unit.logic_cbas) <= 1, "The inline-called function must not contain jumps"
         self.called_unit.is_inline = True
-        for yeildout in self.called_unit.architecture():
+        inline_reverse =  list(self.called_unit.architecture())
+        inline_reverse.reverse()
+        for yeildout in inline_reverse:
             parser_instance.eat(yeildout)
 
 class If(Statement):

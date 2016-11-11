@@ -68,7 +68,11 @@ class MemoryAccessUnit(Unit):
         # Reset the pivot.
         # TODO: document
         # Reset the pivot.
-        yield self.pivot.shell.kill()
+
+
+        kill = self.pivot.shell.kill()
+        print kill
+        yield kill
         # Create a new pivot.
         yield self.pivot.shell.summon(self.raw_memory)
 

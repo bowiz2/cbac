@@ -189,13 +189,11 @@ class Unit(object):
         # If this constant was never accessed before, add it to the cache.
         if value not in self._hardware_constant_cache:
             self._hardware_constant_cache[value] = HardwareConstant(value, word_size=self.bits)
+            # Add it to the unit.
+            self.add_compound(self._hardware_constant_cache[value])
 
         # Get the constant from the cache.
         constant = self._hardware_constant_cache[value]
-
-        # Add it to the unit.
-        self.add_compound(constant)
-
         return constant
 
     @classmethod
@@ -259,6 +257,9 @@ class Unit(object):
         """
         pass
 
+    def procedure(self, *commands):
+        from cbac.core.compound import CBA
+        return self.add_compound(CBA(*commands))
 
 class SimpleUnit(Unit):
     """
