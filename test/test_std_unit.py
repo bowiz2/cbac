@@ -230,4 +230,3 @@ class TestSubRegisterOperation(StdUnitTestCase):
         self.block_space.add(cbac.CBA(
             my_Register.slice(xrange(2, 5)).shell.set_max_value()
         ))
-

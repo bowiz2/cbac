@@ -76,6 +76,22 @@ class TestCallback(StdUnitTestCase):
         self.block_space.add_unit(a)
         self.block_space.add_unit(B())
 
+    @named_schematic
+    def test_otherwise(self):
+
+        class Dummy(Unit):
+            def architecture(self):
+                from cbac import Player
+                yield If(Player(name="NotDude").shell.test_exists()).then(
+                    mc_command.say("Dude exist!")
+                ).otherwise(
+                    mc_command.say("Dude does not exist!")
+                )
+
+        dummy = Dummy()
+        dummy.synthesis()
+        self.block_space.add_unit(dummy)
+
 
 class TestUnitStatementsParsing(TestLogicParser):
     """
@@ -142,6 +158,7 @@ class TestUnitStatementsParsing(TestLogicParser):
         ]).parse(self.parser)
 
         self.assertEqual(len(self.parser.parse_stack), 2)
+
 
 
 class TestCommandCollection(TestCase):

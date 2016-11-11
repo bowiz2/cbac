@@ -269,14 +269,19 @@ class If(Statement):
         """
         Not used
         """
-        #self.condition_commands[-1].command_block.shell.
-        assert False, "otherwise is not implemented."
+        self.otherwise_body = Conditional(*statements)
+        return self
 
     def parse(self, parser_instance):
         """
         parse logic.
         """
         super(If, self).parse(parser_instance)
+        if self.otherwise_body:
+            parser_instance.parse_stack.append(self.otherwise_body)
+            cb =  self.condition_commands[-1].command_block
+            parser_instance.parse_stack.append(cb.shell.has_failed())
+
         parser_instance.parse_stack.append(self.condition_body)
         self.condition_commands.reverse()
         for command in self.condition_commands:
