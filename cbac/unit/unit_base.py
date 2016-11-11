@@ -45,6 +45,7 @@ class Unit(object):
         self.is_inline = False
         self.is_synthesized = False
         self.no_reset = no_reset
+        self.auto_callback = True
 
         self._hardware_constant_cache = {}
         self.callback_pivot = Pivot()
@@ -91,7 +92,8 @@ class Unit(object):
             for input_memory in self.inputs:
                 yield input_memory.shell.reset()
         if self.callback_pivot:
-            yield self.callback_pivot.shell.activate()
+            if self.auto_callback:
+                yield self.callback_pivot.shell.activate()
             yield self.callback_pivot.shell.kill()
             yield self.callback_pivot.shell.summon(self.callback_pivot_home)
 

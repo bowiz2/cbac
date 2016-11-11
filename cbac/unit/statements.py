@@ -168,18 +168,23 @@ class STDCall(Call, PassParameters, MainLogicJump):
     pass
 
 
-class Switch(Statement):
-    """
-    Switch statement.
-    """
-
-    def by(self, *cases):
-        """
-        Construct the statements for this switch
-        """
-        self.cases = cases
-        return self
-
+# class Switch(Statement):
+#     """
+#     Switch statement.
+#     """
+#     @property
+#     def condition(self):
+#         return self.wrapped
+#
+#     def true(self, unit):
+#         self.false_unit = unit
+#
+#     def false(self, unit):
+#         self.false_unit = unit
+#
+#     def parse(self, parser_instance):
+#         parser_instance.
+#         parser_instance.parse_stack.append(MainLogicJump())
 
 class _SwitchCase(Token):
     def __init__(self, to_compare):

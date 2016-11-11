@@ -38,16 +38,17 @@ class BlockSpace(object):
                 continue
             self.unpacked_items.append(item)
 
-    def add_unit(self, unit):
+    def add_unit(self, *units):
         """
         takes a unit and tries to place it in the blockspace.
         :param unit: dict of compounds and relative poistion
         """
-        for compound in unit.compounds_to_pack:
-            self.add(compound)
+        for unit in units:
+            for compound in unit.compounds_to_pack:
+                self.add(compound)
 
-        for other_unit in unit.dependent_units:
-            self.add_unit(other_unit)
+            for other_unit in unit.dependent_units:
+                self.add_unit(other_unit)
 
 
     # Checkers

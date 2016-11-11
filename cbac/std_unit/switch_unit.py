@@ -20,8 +20,8 @@ class SwitchUnit(Unit):
         self.conditions = conditions
         self.true_unit = true_unit
         self.false_unit = false_unit
-
-        self.callback_vortex = self.add_compound(CBA(self.shell.activate()))
+        self.auto_callback = False
+        self.callback_vortex = self.add_compound(CBA(self.callback_pivot.shell.activate()))
 
     def architecture(self):
         """
@@ -30,9 +30,9 @@ class SwitchUnit(Unit):
         you can read about the statement which can be used here in the cbac.unit.statement module.
         """
         yield If(self.conditions).then(
-            self.true_unit.callback_pivot.tp(self.callback_vortex),
+            self.true_unit.callback_pivot.shell.tp(self.callback_vortex),
             self.true_unit.shell.activate()
         ).otherwise(
-            self.false_unit.callback_pivot.tp(self.callback_vortex),
+            self.false_unit.callback_pivot.shell.tp(self.callback_vortex),
             self.false_unit.shell.activate()
         )

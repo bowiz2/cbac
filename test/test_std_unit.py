@@ -102,6 +102,36 @@ class TestBitwiseUnits(StdUnitTestCase):
     def test_multi(self):
         self.block_space.add_unit((std_unit.MultiUnit(4, inline_adder=False)))
 
+class TestUtilUnits(StdUnitTestCase):
+    @named_schematic
+    def test_switch(self):
+        class A(Unit):
+            def architecture(self):
+                yield mc_command.say("Im A unit!")
+
+        class B(Unit):
+            def architecture(self):
+                yield mc_command.say("Im B unit!")
+
+        a = A()
+        a.synthesis()
+        b = B()
+        b.synthesis()
+
+        switch = std_unit.SwitchUnit(mc_command.testfor("@a"), a, b)
+        switch.synthesis()
+
+        class Main(Unit):
+            def architecture(self):
+                yield mc_command.say("Im Main!")
+                for pivot in [a.callback_pivot, b.callback_pivot, switch.callback_pivot]:
+                    yield pivot.shell.kill()
+                    yield pivot.shell.summon()
+                yield MainLogicJump(switch)
+                yield mc_command.say("Im end!")
+        main = Main()
+        main.synthesis()
+        self.block_space.add_unit(a, b, switch, main)
 
 class TestGate(TestCase):
     """Test the gate framework"""
