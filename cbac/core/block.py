@@ -1,8 +1,6 @@
 """
 Holds Minecraft block class.
 """
-from command_shell import CommandBlockShell
-from command_shell.location_shell import BlockShell
 from constants import block_id as ids
 from constants import mc_direction
 from constants.mc_direction import DOWN, UP, NORTH, SOUTH, WEST, EAST
@@ -45,6 +43,8 @@ class Block(object):
         """
         :return: Minecraft command interface.
         """
+
+        from command_shell.location_shell import BlockShell
         return BlockShell(self)
 
 
@@ -126,4 +126,5 @@ class CommandBlock(Block):
         """
         :return: Minecraft command interface.
         """
+        from command_shell import CommandBlockShell
         return CommandBlockShell(self)

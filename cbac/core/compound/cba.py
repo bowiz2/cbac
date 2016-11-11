@@ -80,7 +80,7 @@ class CBA(Compound):
         """
         :return: List of command blocks which wrap user commands.
         """
-        return list(self._gen_cb_chain(self.commands))
+        return [command.command_block for command in self.commands]
 
     @staticmethod
     def _gen_cb_chain(commands):

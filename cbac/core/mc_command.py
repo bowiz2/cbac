@@ -3,6 +3,7 @@ In this module there is an abstract representation of minecraft commands.
 """
 # TODO: refactor creates condition to is_condition_creating. for now we use this because of a back comparability.
 from cbac.core import utils
+from cbac.core.block import CommandBlock
 
 
 def target_selector_inject(f):
@@ -36,12 +37,20 @@ class MCCommand(object):
         force the next command inline to be conditional.
         This is mainly used for testforblock commands.
         """
-        self.is_conditional = is_conditional
         self.creates_condition = creates_condition
         # If the command block holding this command will be repeated.
         self.is_repeated = is_repeated
-
         self.target_selector = target_selector
+        self.command_block = CommandBlock(command=self, conditional=is_conditional)
+
+    @property
+    def is_conditional(self):
+        return self.command_block.conditional
+
+    @is_conditional.setter
+    def is_conditional(self, value):
+        self.command_block.conditional = value
+
 
     @target_selector_inject
     def compile(self):
