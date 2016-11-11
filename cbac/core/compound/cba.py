@@ -21,7 +21,10 @@ class CBA(Compound):
         self.cba_id = self.created_count[0]
         self.created_count[0] += 1
 
-        self.commands = commands
+        self.commands = []
+
+        for command in commands:
+            self.add_command(command)
 
         # An empty block which when activated. will fire up this cba.
         self.activator = Block(FALSE_BLOCK)
@@ -31,6 +34,19 @@ class CBA(Compound):
         self.cb_re_setter = CommandBlock(self.activator.shell.deactivate(), None, "chain", True)
 
         super(CBA, self).__init__(isolated=True)
+
+    def add_command(self, command):
+        """
+        Adds a command to the cba.
+        :param command:
+        :return:
+        """
+        if len(self.commands) == 0:
+            command.command_block.action = "impulse"
+        else:
+            command.command_block.action = "chain"
+            command.command_block.always_active = True
+        self.commands.append(command)
 
     def set_block_names(self, blocks):
         """
@@ -81,22 +97,6 @@ class CBA(Compound):
         :return: List of command blocks which wrap user commands.
         """
         return [command.command_block for command in self.commands]
-
-    @staticmethod
-    def _gen_cb_chain(commands):
-        """
-        Wrappes commands in command blocks, and according to their position decide If they need to be impulse command
-            blocks or chain command blocks.
-        :param commands: a list of commands.
-        :return: CommandBlock generator.
-        """
-        assert len(commands) > 0
-        # The first block must be an impulse block.
-        yield CommandBlock(commands[0], facing=None, action="impulse")
-
-        # And each one after that must be chain
-        for command in commands[1:]:
-            yield CommandBlock(command, facing=None, action="chain", always_active=True)
 
     @property
     def blocks(self):

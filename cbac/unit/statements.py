@@ -269,6 +269,7 @@ class If(Statement):
         """
         Not used
         """
+        #self.condition_commands[-1].command_block.shell.
         assert False, "otherwise is not implemented."
 
     def parse(self, parser_instance):
