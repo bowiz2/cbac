@@ -35,11 +35,13 @@ def pack_areas(areas):
     :param areas: areas you want to pack.
     :return: dict of area and the location inside the blockspace.
     """
+    isolated_areas = filter(lambda x: x.is_isolated, areas)
+    not_isolated_areas = filter(lambda x: not x.is_isolated, areas)
     assignments = {}
     # The start position to which the packers will decide the relational position of the reset of the areas.
     pivot = Vector(0, 0, 0)
 
-    for area in areas:
+    for area in not_isolated_areas + isolated_areas:
         # Assign new location for the area.
         if area.is_isolated:
             prev_area_index = areas.index(area) - 1
