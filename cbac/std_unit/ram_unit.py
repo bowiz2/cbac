@@ -67,12 +67,7 @@ class MemoryAccessUnit(Unit):
         # == Here you declare the commands wof the main logic. each command must be yielded out.
         # Reset the pivot.
         # TODO: document
-        # Reset the pivot.
-
-
-        kill = self.pivot.shell.kill()
-        print kill
-        yield kill
+        yield self.pivot.shell.kill()
         # Create a new pivot.
         yield self.pivot.shell.summon(self.raw_memory)
 
