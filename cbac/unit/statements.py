@@ -226,12 +226,8 @@ class InlineCall(Call, PassParameters):
         PassParameters.parse(self, parser_instance)
         assert len(self.called_unit.logic_cbas) <= 1, "The inline-called function must not contain jumps"
         self.called_unit.is_inline = True
-        for cba in self.called_unit.logic_cbas:
-            for command in cba.commands:
-                if self.is_conditional:
-                    command.is_conditional = True
-                parser_instance.add_parsed(copy.copy(command))
-
+        for yeildout in self.called_unit.architecture():
+            parser_instance.eat(yeildout)
 
 class If(Statement):
     """
