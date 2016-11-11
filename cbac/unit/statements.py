@@ -165,7 +165,12 @@ class STDCall(Call, PassParameters, MainLogicJump):
     """
     Copies parameter to function and then jumps to it.
     """
-    pass
+    def __init__(self, unit, *parameters):
+        PassParameters.__init__(self, unit, *parameters)
+
+    def parse(self, parser_instance):
+        PassParameters.parse(self, parser_instance)
+        MainLogicJump.parse(self, parser_instance)
 
 
 # class Switch(Statement):
