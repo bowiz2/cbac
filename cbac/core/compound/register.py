@@ -17,7 +17,7 @@ class Register(Compound):
         """
         self.size = size
         self.default_block = default_block
-        super(Register, self).__init__(isolated=True)
+        super(Register, self).__init__(isolated=False)
 
     @property
     @memoize
