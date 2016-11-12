@@ -63,13 +63,15 @@ class EntityShell(CommandShell):
         return self._join_command("/tp", self.wrapped.selector, format_relative_location(direction_vector))
 
     @command()
-    def tp(self, thing):
+    def tp(self, thing, break_point=False):
         """
         teleport this pivot to a locatable item
         :param location:
         :return:
         """
         location = self.context.get_absolute_location(thing)
+        if break_point:
+            location += Vector(0, 1, 0)
         return self._join_command("/tp", self.wrapped.selector, format_relative_location(location))
 
     def activate(self):
