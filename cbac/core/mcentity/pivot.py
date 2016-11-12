@@ -9,6 +9,7 @@ class Pivot(MCEntity):
     """
     An armor stand which can move in space and copy areas
     """
+    _all = []
 
     def __init__(self, invisible=False):
         """
@@ -16,6 +17,7 @@ class Pivot(MCEntity):
         """
         tags = {"Invisible": 1} if invisible else {}
         super(Pivot, self).__init__(cbac.core.constants.entity_id.ARMOR_STAND, no_gravity=True, tags=tags)
+        self._all.append(self)
 
     @property
     @memoize
