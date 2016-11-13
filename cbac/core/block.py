@@ -47,6 +47,9 @@ class Block(object):
         from command_shell.location_shell import BlockShell
         return BlockShell(self)
 
+    def __str__(self):
+        return "{0} Block".format(ids.names[self.block_id])
+    
 
 class CommandBlock(Block):
     """
