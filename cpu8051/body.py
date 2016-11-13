@@ -4,6 +4,10 @@ from cbac.core import mc_command
 from cbac.unit.statements import *
 from cbac import CBA
 from cbac import std_unit
+NOP = 0x0C
+INC_A = 0x04
+INC_IRAM = 0x05
+
 
 class MemoryFetcher(cbac.Unit):
     """
@@ -16,8 +20,8 @@ class MemoryFetcher(cbac.Unit):
         self.fetch_destination = fetch_destination
 
     def architecture(self):
-        yield mc_command.say("This is fetcher unit")
-        yield STDCall(self.cpu.read_unit, self.cpu.ip_register)
+        yield self.cpu.ip_register.shell.copy(self.cpu.read_unit.address_input)
+        yield MainLogicJump(self.cpu.read_unit)
         yield self.cpu.read_unit.read_output.shell.copy(self.fetch_destination)
         yield self.cpu.ip_register.shell.copy(self.cpu.increment_unit.input)
         yield MainLogicJump(self.cpu.increment_unit)
@@ -35,7 +39,7 @@ class Cpu8051(cbac.Unit):
         self.process_registers = [self.add_compound(Register(8)) for _ in xrange(2)]
         self.general_registers = [self.add_compound(Register(8)) for _ in xrange(8)]
         self.accumulator = self.add_compound(Register(self.bits))
-        self.opcode = self.add_compound(Register(self.bits))
+        self.opcode = self.process_registers[0]
 
         self.increment_unit = self.add_unit(cbac.std_unit.IncrementUnit)
         # this register is signaled when the opcode operation is complete.
@@ -48,40 +52,56 @@ class Cpu8051(cbac.Unit):
 
         self.second_fetcher = self.add_unit(MemoryFetcher(self, self.process_registers[1]))
 
-    def architecture(self):
+        self.address_fetcher = self.add_unit(MemoryFetcher(self, self.read_unit.address_input))
 
+        self.pivot_reset = self.procedure(
+            mc_command.say("Pivot Reset"),
+            *[pivot.shell.summon(self.callback_pivot_home) for pivot in cbac.core.mcentity.pivot.Pivot._all]
+        )
+
+    def architecture(self):
         yield mc_command.say("hello and welcome!")
         yield MainLogicJump(self.add_unit(MemoryFetcher(self, self.process_registers[0])))
-
-        # MOV RX,#data
-        base = 0x78
-        for i in xrange(base, base+8):
-            yield If(self.opcode_is(i)).then(
-                self.second_fetcher.shell.activate(),
-                self.second_fetcher.callback_pivot.shell.tp(self.procedure(
-                    self.process_registers[1].shell.copy(self.general_registers[i - base]),
-                    self. done_opcode.shell.activate()
-                ))
-            )
+        yield mc_command.say("After first fetch!")
+        # # NOP
         # yield mc_command.say("after increment")
         # yield If(self.opcode_is(0x00)).then(
         #     self.done_opcode.shell.activate()
         # )
 
-        # # MOV A, RX
-        # base = 0xE8
-        # for i in xrange(base, base+8):
-        #     yield If(self.opcode.shell.testforblocks(self.constant_factory(i))).then(
-        #         self.accumulator.shell.copy(self.general_registers[i - base]),
-        #         self.done_opcode.shell.activate()
-        #     )
-        #
-        # base = 0xF8
-        # for i in xrange(base, base+8):
-        #     yield If(self.opcode_is(i)).then(
-        #         self.general_registers[i - base].shell.copy(self.accumulator),
-        #         self.done_opcode.shell.activate()
-        #     )
+        # # TODO: fix code duplication.
+        # # INC A
+        # yield If(self.opcode_is(0x04)).then(
+        #     PassParameters(self.increment_unit, self.accumulator),
+        #     self.increment_unit.shell.activate(),
+        #     self.increment_unit.callback_pivot.shell.tp(self.procedure(
+        #             self.increment_unit.output.shell.copy(self.accumulator),
+        #             self.done_opcode.shell.activate()
+        #         ))
+        # )
+        # INC iram addr
+        yield If(self.opcode_is(INC_IRAM)).then(
+            self.address_fetcher.shell.activate(),
+            self.address_fetcher.callback_pivot.shell.tp(self.procedure(
+                mc_command.say("first callback"),
+                self.read_unit.shell.activate(),
+                self.read_unit.callback_pivot.shell.tp(self.procedure(
+                    mc_command.say("second callback"),
+                    self.read_unit.read_output.shell.copy(self.increment_unit.input),
+                    self.increment_unit.shell.activate(),
+                    self.increment_unit.callback_pivot.shell.tp(self.procedure(
+                        mc_command.say("3 callback"),
+                        self.increment_unit.output.shell.copy(self.write_unit.data_input),
+                        self.write_unit.shell.activate(),
+                        self.write_unit.callback_pivot.shell.tp(self.procedure(
+                            mc_command.say("4 callback, done!"),
+                            self.done_opcode.shell.activate()
+                        ))
+
+                    ), True)
+                ))
+            ))
+        )
         # # INC RX
         # base = 0x08
         # for i in xrange(base, base+8):
@@ -94,17 +114,47 @@ class Cpu8051(cbac.Unit):
         #             )
         #         )
         #     )
-        # # TODO: fix code duplication.
-        # yield If(self.opcode_is(0x04)).then(
-        #     PassParameters(self.increment_unit, self.accumulator),
-        #     self.increment_unit.shell.activate(),
-        #     self.increment_unit.callback_pivot.shell.tp(self.procedure(
-        #             self.increment_unit.output.shell.copy(self.accumulator),
-        #             self.done_opcode.shell.activate()
+
+        # # MOV RX,#data
+        # base = 0x78
+        # for i in xrange(base, base+8):
+        #     yield If(self.opcode_is(i)).then(
+        #         self.second_fetcher.shell.activate(),
+        #         self.second_fetcher.callback_pivot.shell.tp(self.procedure(
+        #             self.process_registers[1].shell.copy(self.general_registers[i - base]),
+        #             self. done_opcode.shell.activate()
         #         ))
-        # )
+        #     )
 
+        # MOV RX,iram addr
+        # base = 0xA8
+        # for i in xrange(base, base+8):
+        #     yield If(self.opcode_is(i)).then(
+        #         self.address_fetcher.shell.activate(),
+        #         self.address_fetcher.callback_pivot.shell.tp(self.procedure(
+        #             self.read_unit.shell.activate(),
+        #             self.read_unit.callback_pivot.shell.tp(self.procedure(
+        #                 self.read_unit.read_output.shell.copy(self.general_registers[i - base]),
+        #                 self.done_opcode.shell.activate())
+        #             )
+        #         ))
+        #     )
 
+        # # MOV A, RX
+        # base = 0xE8
+        # for i in xrange(base, base+8):
+        #     yield If(self.opcode.shell.testforblocks(self.constant_factory(i))).then(
+        #         self.accumulator.shell.copy(self.general_registers[i - base]),
+        #         self.done_opcode.shell.activate()
+        #     )
+        #
+
+        # base = 0xF8
+        # for i in xrange(base, base+8):
+        #     yield If(self.opcode_is(i)).then(
+        #         self.general_registers[i - base].shell.copy(self.accumulator),
+        #         self.done_opcode.shell.activate()
+        #     )
 
     def opcode_is(self, value):
         return self.opcode.shell.testforblocks(self.constant_factory(value))
