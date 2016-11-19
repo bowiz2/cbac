@@ -4,6 +4,8 @@ Statements are syntactic sugar for the definition of units.
 import cbac.core.mc_command as mc_command
 import copy
 from cbac.core.utils import lrange
+import logging
+
 
 # TODO: move parsing logic inside the statement.
 # TODO: implement wait statement
@@ -231,10 +233,15 @@ class InlineCall(Call, PassParameters):
         PassParameters.parse(self, parser_instance)
         assert len(self.called_unit.logic_cbas) <= 1, "The inline-called function must not contain jumps"
         self.called_unit.is_inline = True
-        inline_reverse =  list(self.called_unit.architecture())
-        inline_reverse.reverse()
-        for yeildout in inline_reverse:
-            parser_instance.eat(yeildout)
+        try:
+            inline_reverse = list(self.called_unit.architecture())
+        except TypeError as te:
+            logging.warning("Note that the inline-called unit {} has no architecture.".format(self.called_unit))
+        else:
+            inline_reverse.reverse()
+            for yeildout in inline_reverse:
+                parser_instance.eat(yeildout)
+
 
 class If(Statement):
     """
