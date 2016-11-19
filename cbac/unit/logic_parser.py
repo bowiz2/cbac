@@ -98,6 +98,9 @@ class UnitLogicParser(object):
         # Copy Parameters and rename the statemnt to a main logic jump
         if isinstance(token, Token):
             token.parse(self)
+        elif isinstance(token, list):
+            for item in token:
+                self.eat(item)
         else:
             self.parse_stack.append(Command(token))
 
@@ -136,3 +139,6 @@ class UnitLogicParser(object):
         assert isinstance(command, MCCommand), "command must be of type MCCommand instead got {0}".format(
             command.__class__.__name__)
         self.commands.append(command)
+
+
+

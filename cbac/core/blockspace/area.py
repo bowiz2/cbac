@@ -135,7 +135,7 @@ class BlockBoxArea(Area):
         for x, block_plane in enumerate(self.block_box.blocks):
             for y, block_row in enumerate(block_plane):
                 for z, block_id in enumerate(block_row):
-                    to_return.append(BlockAssignment(self.block_box[x][y][z], Vector(x, y, z), None))
+                    to_return.append(BlockAssignment(self.block_box[x][y][z], Vector(z, y, x), None))
         return to_return
 
 

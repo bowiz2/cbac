@@ -221,10 +221,13 @@ class _SwitchCaseSugar(object):
 case = _SwitchCaseSugar()
 
 
-class InlineCall(Call, PassParameters):
+class InlineCall(PassParameters, Call):
     """
     Calls a unit without jump. Just pushes its commands to the commands of the current cba.
     """
+    def __init__(self, wrapped, *parameters):
+        super(InlineCall, self).__init__(wrapped, *parameters)
+
     def parse(self, parser_instance):
         """
         Parse logic.
@@ -240,6 +243,9 @@ class InlineCall(Call, PassParameters):
         else:
             inline_reverse.reverse()
             for yeildout in inline_reverse:
+                # if isinstance(yeildout, list):
+                #     for item in yeildout:
+                #         parser_instance.eat(item)
                 parser_instance.eat(yeildout)
 
 

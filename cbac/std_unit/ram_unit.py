@@ -3,7 +3,7 @@ Holds all memory access and manipulation units.
 """
 import math
 
-from cbac.core.blockbox import BlockBox
+from cbac.core.blockbox import BlockBox, PlainBlockBox
 from cbac.core.constants.block_id import FALSE_BLOCK
 from cbac.core.constants.mc_direction import *
 from cbac.core.mcentity.pivot import Pivot
@@ -11,6 +11,56 @@ from cbac.core.utils import Vector, inline_generators
 from cbac.unit.statements import *
 from cbac.unit.unit_base import Unit
 from cbac import std_logic
+from cbac.core.compound.hardware_constant import HardwareConstant
+from cbac.core.utils import memoize
+
+
+class MemoryDump(BlockBox):
+    """
+    Represents raw memory.
+    """
+    def __init__(self, data, ratio=(1, 16, 16), word_length=8, isolated=False):
+        super(MemoryDump, self).__init__((word_length*ratio[0], ratio[1], ratio[2]), isolated)
+        self.ratio = ratio
+        assert len(data) <= self.max_data_size
+        self.word_length = word_length
+        self.data = data
+        self.complete_data()
+
+    @property
+    def max_data_size(self):
+        """
+        Calculate the maximum size of the data.
+        """
+        return self.ratio[0] * self.ratio[1] * self.ratio[2]
+
+    def complete_data(self):
+        """
+        Fills the data array so it will match the whole memory.
+        :return:
+        """
+        while len(self.data) < self.max_data_size:
+            self.data.append(0)
+
+    @property
+    @memoize
+    def blocks(self):
+        constants = [HardwareConstant(i, word_size=self.word_length).blocks for i in self.data]
+        rows = self.group(constants, self.ratio[1])
+        return rows
+
+    def group(self, items, group_size):
+        import copy
+        groups = []
+        cur_group = []
+        items = copy.copy(items)
+        while len(items) > 0:
+            for _ in xrange(group_size):
+                cur_group.append(items.pop(0))
+            groups.append(cur_group)
+            cur_group = []
+
+        return groups
 
 
 class MemoryAccessUnit(Unit):
@@ -20,11 +70,11 @@ class MemoryAccessUnit(Unit):
     See example of use in the ReadUnit.
     """
 
-    def __init__(self, ratio=(1, 16, 16), word_size=(8, 1, 1), raw_memory=None, input_address=std_logic.InputRegister):
+    def __init__(self, ratio=(1, 16, 16), word_size=(8, 1, 1), memory_dump=None, input_address=std_logic.InputRegister):
         """
         :param ratio: The ration of words distributed in 3D space.
         :param word_size: the size of a word. by default it is a 8 bits facing east.
-        :param raw_memory: This is the actual "raw" memory on which this access unit is operating.
+        :param memory_dump: This is the actual "raw" memory on which this access unit is operating.
         If no is specified, Memory block will be generated from the ratios multiplied by the word size.
         """
         ratio_product = 1
@@ -41,17 +91,17 @@ class MemoryAccessUnit(Unit):
         self.word_size = word_size
         self.address_space = address_space_size
 
-        if not raw_memory:
+        if not memory_dump:
             # The size of the box in which the memory is stored.
             memory_box_size = (
                 self.ratio.x * self.word_size.x,
                 self.ratio.y * self.word_size.y,
                 self.ratio.z * self.word_size.z
             )
-            raw_memory = BlockBox(memory_box_size, FALSE_BLOCK)
+            memory_dump = PlainBlockBox(memory_box_size, FALSE_BLOCK)
 
         # raw memory is the actual blocks which represent the memory.
-        self.raw_memory = self.add_compound(raw_memory)
+        self.raw_memory = self.add_compound(memory_dump)
 
         # This pivot is going to move in the memory.
         # TODO: create pivot class with generated names.
