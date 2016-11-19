@@ -12,16 +12,6 @@ class TestCpu(StdUnitTestCase):
     def test_body(self):
         self.block_space.add_unit(Cpu8051())
 
-    @named_schematic
-    def test_inc_iram(self):
-        memory = [0] * 256
-        inc_target = 0x03
-
-        memory[0] = opcode.INC_IRAM
-        memory[1] = inc_target
-        memory[inc_target] = 0x01
-
-        self.block_space.add_unit(Cpu8051(memory))
 
     @named_schematic
     def test_mov_a_rx(self):

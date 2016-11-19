@@ -75,13 +75,6 @@ class Cpu8051(cbac.Unit):
         yield InlineCall(self.add_unit(cpu8051.handlers.inc.IncRx()))
         yield InlineCall(self.add_unit(cpu8051.handlers.inc.IncA()))
         yield InlineCall(self.add_unit(cpu8051.handlers.inc.IncAddr()))
-        # # NOP
-        # yield mc_command.say("after increment")
-
-
-
-
-        yield InlineCall(cpu8051.handlers.mov.MovRxA)
 
     def opcode_is(self, value):
         return self.opcode.shell.testforblocks(self.constant_factory(value))
