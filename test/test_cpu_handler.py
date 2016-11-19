@@ -9,9 +9,7 @@ class TestHandler(TestCase):
             bits = 8
 
         class TestSubject(Handler):
-            @property
-            def encoding(self):
-                return "01rr"
+            encoding = "01rr"
 
         self.subject = TestSubject(CpuMock())
 

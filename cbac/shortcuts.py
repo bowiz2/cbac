@@ -21,9 +21,9 @@ class procedure:
     def __init__(self, name):
         self.name = name
 
-    def body(self):
+    def body(self, *statements):
         from cbac.core.compound.cba import CBA
         from cbac.core.mc_command import say
-        return CBA(say("Procedure: ".format(self.name)))
+        return CBA(say("Procedure: {0}".format(self.name)), *statements)
 
 __all__ = ['std_unit_gates', 'std_unit_arithmetics', 'block_ids']

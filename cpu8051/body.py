@@ -3,12 +3,14 @@ from cbac import std_unit
 from cbac.core.compound import Register
 from cbac.unit.statements import *
 from cpu8051.opcode import *
+import cpu8051.handlers
 
 
 class MemoryFetcher(cbac.Unit):
     """
     Fetches the next byte to a register
     """
+
     @cbac.unit.auto_synthesis
     def __init__(self, cpu, fetch_destination):
         super(MemoryFetcher, self).__init__()
@@ -28,6 +30,7 @@ class Cpu8051(cbac.Unit):
     """
     represents a rCPU with the 8051 architecture.
     """
+
     @cbac.unit.auto_synthesis
     def __init__(self, data=None):
         if not data:
@@ -61,6 +64,10 @@ class Cpu8051(cbac.Unit):
         yield mc_command.say("hello and welcome!")
         yield MainLogicJump(self.add_unit(MemoryFetcher(self, self.process_registers[0])))
         yield mc_command.say("After first fetch!")
+        yield InlineCall(cpu8051.handlers.mov.MovRxA)
+        yield InlineCall(cpu8051.handlers.mov.MovARx)
+        yield InlineCall(cpu8051.handlers.mov.MovRxAddr)
+        yield InlineCall(cpu8051.handlers.mov.MovRxData)
         # # NOP
         # yield mc_command.say("after increment")
         # yield If(self.opcode_is(0x00)).then(
@@ -107,34 +114,10 @@ class Cpu8051(cbac.Unit):
         #         )
         #     )
 
-        # # MOV RX,#data
-        # base = 0x78
-        # for i in xrange(base, base+8):
-        #     yield If(self.opcode_is(i)).then(
-        #         self.second_fetcher.shell.activate(),
-        #         self.second_fetcher.callback_pivot.shell.tp(self.procedure(
-        #             self.process_registers[1].shell.copy(self.general_registers[i - base]),
-        #             self. done_opcode.shell.activate()
-        #         ))
-        #     )
-
-        # MOV RX,iram addr
-        # base = 0xA8
-        # for i in xrange(base, base+8):
-        #     yield If(self.opcode_is(i)).then(
-        #         self.address_fetcher.shell.activate(),
-        #         self.address_fetcher.callback_pivot.shell.tp(self.procedure(
-        #             self.read_unit.shell.activate(),
-        #             self.read_unit.callback_pivot.shell.tp(self.procedure(
-        #                 self.read_unit.read_output.shell.copy(self.general_registers[i - base]),
-        #                 self.done_opcode.shell.activate())
-        #             )
-        #         ))
-        #     )
+        yield InlineCall(cpu8051.handlers.mov.MovRxA)
 
     def opcode_is(self, value):
         return self.opcode.shell.testforblocks(self.constant_factory(value))
-
 
 # class Mov(cbac.Unit):
 #     @cbac.unit.auto_callback

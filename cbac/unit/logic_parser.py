@@ -67,7 +67,11 @@ class UnitLogicParser(object):
         logic_cbas = []
 
         # Parse Statements
-        pre_parsed_tokens = list(tokens)
+        try:
+            pre_parsed_tokens = list(tokens)
+        except TypeError:
+            pre_parsed_tokens = []
+
         pre_parsed_tokens = utils.flatten(pre_parsed_tokens, 2)
 
         while len(pre_parsed_tokens) > 0:
@@ -120,7 +124,6 @@ class UnitLogicParser(object):
         :return: generated units which needed for the jump to work.
         """
         # TODO: fix that hack
-        from cbac.std_unit.listner_unit import IsNotActiveListener
         for i, jump in enumerate(self.jumps):
             # The cba from which the jump was made
             origin_cba = logic_cbas[i]
@@ -128,7 +131,6 @@ class UnitLogicParser(object):
             if isinstance(jump, MainLogicJump):
                 # Activate the listener.
                 origin_cba.cb_reserved.command = jump.destination.callback_pivot.shell.tp(landing_cba)
-
 
     def add_parsed(self, command):
         """

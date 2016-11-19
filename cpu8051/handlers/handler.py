@@ -5,14 +5,13 @@ class Handler(cbac.unit.Unit):
     """
     Handles a specific opcode in the cpu.
     """
+
     @cbac.unit.auto_synthesis
     def __init__(self, cpu_body):
         super(Handler, self).__init__(bits=cpu_body.bits)
         self.cpu = cpu_body
 
-    @property
-    def encoding(self):
-        return None
+    encoding = ""
 
     @property
     def _formatted_encoding(self):
@@ -67,4 +66,4 @@ class Handler(cbac.unit.Unit):
         """
         min_range = int(self.encoding.replace('r', '0'), 2)
         max_range = int(self.encoding.replace('r', '1'), 2)
-        return xrange(min_range, max_range+1)
+        return xrange(min_range, max_range + 1)
