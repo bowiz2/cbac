@@ -10,6 +10,14 @@ std_unit_arithmetics = [cbac.std_unit.RippleCarryFullAdderArray, cbac.std_unit.I
 
 
 class procedure:
+    """
+    Usage
+    block_space.add(porcedure("simple_setup").body(
+        say("helo"),
+        other_command(),
+    ))
+    """
+    # TODO: move procedure to better place.
     def __init__(self, name):
         self.name = name
 
