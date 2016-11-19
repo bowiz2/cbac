@@ -5,17 +5,33 @@ class Handler(cbac.unit.Unit):
     """
     Handles a specific opcode in the cpu.
     """
+    encoding = ""
 
     @cbac.unit.auto_synthesis
     def __init__(self, cpu_body):
         super(Handler, self).__init__(bits=cpu_body.bits)
         self.cpu = cpu_body
 
-    encoding = ""
-
     @property
     def _formatted_encoding(self):
         return self._pad(self.encoding.lower())
+
+    @property
+    def opcodes(self):
+        """
+        :return: Which opcodes this handler handles.
+        """
+        min_range = int(self.encoding.replace('r', '0'), 2)
+        max_range = int(self.encoding.replace('r', '1'), 2)
+        return xrange(min_range, max_range + 1)
+
+    @property
+    def opcode(self):
+        """
+        :return: The opcode this handler handles.
+        """
+        assert len(self.opcodes) == 0, "This handler handles more then one opcode. please use 'opcodes' instead."
+        return self.opcodes[0]
 
     def match(self, opcode):
         """
@@ -59,11 +75,5 @@ class Handler(cbac.unit.Unit):
 
         return bit_string
 
-    @property
-    def opcodes(self):
-        """
-        :return: Which opcodes this handler handles.
-        """
-        min_range = int(self.encoding.replace('r', '0'), 2)
-        max_range = int(self.encoding.replace('r', '1'), 2)
-        return xrange(min_range, max_range + 1)
+    def architecture(self):
+        pass

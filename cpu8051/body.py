@@ -64,55 +64,22 @@ class Cpu8051(cbac.Unit):
         yield mc_command.say("hello and welcome!")
         yield MainLogicJump(self.add_unit(MemoryFetcher(self, self.process_registers[0])))
         yield mc_command.say("After first fetch!")
+
         yield InlineCall(cpu8051.handlers.mov.MovRxA)
         yield InlineCall(cpu8051.handlers.mov.MovARx)
         yield InlineCall(cpu8051.handlers.mov.MovRxAddr)
         yield InlineCall(cpu8051.handlers.mov.MovRxData)
+
+        yield InlineCall(cpu8051.handlers.inc.IncA)
+        yield InlineCall(cpu8051.handlers.inc.IncAddr)
+        yield InlineCall(cpu8051.handlers.inc.IncRx)
         # # NOP
         # yield mc_command.say("after increment")
         # yield If(self.opcode_is(0x00)).then(
         #     self.done_opcode.shell.activate()
         # )
 
-        # # TODO: fix code duplication.
-        # # INC A
-        # yield If(self.opcode_is(0x04)).then(
-        #     PassParameters(self.increment_unit, self.accumulator),
-        #     self.increment_unit.shell.activate(),
-        #     self.increment_unit.callback_pivot.shell.tp(self.procedure(
-        #             self.increment_unit.output.shell.copy(self.accumulator),
-        #             self.done_opcode.shell.activate()
-        #         ))
-        # )
-        # INC iram addr
-        # yield If(self.opcode_is(INC_IRAM)).then(
-        #     self.address_fetcher.shell.activate(),
-        #     self.address_fetcher.callback_pivot.shell.tp(self.procedure(
-        #         self.read_unit.shell.activate(),
-        #         self.read_unit.callback_pivot.shell.tp(self.procedure(
-        #             self.read_unit.read_output.shell.copy(self.increment_unit.input),
-        #             self.increment_unit.shell.activate(),
-        #             self.increment_unit.callback_pivot.shell.tp(self.procedure(
-        #                 self.increment_unit.output.shell.store_to_temp(),
-        #                 self.read_unit.memory_access_unit.pivot.shell.load_from_temp(self.increment_unit.output),
-        #                 self.done_opcode.shell.activate()
-        #             ))
-        #         ))
-        #     ))
-        # )
 
-        # # INC RX
-        # base = 0x08
-        # for i in xrange(base, base+8):
-        #     yield If(self.opcode_is(i)).then(
-        #         PassParameters(self.increment_unit, self.general_registers[i - base]),
-        #         self.increment_unit.shell.activate(),
-        #         self.increment_unit.callback_pivot.shell.tp(self.procedure(
-        #                 self.increment_unit.output.shell.copy(self.general_registers[i - base]),
-        #                 self.done_opcode.shell.activate()
-        #             )
-        #         )
-        #     )
 
         yield InlineCall(cpu8051.handlers.mov.MovRxA)
 
