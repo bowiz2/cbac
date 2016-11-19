@@ -132,22 +132,6 @@ class Cpu8051(cbac.Unit):
         #         ))
         #     )
 
-        # # MOV A, RX
-        # base = 0xE8
-        # for i in xrange(base, base+8):
-        #     yield If(self.opcode.shell.testforblocks(self.constant_factory(i))).then(
-        #         self.accumulator.shell.copy(self.general_registers[i - base]),
-        #         self.done_opcode.shell.activate()
-        #     )
-        #
-
-        # base = 0xF8
-        # for i in xrange(base, base+8):
-        #     yield If(self.opcode_is(i)).then(
-        #         self.general_registers[i - base].shell.copy(self.accumulator),
-        #         self.done_opcode.shell.activate()
-        #     )
-
     def opcode_is(self, value):
         return self.opcode.shell.testforblocks(self.constant_factory(value))
 

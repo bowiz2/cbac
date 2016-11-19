@@ -1,8 +1,0 @@
-rm -rf work
-mkdir work
-
-(time dc_shell -x 'include syn_alu.inc' > syn_alu.out) 2>> syn_alu.out
-(time dc_shell -x 'include syn_dec.inc' > syn_dec.out) 2>> syn_dec.out
-(time dc_shell -x 'include syn_ram.inc' > syn_ram.out) 2>> syn_ram.out
-(time dc_shell -x 'include syn_rom.inc' > syn_rom.out) 2>> syn_rom.out
-(time dc_shell -x 'include syn_ctr.inc' > syn_ctr.out) 2>> syn_ctr.out
