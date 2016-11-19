@@ -65,19 +65,19 @@ class Cpu8051(cbac.Unit):
         yield MainLogicJump(self.add_unit(MemoryFetcher(self, self.process_registers[0])))
         yield mc_command.say("After first fetch!")
 
-        yield InlineCall(cpu8051.handlers.mov.MovRxA)
-        yield InlineCall(cpu8051.handlers.mov.MovARx)
-        yield InlineCall(cpu8051.handlers.mov.MovRxAddr)
-        yield InlineCall(cpu8051.handlers.mov.MovRxData)
+        yield InlineCall(self.add_unit(cpu8051.handlers.nop.Nop()))
 
-        yield InlineCall(cpu8051.handlers.inc.IncA)
-        yield InlineCall(cpu8051.handlers.inc.IncAddr)
-        yield InlineCall(cpu8051.handlers.inc.IncRx)
+        yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovRxA()))
+        yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovARx()))
+        yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovRxData()))
+        yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovRxAddr()))
+
+        yield InlineCall(self.add_unit(cpu8051.handlers.inc.IncRx()))
+        yield InlineCall(self.add_unit(cpu8051.handlers.inc.IncA()))
+        yield InlineCall(self.add_unit(cpu8051.handlers.inc.IncAddr()))
         # # NOP
         # yield mc_command.say("after increment")
-        # yield If(self.opcode_is(0x00)).then(
-        #     self.done_opcode.shell.activate()
-        # )
+
 
 
 
