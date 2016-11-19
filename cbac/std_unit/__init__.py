@@ -29,7 +29,7 @@ from .shift_unit import ShiftUnit
 from .reverese_unit import ReverseUnit
 
 # Memory Units
-from .ram_unit import MemoryAccessUnit, WriteUnit, ReadUnit
+from .ram_unit import MemoryAccessUnit, WriteUnit, ReadUnit, MemoryDump
 
 # Misc
 from .listner_unit import Listener, IsActiveListener, IsNotActiveListener, ListenerReSetter
@@ -38,6 +38,6 @@ from .view_detector import ViewDetectorVerticalUnit, ViewDetectorHorizonatlUnit
 from .switch_unit import SwitchUnit
 __all__ = ['AndGate', 'NandGate', 'NotGate', 'OrGate', 'XnorGate', 'XorGate',
            'IncrementUnit', 'FullAdderUnit', 'RippleCarryFullAdderArray', 'NegateUnit', 'SubtractUnit', 'MultiUnit',
-           'ShiftUnit', 'ReverseUnit', 'MemoryAccessUnit', 'WriteUnit', 'ReadUnit',
+           'ShiftUnit', 'ReverseUnit', 'MemoryAccessUnit', 'WriteUnit', 'ReadUnit', 'MemoryDump',
            'Listener', 'IsActiveListener', 'IsNotActiveListener', 'ListenerReSetter', 'ScreenUnit',
            'ViewDetectorVerticalUnit', 'SwitchUnit']

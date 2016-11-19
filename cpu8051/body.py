@@ -1,12 +1,8 @@
 import cbac
-from cbac.core.compound import Register
-from cbac.core import mc_command
-from cbac.unit.statements import *
-from cbac import CBA
 from cbac import std_unit
-NOP = 0x0C
-INC_A = 0x04
-INC_IRAM = 0x05
+from cbac.core.compound import Register
+from cbac.unit.statements import *
+from cpu8051.opcode import *
 
 
 class MemoryFetcher(cbac.Unit):
@@ -33,7 +29,9 @@ class Cpu8051(cbac.Unit):
     represents a rCPU with the 8051 architecture.
     """
     @cbac.unit.auto_synthesis
-    def __init__(self):
+    def __init__(self, data=None):
+        if not data:
+            data = [0] * 256
         super(Cpu8051, self).__init__(bits=8)
         self.ip_register = self.add_compound(Register(8))
         self.process_registers = [self.add_compound(Register(8)) for _ in xrange(2)]
@@ -45,7 +43,7 @@ class Cpu8051(cbac.Unit):
         # this register is signaled when the opcode operation is complete.
         self.done_opcode = self.add_compound(Register(1))
 
-        self.access_unit = self.add_unit(std_unit.MemoryAccessUnit())
+        self.access_unit = self.add_unit(std_unit.MemoryAccessUnit(memory_dump=std_unit.MemoryDump(data)))
 
         self.write_unit = self.add_unit(std_unit.WriteUnit(8, self.access_unit))
         self.read_unit = self.add_unit(std_unit.ReadUnit(8, self.access_unit))
@@ -80,28 +78,22 @@ class Cpu8051(cbac.Unit):
         #         ))
         # )
         # INC iram addr
-        yield If(self.opcode_is(INC_IRAM)).then(
-            self.address_fetcher.shell.activate(),
-            self.address_fetcher.callback_pivot.shell.tp(self.procedure(
-                mc_command.say("first callback"),
-                self.read_unit.shell.activate(),
-                self.read_unit.callback_pivot.shell.tp(self.procedure(
-                    mc_command.say("second callback"),
-                    self.read_unit.read_output.shell.copy(self.increment_unit.input),
-                    self.increment_unit.shell.activate(),
-                    self.increment_unit.callback_pivot.shell.tp(self.procedure(
-                        mc_command.say("3 callback"),
-                        self.increment_unit.output.shell.copy(self.write_unit.data_input),
-                        self.write_unit.shell.activate(),
-                        self.write_unit.callback_pivot.shell.tp(self.procedure(
-                            mc_command.say("4 callback, done!"),
-                            self.done_opcode.shell.activate()
-                        ))
+        # yield If(self.opcode_is(INC_IRAM)).then(
+        #     self.address_fetcher.shell.activate(),
+        #     self.address_fetcher.callback_pivot.shell.tp(self.procedure(
+        #         self.read_unit.shell.activate(),
+        #         self.read_unit.callback_pivot.shell.tp(self.procedure(
+        #             self.read_unit.read_output.shell.copy(self.increment_unit.input),
+        #             self.increment_unit.shell.activate(),
+        #             self.increment_unit.callback_pivot.shell.tp(self.procedure(
+        #                 self.increment_unit.output.shell.store_to_temp(),
+        #                 self.read_unit.memory_access_unit.pivot.shell.load_from_temp(self.increment_unit.output),
+        #                 self.done_opcode.shell.activate()
+        #             ))
+        #         ))
+        #     ))
+        # )
 
-                    ), True)
-                ))
-            ))
-        )
         # # INC RX
         # base = 0x08
         # for i in xrange(base, base+8):
@@ -158,3 +150,8 @@ class Cpu8051(cbac.Unit):
 
     def opcode_is(self, value):
         return self.opcode.shell.testforblocks(self.constant_factory(value))
+
+
+# class Mov(cbac.Unit):
+#     @cbac.unit.auto_callback
+#     def __init__(self):
