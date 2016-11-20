@@ -62,16 +62,16 @@ class OpcodeSet(object):
         return int(arg_bits, 2)
 
     def _pad(self, bit_string):
-        while len(bit_string) < self.set_size:
-            bit_string = '0' + bit_string
+        padsize = self.set_size - len(bit_string)
+        assert padsize >= 0, "Your bit string is too big."
+        return bit_string + ("0" * padsize)
 
-        return bit_string
-
-    def get_value(self, r=0):
+    def get_single(self, r=0):
         """
         :return: get value of an opcode at the r positon.
         """
         return self.all()[r]
+
 
 nop = OpcodeSet("00000000")
 

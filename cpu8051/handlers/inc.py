@@ -52,5 +52,7 @@ class IncRx(Handler):
         yield self.cpu.increment_unit.callback_pivot.shell.tp(self.cpu.procedure(
             self.cpu.increment_unit.output.shell.copy(self.get_register(i)),
             self.cpu.done_opcode.shell.activate()
-        )
-        )
+        ))
+
+
+__all__ = ["IncAddr", "IncRx", "IncA"]

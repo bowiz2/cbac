@@ -8,3 +8,6 @@ class Nop(Handler):
 
     def handle(self, _=None):
         yield self.cpu.done_opcode.shell.activate()
+
+
+__all__ = ["Nop"]
