@@ -10,13 +10,14 @@ class Register(Compound):
     """
     An array of empty blocks which later will be used to store some data.
     """
-
+    # TODO: important! merge hardware constant and register.
     def __init__(self, size, default_block=block_id.FALSE_BLOCK):
         """
         :param size: Size of the memory in bits.
         """
         self.size = size
         self.default_block = default_block
+        self._value = 0
         super(Register, self).__init__(isolated=False)
 
     @property
@@ -25,7 +26,15 @@ class Register(Compound):
         """
         :return: List of blocks which compose the register.
         """
-        return [Block(self.default_block) for _ in xrange(self.size)]
+        bits = bin(self._value)[2:]
+        pad = self.size - len(bits)
+        assert pad >= 0, "value is too big."
+        bits += ('0' * pad)
+        _blocks = []
+        for bit in bits:
+            material = block_id.TRUE_BLOCK if bit == '0' else block_id.FALSE_BLOCK
+            _blocks.append(Block(material))
+        return _blocks
 
     @property
     def ports(self):
@@ -45,6 +54,12 @@ class Register(Compound):
         for i, block_index in enumerate(arange):
             sub_memory.blocks[i] = self.blocks[block_index]
         return sub_memory
+
+    def set_initial_value(self, value):
+        """
+        Set the initial value of the register
+        """
+        self._value = value
 
     @property
     @memoize
