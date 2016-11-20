@@ -1,9 +1,5 @@
 import logging
 
-NOP = 0x0C
-INC_A = 0x04
-INC_IRAM = 0x05
-
 
 class OpcodeSet(object):
     """
@@ -11,7 +7,7 @@ class OpcodeSet(object):
     for example all the opcodes of MOV RX A)
     """
 
-    def __init__(self, encoding, set_size):
+    def __init__(self, encoding, set_size=8):
         assert len(encoding) <= set_size
         if len(encoding) != set_size:
             logging.warning("Attention! your encoding size is smaller then the set size. This is not recommended.")
@@ -70,3 +66,10 @@ class OpcodeSet(object):
             bit_string = '0' + bit_string
 
         return bit_string
+
+
+nop = OpcodeSet("00000000")
+mov_a_rx = OpcodeSet("11101rrr")
+mov_rx_a = OpcodeSet("11111rrr")
+mov_rx_data = OpcodeSet("01111rrr")
+mov_rx_addr = OpcodeSet("10101rrr")
