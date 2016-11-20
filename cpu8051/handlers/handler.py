@@ -34,5 +34,3 @@ class Handler(cbac.unit.Unit):
             If(self.cpu.opcode_is(opcode)).then(
                 *list(self.handle(opcode))
             )
-
-

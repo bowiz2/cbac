@@ -7,4 +7,4 @@ class Nop(Handler):
     opcode_set = nop
 
     def handle(self, _=None):
-       yield self.cpu.done_opcode.shell.activate()
+        yield self.cpu.done_opcode.shell.activate()

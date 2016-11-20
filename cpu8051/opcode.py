@@ -69,7 +69,12 @@ class OpcodeSet(object):
 
 
 nop = OpcodeSet("00000000")
+
 mov_a_rx = OpcodeSet("11101rrr")
 mov_rx_a = OpcodeSet("11111rrr")
 mov_rx_data = OpcodeSet("01111rrr")
 mov_rx_addr = OpcodeSet("10101rrr")
+
+inc_a = OpcodeSet("00000100")
+int_addr = OpcodeSet("00000101")
+inc_rx = OpcodeSet("00001rrr")
