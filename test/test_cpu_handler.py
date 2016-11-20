@@ -1,21 +1,14 @@
 from unittest import TestCase
-from cpu8051.handlers.handler import Handler
+from cpu8051.opcode import OpcodeSet
 
 
-class TestHandler(TestCase):
+class TestOpcodeSet(TestCase):
     def setUp(self):
-
-        class CpuMock(object):
-            bits = 8
-
-        class TestSubject(Handler):
-            encoding = "01rr"
-
-        self.subject = TestSubject(CpuMock())
+        self.subject = OpcodeSet("01rr", 8)
 
     def test_opcodes(self):
-        self.assertEquals(max(self.subject.opcodes), 7)
-        self.assertEquals(min(self.subject.opcodes), 4)
+        self.assertEquals(max(self.subject.all()), 7)
+        self.assertEquals(min(self.subject.all()), 4)
 
     def test_get_register(self):
         self.assertEquals(self.subject.get_arg(0b0111, 'r'), 0b11)
