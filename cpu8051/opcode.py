@@ -67,6 +67,11 @@ class OpcodeSet(object):
 
         return bit_string
 
+    def get_value(self, r=0):
+        """
+        :return: get value of an opcode at the r positon.
+        """
+        return self.all()[r]
 
 nop = OpcodeSet("00000000")
 
