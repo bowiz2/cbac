@@ -60,6 +60,14 @@ class Cpu8051(cbac.Unit):
             *[pivot.shell.summon(self.callback_pivot_home) for pivot in cbac.core.mcentity.pivot.Pivot._all]
         )
 
+    def set_initial_memory(self, data):
+        """
+        Sets the initial memory of the cpu.
+        """
+        self.access_unit.raw_memory = self.access_unit.add_compound(
+            std_unit.MemoryDump(data, self.access_unit.ratio, self.access_unit.word_size)
+        )
+
     def architecture(self):
         yield mc_command.say("hello and welcome!")
         yield MainLogicJump(self.add_unit(MemoryFetcher(self, self.process_registers[0])))

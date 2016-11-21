@@ -33,7 +33,11 @@ class BlockSpace(object):
         :param item: Item you want to pack in this blockspace.
         :return: None
         """
+        import cbac.unit
+
         for item in items:
+            assert not isinstance(item, cbac.unit.Unit),\
+                "you tried to add a unit as a compound, please use 'add_unit' instead."
             if item in self.unpacked_items:
                 continue
             self.unpacked_items.append(item)
