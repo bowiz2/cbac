@@ -10,6 +10,11 @@ class IncA(Handler):
     opcode_set = inc_a
 
     def handle(self, _=None):
+        """
+        Increment A register by 1.
+        :param _: do nothing
+        :return:
+        """
         yield PassParameters(self.cpu.increment_unit, self.cpu.accumulator)
         yield self.cpu.increment_unit.shell.activate()
         yield self.cpu.increment_unit.callback_pivot.shell.tp(self.cpu.procedure(
@@ -25,6 +30,11 @@ class IncAddr(Handler):
     opcode_set = int_addr
 
     def handle(self, _=None):
+        """
+        Increment a given address by 1.
+        :param _: do nothing
+        :return:
+        """
         yield self.cpu.address_fetcher.shell.activate(),
         yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
             self.cpu.read_unit.shell.activate(),
@@ -46,11 +56,17 @@ class IncRx(Handler):
     """
     opcode_set = inc_rx
 
-    def handle(self, i=None):
-        yield PassParameters(self.cpu.increment_unit, self.get_register(i)),
+    def handle(self, opcode=None):
+        """
+        Increment register X by 1.
+        :param opcode:
+        :return:
+        """
+        # pass the encoded register in the opcode to the increment unit.
+        yield PassParameters(self.cpu.increment_unit, self.get_register(opcode)),
         yield self.cpu.increment_unit.shell.activate(),
         yield self.cpu.increment_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            self.cpu.increment_unit.output.shell.copy(self.get_register(i)),
+            self.cpu.increment_unit.output.shell.copy(self.get_register(opcode)),
             self.cpu.done_opcode.shell.activate()
         ))
 
