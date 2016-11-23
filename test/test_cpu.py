@@ -3,6 +3,8 @@ from cpu8051.body import Cpu8051
 from cpu8051 import opcode
 from cpu8051 import handlers
 
+MAX_VALUE = 255
+
 
 class TestCpuHandelrs(StdUnitTestCase):
     def setUp(self):
@@ -25,7 +27,23 @@ class TestCpuHandelrs(StdUnitTestCase):
         super(TestCpuHandelrs, self).tearDown()
 
     @named_schematic
-    def test_mov_a_rx(self):
-        self.handler = handlers.mov.MovARx(self.cpu)
-        self.cpu.accumulator.set_initial_value(256)
+    def test_mov_rx_a(self):
+        self.handler = handlers.mov.MovRxA(self.cpu, debug=True)
+        self.cpu.accumulator.set_initial_value(MAX_VALUE)
 
+    @named_schematic
+    def test_mov_a_rx(self):
+        self.handler = handlers.mov.MovARx(self.cpu, debug=True)
+        self.cpu.general_registers[0].set_initial_value(MAX_VALUE)
+
+    @named_schematic
+    def test_mov_rx_data(self):
+        self.handler = handlers.mov.MovRxData(self.cpu, debug=True)
+        self.memory[self.cpu.ip_register._value] = MAX_VALUE
+
+    @named_schematic
+    def test_mov_rx_addr(self):
+        self.handler = handlers.mov.MovRxAddr(self.cpu, debug=True)
+        addr = 255
+        self.memory[addr] = 0b10101010
+        self.memory[self.cpu.ip_register._value] = addr

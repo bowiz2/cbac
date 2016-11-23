@@ -1,6 +1,6 @@
 from unittest import TestCase
 from cpu8051.opcode import OpcodeSet
-
+from test_std_unit import StdUnitTestCase, named_schematic
 
 class TestOpcodeSet(TestCase):
     def setUp(self):
