@@ -1,6 +1,7 @@
 import cbac
 import cpu8051
 from cbac.unit.statements import If
+from cbac.core import mc_command
 
 
 class Handler(cbac.unit.Unit):
@@ -10,9 +11,10 @@ class Handler(cbac.unit.Unit):
     opcode_set = None  # type: cpu8051.opcode.OpcodeSet
 
     @cbac.unit.auto_synthesis
-    def __init__(self, cpu_body):
+    def __init__(self, cpu_body, debug=False):
         super(Handler, self).__init__(bits=cpu_body.bits)
         self.cpu = cpu_body
+        self._debug = debug
 
     def get_register(self, value):
         """
@@ -30,7 +32,10 @@ class Handler(cbac.unit.Unit):
         yield None
 
     def architecture(self):
+        if self._debug:
+            yield mc_command.say("{} entry".format(self.__class__.__name__))
+
         for opcode in self.opcode_set.all():
-            If(self.cpu.opcode_is(opcode)).then(
+            yield If(self.cpu.opcode_is(opcode)).then(
                 *list(self.handle(opcode))
             )

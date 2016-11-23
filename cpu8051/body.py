@@ -75,8 +75,8 @@ class Cpu8051(cbac.Unit):
 
         yield InlineCall(self.add_unit(cpu8051.handlers.nop.Nop()))
 
-        yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovRxA()))
         yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovARx()))
+        yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovRxA()))
         yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovRxData()))
         yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovRxAddr()))
 
