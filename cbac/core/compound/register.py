@@ -29,11 +29,13 @@ class Register(Compound):
         bits = bin(self._value)[2:]
         pad = self.size - len(bits)
         assert pad >= 0, "value is too big. size of register is {} value is {}".format(self.size, len(bits))
-        bits += ('0' * pad)
+        bits = ('0' * pad) + bits
+
         _blocks = []
         for bit in bits:
             material = block_id.TRUE_BLOCK if bit == '1' else block_id.FALSE_BLOCK
             _blocks.append(Block(material))
+        _blocks.reverse()
         return _blocks
 
     @property
