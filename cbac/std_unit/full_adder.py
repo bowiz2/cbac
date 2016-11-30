@@ -53,13 +53,13 @@ class RippleCarryFullAdderArray(Unit):
 
     @auto_synthesis
     def __init__(self, bits, input_a=std_logic.InputRegister, input_b=std_logic.InputRegister,
-                 output=std_logic.OutputRegister, full_adder_logic=FullAdderUnit, carry_flag=None):
+                 output=std_logic.OutputRegister, full_adder_logic=FullAdderUnit):
         super(RippleCarryFullAdderArray, self).__init__(bits)
         self.input_a = self.add_input(input_a)
         self.input_b = self.add_input(input_b)
         self.output = self.add_output(output)
         self.carry = self.add_input(std_logic.InputRegister(self.bits + 1))
-        self.carry_flag = self.add(carry_flag)
+        self.carry_flags = [None] * self.bits
         self.full_adder_logic = self.add(full_adder_logic)
 
     def architecture(self):
@@ -68,5 +68,6 @@ class RippleCarryFullAdderArray(Unit):
         """
         yield map(self.full_adder_logic, self.input_a.ports, self.input_b.ports, self.output.ports,
                   self.carry.ports[:-1], self.carry.ports[1:])
-        if self.carry_flag:
-            yield self.carry.ports[-1].shell.copy(self.carry_flag)
+
+        for flag_id, flag_bit in enumerate(self.carry_flags):
+            yield self.carry.ports[flag_id + 1].shell.copy(flag_bit)
