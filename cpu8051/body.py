@@ -62,6 +62,7 @@ class Cpu8051(cbac.Unit):
             mc_command.say("Pivot Reset"),
             *[pivot.shell.summon(self.callback_pivot_home) for pivot in cbac.core.mcentity.pivot.Pivot._all]
         )
+        self.flags_register = self.add_compound(Register(8))
 
     def set_initial_memory(self, data):
         """
@@ -88,6 +89,52 @@ class Cpu8051(cbac.Unit):
     def opcode_is(self, value):
         return self.opcode.shell.testforblocks(self.constant_factory(value))
 
-# class Mov(cbac.Unit):
-#     @cbac.unit.auto_callback
-#     def __init__(self):
+
+    @property
+    def carry_flag(self):
+        """
+        :return: Carry flag (Carry out from the D7 bit)
+        """
+        return self.flags_register.ports[0]
+    @property
+    def auxiliary_carry_flag(self):
+        """
+        :return: Auxiliary carry flag  (A carry from D3 to D4)
+        """
+        return self.flags_register.ports[1]
+
+    @property
+    def f0_flag(self):
+        """
+        :return: Available to the user for general purpose
+        """
+        return self.flags_register.ports[2]
+
+    @property
+    def bank_selector_1_flag(self):
+        """
+        :return: Register Bank selector bit 1
+        """
+        return self.flags_register.ports[3]
+
+    @property
+    def bank_selector_0_flag(self):
+        """
+        :return: Register Bank selector bit 0
+        """
+        return self.flags_register.ports[4]
+
+    @property
+    def overflow_flag(self):
+        """
+        :return: Overflow flag.
+        """
+        return self.flags_register.ports[5]
+
+    @property
+    def parity_flag(self):
+        """
+        Set/cleared by hardware each instruction  cycle to indicate an odd/even number of 1 bits in the  accumulator.
+        """
+        return self.flags_register.ports[6]
+
