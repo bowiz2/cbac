@@ -55,4 +55,6 @@ class MovRxAddr(Handler):
         ))
 
 
+mov_handlers = [MovRxA, MovRxAddr, MovRxData, MovARx, MovARx]
+
 __all__ = ["MovRxAddr", "MovRxData", "MovRxA", "MovARx"]
