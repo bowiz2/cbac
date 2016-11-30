@@ -24,13 +24,13 @@ class Handler(cbac.unit.Unit):
         assert self.opcode_set, "must have opcode set."
         return self.cpu.general_registers[self.opcode_set.get_arg(value, 'r')]
 
-    def handle(self, opcode_value=None):
-        """
-        This architecture will be generated for each opcode in the opcode set.
-        :param opcode_value: Here will be passed the currently generated opcode. can be ignored if opcode set size is 1.
-        :return: Generator which is an architecture which describes how to behave depending on the opcode.
-        """
-        yield None
+    # def handle(self, opcode_value=None):
+    #     """
+    #     This architecture will be generated for each opcode in the opcode set.
+    #     :param opcode_value: Here will be passed the currently generated opcode. can be ignored if opcode set size is 1.
+    #     :return: Generator which is an architecture which describes how to behave depending on the opcode.
+    #     """
+    #     yield None
 
     def architecture(self):
         if self._debug:

@@ -40,7 +40,7 @@ class Cpu8051(cbac.Unit):
         self.process_registers = [self.add_compound(Register(8)) for _ in xrange(2)]
         self.general_registers = [self.add_compound(Register(8)) for _ in xrange(8)]
         self.accumulator = self.add_compound(Register(self.bits))
-        self.flags_register = self.add_compound(Register(8))
+        self.flags = self.add_compound(Register(8))
         self.sys_flags = self.add_compound(Register(8))
 
         self.opcode = self.process_registers[0]
@@ -108,48 +108,48 @@ class Cpu8051(cbac.Unit):
         """
         :return: Carry flag (Carry out from the D7 bit)
         """
-        return self.flags_register.ports[0]
+        return self.flags.ports[0]
     @property
     def auxiliary_carry_flag(self):
         """
         :return: Auxiliary carry flag  (A carry from D3 to D4)
         """
-        return self.flags_register.ports[1]
+        return self.flags.ports[1]
 
     @property
     def f0_flag(self):
         """
         :return: Available to the user for general purpose
         """
-        return self.flags_register.ports[2]
+        return self.flags.ports[2]
 
     @property
     def bank_selector_1_flag(self):
         """
         :return: Register Bank selector bit 1
         """
-        return self.flags_register.ports[3]
+        return self.flags.ports[3]
 
     @property
     def bank_selector_0_flag(self):
         """
         :return: Register Bank selector bit 0
         """
-        return self.flags_register.ports[4]
+        return self.flags.ports[4]
 
     @property
     def overflow_flag(self):
         """
         :return: Overflow flag.
         """
-        return self.flags_register.ports[5]
+        return self.flags.ports[5]
 
     @property
     def parity_flag(self):
         """
         Set/cleared by hardware each instruction  cycle to indicate an odd/even number of 1 bits in the  accumulator.
         """
-        return self.flags_register.ports[7]
+        return self.flags.ports[7]
 
     @property
     def carry_present_sys_flag(self):

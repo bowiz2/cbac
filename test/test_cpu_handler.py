@@ -105,12 +105,11 @@ class TestAddcHandlers(TestCpuHandler):
 
     def setUp(self):
         super(TestAddcHandlers, self).setUp()
-        self.cpu.flags_register.set_initial_value(1)
+        self.cpu.sys_flags.set_initial_value(1)  # set the include carry flag to 1
         self.cpu.accumulator.set_initial_value(self.A_INIT_VALUE)
 
     @named_schematic
     def test_addc_a_rx(self):
-
         self.handler = handlers.AddcARxHandler(self.cpu, debug=True)
         self.cpu.general_registers[0].set_initial_value(self.SECOND_OPRAND_VALUE)
 
@@ -120,3 +119,15 @@ class TestAddcHandlers(TestCpuHandler):
         addr = 255
         self.memory[addr] = self.SECOND_OPRAND_VALUE
         self.memory[self.cpu.ip_register._value] = addr
+
+    @named_schematic
+    def test_addc_a_ri(self):
+        self.handler = handlers.AddcARiHandler(self.cpu, debug=True)
+        addr = 255
+        self.memory[addr] = self.SECOND_OPRAND_VALUE
+        self.cpu.general_registers[0].set_initial_value(addr)
+
+    @named_schematic
+    def test_addc_a_data(self):
+        self.handler = handlers.AddcADataHandler(self.cpu, debug=True)
+        self.memory[self.cpu.ip_register._value] = self.SECOND_OPRAND_VALUE
