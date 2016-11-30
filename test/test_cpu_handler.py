@@ -110,24 +110,24 @@ class TestAddcHandlers(TestCpuHandler):
 
     @named_schematic
     def test_addc_a_rx(self):
-        self.handler = handlers.AddcARxHandler(self.cpu, debug=True)
+        self.handler = handlers.AddcARx(self.cpu, debug=True)
         self.cpu.general_registers[0].set_initial_value(self.SECOND_OPRAND_VALUE)
 
     @named_schematic
     def test_addc_a_direct(self):
-        self.handler = handlers.AddcADirectHandler(self.cpu, debug=True)
+        self.handler = handlers.AddcADirect(self.cpu, debug=True)
         addr = 255
         self.memory[addr] = self.SECOND_OPRAND_VALUE
         self.memory[self.cpu.ip_register._value] = addr
 
     @named_schematic
     def test_addc_a_ri(self):
-        self.handler = handlers.AddcARiHandler(self.cpu, debug=True)
+        self.handler = handlers.AddcARi(self.cpu, debug=True)
         addr = 255
         self.memory[addr] = self.SECOND_OPRAND_VALUE
         self.cpu.general_registers[0].set_initial_value(addr)
 
     @named_schematic
     def test_addc_a_data(self):
-        self.handler = handlers.AddcADataHandler(self.cpu, debug=True)
+        self.handler = handlers.AddcAData(self.cpu, debug=True)
         self.memory[self.cpu.ip_register._value] = self.SECOND_OPRAND_VALUE

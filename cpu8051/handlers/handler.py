@@ -65,3 +65,58 @@ class Handler(cbac.unit.Unit):
         ))
 
 
+class AbstractARxHandler(Handler):
+    """
+    Any handler which handles opcode of the type
+    OPCODE A, RX
+    should derive from this class.
+    """
+    def handle(self, opcode_value=None):
+        for yield_out in self.make_logic(self.get_register(opcode_value)):
+            yield yield_out
+
+
+class AbstractADirectHandler(Handler):
+    """
+    Any handler which handles opcode of the type
+    OPCODE A, direct
+    should derive from this class.
+    """
+    def handle(self, _=None):
+        yield self.cpu.address_fetcher.shell.activate()
+        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
+            self.cpu.read_unit.shell.activate(),
+            self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
+                *self.make_logic(self.cpu.read_unit.read_output)
+            ))
+        ))
+
+
+class AbstractARiHandler(Handler):
+    """
+    Any handler which handles opcode of the type
+    OPCODE A, @Ri
+    should derive from this class.
+    """
+    def handle(self, opcode_value=None):
+        yield self.get_register(opcode_value).shell.copy(self.cpu.read_unit.address_input)
+        yield self.cpu.read_unit.shell.activate()
+        yield self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
+            *self.make_logic(self.cpu.read_unit.read_output)
+        ))
+
+
+class AbstractADataHandler(Handler):
+    """
+    Any handler which handles opcode of the type
+    OPCODE A, data
+    should derive from this class.
+    """
+    opcode_set = cpu8051.opcode.add_a_data
+
+    def handle(self, _=None):
+        yield self.cpu.accumulator.shell.copy(self.cpu.adder_unit.input_a)
+        yield self.cpu.second_fetcher.shell.activate()
+        yield self.cpu.second_fetcher.callback_pivot.shell.tp(
+            self.cpu.procedure(*self.make_logic(self.cpu.process_registers[1]))
+        )
