@@ -70,8 +70,33 @@ class TestMovHandlers(TestCpuHandler):
 
 
 class TestAddHandlers(TestCpuHandler):
+    A_INIT_VALUE = 5
+    SECOND_OPRAND_VALUE = 3
+
+    def setUp(self):
+        super(TestAddHandlers, self).setUp()
+        self.cpu.accumulator.set_initial_value(self.A_INIT_VALUE)
+
     @named_schematic
     def test_add_a_rx(self):
-        self.handler = handlers.add.AddARxHandler(self.cpu, debug=True)
-        self.cpu.accumulator.set_initial_value(5)
-        self.cpu.general_registers[0].set_initial_value(3)
+        self.handler = handlers.AddARxHandler(self.cpu, debug=True)
+        self.cpu.general_registers[0].set_initial_value(self.SECOND_OPRAND_VALUE)
+
+    @named_schematic
+    def test_add_a_direct(self):
+        self.handler = handlers.AddADirectHandler(self.cpu, debug=True)
+        addr = 255
+        self.memory[addr] = self.SECOND_OPRAND_VALUE
+        self.memory[self.cpu.ip_register._value] = addr
+
+    @named_schematic
+    def test_add_a_ri(self):
+        self.handler = handlers.AddARiHandler(self.cpu, debug=True)
+        addr = 255
+        self.memory[addr] = self.SECOND_OPRAND_VALUE
+        self.cpu.general_registers[0].set_initial_value(addr)
+
+    @named_schematic
+    def test_add_a_data(self):
+        self.handler = handlers.AddADataHandler(self.cpu, debug=True)
+        self.memory[self.cpu.ip_register._value] = self.SECOND_OPRAND_VALUE

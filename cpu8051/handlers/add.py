@@ -37,24 +37,27 @@ class AddADirectHandler(_AddHandler):
 
     def handle(self, _=None):
         yield self.cpu.address_fetcher.shell.activate()
-        yield self.cpu.address_fetcher.callback_pivot.shell.tp(
-            self.cpu.procedure(
-                self.cpu.read_unit.shell.activate(),
-                self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                    *self.make_add(self.cpu.read_unit.output)
+        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
+            self.cpu.read_unit.shell.activate(),
+            self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
+                *self.make_add(self.cpu.read_unit.read_output)
             ))
         ))
 
 
-class AddRiHandler(_AddHandler):
+class AddARiHandler(_AddHandler):
     """
     ADD A, @Ri
     """
     opcode_set = cpu8051.opcode.add_a_ri
 
     def handle(self, opcode_value=None):
-        for yield_out in self.make_add(self.get_register(opcode_value)):
-            yield yield_out
+        yield self.get_register(opcode_value).shell.copy(self.cpu.read_unit.address_input)
+        yield self.cpu.read_unit.shell.activate()
+        yield self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
+            *self.make_add(self.cpu.read_unit.read_output)
+        ))
+
 
 
 class AddADataHandler(_AddHandler):
