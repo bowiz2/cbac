@@ -40,6 +40,7 @@ class Cpu8051(cbac.Unit):
         self.process_registers = [self.add_compound(Register(8)) for _ in xrange(2)]
         self.general_registers = [self.add_compound(Register(8)) for _ in xrange(8)]
         self.accumulator = self.add_compound(Register(self.bits))
+        self.flags_register = self.add_compound(Register(8))
         self.opcode = self.process_registers[0]
 
         self.increment_unit = self.add_unit(cbac.std_unit.IncrementUnit)
@@ -65,7 +66,7 @@ class Cpu8051(cbac.Unit):
             mc_command.say("Pivot Reset"),
             *[pivot.shell.summon(self.callback_pivot_home) for pivot in cbac.core.mcentity.pivot.Pivot._all]
         )
-        self.flags_register = self.add_compound(Register(8))
+
 
     def set_initial_memory(self, data):
         """

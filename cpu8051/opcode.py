@@ -97,3 +97,6 @@ add_a_rx = OpcodeSet("00101rrr")
 add_a_addr = OpcodeSet("00100101")
 add_a_ri = OpcodeSet("0010011r")
 add_a_data = OpcodeSet("00100100")
+
+addc_a_rx = OpcodeSet("00111rrr")
+addc_a_direct = OpcodeSet("00110101")
