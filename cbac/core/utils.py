@@ -1,6 +1,8 @@
 from collections import namedtuple
 import types
 
+# TODO: organize utils into module.
+
 
 class Vector(namedtuple('Vector', ['x', 'y', 'z'])):
     """
