@@ -69,4 +69,4 @@ class RippleCarryFullAdderArray(Unit):
         yield map(self.full_adder_logic, self.input_a.ports, self.input_b.ports, self.output.ports,
                   self.carry.ports[:-1], self.carry.ports[1:])
         if self.carry_flag:
-            self.carry.ports[-1].shell.copy(self.carry_flag)
+            yield self.carry.ports[-1].shell.copy(self.carry_flag)
