@@ -73,3 +73,4 @@ class AddADataHandler(_AddHandler):
         )
 
 
+add_handlers = [AddADirectHandler, AddARxHandler, AddADataHandler, AddARiHandler]
