@@ -40,3 +40,28 @@ class Handler(cbac.unit.Unit):
             yield If(self.cpu.opcode_is(opcode)).then(
                 *list(self.handle(opcode))
             )
+
+    @property
+    def logic_unit(self):
+        """
+        Sometimes a handler is just wrapping a logic-unit.
+        In that case implement this function and use the make logic method.
+        :return:
+        """
+        raise NotImplemented()
+
+    def make_logic(self, register):
+        """
+        see logic_unit property.
+        :param register:
+        :return:
+        """
+        yield self.cpu.accumulator.shell.copy(self.logic_unit.input_a)
+        yield register.shell.copy(self.logic_unit.input_b)
+        yield self.logic_unit.shell.activate()
+        yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
+            self.logic_unit.output.shell.copy(self.cpu.accumulator),
+            self.cpu.done_opcode.shell.activate()
+        ))
+
+

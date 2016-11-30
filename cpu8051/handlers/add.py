@@ -5,17 +5,8 @@ from cpu8051.handlers.handler import Handler
 class _AddHandler(Handler):
 
     @property
-    def adder(self):
+    def logic_unit(self):
         return self.cpu.adder_unit
-
-    def make_add(self, register):
-        yield self.cpu.accumulator.shell.copy(self.adder.input_a)
-        yield register.shell.copy(self.adder.input_b)
-        yield self.adder.shell.activate()
-        yield self.adder.callback_pivot.shell.tp(self.cpu.procedure(
-            self.adder.output.shell.copy(self.cpu.accumulator),
-            self.cpu.done_opcode.shell.activate()
-        ))
 
 
 class AddARxHandler(_AddHandler):
@@ -25,7 +16,7 @@ class AddARxHandler(_AddHandler):
     opcode_set = cpu8051.opcode.add_a_rx
 
     def handle(self, opcode_value=None):
-        for yield_out in self.make_add(self.get_register(opcode_value)):
+        for yield_out in self.make_logic(self.get_register(opcode_value)):
             yield yield_out
 
 
@@ -40,7 +31,7 @@ class AddADirectHandler(_AddHandler):
         yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
             self.cpu.read_unit.shell.activate(),
             self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                *self.make_add(self.cpu.read_unit.read_output)
+                *self.make_logic(self.cpu.read_unit.read_output)
             ))
         ))
 
@@ -55,7 +46,7 @@ class AddARiHandler(_AddHandler):
         yield self.get_register(opcode_value).shell.copy(self.cpu.read_unit.address_input)
         yield self.cpu.read_unit.shell.activate()
         yield self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            *self.make_add(self.cpu.read_unit.read_output)
+            *self.make_logic(self.cpu.read_unit.read_output)
         ))
 
 
@@ -69,7 +60,7 @@ class AddADataHandler(_AddHandler):
         yield self.cpu.accumulator.shell.copy(self.cpu.adder_unit.input_a)
         yield self.cpu.second_fetcher.shell.activate()
         yield self.cpu.second_fetcher.callback_pivot.shell.tp(
-            self.cpu.procedure(*self.make_add(self.cpu.process_registers[1]))
+            self.cpu.procedure(*self.make_logic(self.cpu.process_registers[1]))
         )
 
 
