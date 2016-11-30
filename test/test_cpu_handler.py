@@ -97,3 +97,26 @@ class TestAddHandlers(TestCpuHandler):
     def test_add_a_data(self):
         self.handler = handlers.AddADataHandler(self.cpu, debug=True)
         self.memory[self.cpu.ip_register._value] = self.SECOND_OPRAND_VALUE
+
+
+class TestAddcHandlers(TestCpuHandler):
+    A_INIT_VALUE = 4
+    SECOND_OPRAND_VALUE = 3
+
+    def setUp(self):
+        super(TestAddcHandlers, self).setUp()
+        self.cpu.flags_register.set_initial_value(1)
+        self.cpu.accumulator.set_initial_value(self.A_INIT_VALUE)
+
+    @named_schematic
+    def test_addc_a_rx(self):
+
+        self.handler = handlers.AddcARxHandler(self.cpu, debug=True)
+        self.cpu.general_registers[0].set_initial_value(self.SECOND_OPRAND_VALUE)
+
+    @named_schematic
+    def test_addc_a_direct(self):
+        self.handler = handlers.AddcADirectHandler(self.cpu, debug=True)
+        addr = 255
+        self.memory[addr] = self.SECOND_OPRAND_VALUE
+        self.memory[self.cpu.ip_register._value] = addr

@@ -41,6 +41,8 @@ class Cpu8051(cbac.Unit):
         self.general_registers = [self.add_compound(Register(8)) for _ in xrange(8)]
         self.accumulator = self.add_compound(Register(self.bits))
         self.flags_register = self.add_compound(Register(8))
+        self.sys_flags = self.add_compound(Register(8))
+
         self.opcode = self.process_registers[0]
 
         self.increment_unit = self.add_unit(cbac.std_unit.IncrementUnit)
@@ -75,6 +77,13 @@ class Cpu8051(cbac.Unit):
         self.access_unit.raw_memory.data = data
 
     def architecture(self):
+        yield If(self.carry_flag.shell == True).then(
+            self.carry_present_sys_flag.shell.activate()
+        )
+        yield If(self.auxiliary_carry_flag.shell == True).then(
+            self.carry_present_sys_flag.shell.activate()
+        )
+
         yield mc_command.say("hello and welcome!")
         yield MainLogicJump(self.add_unit(MemoryFetcher(self, self.process_registers[0])))
         yield mc_command.say("After first fetch!")
@@ -140,5 +149,12 @@ class Cpu8051(cbac.Unit):
         """
         Set/cleared by hardware each instruction  cycle to indicate an odd/even number of 1 bits in the  accumulator.
         """
-        return self.flags_register.ports[6]
+        return self.flags_register.ports[7]
 
+    @property
+    def carry_present_sys_flag(self):
+        """
+        Sets at the beginning of the cycle.
+        :return: Signaled if carry passing is needed for the adder unit.
+        """
+        return self.sys_flags.ports[0]

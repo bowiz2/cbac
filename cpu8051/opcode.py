@@ -89,14 +89,19 @@ mov_rx_a = OpcodeSet("11111rrr")
 mov_rx_data = OpcodeSet("01111rrr")
 mov_rx_addr = OpcodeSet("10101rrr")
 
+# INC
 inc_a = OpcodeSet("00000100")
 int_addr = OpcodeSet("00000101")
 inc_rx = OpcodeSet("00001rrr")
 
+# ADD
 add_a_rx = OpcodeSet("00101rrr")
 add_a_addr = OpcodeSet("00100101")
 add_a_ri = OpcodeSet("0010011r")
 add_a_data = OpcodeSet("00100100")
 
+# ADDC
 addc_a_rx = OpcodeSet("00111rrr")
 addc_a_direct = OpcodeSet("00110101")
+addc_a_ri = OpcodeSet("0011011r")
+addc_a_data = OpcodeSet("00110100")

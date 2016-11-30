@@ -58,6 +58,7 @@ class RippleCarryFullAdderArray(Unit):
         self.input_a = self.add_input(input_a)
         self.input_b = self.add_input(input_b)
         self.output = self.add_output(output)
+        self.carry_in_ports = []
         self.carry = self.add_input(std_logic.InputRegister(self.bits + 1))
         self.carry_flags = [None] * self.bits
         self.full_adder_logic = self.add(full_adder_logic)
@@ -70,4 +71,5 @@ class RippleCarryFullAdderArray(Unit):
                   self.carry.ports[:-1], self.carry.ports[1:])
 
         for flag_id, flag_bit in enumerate(self.carry_flags):
-            yield self.carry.ports[flag_id + 1].shell.copy(flag_bit)
+            if flag_bit:
+                yield self.carry.ports[flag_id + 1].shell.copy(flag_bit)
