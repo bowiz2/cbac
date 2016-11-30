@@ -1,48 +1,44 @@
-"""
-!WARNING! Diamond inheritance is in-place.
-"""
 import cpu8051.opcode
-from cpu8051.handlers.add import AddHandler, AddARxHandler, AddADirectHandler, AddARiHandler, AddADataHandler
+from cpu8051.handlers.handler import *
+from cpu8051.handlers.add import AddHandler
 
 
-class UseCarry(AddHandler):
+class AddWithCarryHandler(AddHandler):
     """
     Wraps a handle, but adds the carry to the adder_unit.
     """
-    wrapped_handler = None
-
     def architecture(self):
-        yield self.cpu.carry_present_sys_flag.shell.copy(self.adder.carry.ports[0])
-        for yield_out in super(AddHandler, self).architecture():
+        yield self.cpu.carry_present_sys_flag.shell.copy(self.cpu.adder_unit.carry.ports[0])
+        for yield_out in super(AddWithCarryHandler, self).architecture():
             yield yield_out
 
 
-class AddcARx(UseCarry, AddARxHandler):
+class AddcARxHandler(AddWithCarryHandler, AbstractARxHandler):
     """
     ADDC A, RX
     """
     opcode_set = cpu8051.opcode.addc_a_rx
 
 
-class AddcADirect(UseCarry, AddADirectHandler):
+class AddcADirectHandler(AddWithCarryHandler, AbstractADirectHandler):
     """
     ADDC A, direct
     """
     opcode_set = cpu8051.opcode.addc_a_direct
 
 
-class AddcARi(UseCarry, AddARiHandler):
+class AddcARiHandler(AddWithCarryHandler, AbstractARiHandler):
     """
     ADDC A, @Ri
     """
     opcode_set = cpu8051.opcode.addc_a_ri
 
 
-class AddcAData(UseCarry, AddADataHandler):
+class AddcADataHandler(AddWithCarryHandler, AbstractADataHandler):
     """
     ADDC A, data
     """
     opcode_set = cpu8051.opcode.addc_a_data
 
 
-addc_handlers = [AddcADirect, AddcARx, AddcAData, AddcARi]
+addc_handlers = [AddcADirectHandler, AddcARxHandler, AddcADataHandler, AddcARiHandler]

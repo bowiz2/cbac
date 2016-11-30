@@ -41,15 +41,6 @@ class Handler(cbac.unit.Unit):
                 *list(self.handle(opcode))
             )
 
-    @property
-    def logic_unit(self):
-        """
-        Sometimes a handler is just wrapping a logic-unit.
-        In that case implement this function and use the make logic method.
-        :return:
-        """
-        raise NotImplemented()
-
     def make_logic(self, register):
         """
         see logic_unit property.
