@@ -105,3 +105,9 @@ addc_a_rx = OpcodeSet("00111rrr")
 addc_a_direct = OpcodeSet("00110101")
 addc_a_ri = OpcodeSet("0011011r")
 addc_a_data = OpcodeSet("00110100")
+
+#ANL
+anl_a_rx = OpcodeSet("01011rrr")
+anl_a_direct = OpcodeSet("01010101")
+anl_a_ri = OpcodeSet("0101011r")
+anl_a_data = OpcodeSet("01010100")
