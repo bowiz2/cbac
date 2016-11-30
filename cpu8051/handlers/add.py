@@ -1,9 +1,8 @@
-import cpu8051.handlers.handler
+from cpu8051.handlers.handler import Handler
 import cpu8051.opcode
-from cbac.unit.statements import *
 
 
-class _AddHandler(cpu8051.handlers.handler.Handler):
+class _AddHandler(Handler):
 
     @property
     def adder(self):
@@ -12,8 +11,8 @@ class _AddHandler(cpu8051.handlers.handler.Handler):
     def make_add(self, register):
         yield self.cpu.accumulator.shell.copy(self.adder.input_a)
         yield register.shell.copy(self.adder.input_b)
-        self.adder.shell.activate(),
-        self.adder.callback_pivot.shell.tp(self.cpu.procedure(
+        yield self.adder.shell.activate()
+        yield self.adder.callback_pivot.shell.tp(self.cpu.procedure(
             self.adder.output.shell.copy(self.cpu.accumulator),
             self.cpu.done_opcode.shell.activate()
         ))
@@ -30,7 +29,7 @@ class AddARxHandler(_AddHandler):
             yield yield_out
 
 
-class AddADirect(_AddHandler):
+class AddADirectHandler(_AddHandler):
     """
     ADD A, direct
     """
@@ -38,15 +37,16 @@ class AddADirect(_AddHandler):
 
     def handle(self, _=None):
         yield self.cpu.address_fetcher.shell.activate()
-        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-            self.cpu.read_unit.shell.activate(),
-            self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                *self.make_add(self.cpu.read_unit.output),
+        yield self.cpu.address_fetcher.callback_pivot.shell.tp(
+            self.cpu.procedure(
+                self.cpu.read_unit.shell.activate(),
+                self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
+                    *self.make_add(self.cpu.read_unit.output)
             ))
         ))
 
 
-class AddRi(_AddHandler):
+class AddRiHandler(_AddHandler):
     """
     ADD A, @Ri
     """
@@ -57,7 +57,7 @@ class AddRi(_AddHandler):
             yield yield_out
 
 
-class AddAData(_AddHandler):
+class AddADataHandler(_AddHandler):
     """
     ADD A, data
     """

@@ -13,6 +13,7 @@ class Handler(cbac.unit.Unit):
     @cbac.unit.auto_synthesis
     def __init__(self, cpu_body, debug=False):
         super(Handler, self).__init__(bits=cpu_body.bits)
+        assert isinstance(cpu_body, cpu8051.body.Cpu8051)
         self.cpu = cpu_body
         self._debug = debug
 

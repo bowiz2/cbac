@@ -72,6 +72,15 @@ class OpcodeSet(object):
         """
         return self.all()[r]
 
+# Meaning of Oprands
+# ==================
+# rx - Working register R0-R7
+# addr - 128 internal RAM locations, any l/O port, control or status register
+# ri - Indirect internal or external RAM location addressed by register R0 or R1
+# data - 8-bit constant included in instruction
+# data16 - 16-bit constant included as bytes 2 and 3 of instruction
+# bit - 128 software flags, any bitaddressable l/O pin, control or status bit
+# a - Accumulator
 
 nop = OpcodeSet("00000000")
 
@@ -83,3 +92,8 @@ mov_rx_addr = OpcodeSet("10101rrr")
 inc_a = OpcodeSet("00000100")
 int_addr = OpcodeSet("00000101")
 inc_rx = OpcodeSet("00001rrr")
+
+add_a_rx = OpcodeSet("00101rrr")
+add_a_addr = OpcodeSet("00100101")
+add_a_ri = OpcodeSet("0010011r")
+add_a_data = OpcodeSet("00100100")

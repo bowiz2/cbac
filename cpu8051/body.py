@@ -43,6 +43,9 @@ class Cpu8051(cbac.Unit):
         self.opcode = self.process_registers[0]
 
         self.increment_unit = self.add_unit(cbac.std_unit.IncrementUnit)
+
+        self.adder_unit = self.add_unit(cbac.std_unit.RippleCarryFullAdderArray)
+
         # this register is signaled when the opcode operation is complete.
         self.done_opcode = self.add_compound(Register(1))
 
