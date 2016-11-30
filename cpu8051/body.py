@@ -67,11 +67,7 @@ class Cpu8051(cbac.Unit):
         """
         Sets the initial memory of the cpu.
         """
-        dump=
-        self.cpu.add_compound()
-        self.access_unit.raw_memory = self.access_unit.add_compound(
-
-        )
+        self.access_unit.raw_memory.data = data
 
     def architecture(self):
         yield mc_command.say("hello and welcome!")
