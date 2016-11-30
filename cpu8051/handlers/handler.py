@@ -51,16 +51,16 @@ class Handler(cbac.unit.Unit):
         :param register:
         :return:
         """
-        yield self.cpu.accumulator.shell.copy(self.logic_unit.input_a)
-        yield register.shell.copy(self.logic_unit.input_b)
+        yield self.cpu.accumulator.shell.copy(self.logic_unit.inputs[0])
+        yield register.shell.copy(self.logic_unit.inputs[1])
         yield self.logic_unit.shell.activate()
         yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            self.logic_unit.output.shell.copy(self.cpu.accumulator),
+            self.logic_unit.outputs[0].shell.copy(self.cpu.accumulator),
             self.cpu.done_opcode.shell.activate()
         ))
 
 
-class ARxHandler(Handler):
+class ARxMode(Handler):
     """
     Any handler which handles opcode of the type
     OPCODE A, RX
@@ -71,7 +71,7 @@ class ARxHandler(Handler):
             yield yield_out
 
 
-class ADirectHandler(Handler):
+class ADirectMode(Handler):
     """
     Any handler which handles opcode of the type
     OPCODE A, direct
@@ -87,7 +87,7 @@ class ADirectHandler(Handler):
         ))
 
 
-class ARiHandler(Handler):
+class ARiMode(Handler):
     """
     Any handler which handles opcode of the type
     OPCODE A, @Ri
@@ -101,7 +101,7 @@ class ARiHandler(Handler):
         ))
 
 
-class ADataHandler(Handler):
+class ADataMode(Handler):
     """
     Any handler which handles opcode of the type
     OPCODE A, data
@@ -115,3 +115,34 @@ class ADataHandler(Handler):
         yield self.cpu.second_fetcher.callback_pivot.shell.tp(
             self.cpu.procedure(*self.make_logic(self.cpu.process_registers[1]))
         )
+
+
+class DirectAMode(Handler):
+    """
+    """
+
+    def make_logic(self, register):
+        """
+        see logic_unit property.
+        :param register:
+        :return:s
+        """
+        input_a = self.logic_unit.inputs[0]
+        input_b = self.logic_unit.inputs[1]
+        output = self.logic_unit.outputs[0]
+        yield self.cpu.accumulator.shell.copy(input_a)
+        yield register.shell.copy(input_b)
+        yield self.logic_unit.shell.activate()
+        yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
+            output.shell.store_to_temp(),
+            self.cpu.access_unit.pivot.shell.load_from_temp(output)
+        ))
+
+    def handle(self, _=None):
+        yield self.cpu.address_fetcher.shell.activate()
+        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
+            self.cpu.read_unit.shell.activate(),
+            self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
+                *self.make_logic(self.cpu.read_unit.read_output)
+            ))
+        ))

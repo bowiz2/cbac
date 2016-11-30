@@ -110,24 +110,40 @@ class TestAddcHandlers(TestCpuHandler):
 
     @named_schematic
     def test_addc_a_rx(self):
-        self.handler = handlers.AddcARxHandler(self.cpu, debug=True)
+        self.handler = handlers.AddcARxMode(self.cpu, debug=True)
         self.cpu.general_registers[0].set_initial_value(self.SECOND_OPRAND_VALUE)
 
     @named_schematic
     def test_addc_a_direct(self):
-        self.handler = handlers.AddcADirectHandler(self.cpu, debug=True)
+        self.handler = handlers.AddcADirectMode(self.cpu, debug=True)
         addr = 255
         self.memory[addr] = self.SECOND_OPRAND_VALUE
         self.memory[self.cpu.ip_register._value] = addr
 
     @named_schematic
     def test_addc_a_ri(self):
-        self.handler = handlers.AddcARiHandler(self.cpu, debug=True)
+        self.handler = handlers.AddcARiMode(self.cpu, debug=True)
         addr = 255
         self.memory[addr] = self.SECOND_OPRAND_VALUE
         self.cpu.general_registers[0].set_initial_value(addr)
 
     @named_schematic
     def test_addc_a_data(self):
-        self.handler = handlers.AddcADataHandler(self.cpu, debug=True)
+        self.handler = handlers.AddcADataMode(self.cpu, debug=True)
         self.memory[self.cpu.ip_register._value] = self.SECOND_OPRAND_VALUE
+
+
+class TestAnlHanlders(TestCpuHandler):
+    @named_schematic
+    def test_anl_a_rx(self):
+        self.handler = handlers.AnlARxHandler(self.cpu, debug=True)
+        self.cpu.accumulator.set_initial_value(0b00001111)
+        self.cpu.general_registers[0].set_initial_value(0b00111100)
+
+    @named_schematic
+    def test_anl_direct_a(self):
+        self.handler = handlers.AnlDirectA(self.cpu, debug=True)
+        self.cpu.accumulator.set_initial_value(0b00111100)
+        addr = 255
+        self.memory[addr] = 0b00001111
+        self.cpu.general_registers[0].set_initial_value(addr)

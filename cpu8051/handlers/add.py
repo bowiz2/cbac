@@ -9,28 +9,28 @@ class Add(Handler):
         return self.cpu.adder_unit
 
 
-class AddARx(Add, ARxHandler):
+class AddARx(Add, ARxMode):
     """
     ADD A, RX
     """
     opcode_set = cpu8051.opcode.add_a_rx
 
 
-class AddADirect(Add, ADirectHandler):
+class AddADirect(Add, ADirectMode):
     """
     ADD A, direct
     """
     opcode_set = cpu8051.opcode.add_a_rx
 
 
-class AddARi(Add, ARiHandler):
+class AddARi(Add, ARiMode):
     """
     ADD A, @Ri
     """
     opcode_set = cpu8051.opcode.add_a_ri
 
 
-class AddAData(Add, ADataHandler):
+class AddAData(Add, ADataMode):
     """
     ADD A, data
     """
