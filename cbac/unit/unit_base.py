@@ -12,6 +12,7 @@ from cbac import std_logic
 from cbac.core.compound.hardware_constant import HardwareConstant
 from cbac.core.mcentity import Pivot
 
+
 # TODO: implement caching
 # TODO: add refcount for a unit. to know if it can be included as an inline.
 # TODO: organize the class, mainly the methods.
@@ -259,7 +260,9 @@ class Unit(object):
 
     def procedure(self, *commands):
         from cbac.core.compound import CBA
+        commands = filter(lambda x: x is not None, commands)
         return self.add_compound(CBA(*commands))
+
 
 class SimpleUnit(Unit):
     """
