@@ -55,14 +55,18 @@ class Handler(cbac.unit.Unit):
         """
         raise NotImplemented()
 
-    def make_logic(self, register):
+    def make_logic(self, register_a=None, register_b=None):
         """
         see logic_unit property.
-        :param register:
+        :param register_a:
+        :param register_b:
         :return:
         """
-        yield self.cpu.accumulator.shell.copy(self.logic_unit.inputs[0])
-        yield register.shell.copy(self.logic_unit.inputs[1])
+        if register_a:
+            yield self.cpu.accumulator.shell.copy(self.logic_unit.inputs[0])
+        if register_b:
+            yield register_b.shell.copy(self.logic_unit.inputs[1])
+
         yield self.logic_unit.shell.activate()
         yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
             self.logic_unit.outputs[0].shell.copy(self.cpu.accumulator),
@@ -81,7 +85,7 @@ class ARxMode(Handler):
         """
         Handlers mode which uses a and rn register opcodes.
         """
-        for yield_out in self.make_logic(self.get_register(opcode_value)):
+        for yield_out in self.make_logic(self.cpu.accumulator, self.get_register(opcode_value)):
             yield yield_out
 
 
@@ -100,7 +104,7 @@ class ADirectMode(Handler):
         yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
             self.cpu.read_unit.shell.activate(),
             self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                *self.make_logic(self.cpu.read_unit.read_output)
+                *self.make_logic(self.cpu.accumulator, self.cpu.read_unit.read_output)
             ))
         ))
 
@@ -120,7 +124,7 @@ class ARiMode(Handler):
         yield self.get_register(opcode_value).shell.copy(self.cpu.read_unit.address_input)
         yield self.cpu.read_unit.shell.activate()
         yield self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            *self.make_logic(self.cpu.read_unit.read_output)
+            *self.make_logic(self.cpu.accumulator, self.cpu.read_unit.read_output)
         ))
 
 
@@ -139,7 +143,7 @@ class ADataMode(Handler):
         yield self.cpu.accumulator.shell.copy(self.cpu.adder_unit.input_a)
         yield self.cpu.second_fetcher.shell.activate()
         yield self.cpu.second_fetcher.callback_pivot.shell.tp(
-            self.cpu.procedure(*self.make_logic(self.cpu.process_registers[1]))
+            self.cpu.procedure(*self.make_logic(self.cpu.accumulator, self.cpu.process_registers[1]))
         )
 
 
@@ -150,17 +154,18 @@ class DirectAMode(Handler):
     should derive from this class.
     """
 
-    def make_logic(self, register):
+    def make_logic(self, register_a=None, register_b=None):
         """
         see logic_unit property.
-        :param register:
+        :param register_a:
+        :param register_b:
         :return:s
         """
         input_a = self.logic_unit.inputs[0]
         input_b = self.logic_unit.inputs[1]
         output = self.logic_unit.outputs[0]
         yield self.cpu.accumulator.shell.copy(input_a)
-        yield register.shell.copy(input_b)
+        yield register_b.shell.copy(input_b)
         yield self.logic_unit.shell.activate()
         yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
             output.shell.store_to_temp(),
@@ -175,35 +180,17 @@ class DirectAMode(Handler):
         yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
             self.cpu.read_unit.shell.activate(),
             self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                *self.make_logic(self.cpu.read_unit.read_output)
+                *self.make_logic(self.cpu.read_unit.read_output, self.cpu.accumulator)
             ))
         ))
 
 
-class DirectDataMode(Handler):
+class DirectDataMode(DirectAMode):
     """
     Any handler which handles opcode of the type
     OPCODE direct, data
     should derive from this class.
     """
-
-    def make_logic(self, register):
-        """
-        see logic_unit property.
-        :param register:
-        :return:s
-        """
-        input_a = self.logic_unit.inputs[0]
-        input_b = self.logic_unit.inputs[1]
-        output = self.logic_unit.outputs[0]
-        yield register.shell.copy(input_a)
-        yield self.cpu.process_registers[1].shell.copy(input_b)
-        yield self.logic_unit.shell.activate()
-        yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            output.shell.store_to_temp(),
-            self.cpu.access_unit.pivot.shell.load_from_temp(output)
-        ))
-
     def handle(self, _=None):
         """
         Handlers a single opcode.
@@ -214,7 +201,7 @@ class DirectDataMode(Handler):
             self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
                 self.cpu.second_fetcher.shell.activate(),
                 self.cpu.second_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-                    *self.make_logic(self.cpu.read_unit.read_output)
+                    *self.make_logic(self.cpu.read_unit.read_output, self.cpu.process_registers[1])
                 ))
             ))
         ))
