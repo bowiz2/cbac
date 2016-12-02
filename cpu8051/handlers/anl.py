@@ -1,10 +1,12 @@
 import cpu8051.opcode
 from cpu8051.handlers.handler import *
 
+
 class Anl(Handler):
     @property
     def logic_unit(self):
         return self.cpu.and_unit
+
 
 class AnlARxHandler(Anl, ARxMode):
     opcode_set = cpu8051.opcode.anl_a_rx
@@ -21,5 +23,10 @@ class AnlADirectHandler(Anl, ADirectMode):
 class AnlADataHandler(Anl, ADataMode):
     opcode_set = cpu8051.opcode.anl_a_data
 
+
 class AnlDirectA(Anl, DirectAMode):
     opcode_set = cpu8051.opcode.anl_direct_a
+
+
+class AnlDirectData(Anl, DirectDataMode):
+    opcode_set = cpu8051.opcode.anl_direct_data
