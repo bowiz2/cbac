@@ -62,7 +62,8 @@ class Mode(object):
         ))
 
     def behaviour(self, opcode_value=None):
-        raise NotImplementedError()
+        for yield_out in self.make_logic(*self.acting_registers):
+            yield yield_out
 
 
 class RxMode(Mode):

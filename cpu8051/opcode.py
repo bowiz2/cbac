@@ -137,6 +137,11 @@ cpl_bit = OpcodeSet("10110010")
 
 da_a = OpcodeSet("11010100")
 
+dec_a = OpcodeSet("00010100")
+dec_rx = OpcodeSet("00011rrr")
+dec_direct = OpcodeSet("00010101")
+dec_ri = OpcodeSet("0001011r")
+
 
 declared_opcodes = filter(lambda x: isinstance(x, OpcodeSet), globals().values())
 

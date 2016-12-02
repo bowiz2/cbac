@@ -1,6 +1,6 @@
-from cpu8051.handlers import ModeHandler
+from cpu8051.handlers.handler import ModeHandler
 from cpu8051.handlers.mode import *
-
+from cpu8051.opcode import *
 
 class Dec(ModeHandler):
     @property
@@ -13,3 +13,17 @@ class Dec(ModeHandler):
             yield yield_out
 
 
+class DecAHandler(Dec, AMode):
+    opcode_set = dec_a
+
+
+class DecRxHandler(Dec, RxMode):
+    opcode_set = dec_rx
+
+
+class DecRiHandler(Dec, RiMode):
+    opcode_set = dec_ri
+
+
+class DecDirectHandler(Dec, DirectMode):
+    opcode_set = dec_direct

@@ -153,6 +153,7 @@ class TestAddcHandlers(TestCpuHandler):
 
 
 class TestAnlHanlders(TestCpuHandler):
+    # TODO: implement the rest of the handler.
     @named_schematic
     def test_anl_a_rx(self):
         self.handler = handlers.AnlARxHandler(self.cpu, debug=True)
@@ -166,3 +167,9 @@ class TestAnlHanlders(TestCpuHandler):
         addr = 255
         self.memory[addr] = 0b00001111
         self.cpu.general_registers[0].set_initial_value(addr)
+
+class TestDecHandlers(TestCpuHandler):
+    @named_schematic
+    def test_dec_a(self):
+        self.handler = handlers.DecAHandler(self.cpu, debug=True)
+        self.cpu.accumulator.set_initial_value(4)
