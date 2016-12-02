@@ -53,6 +53,7 @@ class ModeHandler(Handler):
     """
     please forgive me.
     """
+    # used for testing and faster compilation.
     uses_adder = False
     uses_incrementer = False
     uses_and_unit = False
