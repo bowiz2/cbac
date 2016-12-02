@@ -1,5 +1,5 @@
 import cpu8051.opcode
-from cpu8051.handlers import ARxMode, ADirectMode, ARiMode, ADataMode
+from cpu8051.handlers.mode import ARxMode, ADirectMode, ARiMode, ADataMode
 from cpu8051.handlers.add import Add
 from cpu8051.handlers.handler import *
 

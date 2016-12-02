@@ -27,13 +27,13 @@ class Handler(cbac.unit.Unit):
         assert self.opcode_set, "must have opcode set."
         return self.cpu.general_registers[self.opcode_set.get_arg(value, 'r')]
 
-    # def handle(self, opcode_value=None):
-    #     """
-    #     This architecture will be generated for each opcode in the opcode set.
-    #     :param opcode_value: Here will be passed the currently generated opcode. can be ignored if opcode set size is 1.
-    #     :return: Generator which is an architecture which describes how to behave depending on the opcode.
-    #     """
-    #     yield None
+    def handle(self, opcode_value=None):
+        """
+        This architecture will be generated for each opcode in the opcode set.
+        :param opcode_value: Here will be passed the currently generated opcode. can be ignored if opcode set size is 1.
+        :return: Generator which is an architecture which describes how to behave depending on the opcode.
+        """
+        raise NotImplementedError()
 
     def architecture(self):
         """
@@ -48,28 +48,11 @@ class Handler(cbac.unit.Unit):
                 *list(self.handle(opcode))
             )
 
-    @property
-    def logic_unit(self):
-        """
-        Must be implemented if make_logic is used.
-        """
-        raise NotImplemented()
 
-    def make_logic(self, register_a=None, register_b=None):
-        """
-        see logic_unit property.
-        :param register_a:
-        :param register_b:
-        :return:
-        """
-        if register_a:
-            yield self.cpu.accumulator.shell.copy(self.logic_unit.inputs[0])
-        if register_b:
-            yield register_b.shell.copy(self.logic_unit.inputs[1])
-
-        yield self.logic_unit.shell.activate()
-        yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            self.logic_unit.outputs[0].shell.copy(self.cpu.accumulator),
-            self.cpu.done_opcode.shell.activate()
-        ))
-
+class ModeHandler(Handler):
+    """
+    please forgive me.
+    """
+    def handle(self, opcode_value=None):
+        for yield_out in self.behaviour(opcode_value):
+            yield yield_out

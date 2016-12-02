@@ -48,17 +48,16 @@ class Cpu8051(cbac.Unit):
 
         self.opcode = self.process_registers[0]
 
-        self.second_fetcher = self.add_unit(MemoryFetcher(self, self.process_registers[1]))
-        self.address_fetcher = self.add_unit(MemoryFetcher(self, self.read_unit.address_input))
-
         self.increment_unit = self.add_unit(cbac.std_unit.IncrementUnit(self.bits))
         self.and_unit = self.add_unit(cbac.std_unit.AndGate.Array(self.bits))
         self.adder_unit = self.add_unit(cbac.std_unit.RippleCarryFullAdderArray)
-        self.subtract_unit = self.add_unit(cbac.std_unit.SubtractUnit)
 
         self.access_unit = self.add_unit(std_unit.MemoryAccessUnit(memory_dump=std_unit.MemoryDump(data)))
         self.write_unit = self.add_unit(std_unit.WriteUnit(8, self.access_unit))
         self.read_unit = self.add_unit(std_unit.ReadUnit(8, self.access_unit))
+
+        self.second_fetcher = self.add_unit(MemoryFetcher(self, self.process_registers[1]))
+        self.address_fetcher = self.add_unit(MemoryFetcher(self, self.read_unit.address_input))
 
         # Set flags for the adder unit.
         self.adder_unit.carry_flags[3] = self.auxiliary_carry_flag

@@ -5,15 +5,18 @@ for exanple a, direct
 a, rn
 
 and so fourth.
+
+This thing is convoluted and weird as the tax code.
+WORNING!!!! IAMOND INHERITANCE IS IN PLACE!!!1
 """
 # Each mode in here will be descriped of the operators creating the mode.
 # For example The mode "DirectDataMode" is the mode of the opcode ANL direct, data
 
 
 class Mode(object):
-    reads_memory = False
-    writes_memory = False
-
+    """
+    Mode is a behaviour of a handler.
+    """
     @property
     def acting_registers(self):
         """
@@ -30,11 +33,36 @@ class Mode(object):
         """
         return self.acting_registers[0]
 
-    def append_actor(self, mode_type, *actors):
-        return super(mode_type, self).acting_registers + list(actors)
-
     def preppend_actor(self, mode_type, *actors):
         return list(actors) + super(mode_type, self).acting_registers
+
+    @property
+    def logic_unit(self):
+        """
+        Must be implemented if make_logic is used.
+        """
+        raise NotImplementedError()
+
+    def make_logic(self, register_a=None, register_b=None):
+        """
+        see logic_unit property.
+        :param register_a:
+        :param register_b:
+        :return:
+        """
+        if register_a:
+            yield self.cpu.accumulator.shell.copy(self.logic_unit.inputs[0])
+        if register_b:
+            yield register_b.shell.copy(self.logic_unit.inputs[1])
+
+        yield self.logic_unit.shell.activate()
+        yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
+            self.logic_unit.outputs[0].shell.copy(self.cpu.accumulator),
+            self.cpu.done_opcode.shell.activate()
+        ))
+
+    def behaviour(self, opcode_value=None):
+        raise NotImplementedError()
 
 
 class RxMode(Mode):
@@ -46,9 +74,9 @@ class RxMode(Mode):
 
     @property
     def acting_registers(self):
-        return self.append_actor(RxMode, self.handled_register)
+        return self.preppend_actor(RxMode, self.handled_register)
 
-    def handle(self, opcode_value=None):
+    def behaviour(self, opcode_value=None):
         """
         Handlers mode which uses a and rn register opcodes.
         """
@@ -61,7 +89,7 @@ class DirectMode(Mode):
     @property
     def acting_registers(self):
         self.direct_register_hold = self.cpu.read_unit.read_output
-        return self.append_actor(DirectMode, self.direct_register_hold)
+        return self.preppend_actor(DirectMode, self.direct_register_hold)
 
     def make_logic(self, register_a=None, register_b=None):
         # Deside if we need to store the result of the logic inside the memory or
@@ -71,13 +99,14 @@ class DirectMode(Mode):
             yield self.logic_unit.shell.activate()
             yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
                 self.logic_unit.outputs[0].shell.store_to_temp(),
-                self.cpu.access_unit.pivot.shell.load_from_temp(self.logic_unit.outputs[0])
+                self.cpu.access_unit.pivot.shell.load_from_temp(self.logic_unit.outputs[0]),
+                self.cpu.done_opcode.shell.activate()
             ))
         else:
             for yield_out in super(DirectMode, self).make_logic(register_a, register_b):
                 yield yield_out
 
-    def handle(self, _=None):
+    def behaviour(self, _=None):
         """
         Handles a single opcode.
         """
@@ -102,9 +131,9 @@ class DirectMode(Mode):
 class RiMode(Mode):
     @property
     def acting_registers(self):
-        return self.append_actor(RiMode, self.cpu.read_unit.read_output)
+        return self.preppend_actor(RiMode, self.cpu.read_unit.read_output)
 
-    def handle(self, opcode_value=None):
+    def behaviour(self, opcode_value=None):
         """
         Handler all the opcodes which uses a register an RN register.
         :param opcode_value: the opcode we need to handle.
@@ -119,9 +148,9 @@ class RiMode(Mode):
 class DataMode(Mode):
     @property
     def acting_registers(self):
-        return self.append_actor(DataMode, self.cpu.process_registers[1])
+        return self.preppend_actor(DataMode, self.cpu.process_registers[1])
 
-    def handle(self, _=None):
+    def behaviour(self, _=None):
         """
         Handlers a single opcode.
         """
@@ -141,9 +170,9 @@ class DirectDataMode(DirectMode):
 
     @property
     def acting_registers(self):
-        return self.append_actor(DirectDataMode, self.cpu.process_registers[1])
+        return self.preppend_actor(DirectDataMode, self.cpu.process_registers[1])
 
-    def handle(self, _=None):
+    def behaviour(self, _=None):
         """
         Handlers a single opcode.
         """
@@ -162,46 +191,41 @@ class DirectDataMode(DirectMode):
 class DirectAMode(DirectMode):
     @property
     def acting_registers(self):
-        return self.append_actor(DirectAMode, self.cpu.accumulator)
+        return self.preppend_actor(DirectAMode, self.cpu.accumulator)
 
 
-class ARxMode(RxMode):
+class AMode(Mode):
     @property
     def acting_registers(self):
         return self.preppend_actor(ARxMode, self.cpu.accumulator)
 
 
-class ADirectMode(DirectMode):
+class ARxMode(AMode, RxMode):
+    pass
+
+
+class ADirectMode(AMode, DirectMode):
     """
     Any handler which handles opcode of the type
     OPCODE A, direct
     should derive from this class.
     """
-
-    @property
-    def acting_registers(self):
-        return self.preppend_actor(ADirectMode, self.cpu.accumulator)
+    pass
 
 
-class ARiMode(RiMode):
+class ARiMode(AMode, RiMode):
     """
     Any handler which handles opcode of the type
     OPCODE A, @Ri
     should derive from this class.
     """
-
-    @property
-    def acting_registers(self):
-        return self.preppend_actor(ARiMode, self.cpu.accumulator)
+    pass
 
 
-class ADataMode(DataMode):
+class ADataMode(AMode, DataMode):
     """
     Any handler which handles opcode of the type
     OPCODE A, data
     should derive from this class.
     """
-
-    @property
-    def acting_registers(self):
-        return self.preppend_actor(ADataMode, self.cpu.accumulator)
+    pass

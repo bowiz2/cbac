@@ -1,10 +1,9 @@
 import cpu8051.opcode
 from cpu8051.handlers.handler import *
-from cpu8051.handlers.modes import ARxMode, ADirectMode, ARiMode, ADataMode
+from cpu8051.handlers.mode import ARxMode, ADirectMode, ARiMode, ADataMode
 
 
-class Add(Handler):
-
+class Add(ModeHandler):
     @property
     def logic_unit(self):
         return self.cpu.adder_unit
