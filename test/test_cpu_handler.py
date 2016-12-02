@@ -1,10 +1,15 @@
 from unittest import TestCase
-from cpu8051.opcode import OpcodeSet
+from cpu8051.opcode import OpcodeSet, declared_opcodes
 from test_std_unit import StdUnitTestCase, named_schematic
 from cpu8051.body import Cpu8051
 from cpu8051 import handlers
+import collections
 
 MAX_VALUE = 255
+
+
+def duplicates(l):
+    return [item for item, count in collections.Counter(l).items() if count > 1]
 
 
 class TestOpcodeSet(TestCase):
@@ -22,6 +27,20 @@ class TestOpcodeSet(TestCase):
         self.assertTrue(self.subject.match(0b0101))
         self.assertTrue(self.subject.match(0b0111))
         self.assertFalse(self.subject.match(0b1111))
+
+    def test_sanity(self):
+        op_values = []
+        for opcode in declared_opcodes:
+            op_values += opcode.all()
+        dups = duplicates(op_values)
+        error = ""
+        for dup in dups:
+            error += "Duplicates for {} are:\n".format(bin(dup))
+            for opcode in declared_opcodes:
+                if opcode.match(dup):
+                    error += "\t" + opcode.encoding + "\n"
+
+        assert len(dups) is 0, "There are opcode duplicates.\n" + error
 
 
 class TestCpuHandler(StdUnitTestCase):

@@ -106,9 +106,37 @@ addc_a_direct = OpcodeSet("00110101")
 addc_a_ri = OpcodeSet("0011011r")
 addc_a_data = OpcodeSet("00110100")
 
+#AJMP
+ajmp_addr11 = OpcodeSet("rrr00001")
+
 #ANL
 anl_a_rx = OpcodeSet("01011rrr")
 anl_a_direct = OpcodeSet("01010101")
 anl_a_ri = OpcodeSet("0101011r")
 anl_a_data = OpcodeSet("01010100")
 anl_direct_a = OpcodeSet("01010101")
+anl_direct_data = OpcodeSet("01010011")
+anl_c_bit = OpcodeSet("10000010")
+anl_c_sbit = OpcodeSet("10110000")
+
+# CJNE
+cnje_a_direct_rel = OpcodeSet("10110101")
+cnje_a_data_rel = OpcodeSet("10110100")
+cnje_rx_data_rel = OpcodeSet("10111rrr")
+cnje_ri_data_rel = OpcodeSet("1011011r")
+
+# CLR
+clr_a = OpcodeSet("11100100")
+clr_c = OpcodeSet("11000011")
+clr_bit = OpcodeSet("11000010")
+
+# CPL
+cpl_a = OpcodeSet("11110100")
+cpl_c = OpcodeSet("10110011")
+cpl_bit = OpcodeSet("10110010")
+
+da_a = OpcodeSet("11010100")
+
+
+declared_opcodes = filter(lambda x: isinstance(x, OpcodeSet), globals().values())
+
