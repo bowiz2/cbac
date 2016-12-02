@@ -144,6 +144,12 @@ class Unit(object):
         self.compounds.append(item)
         return item
 
+    def _remove_compound(self, item):
+        """
+        used in tests
+        """
+        self.compounds.remove(item)
+
     def add_unit(self, unit):
         """
         Adds a unit to the dependent unit list.
