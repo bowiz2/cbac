@@ -27,13 +27,13 @@ class Handler(cbac.unit.Unit):
         assert self.opcode_set, "must have opcode set."
         return self.cpu.general_registers[self.opcode_set.get_arg(value, 'r')]
 
-    def handle(self, opcode_value=None):
-        """
-        This architecture will be generated for each opcode in the opcode set.
-        :param opcode_value: Here will be passed the currently generated opcode. can be ignored if opcode set size is 1.
-        :return: Generator which is an architecture which describes how to behave depending on the opcode.
-        """
-        yield None
+    # def handle(self, opcode_value=None):
+    #     """
+    #     This architecture will be generated for each opcode in the opcode set.
+    #     :param opcode_value: Here will be passed the currently generated opcode. can be ignored if opcode set size is 1.
+    #     :return: Generator which is an architecture which describes how to behave depending on the opcode.
+    #     """
+    #     yield None
 
     def architecture(self):
         """
@@ -89,13 +89,26 @@ class ARxMode(Handler):
             yield yield_out
 
 
-class ADirectMode(Handler):
-    """
-    Any handler which handles opcode of the type
-    OPCODE A, direct
-    should derive from this class.
-    """
+class Mode(Handler):
+    @property
+    def acting_registers(self):
+        """
+        Means it is automaticly fetches these registers without commands.
+        :return:
+        """
+        return []
 
+
+class A(Mode):
+    """
+    When a class derives from this mode, it will include the accumulator register in the fetched registers.
+    """
+    @property
+    def acting_registers(self):
+        return self.acting_registers + [self.cpu.accumulator]
+
+
+class DirectMode(Mode):
     def handle(self, _=None):
         """
         Handles a single opcode.
@@ -104,18 +117,15 @@ class ADirectMode(Handler):
         yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
             self.cpu.read_unit.shell.activate(),
             self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                *self.make_logic(self.cpu.accumulator, self.cpu.read_unit.read_output)
+                *self.make_logic(self.cpu.read_unit.read_output, *self.acting_registers)
             ))
         ))
 
 
-class ARiMode(Handler):
-    """
-    Any handler which handles opcode of the type
-    OPCODE A, @Ri
-    should derive from this class.
-    """
-
+class RiMode(Mode):
+    @property
+    def acting_registers(self):
+        return self.acting_registers + [self.cpu.read_unit.read_output]
     def handle(self, opcode_value=None):
         """
         Handler all the opcodes which uses a register an RN register.
@@ -124,17 +134,15 @@ class ARiMode(Handler):
         yield self.get_register(opcode_value).shell.copy(self.cpu.read_unit.address_input)
         yield self.cpu.read_unit.shell.activate()
         yield self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            *self.make_logic(self.cpu.accumulator, self.cpu.read_unit.read_output)
+            *self.make_logic(self.cpu.accumulator, )
         ))
 
 
-class ADataMode(Handler):
-    """
-    Any handler which handles opcode of the type
-    OPCODE A, data
-    should derive from this class.
-    """
-    opcode_set = cpu8051.opcode.add_a_data
+class DataMode(Mode):
+
+    @property
+    def acting_registers(self):
+        return self.acting_registers + [self.cpu.process_registers[1]]
 
     def handle(self, _=None):
         """
@@ -143,8 +151,35 @@ class ADataMode(Handler):
         yield self.cpu.accumulator.shell.copy(self.cpu.adder_unit.input_a)
         yield self.cpu.second_fetcher.shell.activate()
         yield self.cpu.second_fetcher.callback_pivot.shell.tp(
-            self.cpu.procedure(*self.make_logic(self.cpu.accumulator, self.cpu.process_registers[1]))
+            self.cpu.procedure(*self.make_logic(*self.acting_registers))
         )
+
+
+class ADirectMode(A, DirectMode):
+    """
+    Any handler which handles opcode of the type
+    OPCODE A, direct
+    should derive from this class.
+    """
+    pass
+
+
+class ARiMode(A, RiMode):
+    """
+    Any handler which handles opcode of the type
+    OPCODE A, @Ri
+    should derive from this class.
+    """
+    pass
+
+
+class ADataMode(A, DataMode):
+    """
+    Any handler which handles opcode of the type
+    OPCODE A, data
+    should derive from this class.
+    """
+    pass
 
 
 class DirectAMode(Handler):
@@ -191,6 +226,7 @@ class DirectDataMode(DirectAMode):
     OPCODE direct, data
     should derive from this class.
     """
+
     def handle(self, _=None):
         """
         Handlers a single opcode.
