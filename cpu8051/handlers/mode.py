@@ -197,7 +197,7 @@ class DirectAMode(DirectMode):
 class AMode(Mode):
     @property
     def acting_registers(self):
-        return self.preppend_actor(ARxMode, self.cpu.accumulator)
+        return self.preppend_actor(AMode, self.cpu.accumulator)
 
 
 class ARxMode(AMode, RxMode):
