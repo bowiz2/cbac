@@ -1,5 +1,6 @@
 import cpu8051.opcode
 from cpu8051.handlers.handler import *
+from cpu8051.handlers.modes import ARxMode, ADirectMode, ARiMode, ADataMode
 
 
 class Add(Handler):
@@ -9,32 +10,32 @@ class Add(Handler):
         return self.cpu.adder_unit
 
 
-class AddARx(Add, ARxMode):
+class AddARxHandler(Add, ARxMode):
     """
     ADD A, RX
     """
     opcode_set = cpu8051.opcode.add_a_rx
 
 
-class AddADirect(Add, ADirectMode):
+class AddADirectHandler(Add, ADirectMode):
     """
     ADD A, direct
     """
     opcode_set = cpu8051.opcode.add_a_rx
 
 
-class AddARi(Add, ARiMode):
+class AddARiHandler(Add, ARiMode):
     """
     ADD A, @Ri
     """
     opcode_set = cpu8051.opcode.add_a_ri
 
 
-class AddAData(Add, ADataMode):
+class AddADataHandler(Add, ADataMode):
     """
     ADD A, data
     """
     opcode_set = cpu8051.opcode.add_a_data
 
 
-add_handlers = [AddADirect, AddARx, AddAData, AddARi]
+add_handlers = [AddADirectHandler, AddARxHandler, AddADataHandler, AddARiHandler]
