@@ -14,32 +14,32 @@ class Addc(Add):
             yield yield_out
 
 
-class AddcARxMode(Addc, ARxMode):
+class AddcARxHandler(Addc, ARxMode):
     """
     ADDC A, RX
     """
     opcode_set = cpu8051.opcode.addc_a_rx
 
 
-class AddcADirectMode(Addc, ADirectMode):
+class AddcADirectHandler(Addc, ADirectMode):
     """
     ADDC A, direct
     """
     opcode_set = cpu8051.opcode.addc_a_direct
 
 
-class AddcARiMode(Addc, ARiMode):
+class AddcARiHandler(Addc, ARiMode):
     """
     ADDC A, @Ri
     """
     opcode_set = cpu8051.opcode.addc_a_ri
 
 
-class AddcADataMode(Addc, ADataMode):
+class AddcADataHandler(Addc, ADataMode):
     """
     ADDC A, data
     """
     opcode_set = cpu8051.opcode.addc_a_data
 
 
-addc_handlers = [AddcADirectMode, AddcARxMode, AddcADataMode, AddcARiMode]
+addc_handlers = [AddcADirectHandler, AddcARxHandler, AddcADataHandler, AddcARiHandler]
