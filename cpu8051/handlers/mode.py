@@ -17,6 +17,11 @@ class Mode(object):
     """
     Mode is a behaviour of a handler.
     """
+    # Does this access mode manipulates memory.
+    uses_memory = False
+    # Does this access mode manipulates general registers.
+    uses_general_registers = False
+
     @property
     def acting_registers(self):
         """
@@ -72,7 +77,7 @@ class RxMode(Mode):
     OPCODE A, RX
     should derive from this class.
     """
-
+    uses_general_registers = True
     @property
     def acting_registers(self):
         return self.preppend_actor(RxMode, self.handled_register)
@@ -87,6 +92,7 @@ class RxMode(Mode):
 
 
 class DirectMode(Mode):
+    uses_memory = True
     @property
     def acting_registers(self):
         self.direct_register_hold = self.cpu.read_unit.read_output
@@ -130,6 +136,8 @@ class DirectMode(Mode):
 
 
 class RiMode(Mode):
+    uses_memory = True
+    uses_general_registers = True
     @property
     def acting_registers(self):
         return self.preppend_actor(RiMode, self.cpu.read_unit.read_output)
@@ -147,6 +155,7 @@ class RiMode(Mode):
 
 
 class DataMode(Mode):
+    uses_memory = True
     @property
     def acting_registers(self):
         return self.preppend_actor(DataMode, self.cpu.process_registers[1])
