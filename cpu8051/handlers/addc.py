@@ -8,9 +8,9 @@ class Addc(Add):
     """
     Wraps a handle, but adds the carry to the adder_unit.
     """
-    def architecture(self):
+    def make_logic(self, register_a=None, register_b=None):
         yield self.cpu.carry_present_sys_flag.shell.copy(self.cpu.adder_unit.carry.ports[0])
-        for yield_out in super(Addc, self).architecture():
+        for yield_out in super(Addc, self).make_logic(register_a):
             yield yield_out
 
 
