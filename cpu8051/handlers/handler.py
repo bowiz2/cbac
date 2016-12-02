@@ -53,6 +53,10 @@ class ModeHandler(Handler):
     """
     please forgive me.
     """
+    uses_adder = False
+    uses_incrementer = False
+    uses_and_unit = False
+
     def handle(self, opcode_value=None):
         for yield_out in self.behaviour(opcode_value):
             yield yield_out

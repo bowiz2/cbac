@@ -4,6 +4,7 @@ from cpu8051.handlers.mode import ARxMode, ADirectMode, ARiMode, ADataMode
 
 
 class Add(ModeHandler):
+    uses_adder = True
     @property
     def logic_unit(self):
         return self.cpu.adder_unit

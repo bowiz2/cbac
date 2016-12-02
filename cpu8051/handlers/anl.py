@@ -4,7 +4,8 @@ from cpu8051.handlers.handler import *
 from cpu8051.handlers.mode import DirectDataMode, DirectAMode
 
 
-class Anl(Handler):
+class Anl(ModeHandler):
+    uses_and_unit = True
     @property
     def logic_unit(self):
         return self.cpu.and_unit
