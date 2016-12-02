@@ -6,14 +6,14 @@ a, rn
 
 and so fourth.
 """
-from cpu8051.handlers import Handler
-
-
 # Each mode in here will be descriped of the operators creating the mode.
 # For example The mode "DirectDataMode" is the mode of the opcode ANL direct, data
 
 
 class Mode(object):
+    reads_memory = False
+    writes_memory = False
+
     @property
     def acting_registers(self):
         """
