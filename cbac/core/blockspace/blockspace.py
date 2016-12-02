@@ -52,7 +52,11 @@ class BlockSpace(object):
                 self.add(compound)
 
             for other_unit in unit.dependent_units:
-                self.add_unit(other_unit)
+                if len(unit.build_whitelist) > 0:
+                    if other_unit in unit.build_whitelist:
+                        self.add_unit(other_unit)
+                else:
+                    self.add_unit(other_unit)
 
 
     # Checkers

@@ -41,6 +41,7 @@ class Unit(object):
         self.outputs = []
         # Units which are needed for this unit to function.
         self.dependent_units = []
+        self.build_whitelist = []
         # Logic cbas are cbac which excecute the logic of the unit. the entry point is the first logic_cba
         self.logic_cbas = []
         self.is_inline = False
