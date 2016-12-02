@@ -71,7 +71,6 @@ class Cpu8051(cbac.Unit):
             *[pivot.shell.summon(self.callback_pivot_home) for pivot in cbac.core.mcentity.pivot.Pivot._all]
         )
 
-
     def set_initial_memory(self, data):
         """
         Sets the initial memory of the cpu.
@@ -104,13 +103,13 @@ class Cpu8051(cbac.Unit):
     def opcode_is(self, value):
         return self.opcode.shell.testforblocks(self.constant_factory(value))
 
-
     @property
     def carry_flag(self):
         """
         :return: Carry flag (Carry out from the D7 bit)
         """
         return self.flags.ports[0]
+
     @property
     def auxiliary_carry_flag(self):
         """
