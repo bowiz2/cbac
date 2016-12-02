@@ -22,6 +22,10 @@ class HardwareConstant(Compound):
         """
         super(HardwareConstant, self).__init__(isolated=False)
         self.word_size = word_size
+
+        if number < 0:
+            number = abs(number) - (1 << self.word_size)
+
         self.number = number
         self.bits = [bool(int(x)) for x in reversed(bin(number)[2:])]
 
