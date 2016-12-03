@@ -50,6 +50,7 @@ class Cpu8051(cbac.Unit):
 
         self.increment_unit = self.add_unit(cbac.std_unit.IncrementUnit(self.bits))
         self.and_unit = self.add_unit(cbac.std_unit.AndGate.Array(self.bits))
+        self.or_unit = self.add_unit(cbac.std_unit.OrGate.Array(self.bits))
         self.adder_unit = self.add_unit(cbac.std_unit.RippleCarryFullAdderArray)
 
         self.access_unit = self.add_unit(std_unit.MemoryAccessUnit(memory_dump=std_unit.MemoryDump(data)))

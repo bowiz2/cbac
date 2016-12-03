@@ -4,32 +4,50 @@ from cpu8051.handlers.handler import *
 from cpu8051.handlers.mode import DirectDataMode, DirectAMode
 
 
-class Anl(ModeHandler):
+class _Anl(ModeHandler):
     uses_and_unit = True
     @property
     def logic_unit(self):
         return self.cpu.and_unit
 
 
-class AnlARxHandler(Anl, ARxMode):
+class AnlARxHandler(_Anl, ARxMode):
+    """
+    ANL A, RX
+    """
     opcode_set = cpu8051.opcode.anl_a_rx
 
 
-class AnlARiHandler(Anl, ARiMode):
+class AnlARiHandler(_Anl, ARiMode):
+    """
+    ANL A, @Ri
+    """
     opcode_set = cpu8051.opcode.anl_a_ri
 
 
-class AnlADirectHandler(Anl, ADirectMode):
+class AnlADirectHandler(_Anl, ADirectMode):
+    """
+    ANL A, direct
+    """
     opcode_set = cpu8051.opcode.anl_a_direct
 
 
-class AnlADataHandler(Anl, ADataMode):
+class AnlADataHandler(_Anl, ADataMode):
+    """
+    ANL A, #data
+    """
     opcode_set = cpu8051.opcode.anl_a_data
 
 
-class AnlDirectA(Anl, DirectAMode):
+class AnlDirectA(_Anl, DirectAMode):
+    """
+    ANL direct, A
+    """
     opcode_set = cpu8051.opcode.anl_direct_a
 
 
-class AnlDirectData(Anl, DirectDataMode):
+class AnlDirectData(_Anl, DirectDataMode):
+    """
+    ANL direct, #data
+    """
     opcode_set = cpu8051.opcode.anl_direct_data

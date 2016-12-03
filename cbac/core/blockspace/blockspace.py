@@ -52,12 +52,8 @@ class BlockSpace(object):
                 self.add(compound)
 
             for other_unit in unit.dependent_units:
-                if len(unit.build_whitelist) > 0:
-                    if other_unit in unit.build_whitelist:
-                        self.add_unit(other_unit)
-                else:
+                if other_unit not in unit.build_blacklist:
                     self.add_unit(other_unit)
-
 
     # Checkers
     def is_location_out_of_bounds(self, location):
@@ -91,7 +87,7 @@ class BlockSpace(object):
         elif hasattr(item, "blocks") and all(block in self.packed_blocks for block in item.blocks):
             block_locations = [self.packed_blocks[block] for block in item.blocks]
         else:
-            raise Exception("Item was nor packed or constructed from a packed item.")
+            raise Exception("Item {} was nor packed or constructed from a packed item.".format(item))
 
         return utils.min_corner(block_locations), utils.max_corner(block_locations)
 

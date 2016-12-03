@@ -1,74 +1,40 @@
-from cpu8051.handlers.handler import Handler
-from cbac.unit.statements import *
+from cpu8051.handlers.handler import ModeHandler
+from cpu8051.handlers.mode import AMode, RxMode, RiMode, DirectMode
 from cpu8051.opcode import *
 
 
-class IncA(Handler):
+class _Inc(ModeHandler):
+    """
+    BASE Inc Handler.
+    """
+    @property
+    def logic_unit(self):
+        return self.cpu.increment_unit
+
+
+class IncAHandler(_Inc, AMode):
     """
     INC A
     """
     opcode_set = inc_a
 
-    def handle(self, _=None):
-        """
-        Increment A register by 1.
-        :param _: do nothing
-        :return:
-        """
-        yield PassParameters(self.cpu.increment_unit, self.cpu.accumulator)
-        yield self.cpu.increment_unit.shell.activate()
-        yield self.cpu.increment_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            self.cpu.increment_unit.output.shell.copy(self.cpu.accumulator),
-            self.cpu.done_opcode.shell.activate()
-        ))
 
-
-class IncAddr(Handler):
+class IncRxHandler(_Inc, RxMode):
     """
-    INC iram addr
-    """
-    opcode_set = int_addr
-
-    def handle(self, _=None):
-        """
-        Increment a given address by 1.
-        :param _: do nothing
-        :return:
-        """
-        yield self.cpu.address_fetcher.shell.activate(),
-        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-            self.cpu.read_unit.shell.activate(),
-            self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                self.cpu.read_unit.read_output.shell.copy(self.cpu.increment_unit.input),
-                self.cpu.increment_unit.shell.activate(),
-                self.cpu.increment_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                    self.cpu.increment_unit.output.shell.store_to_temp(),
-                    self.cpu.read_unit.memory_access_unit.pivot.shell.load_from_temp(self.cpu.increment_unit.output),
-                    self.cpu.done_opcode.shell.activate()
-                ))
-            ))
-        ))
-
-
-class IncRx(Handler):
-    """
-    INC RX
+    INC Rx
     """
     opcode_set = inc_rx
 
-    def handle(self, opcode=None):
-        """
-        Increment register X by 1.
-        :param opcode:
-        :return:
-        """
-        # pass the encoded register in the opcode to the increment unit.
-        yield PassParameters(self.cpu.increment_unit, self.get_register(opcode)),
-        yield self.cpu.increment_unit.shell.activate(),
-        yield self.cpu.increment_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            self.cpu.increment_unit.output.shell.copy(self.get_register(opcode)),
-            self.cpu.done_opcode.shell.activate()
-        ))
+
+class IncRiHandler(_Inc, RiMode):
+    """
+    INC @Ri
+    """
+    opcode_set = inc_ri
 
 
-__all__ = ["IncAddr", "IncRx", "IncA"]
+class IncDirectHandler(_Inc, DirectMode):
+    """
+    INC direct
+    """
+    opcode_set = inc_direct

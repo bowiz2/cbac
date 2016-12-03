@@ -1,4 +1,6 @@
 from unittest import TestCase
+
+from cpu8051.handlers.mode import AMode, DirectMode, DirectDataMode
 from cpu8051.opcode import OpcodeSet, declared_opcodes
 from test_std_unit import StdUnitTestCase, named_schematic
 from cpu8051.body import Cpu8051
@@ -7,6 +9,11 @@ import collections
 
 MAX_VALUE = 255
 
+class TestModeHandlers(TestCase):
+    def test_bytes(self):
+        self.assertEqual(AMode().bytes, 1)
+        self.assertEqual(DirectMode().bytes, 2)
+        self.assertEqual(DirectDataMode().bytes, 3)
 
 def duplicates(l):
     return [item for item, count in collections.Counter(l).items() if count > 1]
@@ -44,29 +51,26 @@ class TestOpcodeSet(TestCase):
 
 
 class TestCpuHandler(StdUnitTestCase):
+    cpu = Cpu8051(auto_synthesis=False)
     def setUp(self):
         super(TestCpuHandler, self).setUp()
-        self.cpu = Cpu8051(auto_synthesis=False)
         self.memory = [0] * 256
         self.handler = None  # type: handlers.handler.Handler
         self.cpu.ip_register.set_initial_value(1)
 
     def tearDown(self):
-        whitelist = []
+        blacklist = []
 
-        if self.handler.uses_adder:
-            whitelist.append(self.cpu.adder_unit)
+        if not self.handler.uses_adder:
+            blacklist.append(self.cpu.adder_unit)
 
-        if self.handler.uses_and_unit:
-            whitelist.append(self.cpu.and_unit)
+        if not self.handler.uses_and_unit:
+            blacklist.append(self.cpu.and_unit)
 
-        if self.handler.uses_memory:
-            whitelist += self.cpu.memory_units
-        if not self.handler.uses_general_registers:
-            for general_register in self.cpu.general_registers:
-                self.cpu._remove_compound(general_register)
+        if not self.handler.uses_memory:
+            blacklist += self.cpu.memory_units
 
-        self.cpu.build_whitelist = whitelist
+        self.cpu.build_blacklist = blacklist
 
         self.block_space.add_unit(self.handler)
         self.block_space.add_unit(self.cpu)
@@ -75,6 +79,8 @@ class TestCpuHandler(StdUnitTestCase):
 
         self.cpu.set_initial_memory(self.memory)
         super(TestCpuHandler, self).tearDown()
+
+
 
 
 class TestMovHandlers(TestCpuHandler):

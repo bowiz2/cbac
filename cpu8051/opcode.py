@@ -91,9 +91,9 @@ mov_rx_addr = OpcodeSet("10101rrr")
 
 # INC
 inc_a = OpcodeSet("00000100")
-int_addr = OpcodeSet("00000101")
+inc_direct = OpcodeSet("00000101")
 inc_rx = OpcodeSet("00001rrr")
-
+inc_ri = OpcodeSet("0000011r")
 # ADD
 add_a_rx = OpcodeSet("00101rrr")
 add_a_addr = OpcodeSet("00100101")
@@ -142,6 +142,12 @@ dec_rx = OpcodeSet("00011rrr")
 dec_direct = OpcodeSet("00010101")
 dec_ri = OpcodeSet("0001011r")
 
+orl_a_rx = OpcodeSet("01001rrr")
+orl_a_direct = OpcodeSet("01000101")
+orl_a_ri = OpcodeSet("0100011r")
+orl_a_data = OpcodeSet("01000100")
+orl_direct_a = OpcodeSet("01000010")
+orl_direct_data = OpcodeSet("01000011")
 
 declared_opcodes = filter(lambda x: isinstance(x, OpcodeSet), globals().values())
 

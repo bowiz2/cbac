@@ -1,10 +1,10 @@
 import cpu8051.opcode
 from cpu8051.handlers.mode import ARxMode, ADirectMode, ARiMode, ADataMode
-from cpu8051.handlers.add import Add
+from cpu8051.handlers.add import _Add
 from cpu8051.handlers.handler import *
 
 
-class Addc(Add):
+class Addc(_Add):
     """
     Wraps a handle, but adds the carry to the adder_unit.
     """

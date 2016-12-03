@@ -23,6 +23,13 @@ class Mode(object):
     uses_general_registers = False
 
     @property
+    def bytes(self):
+        """
+        :return: How may bytes an opcode of this mode takes.
+        """
+        return 1
+
+    @property
     def acting_registers(self):
         """
         Means it is automaticly fetches these registers without commands.
@@ -93,6 +100,11 @@ class RxMode(Mode):
 
 class DirectMode(Mode):
     uses_memory = True
+
+    @property
+    def bytes(self):
+        return 1 + super(DirectMode, self).bytes
+
     @property
     def acting_registers(self):
         self.direct_register_hold = self.cpu.read_unit.read_output
@@ -155,6 +167,11 @@ class RiMode(Mode):
 
 
 class DataMode(Mode):
+
+    @property
+    def bytes(self):
+        return 1 + super(DataMode, self).bytes
+
     uses_memory = True
     @property
     def acting_registers(self):
@@ -178,6 +195,9 @@ class DirectDataMode(DirectMode):
     should derive from this class.
     """
 
+    @property
+    def bytes(self):
+        return 1 + super(DirectDataMode, self).bytes
     @property
     def acting_registers(self):
         return self.preppend_actor(DirectDataMode, self.cpu.process_registers[1])
@@ -239,3 +259,5 @@ class ADataMode(AMode, DataMode):
     should derive from this class.
     """
     pass
+
+
