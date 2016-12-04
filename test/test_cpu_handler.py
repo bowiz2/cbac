@@ -1,5 +1,6 @@
 from unittest import TestCase
 
+from cpu8051.handlers.jmp import JZHandler
 from cpu8051.handlers.mode import AMode, DirectMode, DirectDataMode
 from cpu8051.opcode import OpcodeSet, declared_opcodes
 from test_std_unit import StdUnitTestCase, named_schematic
@@ -38,7 +39,7 @@ class TestOpcodeSet(TestCase):
     def test_sanity(self):
         op_values = []
         for opcode in declared_opcodes:
-            op_values += opcode.all()
+            op_values += [opcode.get_single()]
         dups = duplicates(op_values)
         error = ""
         for dup in dups:
@@ -52,11 +53,13 @@ class TestOpcodeSet(TestCase):
 
 class TestCpuHandler(StdUnitTestCase):
     cpu = Cpu8051(auto_synthesis=False)
+
     def setUp(self):
         super(TestCpuHandler, self).setUp()
         self.memory = [0] * 256
         self.handler = None  # type: handlers.handler.Handler
-        self.cpu.ip_register.set_initial_value(1)
+        self._next_fetched_byte = 1
+        self.cpu.ip_register.set_initial_value(self._next_fetched_byte)
 
     def tearDown(self):
         blacklist = []
@@ -80,7 +83,15 @@ class TestCpuHandler(StdUnitTestCase):
         self.cpu.set_initial_memory(self.memory)
         super(TestCpuHandler, self).tearDown()
 
-
+    @property
+    def next_fetched_byte(self):
+        """
+        The next byte index which will be fetched.
+        :return:
+        """
+        to_ret = self._next_fetched_byte
+        self._next_fetched_byte += 1
+        return to_ret
 
 
 class TestMovHandlers(TestCpuHandler):
@@ -195,3 +206,9 @@ class TestDecHandlers(TestCpuHandler):
     def test_dec_a(self):
         self.handler = handlers.DecAHandler(self.cpu, debug=True)
         self.cpu.accumulator.set_initial_value(4)
+
+class TestJmp(TestCpuHandler):
+    @named_schematic
+    def test_jz(self):
+        self.handler = JZHandler(self.cpu, debug=True)
+        self.memory[self.next_fetched_byte] = MAX_VALUE

@@ -3,7 +3,7 @@ from cpu8051.handlers.mode import ConditionJumpRelMode
 from cpu8051.opcode import *
 
 
-class JZ(ModeHandler, ConditionJumpRelMode):
+class JZHandler(ModeHandler, ConditionJumpRelMode):
     """
     JZ rel
     """
@@ -13,10 +13,10 @@ class JZ(ModeHandler, ConditionJumpRelMode):
         """
         :return: Check if accumulator is zero command
         """
-        return self.cpu.accumulator.shell == self.constant_factory(0)
+        return self.cpu.accumulator.shell == self.constant_factory(0),
 
 
-class JNZ(ModeHandler, ConditionJumpRelMode):
+class JNZHandler(ModeHandler, ConditionJumpRelMode):
     """
     JNZ rel
     """
@@ -29,7 +29,7 @@ class JNZ(ModeHandler, ConditionJumpRelMode):
         return self.cpu.accumulator.shell != self.constant_factory(0)
 
 
-class JC(ModeHandler, ConditionJumpRelMode):
+class JCHandler(ModeHandler, ConditionJumpRelMode):
     """
     JC rel
     """
@@ -39,10 +39,10 @@ class JC(ModeHandler, ConditionJumpRelMode):
         """
         :return: Check carry flag set command
         """
-        return self.cpu.carry_flag.shell == True
+        return self.cpu.carry_flag.shell == True,
 
 
-class JNC(ModeHandler, ConditionJumpRelMode):
+class JNCHandler(ModeHandler, ConditionJumpRelMode):
     """
     JNC rel
     """

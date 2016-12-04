@@ -9,8 +9,11 @@ and so fourth.
 This thing is convoluted and weird as the tax code.
 WORNING!!!! IAMOND INHERITANCE IS IN PLACE!!!1
 """
+
+
 # Each mode in here will be descriped of the operators creating the mode.
 # For example The mode "DirectDataMode" is the mode of the opcode ANL direct, data
+import cbac
 
 
 class Mode(object):
@@ -22,6 +25,7 @@ class Mode(object):
     # Does this access mode manipulates general registers.
     uses_general_registers = False
     cpu = None
+
     @property
     def bytes(self):
         """
@@ -85,6 +89,7 @@ class RxMode(Mode):
     should derive from this class.
     """
     uses_general_registers = True
+
     @property
     def acting_registers(self):
         return self.preppend_actor(RxMode, self.handled_register)
@@ -141,6 +146,7 @@ class DirectMode(Mode):
 class RiMode(Mode):
     uses_memory = True
     uses_general_registers = True
+
     @property
     def acting_registers(self):
         return self.preppend_actor(RiMode, self.cpu.read_unit.read_output)
@@ -158,12 +164,12 @@ class RiMode(Mode):
 
 
 class DataMode(Mode):
-
     @property
     def bytes(self):
         return 1 + super(DataMode, self).bytes
 
     uses_memory = True
+
     @property
     def acting_registers(self):
         return self.preppend_actor(DataMode, self.cpu.process_registers[1])
@@ -189,6 +195,7 @@ class DirectDataMode(DirectMode):
     @property
     def bytes(self):
         return 1 + super(DirectDataMode, self).bytes
+
     @property
     def acting_registers(self):
         return self.preppend_actor(DirectDataMode, self.cpu.process_registers[1])
@@ -251,9 +258,13 @@ class ADataMode(AMode, DataMode):
     """
     pass
 
+
 from cbac.unit.statements import If
 
+
 class JumpRelMode(Mode):
+    uses_memory = True
+
     @property
     def bytes(self):
         return super(JumpRelMode, self).bytes + 1
@@ -266,22 +277,35 @@ class JumpRelMode(Mode):
         yield register_a.shell.copy(self.cpu.ip_register)
 
     def behaviour(self, opcode_value=None):
-       yield self.cpu.address_fetcher.shell.activate()
-       yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-           self.make_logic(*self.acting_registers)
-       ))
+        yield self.cpu.address_fetcher.shell.activate()
+        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
+            *self.make_logic(*self.acting_registers)
+        ))
+
+
+class ConditionUnit(cbac.unit.Unit):
+    @cbac.unit.auto_synthesis
+    def __init__(self, condition, *todo):
+        super(ConditionUnit, self).__init__(0)
+        self.condition = condition
+        self.todo = todo
+
+    def architecture(self):
+        yield If(self.condition).then(
+            *self.todo
+        )
+from itertools import chain
+
 
 class ConditionJumpRelMode(JumpRelMode):
-
     @property
     def condition(self):
         raise NotImplementedError()
 
     def behaviour(self, opcode_value=None):
-        yield self.cpu.address_fetcher.shell.activate(),
-        # The reason the condition is on the tp, is because we need to fetch no metter what.
-        yield If(self.condition).then(
-            self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-                self.make_logic(*self.acting_registers)
-            ))
-        )
+        yield self.cpu.address_fetcher.shell.activate()
+        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
+            *chain(self.condition, self.make_logic(*self.acting_registers))
+        ))
+
+
