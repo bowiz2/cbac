@@ -149,5 +149,8 @@ orl_a_data = OpcodeSet("01000100")
 orl_direct_a = OpcodeSet("01000010")
 orl_direct_data = OpcodeSet("01000011")
 
+jz_rel = OpcodeSet("01100000")
+jc_rel = OpcodeSet("01000000")
+
 declared_opcodes = filter(lambda x: isinstance(x, OpcodeSet), globals().values())
 

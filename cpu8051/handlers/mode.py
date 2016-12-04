@@ -21,7 +21,7 @@ class Mode(object):
     uses_memory = False
     # Does this access mode manipulates general registers.
     uses_general_registers = False
-
+    cpu = None
     @property
     def bytes(self):
         """
@@ -129,22 +129,13 @@ class DirectMode(Mode):
         """
         Handles a single opcode.
         """
-        if self.store_register == self.direct_register_hold:
-            yield self.cpu.address_fetcher.shell.activate()
-            yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-                self.cpu.read_unit.shell.activate(),
-                self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                    *self.make_logic(self.cpu.read_unit.read_output, self.cpu.accumulator)
-                ))
+        yield self.cpu.address_fetcher.shell.activate()
+        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
+            self.cpu.read_unit.shell.activate(),
+            self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
+                *self.make_logic(*self.acting_registers)
             ))
-        else:
-            yield self.cpu.address_fetcher.shell.activate()
-            yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-                self.cpu.read_unit.shell.activate(),
-                self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                    *self.make_logic(*self.acting_registers)
-                ))
-            ))
+        ))
 
 
 class RiMode(Mode):
@@ -260,4 +251,37 @@ class ADataMode(AMode, DataMode):
     """
     pass
 
+from cbac.unit.statements import If
 
+class JumpRelMode(Mode):
+    @property
+    def bytes(self):
+        return super(JumpRelMode, self).bytes + 1
+
+    @property
+    def acting_registers(self):
+        return self.preppend_actor(JumpRelMode, self.cpu.process_registers[1])
+
+    def make_logic(self, register_a=None, register_b=None):
+        yield register_a.shell.copy(self.cpu.ip_register)
+
+    def behaviour(self, opcode_value=None):
+       yield self.cpu.address_fetcher.shell.activate()
+       yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
+           self.make_logic(*self.acting_registers)
+       ))
+
+class ConditionJumpRelMode(JumpRelMode):
+
+    @property
+    def condition(self):
+        raise NotImplementedError()
+
+    def behaviour(self, opcode_value=None):
+        yield self.cpu.address_fetcher.shell.activate(),
+        # The reason the condition is on the tp, is because we need to fetch no metter what.
+        yield If(self.condition).then(
+            self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
+                self.make_logic(*self.acting_registers)
+            ))
+        )
