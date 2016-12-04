@@ -13,5 +13,6 @@ import shortcuts
 
 BuildEnvironment = BlockSpace
 CommandBlockArray = CBA
-__all__ = ["Block", "CommandBlock", "Compound", "CBA", "CommandBlockArray", "Register", "HardwareConstant", "BlockSpace",
+__all__ = ["Block", "CommandBlock", "Compound", "CBA", "CommandBlockArray", "Register", "HardwareConstant",
+           "BlockSpace",
            "Unit", "MCEntity", "assembler", "mc_direction", "block_id", 'std_unit', 'std_logic', 'schematics', 'Player']

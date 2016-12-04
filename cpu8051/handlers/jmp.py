@@ -8,6 +8,7 @@ class JZHandler(ModeHandler, ConditionJumpRelMode):
     JZ rel
     """
     opcode_set = jz_rel
+
     @property
     def condition(self):
         """
@@ -21,6 +22,7 @@ class JNZHandler(ModeHandler, ConditionJumpRelMode):
     JNZ rel
     """
     opcode_set = jnz_rel
+
     @property
     def condition(self):
         """
@@ -34,6 +36,7 @@ class JCHandler(ModeHandler, ConditionJumpRelMode):
     JC rel
     """
     opcode_set = jc_rel
+
     @property
     def condition(self):
         """
@@ -47,6 +50,7 @@ class JNCHandler(ModeHandler, ConditionJumpRelMode):
     JNC rel
     """
     opcode_set = jnc_rel
+
     @property
     def condition(self):
         """

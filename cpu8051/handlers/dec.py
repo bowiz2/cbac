@@ -2,8 +2,10 @@ from cpu8051.handlers.handler import ModeHandler
 from cpu8051.handlers.mode import *
 from cpu8051.opcode import *
 
+
 class Dec(ModeHandler):
     uses_adder = True
+
     @property
     def logic_unit(self):
         return self.cpu.adder_unit

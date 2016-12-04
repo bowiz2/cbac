@@ -36,7 +36,7 @@ class BlockSpace(object):
         import cbac.unit
 
         for item in items:
-            assert not isinstance(item, cbac.unit.Unit),\
+            assert not isinstance(item, cbac.unit.Unit), \
                 "you tried to add a unit as a compound, please use 'add_unit' instead."
             if item in self.unpacked_items:
                 continue

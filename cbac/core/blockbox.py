@@ -33,4 +33,4 @@ class PlainBlockBox(BlockBox):
     @memoize
     def blocks(self):
         return [[[Block(self.fill_material, block_data=self.fill_data) for _ in xrange(self.size[0])] for _ in
-          xrange(self.size[1])] for _ in xrange(self.size[2])]
+                 xrange(self.size[1])] for _ in xrange(self.size[2])]

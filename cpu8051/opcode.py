@@ -72,6 +72,7 @@ class OpcodeSet(object):
         """
         return self.all()[r]
 
+
 # Meaning of Oprands
 # ==================
 # rx - Working register R0-R7
@@ -106,15 +107,15 @@ addc_a_direct = OpcodeSet("00110101")
 addc_a_ri = OpcodeSet("0011011r")
 addc_a_data = OpcodeSet("00110100")
 
-#AJMP
+# AJMP
 ajmp_addr11 = OpcodeSet("rrr00001")
 
-#ANL
+# ANL
 anl_a_rx = OpcodeSet("01011rrr")
 anl_a_direct = OpcodeSet("01010101")
 anl_a_ri = OpcodeSet("0101011r")
 anl_a_data = OpcodeSet("01010100")
-anl_direct_a = OpcodeSet("01010101") # TODO: check how to settle ambiguity.
+anl_direct_a = OpcodeSet("01010101")  # TODO: check how to settle ambiguity.
 anl_direct_data = OpcodeSet("01010011")
 anl_c_bit = OpcodeSet("10000010")
 anl_c_sbit = OpcodeSet("10110000")
@@ -154,6 +155,4 @@ jnz_rel = OpcodeSet("01110000")
 jc_rel = OpcodeSet("01000000")
 jnc_rel = OpcodeSet("01010000")
 
-
 declared_opcodes = filter(lambda x: isinstance(x, OpcodeSet), globals().values())
-

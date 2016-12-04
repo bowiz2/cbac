@@ -10,7 +10,6 @@ This thing is convoluted and weird as the tax code.
 WORNING!!!! IAMOND INHERITANCE IS IN PLACE!!!1
 """
 
-
 # Each mode in here will be descriped of the operators creating the mode.
 # For example The mode "DirectDataMode" is the mode of the opcode ANL direct, data
 import cbac
@@ -294,6 +293,8 @@ class ConditionUnit(cbac.unit.Unit):
         yield If(self.condition).then(
             *self.todo
         )
+
+
 from itertools import chain
 
 
@@ -307,5 +308,3 @@ class ConditionJumpRelMode(JumpRelMode):
         yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
             *chain(self.condition, self.make_logic(*self.acting_registers))
         ))
-
-

@@ -53,6 +53,7 @@ class HardwareConstantFactory(object):
     """
     Creates Hardware constant objects using cache.
     """
+
     def __init__(self, word_size):
         """
         :param word_size: Word size of the constant.
@@ -71,4 +72,3 @@ class HardwareConstantFactory(object):
             self.cache[value] = HardwareConstant(value, word_size=self.word_size)
 
         return self.cache
-

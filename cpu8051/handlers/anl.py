@@ -6,6 +6,7 @@ from cpu8051.handlers.mode import DirectDataMode, DirectAMode
 
 class _Anl(ModeHandler):
     uses_and_unit = True
+
     @property
     def logic_unit(self):
         return self.cpu.and_unit

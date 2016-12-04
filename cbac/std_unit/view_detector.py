@@ -31,7 +31,7 @@ class ViewDetectorVerticalUnit(Unit):
             j = i + 1
             m_range = i, j
             yield If(self.player.shell.test_rotation_vertical(*m_range)).then(
-                self.constant_factory(i+90).shell.copy(self.output)
+                self.constant_factory(i + 90).shell.copy(self.output)
             )
 
 
@@ -58,5 +58,5 @@ class ViewDetectorHorizonatlUnit(Unit):
             j = i + 1
             m_range = i, j
             yield If(self.player.shell.test_rotation_horizontal(*m_range)).then(
-                self.constant_factory(i+180).shell.copy(self.output)
+                self.constant_factory(i + 180).shell.copy(self.output)
             )

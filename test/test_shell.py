@@ -8,6 +8,7 @@ from cbac.core.command_shell.player_shell import PlayerShell
 from cbac.core.utils import Vector, memoize
 from cbac.core.mcentity import Player
 
+
 class BlockspaceMock(BlockSpace):
     """
     Used in the command shell tests.

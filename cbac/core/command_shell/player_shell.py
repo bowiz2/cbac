@@ -9,6 +9,7 @@ class PlayerShell(CommandShell):
     """
     Minecraft command interface.
     """
+
     @property
     def player(self):
         """

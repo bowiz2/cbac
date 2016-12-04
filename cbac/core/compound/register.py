@@ -10,6 +10,7 @@ class Register(Compound):
     """
     An array of empty blocks which later will be used to store some data.
     """
+
     # TODO: important! merge hardware constant and register.
     def __init__(self, size, default_block=block_id.FALSE_BLOCK):
         """

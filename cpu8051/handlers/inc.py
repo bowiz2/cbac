@@ -7,6 +7,7 @@ class _Inc(ModeHandler):
     """
     BASE Inc Handler.
     """
+
     @property
     def logic_unit(self):
         return self.cpu.increment_unit

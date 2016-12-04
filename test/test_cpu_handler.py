@@ -10,11 +10,13 @@ import collections
 
 MAX_VALUE = 255
 
+
 class TestModeHandlers(TestCase):
     def test_bytes(self):
         self.assertEqual(AMode().bytes, 1)
         self.assertEqual(DirectMode().bytes, 2)
         self.assertEqual(DirectDataMode().bytes, 3)
+
 
 def duplicates(l):
     return [item for item, count in collections.Counter(l).items() if count > 1]
@@ -201,11 +203,13 @@ class TestAnlHanlders(TestCpuHandler):
         self.memory[addr] = 0b00001111
         self.cpu.general_registers[0].set_initial_value(addr)
 
+
 class TestDecHandlers(TestCpuHandler):
     @named_schematic
     def test_dec_a(self):
         self.handler = handlers.DecAHandler(self.cpu, debug=True)
         self.cpu.accumulator.set_initial_value(4)
+
 
 class TestJmp(TestCpuHandler):
     @named_schematic

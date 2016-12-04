@@ -32,6 +32,7 @@ class CommandShell(object):
         Joins the items into a minecraft compatible format.
 
         """
+
         # TODO: implement test.
         def parse(obj):
             """

@@ -68,6 +68,7 @@ class Cpu8051(cbac.Unit):
             mc_command.say("Pivot Reset"),
             *[pivot.shell.summon(self.callback_pivot_home) for pivot in cbac.core.mcentity.pivot.Pivot._all]
         )
+
     @property
     def memory_units(self):
         """
