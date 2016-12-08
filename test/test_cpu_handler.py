@@ -1,12 +1,13 @@
 from unittest import TestCase
 
-from cpu8051.handlers.jmp import JZHandler
+from cpu8051.handlers.jmp import JzRelHandler, JmpRelHandler
 from cpu8051.handlers.mode import AMode, DirectMode, DirectDataMode
 from cpu8051.opcode import OpcodeSet, declared_opcodes
 from test_std_unit import StdUnitTestCase, named_schematic
 from cpu8051.body import Cpu8051
 from cpu8051 import handlers
 import collections
+import inspect
 
 MAX_VALUE = 255
 
@@ -64,6 +65,8 @@ class TestCpuHandler(StdUnitTestCase):
         self.cpu.ip_register.set_initial_value(self._next_fetched_byte)
 
     def tearDown(self):
+        if inspect.isclass(self.handler):
+            self.handler = self.handler(self.cpu, debug=True)
         blacklist = []
 
         if not self.handler.uses_adder:
@@ -214,5 +217,10 @@ class TestDecHandlers(TestCpuHandler):
 class TestJmp(TestCpuHandler):
     @named_schematic
     def test_jz(self):
-        self.handler = JZHandler(self.cpu, debug=True)
+        self.handler = JzRelHandler
+        self.memory[self.next_fetched_byte] = MAX_VALUE
+
+    @named_schematic
+    def test_jmp(self):
+        self.handler = JmpRelHandler
         self.memory[self.next_fetched_byte] = MAX_VALUE

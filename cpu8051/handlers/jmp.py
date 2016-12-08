@@ -1,9 +1,16 @@
 from cpu8051.handlers.handler import ModeHandler
-from cpu8051.handlers.mode import ConditionJumpRelMode
+from cpu8051.handlers.mode import ConditionJumpRelMode, JumpRelMode
 from cpu8051.opcode import *
 
 
-class JZHandler(ModeHandler, ConditionJumpRelMode):
+class JmpRelHandler(ModeHandler, JumpRelMode):
+    """
+    JMP rel
+    """
+    opcode_set = OpcodeSet("00000001")
+
+
+class JzRelHandler(ModeHandler, ConditionJumpRelMode):
     """
     JZ rel
     """
@@ -17,7 +24,7 @@ class JZHandler(ModeHandler, ConditionJumpRelMode):
         return self.cpu.accumulator.shell == self.constant_factory(0),
 
 
-class JNZHandler(ModeHandler, ConditionJumpRelMode):
+class JnzRelHandler(ModeHandler, ConditionJumpRelMode):
     """
     JNZ rel
     """
@@ -31,7 +38,7 @@ class JNZHandler(ModeHandler, ConditionJumpRelMode):
         return self.cpu.accumulator.shell != self.constant_factory(0)
 
 
-class JCHandler(ModeHandler, ConditionJumpRelMode):
+class JcRelHandler(ModeHandler, ConditionJumpRelMode):
     """
     JC rel
     """
@@ -45,7 +52,7 @@ class JCHandler(ModeHandler, ConditionJumpRelMode):
         return self.cpu.carry_flag.shell == True,
 
 
-class JNCHandler(ModeHandler, ConditionJumpRelMode):
+class JncRelHandler(ModeHandler, ConditionJumpRelMode):
     """
     JNC rel
     """
