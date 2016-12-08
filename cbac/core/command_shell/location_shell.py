@@ -3,7 +3,7 @@ Holds Location shell, and Block shell, which are the same thing.
 """
 from cbac.core.command_shell.command_shell_base import CommandShell
 from cbac.core.command_shell.decorator import command
-from cbac.core.constants.block_id import names as block_names, TRUE_BLOCK, FALSE_BLOCK
+from core.block import BlockID
 
 from cbac.core.utils import Vector, format_area
 from cbac.core.utils import absolute_area as abs_area
@@ -125,13 +125,13 @@ class LocationShell(CommandShell):
         """
         :return: Setblock command which places a true block.
         """
-        return self.setblock(TRUE_BLOCK)
+        return self.setblock(BlockID.TRUE_BLOCK)
 
     def deactivate(self):
         """
         :return: Setblock command which places a false block.
         """
-        return self.setblock(FALSE_BLOCK)
+        return self.setblock(BlockID.FALSE_BLOCK)
 
     def reset(self):
         """
@@ -153,7 +153,7 @@ class LocationShell(CommandShell):
             other_block_id,
             other_block_data_value,
             "replace",
-            block_names[block_id],
+            BlockID.names[block_id],
             block_data_value
         )
 
@@ -174,9 +174,9 @@ class LocationShell(CommandShell):
         # TODO: add support for the equal command to support area comprensions.
         # Work only with boolean values.
         if other is True:
-            other = TRUE_BLOCK
+            other = BlockID.TRUE_BLOCK
         elif other is False:
-            other = FALSE_BLOCK
+            other = BlockID.FALSE_BLOCK
 
         try:
             return self.testforblock(other.block_id)

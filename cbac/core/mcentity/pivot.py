@@ -1,4 +1,3 @@
-import cbac.core.constants.entity_id
 from cbac.core.command_shell.entity_shell import PivotShell
 
 from cbac.core.mcentity import MCEntity
@@ -16,7 +15,7 @@ class Pivot(MCEntity):
         :param area_of_affect: This is the area which is copied to and from the pivot.
         """
         tags = {"Invisible": 1} if invisible else {}
-        super(Pivot, self).__init__(cbac.core.constants.entity_id.ARMOR_STAND, no_gravity=True, tags=tags)
+        super(Pivot, self).__init__(MCEntity.ID.ARMOR_STAND, no_gravity=True, tags=tags)
         self._all.append(self)
 
     @property

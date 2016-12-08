@@ -1,11 +1,10 @@
 """
 Declarations of objects which are wrapping items to be packed into a blockspace.
 """
-import cbac.core.constants.mc_direction
 from cbac.core.block import Block
 from cbac.core.blockspace.assignment import BlockAssignment
 from cbac.core.blockspace.winder import winde
-from cbac.core.constants import mc_direction
+from cbac.core.mc_direction import MCDirection
 
 from cbac.core.utils import Vector
 
@@ -76,7 +75,7 @@ class LineArea(Area):
     An area which constructs a line out of blocks.
     """
 
-    def __init__(self, compound, start_build_direction=mc_direction.EAST):
+    def __init__(self, compound, start_build_direction=MCDirection.EAST):
         super(LineArea, self).__init__(compound)
         self.start_build_direction = start_build_direction
 
@@ -87,7 +86,7 @@ class LineArea(Area):
         packed = []
 
         for i, block in enumerate(compound.blocks):
-            build_direction_vector = cbac.core.constants.mc_direction.vectors[build_direction]
+            build_direction_vector = MCDirection.vectors[build_direction]
             relative_location = corner + (build_direction_vector * i)
             relative_assignment = BlockAssignment(block, relative_location, build_direction)
             packed.append(relative_assignment)

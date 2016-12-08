@@ -1,8 +1,7 @@
 from unittest import TestCase
 
-from cbac.core.constants.block_id import FALSE_BLOCK
+from core.block import BlockID
 
-import cbac.core.block as block
 from cbac.core.compound import HardwareConstant
 from cbac.core.compound import Register
 
@@ -17,9 +16,9 @@ class TestCompound(TestCase):
 
         for present_item, excpected_item in zip(const.blocks, excpected):
             if excpected_item is True:
-                self.assertEqual(present_item.block_id, block.ids.TRUE_BLOCK)
+                self.assertEqual(present_item.block_id, BlockID.TRUE_BLOCK)
             elif excpected_item is False:
-                self.assertEqual(present_item.block_id, block.ids.FALSE_BLOCK)
+                self.assertEqual(present_item.block_id, BlockID.FALSE_BLOCK)
 
     def test_memory(self):
         BITS = 8
@@ -27,7 +26,7 @@ class TestCompound(TestCase):
         self.assertEqual(len(memory.blocks), BITS)
 
         for i in xrange(BITS):
-            self.assertEqual(memory.blocks[i].block_id, FALSE_BLOCK)
+            self.assertEqual(memory.blocks[i].block_id, BlockID.FALSE_BLOCK)
 
     def test_get_sub_memory(self):
         BITS = 8

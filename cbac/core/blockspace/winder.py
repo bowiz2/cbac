@@ -3,7 +3,7 @@ Winds an array of command blocks into a compact area.
 """
 from cbac.core.block import CommandBlock
 from cbac.core.blockspace.assignment import BlockAssignment
-from cbac.core.constants import mc_direction
+from cbac.core.mc_direction import MCDirection
 
 from cbac.core.utils import Vector
 
@@ -80,9 +80,9 @@ def decide_directions(rows, start_direction):
     for row_id, row in enumerate(rows):
         for block in row:
             if block is not row[-1]:
-                directions[block] = [start_direction, mc_direction.oposite(start_direction)][row_id % 2]
+                directions[block] = [start_direction, MCDirection.opposite(start_direction)][row_id % 2]
             else:
-                directions[block] = mc_direction.UP
+                directions[block] = MCDirection.UP
 
         if row_id % 2 is 1:
             row.reverse()

@@ -1,11 +1,10 @@
 """
 Holds Constant class.
 """
-from cbac.core.block import Block
-from cbac.core.constants import block_id
-
+import core.block
 from cbac.core.compound import Compound
 from cbac.core.utils import memoize
+from cbac.core.block import Block
 
 
 class HardwareConstant(Compound):
@@ -34,15 +33,15 @@ class HardwareConstant(Compound):
         to_return = []
         for bit in self.bits:
             if bit:
-                material = block_id.TRUE_BLOCK
+                material = core.block.BlockID.TRUE_BLOCK
             else:
-                material = block_id.FALSE_BLOCK
+                material = core.block.BlockID.FALSE_BLOCK
 
             to_return.append(Block(material))
 
         if self.word_size is not None:
             for i in xrange(self.word_size - len(self.bits)):
-                to_return.append(Block(block_id.FALSE_BLOCK))
+                to_return.append(Block(core.block.BlockID.FALSE_BLOCK))
         return to_return
 
 

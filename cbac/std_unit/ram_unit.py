@@ -4,8 +4,8 @@ Holds all memory access and manipulation units.
 import math
 
 from cbac.core.blockbox import BlockBox, PlainBlockBox
-from cbac.core.constants.block_id import FALSE_BLOCK
-from cbac.core.constants.mc_direction import *
+from core.block import BlockID
+from cbac.core.mc_direction import MCDirection
 from cbac.core.mcentity.pivot import Pivot
 from cbac.core.utils import Vector, inline_generators
 from cbac.unit.statements import *
@@ -98,7 +98,7 @@ class MemoryAccessUnit(Unit):
                 self.ratio.y * self.word_size.y,
                 self.ratio.z * self.word_size.z
             )
-            memory_dump = PlainBlockBox(memory_box_size, FALSE_BLOCK)
+            memory_dump = PlainBlockBox(memory_box_size, BlockID.FALSE_BLOCK)
 
         # raw memory is the actual blocks which represent the memory.
         self.raw_memory = self.add_compound(memory_dump)
@@ -125,18 +125,18 @@ class MemoryAccessUnit(Unit):
         for i, addres_bit in enumerate(self.input_address.blocks):
             if 2 ** i < self.ratio.x:
                 yield If(addres_bit.shell == True).then(
-                    self.pivot.shell.move(EAST, self.word_size.x * (2 ** i))
+                    self.pivot.shell.move(MCDirection.EAST, self.word_size.x * (2 ** i))
                 )
 
             elif 2 ** i < self.ratio.x + self.ratio.y - 1:
                 yield If(addres_bit.shell == True).then(
-                    self.pivot.shell.move(UP, self.word_size.y * int(2 ** (i - math.log(self.ratio.x, 2)))
+                    self.pivot.shell.move(MCDirection.UP, self.word_size.y * int(2 ** (i - math.log(self.ratio.x, 2)))
                                           )
                 )
             else:
                 yield If(addres_bit.shell == True).then(
                     self.pivot.shell.move(
-                        NORTH,
+                        MCDirection.NORTH,
                         self.word_size.z * int(2 ** (i - math.log(self.ratio.x, 2) - math.log(self.ratio.y, 2)))
                     )
                 )

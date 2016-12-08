@@ -2,6 +2,7 @@
 In this module there is an abstract representation of minecraft commands.
 """
 # TODO: refactor creates condition to is_condition_creating. for now we use this because of a back comparability.
+import core.block
 from cbac.core import utils
 from cbac.core.block import CommandBlock
 
@@ -346,9 +347,6 @@ def lazy_command_condition(f):
     return _wrapper
 
 
-from cbac.core.constants import block_id as block_ids
-
-
 def _join_command(*items):
     """
     Joins the items into a minecraft compatible format.
@@ -441,7 +439,7 @@ def fill(area, block_id, data_value=None, block_handling=None, *options):
     if not isinstance(area, str):
         area = utils.format_area(area)
 
-    return _join_command("/fill", area, block_ids.names[block_id], data_value, block_handling, *options)
+    return _join_command("/fill", area, core.block.BlockID.names[block_id], data_value, block_handling, *options)
 
 
 @lazy_command
@@ -449,7 +447,7 @@ def set_block(location, block_id, data_value=0, block_handling=None, tags=None):
     """
     Sets a block to a new block id with some more advanced options.
     """
-    return _join_command("/setblock", location, block_ids.names[block_id], data_value, block_handling, tags)
+    return _join_command("/setblock", location, core.block.BlockID.names[block_id], data_value, block_handling, tags)
 
 
 @lazy_command_condition
@@ -457,4 +455,4 @@ def testforblock(location, block_id, data_value=0, tags=None):
     """
     Check if a block at this location is of a certain signature.
     """
-    return _join_command("/testforblock", location, block_ids.names[block_id], data_value, tags)
+    return _join_command("/testforblock", location, core.block.BlockID.names[block_id], data_value, tags)

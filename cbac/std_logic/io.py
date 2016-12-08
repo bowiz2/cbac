@@ -1,7 +1,7 @@
 """
 Holds the io sugar.
 """
-from cbac.core.constants.block_id import FALSE_BLOCK
+from core.block import BlockID
 
 import cbac.core.compound.register
 import cbac.core.block
@@ -19,7 +19,7 @@ class Port(cbac.core.block.Block, StdLogic):
     Represents a block.
     """
 
-    def __init__(self, fill_block_id=FALSE_BLOCK):
+    def __init__(self, fill_block_id=BlockID.FALSE_BLOCK):
         super(Port, self).__init__(fill_block_id)
 
 

@@ -3,10 +3,10 @@ from unittest import TestCase
 from cbac.core.block import Block, CommandBlock
 from cbac.core.blockspace import BlockSpace
 from cbac.core.command_shell import ShellContext, CommandShell
-from cbac.core.constants.block_id import *
-from cbac.core.command_shell.player_shell import PlayerShell
-from cbac.core.utils import Vector, memoize
 from cbac.core.mcentity import Player
+from cbac.core.utils import Vector, memoize
+from core.block import BlockID
+
 
 class BlockspaceMock(BlockSpace):
     """
@@ -67,15 +67,15 @@ class TestLocationShell(TestShell):
         self.assertEqual("~1 ~0 ~-1 ~1 ~0 ~-1", self.subject_shell.area)
 
     def test_setblock(self):
-        compiled_command = self.subject_shell.setblock(TRUE_BLOCK)()
+        compiled_command = self.subject_shell.setblock(BlockID.TRUE_BLOCK)()
         self.assertEqual("/setblock ~1 ~0 ~-1 redstone_block 0", compiled_command)
-        compiled_command = self.subject_shell.setblock(TRUE_BLOCK, 7)()
+        compiled_command = self.subject_shell.setblock(BlockID.TRUE_BLOCK, 7)()
         self.assertEqual("/setblock ~1 ~0 ~-1 redstone_block 7", compiled_command)
 
     def test_testforblock(self):
-        compiled_command = self.subject_shell.testforblock(TRUE_BLOCK)()
+        compiled_command = self.subject_shell.testforblock(BlockID.TRUE_BLOCK)()
         self.assertEqual("/testforblock ~1 ~0 ~-1 redstone_block 0", compiled_command)
-        compiled_command = self.subject_shell.testforblock(TRUE_BLOCK, 7)()
+        compiled_command = self.subject_shell.testforblock(BlockID.TRUE_BLOCK, 7)()
         self.assertEqual("/testforblock ~1 ~0 ~-1 redstone_block 7", compiled_command)
 
 

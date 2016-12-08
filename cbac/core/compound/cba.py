@@ -3,7 +3,7 @@ Command Block Array holder
 """
 from cbac.core.block import Block, CommandBlock
 from cbac.core.command_shell import CBAShell
-from cbac.core.constants.block_id import FALSE_BLOCK
+from core.block import BlockID
 
 from cbac.core.compound import Compound
 from cbac.core.utils import memoize
@@ -27,7 +27,7 @@ class CBA(Compound):
             self.add_command(command)
 
         # An empty block which when activated. will fire up this cba.
-        self.activator = Block(FALSE_BLOCK)
+        self.activator = Block(BlockID.FALSE_BLOCK)
 
         self.cb_reserved = CommandBlock("/say", None, "chain", True)
         # This block responsible for deactivating the activator block. if the cba is not repeated.

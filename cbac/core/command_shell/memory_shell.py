@@ -1,7 +1,7 @@
 """
 Holds register shell.
 """
-from cbac.core.constants.block_id import TRUE_BLOCK
+from core.block import BlockID
 
 from cbac.core.command_shell.compound_shell import CompoundShell
 
@@ -26,7 +26,7 @@ class RegisterShell(CompoundShell):
         max_value = 2 ** self.wrapped.size
 
         if number == max_value:
-            return self.fill(TRUE_BLOCK)
+            return self.fill(BlockID.TRUE_BLOCK)
         if number == 0:
             return self.fill(self.wrapped.default_block)
 

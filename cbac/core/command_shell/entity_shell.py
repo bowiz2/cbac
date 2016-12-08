@@ -3,11 +3,10 @@ Holds Entity Shell
 """
 from cbac.core.command_shell.command_shell_base import CommandShell
 from cbac.core.command_shell.decorator import command
-from cbac.core.constants.block_id import TRUE_BLOCK, names
-from cbac.core.constants.mc_direction import vectors as direction_vectors
-
+from core.block import BlockID
 from cbac.core.utils import Vector
 from cbac.core.utils import format_relative_location, format_location, format_relative_area, absolute_area, format_area
+from cbac.core.mc_direction import MCDirection
 
 
 class EntityShell(CommandShell):
@@ -59,7 +58,7 @@ class EntityShell(CommandShell):
         :param distance: How far to move the mcentity.
         :return: Tp command.
         """
-        direction_vector = direction_vectors[direction] * distance
+        direction_vector = MCDirection.vectors[direction] * distance
         return self._join_command("/tp", self.wrapped.selector, format_relative_location(direction_vector))
 
     @command()
@@ -79,7 +78,7 @@ class EntityShell(CommandShell):
         Set the block at which this mcentity is standing as true block.
         :return: Execute command.
         """
-        return self.execute("/setblock ~ ~ ~ {}".format(names[TRUE_BLOCK]))
+        return self.execute("/setblock ~ ~ ~ {}".format(BlockID.names[BlockID.TRUE_BLOCK]))
 
 
 class PivotShell(EntityShell):

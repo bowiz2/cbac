@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from cbac import Block, Compound
 from cbac.core.blockspace import packer
-from cbac.core.constants.block_id import SNOW_BLOCK
+from core.block import BlockID
 
 
 class TestPacker(TestCase):
@@ -16,7 +16,7 @@ class TestPacker(TestCase):
         compound_count = 3
 
         # Create a few snow blocks.
-        compounds = [Compound([Block(SNOW_BLOCK) for i in xrange(snow_count)]) for j in xrange(compound_count)]
+        compounds = [Compound([Block(BlockID.SNOW_BLOCK) for i in xrange(snow_count)]) for j in xrange(compound_count)]
         pack_results = packer.pack(compounds)
 
         # Check if all the compounds are in the pack result.

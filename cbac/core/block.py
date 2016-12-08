@@ -1,9 +1,7 @@
 """
 Holds Minecraft block class.
 """
-from constants import block_id as ids
-from constants import mc_direction
-from constants.mc_direction import DOWN, UP, NORTH, SOUTH, WEST, EAST
+from cbac.core.mc_direction import MCDirection
 from utils import memoize
 
 
@@ -48,7 +46,7 @@ class Block(object):
         return BlockShell(self)
 
     def __str__(self):
-        return "{0} Block".format(ids.names[self.block_id])
+        return "{0} Block".format(BlockID.names[self.block_id])
 
 
 class CommandBlock(Block):
@@ -57,7 +55,7 @@ class CommandBlock(Block):
     Contains all the command block types. Such as impulse repeat and chain.
     """
 
-    def __init__(self, command, facing=mc_direction.UP, action="impulse", always_active=False, conditional=False,
+    def __init__(self, command, facing=MCDirection.UP, action="impulse", always_active=False, conditional=False,
                  custom_name=None):
         """
         :param command: The command which will be executed when this command block is activated in the "real" world.
@@ -82,11 +80,11 @@ class CommandBlock(Block):
         :note: depends on the action of the block.
         """
         if self.action == "impulse":
-            return ids.IMPULSE_COMMAND_BLOCK
+            return BlockID.IMPULSE_COMMAND_BLOCK
         elif self.action == "repeat":  # 'repeat'
-            return ids.REPEATING_COMMAND_BLOCK
+            return BlockID.REPEATING_COMMAND_BLOCK
         elif self.action == "chain":  # 'chain'
-            return ids.CHAIN_COMMAND_BLOCK
+            return BlockID.CHAIN_COMMAND_BLOCK
         else:
             raise TypeError("No such action {0}.".format(self.action))
 
@@ -110,7 +108,8 @@ class CommandBlock(Block):
             return 0
 
         # The data value depends on the direction the command block is facing.
-        face_index = [DOWN, UP, NORTH, SOUTH, WEST, EAST].index(self.facing)
+        face_index = [MCDirection.DOWN, MCDirection.UP, MCDirection.NORTH, MCDirection.SOUTH, MCDirection.WEST,
+                      MCDirection.EAST].index(self.facing)
 
         conditional = self.conditional
 
@@ -131,3 +130,38 @@ class CommandBlock(Block):
         """
         from command_shell import CommandBlockShell
         return CommandBlockShell(self)
+
+
+class BlockID(object):
+    """
+    Block ids.
+    """
+    EMPTY_BLOCK = 0
+    AIR_BLOCK = EMPTY_BLOCK
+    GLASS_BLOCK = 20
+    SNOW_BLOCK = 80
+    REDSTONE_BLOCK = 152
+    EMERALD_BLOCK = 133
+    # A block which represents the "true" value.
+    TRUE_BLOCK = REDSTONE_BLOCK
+    # A block which represents the "false" value.
+    FALSE_BLOCK = SNOW_BLOCK
+
+    # Command block materials.
+    IMPULSE_COMMAND_BLOCK = 137
+    REPEATING_COMMAND_BLOCK = 210
+    CHAIN_COMMAND_BLOCK = 211
+
+    # Blocks which do not further redstone signal.
+    ISOLATORS = [EMPTY_BLOCK, GLASS_BLOCK]
+
+    names = {
+        GLASS_BLOCK: 'glass',
+        EMPTY_BLOCK: 'air',
+        SNOW_BLOCK: 'snow',
+        REDSTONE_BLOCK: 'redstone_block',
+        IMPULSE_COMMAND_BLOCK: 'command_block',
+        REPEATING_COMMAND_BLOCK: 'repeating_command_block',
+        CHAIN_COMMAND_BLOCK: 'chain_command_block',
+        EMERALD_BLOCK: 'emerald_block'
+    }

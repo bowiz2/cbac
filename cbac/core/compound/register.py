@@ -1,7 +1,6 @@
+import core.block
 from cbac.core.block import Block
 from cbac.core.command_shell import RegisterShell
-from cbac.core.constants import block_id
-
 from cbac.core.compound import Compound
 from cbac.core.utils import memoize
 
@@ -11,7 +10,7 @@ class Register(Compound):
     An array of empty blocks which later will be used to store some data.
     """
     # TODO: important! merge hardware constant and register.
-    def __init__(self, size, default_block=block_id.FALSE_BLOCK):
+    def __init__(self, size, default_block=core.block.BlockID.FALSE_BLOCK):
         """
         :param size: Size of the memory in bits.
         """
@@ -33,7 +32,7 @@ class Register(Compound):
 
         _blocks = []
         for bit in bits:
-            material = block_id.TRUE_BLOCK if bit == '1' else block_id.FALSE_BLOCK
+            material = core.block.BlockID.TRUE_BLOCK if bit == '1' else core.block.BlockID.FALSE_BLOCK
             _blocks.append(Block(material))
         _blocks.reverse()
         return _blocks
