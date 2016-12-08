@@ -72,6 +72,7 @@ def usage():
     """
     print "usage: build_str_units.py <build_folder> [bits]"
 
+
 if __name__ == "__main__":
     if len(sys.argv) < 3 or len(sys.argv) > 4:
         usage()

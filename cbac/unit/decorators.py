@@ -3,6 +3,7 @@ def auto_synthesis(f):
     Decorator.
     Makes the unit to synthesise one creation after the __init__
     """
+
     # TODO: write tests for this
     def wrapper(u_self, *args, **kwargs):
         do_synthesise = True

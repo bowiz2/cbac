@@ -10,6 +10,7 @@ class Player(object):
     Logical representation of a player in the minecraft world.
     Note, players cannot be added to a blockspace.
     """
+
     def __init__(self, name=None, random=False, all_players=False):
         """
         :param name: name of the player you want to represent. if None provided, you are representing the closest

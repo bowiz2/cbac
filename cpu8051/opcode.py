@@ -72,6 +72,7 @@ class OpcodeSet(object):
         """
         return self.all()[r]
 
+
 # Meaning of Oprands
 # ==================
 # rx - Working register R0-R7
@@ -106,10 +107,10 @@ addc_a_direct = OpcodeSet("00110101")
 addc_a_ri = OpcodeSet("0011011r")
 addc_a_data = OpcodeSet("00110100")
 
-#AJMP
+# AJMP
 ajmp_addr11 = OpcodeSet("rrr00001")
 
-#ANL
+# ANL
 anl_a_rx = OpcodeSet("01011rrr")
 anl_a_direct = OpcodeSet("01010101")
 anl_a_ri = OpcodeSet("0101011r")
@@ -137,6 +138,4 @@ cpl_bit = OpcodeSet("10110010")
 
 da_a = OpcodeSet("11010100")
 
-
 declared_opcodes = filter(lambda x: isinstance(x, OpcodeSet), globals().values())
-

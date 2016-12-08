@@ -1,6 +1,7 @@
 from collections import namedtuple
 import types
 
+
 # TODO: organize utils into module.
 
 
@@ -104,6 +105,7 @@ class InlineGenerator(object):
     """
     Used in the _from util keeyword.
     """
+
     def __init__(self, wrapped):
         self.wrapped = wrapped
 

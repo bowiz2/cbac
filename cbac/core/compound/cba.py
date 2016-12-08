@@ -65,7 +65,7 @@ class CBA(Compound):
         going to execute its command and all subsequent command each game tick as long as this compound is activated.
         :return:
         """
-        assert len(self.blocks) > 2 and isinstance(self.blocks[0], CommandBlock),\
+        assert len(self.blocks) > 2 and isinstance(self.blocks[0], CommandBlock), \
             "There must be at least 1 command block in this CBA."
         # Disable the re-setter
         self.cb_re_setter = None

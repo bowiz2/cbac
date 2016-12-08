@@ -65,6 +65,7 @@ class ListenerReSetter(Unit):
     """
     Resets all the listeners
     """
+
     def __init__(self, listeners):
         """
         :param listeners: Listeners you want to reset.

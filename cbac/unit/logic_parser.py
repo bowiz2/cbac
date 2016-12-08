@@ -141,6 +141,3 @@ class UnitLogicParser(object):
         assert isinstance(command, MCCommand), "command must be of type MCCommand instead got {0}".format(
             command.__class__.__name__)
         self.commands.append(command)
-
-
-

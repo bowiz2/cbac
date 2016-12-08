@@ -4,6 +4,7 @@ from unittest import TestCase
 from cbac.core.utils import *
 from cbac.core.utils import _from
 
+
 class TestUtils(TestCase):
     def test_yield_from(self):
         def some():
@@ -36,14 +37,12 @@ class TestUtils(TestCase):
 
 
 class TestLocations(TestCase):
-
     def setUp(self):
         self.a = Vector(3, 5, 1)
         self.b = Vector(1, 2, 3)
         self.c = Vector(4, 4, 4)
 
     def test_sort_locations(self):
-
         sort_x, sort_y, sort_z = sort_locations([self.a, self.b, self.c])
         self.assertEquals(sort_x[0], self.b)
         self.assertEquals(sort_x[1], self.a)

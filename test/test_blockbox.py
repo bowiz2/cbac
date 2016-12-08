@@ -29,7 +29,7 @@ class BlockBoxTest(TestCase):
         return cbac.assembler.assemble(my_blockspace)
 
     def test_ram(self):
-        ram = cbac.std_unit.ram_unit.MemoryDump([1,2,3])
-        blockspace = BlockSpace((1,1,1))
+        ram = cbac.std_unit.ram_unit.MemoryDump([1, 2, 3])
+        blockspace = BlockSpace((1, 1, 1))
         blockspace.add(ram)
         blockspace.build("./products/memory_dump.schematic")

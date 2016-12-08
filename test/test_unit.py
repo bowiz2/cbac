@@ -78,7 +78,6 @@ class TestCallback(StdUnitTestCase):
 
     @named_schematic
     def test_otherwise(self):
-
         class Dummy(Unit):
             def architecture(self):
                 from cbac import Player
@@ -100,7 +99,6 @@ class TestUnitStatementsParsing(TestLogicParser):
 
     def test_if(self):
         subject_shell = Register(2).blocks[0].shell
-
 
         If(self.sample_condition_command).then(
             self.sample_command,
@@ -124,6 +122,7 @@ class TestUnitStatementsParsing(TestLogicParser):
             """
             Unit which is used for testing
             """
+
             def architecture(self):
                 """
                 just say hey
@@ -158,7 +157,6 @@ class TestUnitStatementsParsing(TestLogicParser):
         ]).parse(self.parser)
 
         self.assertEqual(len(self.parser.parse_stack), 2)
-
 
 
 class TestCommandCollection(TestCase):

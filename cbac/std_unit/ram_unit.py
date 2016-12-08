@@ -19,8 +19,9 @@ class MemoryDump(BlockBox):
     """
     Represents raw memory.
     """
+
     def __init__(self, data, ratio=(1, 16, 16), word_length=8, isolated=False):
-        super(MemoryDump, self).__init__((word_length*ratio[0], ratio[1], ratio[2]), isolated)
+        super(MemoryDump, self).__init__((word_length * ratio[0], ratio[1], ratio[2]), isolated)
         self.ratio = ratio
         assert len(data) <= self.max_data_size
         self.word_length = word_length

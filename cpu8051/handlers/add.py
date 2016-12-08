@@ -3,7 +3,6 @@ from cpu8051.handlers.handler import *
 
 
 class Add(Handler):
-
     @property
     def logic_unit(self):
         return self.cpu.adder_unit

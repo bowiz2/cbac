@@ -52,7 +52,6 @@ class MCCommand(object):
     def is_conditional(self, value):
         self.command_block.conditional = value
 
-
     @target_selector_inject
     def compile(self):
         """

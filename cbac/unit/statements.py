@@ -17,7 +17,6 @@ class Token(object):
     """
     pass
 
-
     def parse(self, parser_instance):
         """
         Parse this statement in the parser.
@@ -167,6 +166,7 @@ class STDCall(Call, PassParameters, MainLogicJump):
     """
     Copies parameter to function and then jumps to it.
     """
+
     def __init__(self, unit, *parameters):
         PassParameters.__init__(self, unit, *parameters)
 
@@ -225,6 +225,7 @@ class InlineCall(PassParameters, Call):
     """
     Calls a unit without jump. Just pushes its commands to the commands of the current cba.
     """
+
     def __init__(self, wrapped, *parameters):
         super(InlineCall, self).__init__(wrapped, *parameters)
 
@@ -300,7 +301,7 @@ class If(Statement):
         super(If, self).parse(parser_instance)
         if self.otherwise_body:
             parser_instance.parse_stack.append(self.otherwise_body)
-            cb =  self.condition_commands[-1].command_block
+            cb = self.condition_commands[-1].command_block
             parser_instance.parse_stack.append(cb.shell.has_failed())
 
         parser_instance.parse_stack.append(self.condition_body)
@@ -373,4 +374,3 @@ class TruthTable(Statement):
                     else:
                         condition_cmds.append(input_port.shell == False)
                 parser_instance.parse_stack.append(If(condition_cmds).then(*actions))
-
