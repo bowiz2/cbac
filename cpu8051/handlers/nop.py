@@ -3,11 +3,11 @@ from cpu8051.handlers.handler import Handler
 from cbac.unit.statements import *
 
 
-class Nop(Handler):
-    opcode_set = nop
+# class Nop(Handler):
+#     opcode_set = nop
+#
+#     def handle(self, _=None):
+#         yield self.cpu.done_opcode.shell.activate()
 
-    def handle(self, _=None):
-        yield self.cpu.done_opcode.shell.activate()
-
-all_handlers = [Nop]
+#all_handlers = [Nop]
 __all__ = ["Nop"]

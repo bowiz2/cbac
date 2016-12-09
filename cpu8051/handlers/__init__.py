@@ -8,7 +8,6 @@ import anl
 import dec
 from mov import *
 from inc import *
-from nop import *
 from add import *
 from addc import *
 from anl import *

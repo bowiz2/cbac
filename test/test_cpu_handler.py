@@ -26,10 +26,18 @@ def duplicates(l):
 class TestOpcodeSet(TestCase):
     def setUp(self):
         self.subject = OpcodeSet("01rr", 8)
+        self.all = reduce(lambda x, y: x + y, (o.all() for o in declared_opcodes))
 
     def test_opcodes(self):
         self.assertEquals(max(self.subject.all()), 7)
         self.assertEquals(min(self.subject.all()), 4)
+        self.assertEqual(len(self.subject.all()), 4)
+
+    def test_small(self):
+        self.assertEqual(len(OpcodeSet("r", 1).all()), 2)
+
+    def test_big(self):
+        self.assertEqual(len(OpcodeSet("rrrrrrrr", 8).all()), 256)
 
     def test_get_register(self):
         self.assertEquals(self.subject.get_arg(0b0111, 'r'), 0b11)
@@ -40,20 +48,23 @@ class TestOpcodeSet(TestCase):
         self.assertFalse(self.subject.match(0b1111))
 
     def test_sanity(self):
-        op_values = []
-        for opcode in declared_opcodes:
-            op_values += [opcode.get_single()]
-        dups = duplicates(op_values)
+        dups = duplicates(self.all)
         error = ""
         for dup in dups:
             error += "Duplicates for {} are:\n".format(bin(dup))
             for opcode in declared_opcodes:
                 if opcode.match(dup):
+
                     error += "\t" + opcode.encoding + "\n"
 
         assert len(dups) is 0, "There are opcode duplicates.\n" + error
 
+    def test_opcode_sheet_complete(self):
 
+        print sorted(all)
+        self.assertEqual(len(all),256, "Only {} opcodes are done".format(len(all)))
+    def test_print(self):
+        print map(lambda x: len(x.all()), declared_opcodes)
 class TestCpuHandler(StdUnitTestCase):
     cpu = Cpu8051(auto_synthesis=False)
 

@@ -29,7 +29,7 @@ class OpcodeSet(object):
         """
         min_range = int(self.encoding.replace('r', '0'), 2)
         max_range = int(self.encoding.replace('r', '1'), 2)
-        return xrange(min_range, max_range + 1)
+        return range(min_range, max_range + 1)
 
     def match(self, opcode):
         """
@@ -64,7 +64,7 @@ class OpcodeSet(object):
     def _pad(self, bit_string):
         padsize = self.set_size - len(bit_string)
         assert padsize >= 0, "Your bit string is too big."
-        return bit_string + ("0" * padsize)
+        return ("0" * padsize) + bit_string
 
     def get_single(self, r=0):
         """
@@ -83,7 +83,7 @@ class OpcodeSet(object):
 # bit - 128 software flags, any bitaddressable l/O pin, control or status bit
 # a - Accumulator
 
-nop = OpcodeSet("00000000")
+#nop = OpcodeSet("00000000")
 
 mov_a_rx = OpcodeSet("11101rrr")
 mov_rx_a = OpcodeSet("11111rrr")
@@ -107,15 +107,13 @@ addc_a_direct = OpcodeSet("00110101")
 addc_a_ri = OpcodeSet("0011011r")
 addc_a_data = OpcodeSet("00110100")
 
-# AJMP
-ajmp_addr11 = OpcodeSet("rrr00001")
 
 # ANL
 anl_a_rx = OpcodeSet("01011rrr")
 anl_a_direct = OpcodeSet("01010101")
 anl_a_ri = OpcodeSet("0101011r")
 anl_a_data = OpcodeSet("01010100")
-anl_direct_a = OpcodeSet("01010101")  # TODO: check how to settle ambiguity.
+anl_direct_a = OpcodeSet("01010010")
 anl_direct_data = OpcodeSet("01010011")
 anl_c_bit = OpcodeSet("10000010")
 anl_c_sbit = OpcodeSet("10110000")
@@ -150,10 +148,13 @@ orl_a_data = OpcodeSet("01000100")
 orl_direct_a = OpcodeSet("01000010")
 orl_direct_data = OpcodeSet("01000011")
 
-jmp = OpcodeSet("")
+jmp = OpcodeSet("00000000")
 jz_rel = OpcodeSet("01100000")
 jnz_rel = OpcodeSet("01110000")
 jc_rel = OpcodeSet("01000000")
 jnc_rel = OpcodeSet("01010000")
 
-declared_opcodes = filter(lambda x: isinstance(x, OpcodeSet), globals().values())
+declared_opcodes =[]
+for opcode in locals().values():
+    if opcode not in declared_opcodes and isinstance(opcode, OpcodeSet):
+        declared_opcodes.append(opcode)
