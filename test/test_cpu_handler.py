@@ -54,7 +54,6 @@ class TestOpcodeSet(TestCase):
             error += "Duplicates for {} are:\n".format(bin(dup))
             for opcode in declared_opcodes:
                 if opcode.match(dup):
-
                     error += "\t" + opcode.encoding + "\n"
 
         assert len(dups) is 0, "There are opcode duplicates.\n" + error
@@ -62,9 +61,12 @@ class TestOpcodeSet(TestCase):
     def test_opcode_sheet_complete(self):
 
         print sorted(all)
-        self.assertEqual(len(all),256, "Only {} opcodes are done".format(len(all)))
+        self.assertEqual(len(all), 256, "Only {} opcodes are done".format(len(all)))
+
     def test_print(self):
         print map(lambda x: len(x.all()), declared_opcodes)
+
+
 class TestCpuHandler(StdUnitTestCase):
     cpu = Cpu8051(auto_synthesis=False)
 
