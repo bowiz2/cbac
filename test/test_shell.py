@@ -13,18 +13,6 @@ class BlockspaceMock(BlockSpace):
     """
     Used in the command shell tests.
     """
-
-    def __init__(self, size):
-        super(BlockspaceMock, self).__init__(size)
-        self._packed_blocks = {}
-
-    @property
-    def packed_blocks(self):
-        """
-        Get the placed blocks
-        """
-        return self._packed_blocks
-
     def add_block(self, block, location):
         """
         Add a block at a location.
