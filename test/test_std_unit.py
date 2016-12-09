@@ -76,7 +76,7 @@ class TestBitwiseUnits(StdUnitTestCase):
 
     @named_schematic
     def test_ripple_carry_adder(self):
-        self.block_space.add_unit(std_unit.full_adder.RippleCarryFullAdderArray(4))
+        self.block_space.add_unit(std_unit.full_adder.RippleCarryFullAdderArray(8))
 
     @named_schematic
     def test_negate_unit(self):
