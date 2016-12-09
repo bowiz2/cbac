@@ -10,6 +10,8 @@ import std_logic
 import std_unit
 import schematics
 import shortcuts
+from cbac.core import mc_command
+
 
 BuildEnvironment = BlockSpace
 CommandBlockArray = CBA

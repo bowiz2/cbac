@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from cpu8051.handlers.jmp import JzRelHandler, JmpRelHandler
+from cpu8051.handlers.jmp import JzRelHandler, JmpRelHandler, JnzRelHandler
 from cpu8051.handlers.mode import AMode, DirectMode, DirectDataMode
 from cpu8051.opcode import OpcodeSet, declared_opcodes
 from test_std_unit import StdUnitTestCase, named_schematic
@@ -218,6 +218,11 @@ class TestJmp(TestCpuHandler):
     @named_schematic
     def test_jz(self):
         self.handler = JzRelHandler
+        self.memory[self.next_fetched_byte] = MAX_VALUE
+
+    @named_schematic
+    def test_jnz(self):
+        self.handler = JnzRelHandler
         self.memory[self.next_fetched_byte] = MAX_VALUE
 
     @named_schematic

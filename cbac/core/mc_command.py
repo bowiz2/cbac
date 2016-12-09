@@ -457,3 +457,6 @@ def testforblock(location, block_id, data_value=0, tags=None):
     Check if a block at this location is of a certain signature.
     """
     return _join_command("/testforblock", location, block_ids.names[block_id], data_value, tags)
+
+__all__ = ["MCCommand", "SimpleCommand", "factory", "EmptyCommand", "testfor", "testforblock", "fill", "clone",
+           "set_block", "say", "TargetSelector"]

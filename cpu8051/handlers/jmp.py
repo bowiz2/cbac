@@ -21,7 +21,7 @@ class JzRelHandler(ModeHandler, ConditionJumpRelMode):
         """
         :return: Check if accumulator is zero command
         """
-        return self.cpu.accumulator.shell == self.constant_factory(0),
+        return [self.cpu.accumulator.shell == self.constant_factory(0)]
 
 
 class JnzRelHandler(ModeHandler, ConditionJumpRelMode):

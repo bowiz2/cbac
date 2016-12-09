@@ -9,7 +9,7 @@ and so fourth.
 This thing is convoluted and weird as the tax code.
 WORNING!!!! IAMOND INHERITANCE IS IN PLACE!!!1
 """
-
+from itertools import chain
 # Each mode in here will be descriped of the operators creating the mode.
 # For example The mode "DirectDataMode" is the mode of the opcode ANL direct, data
 import cbac
@@ -258,9 +258,6 @@ class ADataMode(AMode, DataMode):
     pass
 
 
-from cbac.unit.statements import If
-
-
 class JumpRelMode(Mode):
     uses_memory = True
 
@@ -276,26 +273,10 @@ class JumpRelMode(Mode):
         yield register_a.shell.copy(self.cpu.ip_register)
 
     def behaviour(self, opcode_value=None):
-        yield self.cpu.address_fetcher.shell.activate()
-        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
+        yield self.cpu.second_fetcher.shell.activate()
+        yield self.cpu.second_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
             *self.make_logic(*self.acting_registers)
         ))
-
-
-class ConditionUnit(cbac.unit.Unit):
-    @cbac.unit.auto_synthesis
-    def __init__(self, condition, *todo):
-        super(ConditionUnit, self).__init__(0)
-        self.condition = condition
-        self.todo = todo
-
-    def architecture(self):
-        yield If(self.condition).then(
-            *self.todo
-        )
-
-
-from itertools import chain
 
 
 class ConditionJumpRelMode(JumpRelMode):
@@ -304,7 +285,7 @@ class ConditionJumpRelMode(JumpRelMode):
         raise NotImplementedError()
 
     def behaviour(self, opcode_value=None):
-        yield self.cpu.address_fetcher.shell.activate()
-        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
+        yield self.cpu.second_fetcher.shell.activate()
+        yield self.cpu.second_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
             *chain(self.condition, self.make_logic(*self.acting_registers))
         ))
