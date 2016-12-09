@@ -9,5 +9,5 @@ class Nop(Handler):
     def handle(self, _=None):
         yield self.cpu.done_opcode.shell.activate()
 
-
+all_handlers = [Nop]
 __all__ = ["Nop"]

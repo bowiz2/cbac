@@ -39,3 +39,5 @@ class IncDirectHandler(_Inc, DirectMode):
     INC direct
     """
     opcode_set = inc_direct
+
+all_handlers = [IncAHandler, IncDirectHandler, IncRiHandler, IncRxHandler]

@@ -49,3 +49,5 @@ class OrlDirectData(_Orl, DirectDataMode):
     ORL direct, #data
     """
     opcode_set = cpu8051.opcode.orl_direct_data
+
+all_handlers = [OrlADataHandler, OrlADirectHandler, OrlARiHandler, OrlARxHandler, OrlDirectA, OrlDirectData]

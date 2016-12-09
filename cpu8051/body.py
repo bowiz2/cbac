@@ -69,6 +69,8 @@ class Cpu8051(cbac.Unit):
             *[pivot.shell.summon(self.callback_pivot_home) for pivot in cbac.core.mcentity.pivot.Pivot._all]
         )
 
+        self.handlers = []
+
     @property
     def memory_units(self):
         """
@@ -100,6 +102,9 @@ class Cpu8051(cbac.Unit):
         yield mc_command.say("hello and welcome!")
         yield MainLogicJump(self.add_unit(MemoryFetcher(self, self.process_registers[0])))
         yield mc_command.say("After first fetch!")
+
+        for handler in self.handlers:
+            yield InlineCall(handler)
 
     def opcode_is(self, value):
         return self.opcode.shell.testforblocks(self.constant_factory(value))

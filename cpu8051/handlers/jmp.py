@@ -64,3 +64,5 @@ class JncRelHandler(ModeHandler, ConditionJumpRelMode):
         :return: Check if carry flag not set command.
         """
         return self.cpu.carry_flag.shell != True
+
+all_handlers = [JmpRelHandler, JzRelHandler, JnzRelHandler, JcRelHandler, JncRelHandler]
