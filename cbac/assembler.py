@@ -4,6 +4,7 @@ from pymclevel import nbt
 
 from cbac.core.block import CommandBlock
 from cbac.core.mc_command import factory as command_factory
+import progressbar
 
 
 def tagged_cb(command_block, location, blockspace):
@@ -122,8 +123,9 @@ def assemble(block_space):
     # Create a schematic of the size of the blockspace.
     schematic = MCSchematic(shape=block_space.size)
     tile_entities_to_add = []
+    progress = progressbar.ProgressBar(widgets=["Assembling Blockspace ", progressbar.Percentage(), progressbar.Bar()])
 
-    for block, location in block_space.packed_blocks.items():
+    for block, location in progress(block_space.packed_blocks.items()):
         # Create the actual block.
         if block.has_tile_entity:
             # Create the tile mcentity of the block, if it has one.
