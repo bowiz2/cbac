@@ -30,3 +30,5 @@ class DecRiHandler(Dec, RiMode):
 
 class DecDirectHandler(Dec, DirectMode):
     opcode_set = dec_direct
+
+all_handles = [DecAHandler, DecDirectHandler, DecRiHandler, DecRxHandler, DecDirectHandler]

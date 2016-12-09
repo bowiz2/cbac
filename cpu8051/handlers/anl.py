@@ -52,3 +52,6 @@ class AnlDirectData(_Anl, DirectDataMode):
     ANL direct, #data
     """
     opcode_set = cpu8051.opcode.anl_direct_data
+
+
+all_handlers = [AnlARxHandler, AnlDirectA, AnlADataHandler, AnlADirectHandler, AnlARiHandler, AnlDirectData]

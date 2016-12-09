@@ -39,4 +39,4 @@ class AddADataHandler(_Add, ADataMode):
     opcode_set = cpu8051.opcode.add_a_data
 
 
-add_handlers = [AddADirectHandler, AddARxHandler, AddADataHandler, AddARiHandler]
+all_handlers = [AddADirectHandler, AddARxHandler, AddADataHandler, AddARiHandler]

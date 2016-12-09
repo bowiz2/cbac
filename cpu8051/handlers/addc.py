@@ -43,4 +43,4 @@ class AddcADataHandler(Addc, ADataMode):
     opcode_set = cpu8051.opcode.addc_a_data
 
 
-addc_handlers = [AddcADirectHandler, AddcARxHandler, AddcADataHandler, AddcARiHandler]
+all_handlers = [AddcADirectHandler, AddcARxHandler, AddcADataHandler, AddcARiHandler]
