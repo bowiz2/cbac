@@ -59,9 +59,8 @@ class TestOpcodeSet(TestCase):
         assert len(dups) is 0, "There are opcode duplicates.\n" + error
 
     def test_opcode_sheet_complete(self):
-
-        print sorted(all)
-        self.assertEqual(len(all), 256, "Only {} opcodes are done".format(len(all)))
+        print sorted(self.all)
+        self.assertEqual(len(self.all), 256, "Only {} opcodes are done".format(len(self.all)))
 
     def test_print(self):
         print map(lambda x: len(x.all()), declared_opcodes)
