@@ -27,8 +27,6 @@ class BlockSpace(object):
         self._packed_blocks = {}
         self.unpacked_items = []
 
-        self._repacking_needed = False
-
     def add(self, *items):
         """
         Schedule an item for packing.
@@ -36,7 +34,6 @@ class BlockSpace(object):
         :return: None
         """
         import cbac.unit
-        self._repacking_needed = True
         for item in items:
             assert not isinstance(item, cbac.unit.Unit), \
                 "you tried to add a unit as a compound, please use 'add_unit' instead."
