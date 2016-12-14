@@ -67,10 +67,11 @@ class TestOpcodeSet(TestCase):
 
 
 class TestCpuHandler(StdUnitTestCase):
-    cpu = Cpu8051(auto_synthesis=False)
+
 
     def setUp(self):
         super(TestCpuHandler, self).setUp()
+        self.cpu =  Cpu8051(auto_synthesis=False)
         self.memory = [0] * 256
         self.handler = None  # type: handlers.handler.Handler
         self._next_fetched_byte = 1
@@ -79,18 +80,19 @@ class TestCpuHandler(StdUnitTestCase):
     def tearDown(self):
         if inspect.isclass(self.handler):
             self.handler = self.handler(self.cpu, debug=True)
-        blacklist = []
 
-        if not self.handler.uses_adder:
-            blacklist.append(self.cpu.adder_unit)
-
-        if not self.handler.uses_and_unit:
-            blacklist.append(self.cpu.and_unit)
-
-        if not self.handler.uses_memory:
-            blacklist += self.cpu.memory_units
-
-        self.cpu.build_blacklist = blacklist
+        # blacklist = []
+        #
+        # if not self.handler.uses_adder:
+        #     blacklist.append(self.cpu.adder_unit)
+        #
+        # if not self.handler.uses_and_unit:
+        #     blacklist.append(self.cpu.and_unit)
+        #
+        # if not self.handler.uses_memory:
+        #     blacklist += self.cpu.memory_units
+        #
+        # self.cpu.build_blacklist = blacklist
 
         self.block_space.add_unit(self.handler)
         self.block_space.add_unit(self.cpu)

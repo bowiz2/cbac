@@ -196,9 +196,7 @@ class Unit(object):
         """
         # If this constant was never accessed before, add it to the cache.
         if value not in self._hardware_constant_cache:
-            self._hardware_constant_cache[value] = HardwareConstant(value, word_size=self.bits)
-            # Add it to the unit.
-            self.add_compound(self._hardware_constant_cache[value])
+            self._hardware_constant_cache[value] = self.add_compound(HardwareConstant(value, word_size=self.bits))
 
         # Get the constant from the cache.
         constant = self._hardware_constant_cache[value]
