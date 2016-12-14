@@ -148,7 +148,7 @@ orl_a_data = OpcodeSet("01000100")
 orl_direct_a = OpcodeSet("01000010")
 orl_direct_data = OpcodeSet("01000011")
 
-jmp = OpcodeSet("00000000")
+jmp_rel = OpcodeSet("00000000")
 jz_rel = OpcodeSet("01100000")
 jnz_rel = OpcodeSet("01110000")
 jc_rel = OpcodeSet("01000000")
