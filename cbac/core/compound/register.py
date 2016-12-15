@@ -61,10 +61,18 @@ class Register(Compound):
         """
         Set the initial value of the register
         """
-        assert len(bin(self._value)[2:]) <= self.size
+        assert value <= self.max_value
         self._value = value
+
+    @property
+    def max_value(self):
+        """
+        :return: max possible value for this register.
+        """
+        return (2 ** self.size) - 1
 
     @property
     @memoize
     def shell(self):
         return RegisterShell(self)
+
