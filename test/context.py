@@ -12,7 +12,8 @@ if "cbac_test_products" in os.environ:
 else:
     logging.warning("You have'nt set cbac_test_products path in your environment variables.")
     product_dir = mkdtemp()
-    
+
+print "Product dir is at ->", product_dir
 
 if not os.path.exists(product_dir):
     os.makedirs(product_dir)
