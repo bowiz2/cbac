@@ -120,26 +120,21 @@ class BlockSpace(object):
 
         return self._packed_blocks
 
-    def shrink(self):
+    @property
+    def size(self):
         """
         Shrinks the blockspace size to the minimal, according to its blocks.
         """
         if len(self.packed_blocks) > 0:
             block_locations = self.packed_blocks.values()
-            self.size = utils.max_corner(block_locations) + utils.Vector(1, 1, 1)
-
-    def pack_shrink(self):
-        """
-        Packs and shrinks the blockspace.
-        """
-        self.pack()
-        self.shrink()
+            return utils.max_corner(block_locations) + utils.Vector(1, 1, 1)
+        return Vector(0, 0, 0)
 
     def build(self, filename):
         """
         Builds this blockspace into a schematic file.
         :param filename: path of the schematic file.
         """
-        self.pack_shrink()
+        self.pack()
         schematic = self.assembler.assemble(self)
         schematic.saveToFile(filename=filename)
