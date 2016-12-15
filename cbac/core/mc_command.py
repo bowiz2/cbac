@@ -346,7 +346,7 @@ def lazy_command_condition(f):
     return _wrapper
 
 
-from cbac.core.constants import block_id as block_ids
+from cbac.core.block import BlockID
 
 
 def _join_command(*items):
@@ -441,7 +441,7 @@ def fill(area, block_id, data_value=None, block_handling=None, *options):
     if not isinstance(area, str):
         area = utils.format_area(area)
 
-    return _join_command("/fill", area, core.block.BlockID.names[block_id], data_value, block_handling, *options)
+    return _join_command("/fill", area, BlockID.names[block_id], data_value, block_handling, *options)
 
 
 @lazy_command
@@ -449,7 +449,7 @@ def set_block(location, block_id, data_value=0, block_handling=None, tags=None):
     """
     Sets a block to a new block id with some more advanced options.
     """
-    return _join_command("/setblock", location, core.block.BlockID.names[block_id], data_value, block_handling, tags)
+    return _join_command("/setblock", location, BlockID.names[block_id], data_value, block_handling, tags)
 
 
 @lazy_command_condition
@@ -457,7 +457,7 @@ def testforblock(location, block_id, data_value=0, tags=None):
     """
     Check if a block at this location is of a certain signature.
     """
-    return _join_command("/testforblock", location, core.block.BlockID.names[block_id], data_value, tags)
+    return _join_command("/testforblock", location, BlockID.names[block_id], data_value, tags)
 
 __all__ = ["MCCommand", "SimpleCommand", "factory", "EmptyCommand", "testfor", "testforblock", "fill", "clone",
            "set_block", "say", "TargetSelector"]
