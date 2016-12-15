@@ -24,7 +24,7 @@ class BlockSpace(object):
         self.assembler = assembler_instance
         # An item can be a compound, block-box or anything else.
         self.packed_items = {}
-
+        self._packed_blocks = {}
         self.unpacked_items = []
 
     def add(self, *items):
@@ -34,7 +34,6 @@ class BlockSpace(object):
         :return: None
         """
         import cbac.unit
-
         for item in items:
             assert not isinstance(item, cbac.unit.Unit), \
                 "you tried to add a unit as a compound, please use 'add_unit' instead."
@@ -52,7 +51,8 @@ class BlockSpace(object):
                 self.add(compound)
 
             for other_unit in unit.dependent_units:
-                self.add_unit(other_unit)
+                if other_unit not in unit.build_blacklist:
+                    self.add_unit(other_unit)
 
     # Checkers
     def is_location_out_of_bounds(self, location):
@@ -86,7 +86,7 @@ class BlockSpace(object):
         elif hasattr(item, "blocks") and all(block in self.packed_blocks for block in item.blocks):
             block_locations = [self.packed_blocks[block] for block in item.blocks]
         else:
-            raise Exception("Item was nor packed or constructed from a packed item.")
+            raise Exception("Item {} was nor packed or constructed from a packed item.".format(item))
 
         return utils.min_corner(block_locations), utils.max_corner(block_locations)
 
@@ -116,20 +116,24 @@ class BlockSpace(object):
         block_packings = self.packer.pack(self.unpacked_items)
         for packed_item, block_packing in block_packings.items():
             self.packed_items[packed_item] = block_packing
+        packed_blocks = {}
+        for compound in self.packed_items.values():
+            for block, location, build_direction in compound.block_assignments:
+                try:
+                    block.facing = build_direction
+                except AttributeError:
+                    pass
+                packed_blocks[block] = location
+
+        self._packed_blocks = packed_blocks
 
     @property
     def packed_blocks(self):
         """
         :return: A dict of the packed blocks in this blockspace mapped with their location.
         """
-        to_return = {}
-        for compound in self.packed_items.values():
-            for block, location, build_direction in compound.block_assignments:
-                if hasattr(block, "facing"):
-                    block.facing = build_direction
 
-                to_return[block] = location
-        return to_return
+        return self._packed_blocks
 
     def shrink(self):
         """

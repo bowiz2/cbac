@@ -2,7 +2,6 @@
 In this module there is an abstract representation of minecraft commands.
 """
 # TODO: refactor creates condition to is_condition_creating. for now we use this because of a back comparability.
-import core.block
 from cbac.core import utils
 from cbac.core.block import CommandBlock
 
@@ -51,6 +50,7 @@ class MCCommand(object):
     @is_conditional.setter
     def is_conditional(self, value):
         self.command_block.conditional = value
+
 
     @target_selector_inject
     def compile(self):
@@ -346,6 +346,9 @@ def lazy_command_condition(f):
     return _wrapper
 
 
+from cbac.core.constants import block_id as block_ids
+
+
 def _join_command(*items):
     """
     Joins the items into a minecraft compatible format.
@@ -455,3 +458,6 @@ def testforblock(location, block_id, data_value=0, tags=None):
     Check if a block at this location is of a certain signature.
     """
     return _join_command("/testforblock", location, core.block.BlockID.names[block_id], data_value, tags)
+
+__all__ = ["MCCommand", "SimpleCommand", "factory", "EmptyCommand", "testfor", "testforblock", "fill", "clone",
+           "set_block", "say", "TargetSelector"]

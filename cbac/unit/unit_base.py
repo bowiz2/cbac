@@ -41,6 +41,7 @@ class Unit(object):
         self.outputs = []
         # Units which are needed for this unit to function.
         self.dependent_units = []
+        self.build_blacklist = []
         # Logic cbas are cbac which excecute the logic of the unit. the entry point is the first logic_cba
         self.logic_cbas = []
         self.is_inline = False
@@ -143,6 +144,12 @@ class Unit(object):
         self.compounds.append(item)
         return item
 
+    def _remove_compound(self, item):
+        """
+        used in tests
+        """
+        self.compounds.remove(item)
+
     def add_unit(self, unit):
         """
         Adds a unit to the dependent unit list.
@@ -189,9 +196,7 @@ class Unit(object):
         """
         # If this constant was never accessed before, add it to the cache.
         if value not in self._hardware_constant_cache:
-            self._hardware_constant_cache[value] = HardwareConstant(value, word_size=self.bits)
-            # Add it to the unit.
-            self.add_compound(self._hardware_constant_cache[value])
+            self._hardware_constant_cache[value] = self.add_compound(HardwareConstant(value, word_size=self.bits))
 
         # Get the constant from the cache.
         constant = self._hardware_constant_cache[value]

@@ -3,8 +3,8 @@ Contains all the abstract handler declaration and handler modes.
 """
 import cbac
 import cpu8051
-from cbac.unit.statements import If
 from cbac.core import mc_command
+from cbac.unit.statements import If
 
 
 class Handler(cbac.unit.Unit):
@@ -33,7 +33,7 @@ class Handler(cbac.unit.Unit):
         :param opcode_value: Here will be passed the currently generated opcode. can be ignored if opcode set size is 1.
         :return: Generator which is an architecture which describes how to behave depending on the opcode.
         """
-        yield None
+        raise NotImplementedError()
 
     def architecture(self):
         """
@@ -48,173 +48,16 @@ class Handler(cbac.unit.Unit):
                 *list(self.handle(opcode))
             )
 
-    @property
-    def logic_unit(self):
-        """
-        Must be implemented if make_logic is used.
-        """
-        raise NotImplemented()
 
-    def make_logic(self, register):
-        """
-        see logic_unit property.
-        :param register:
-        :return:
-        """
-        yield self.cpu.accumulator.shell.copy(self.logic_unit.inputs[0])
-        yield register.shell.copy(self.logic_unit.inputs[1])
-        yield self.logic_unit.shell.activate()
-        yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            self.logic_unit.outputs[0].shell.copy(self.cpu.accumulator),
-            self.cpu.done_opcode.shell.activate()
-        ))
-
-
-class ARxMode(Handler):
+class ModeHandler(Handler):
     """
-    Any handler which handles opcode of the type
-    OPCODE A, RX
-    should derive from this class.
+    please forgive me.
     """
+    # used for testing and
+    uses_adder = False
+    uses_incrementer = False
+    uses_and_unit = False
 
     def handle(self, opcode_value=None):
-        """
-        Handlers mode which uses a and rn register opcodes.
-        """
-        for yield_out in self.make_logic(self.get_register(opcode_value)):
+        for yield_out in self.behaviour(opcode_value):
             yield yield_out
-
-
-class ADirectMode(Handler):
-    """
-    Any handler which handles opcode of the type
-    OPCODE A, direct
-    should derive from this class.
-    """
-
-    def handle(self, _=None):
-        """
-        Handles a single opcode.
-        """
-        yield self.cpu.address_fetcher.shell.activate()
-        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-            self.cpu.read_unit.shell.activate(),
-            self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                *self.make_logic(self.cpu.read_unit.read_output)
-            ))
-        ))
-
-
-class ARiMode(Handler):
-    """
-    Any handler which handles opcode of the type
-    OPCODE A, @Ri
-    should derive from this class.
-    """
-
-    def handle(self, opcode_value=None):
-        """
-        Handler all the opcodes which uses a register an RN register.
-        :param opcode_value: the opcode we need to handle.
-        """
-        yield self.get_register(opcode_value).shell.copy(self.cpu.read_unit.address_input)
-        yield self.cpu.read_unit.shell.activate()
-        yield self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            *self.make_logic(self.cpu.read_unit.read_output)
-        ))
-
-
-class ADataMode(Handler):
-    """
-    Any handler which handles opcode of the type
-    OPCODE A, data
-    should derive from this class.
-    """
-    opcode_set = cpu8051.opcode.add_a_data
-
-    def handle(self, _=None):
-        """
-        Handlers a single opcode.
-        """
-        yield self.cpu.accumulator.shell.copy(self.cpu.adder_unit.input_a)
-        yield self.cpu.second_fetcher.shell.activate()
-        yield self.cpu.second_fetcher.callback_pivot.shell.tp(
-            self.cpu.procedure(*self.make_logic(self.cpu.process_registers[1]))
-        )
-
-
-class DirectAMode(Handler):
-    """
-    Any handler which handles opcode of the type
-    OPCODE direct, a
-    should derive from this class.
-    """
-
-    def make_logic(self, register):
-        """
-        see logic_unit property.
-        :param register:
-        :return:s
-        """
-        input_a = self.logic_unit.inputs[0]
-        input_b = self.logic_unit.inputs[1]
-        output = self.logic_unit.outputs[0]
-        yield self.cpu.accumulator.shell.copy(input_a)
-        yield register.shell.copy(input_b)
-        yield self.logic_unit.shell.activate()
-        yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            output.shell.store_to_temp(),
-            self.cpu.access_unit.pivot.shell.load_from_temp(output)
-        ))
-
-    def handle(self, _=None):
-        """
-        Handles a single opcode
-        """
-        yield self.cpu.address_fetcher.shell.activate()
-        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-            self.cpu.read_unit.shell.activate(),
-            self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                *self.make_logic(self.cpu.read_unit.read_output)
-            ))
-        ))
-
-
-class DirectDataMode(Handler):
-    """
-    Any handler which handles opcode of the type
-    OPCODE direct, data
-    should derive from this class.
-    """
-
-    def make_logic(self, register):
-        """
-        see logic_unit property.
-        :param register:
-        :return:s
-        """
-        input_a = self.logic_unit.inputs[0]
-        input_b = self.logic_unit.inputs[1]
-        output = self.logic_unit.outputs[0]
-        yield register.shell.copy(input_a)
-        yield self.cpu.process_registers[1].shell.copy(input_b)
-        yield self.logic_unit.shell.activate()
-        yield self.logic_unit.callback_pivot.shell.tp(self.cpu.procedure(
-            output.shell.store_to_temp(),
-            self.cpu.access_unit.pivot.shell.load_from_temp(output)
-        ))
-
-    def handle(self, _=None):
-        """
-        Handlers a single opcode.
-        """
-        yield self.cpu.address_fetcher.shell.activate()
-        yield self.cpu.address_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-            self.cpu.read_unit.shell.activate(),
-            self.cpu.read_unit.callback_pivot.shell.tp(self.cpu.procedure(
-                self.cpu.second_fetcher.shell.activate(),
-                self.cpu.second_fetcher.callback_pivot.shell.tp(self.cpu.procedure(
-                    *self.make_logic(self.cpu.read_unit.read_output)
-                ))
-            ))
-        ))

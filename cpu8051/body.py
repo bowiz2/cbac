@@ -43,33 +43,47 @@ class Cpu8051(cbac.Unit):
         self.flags = self.add_compound(Register(8))
         self.sys_flags = self.add_compound(Register(8))
 
-        self.opcode = self.process_registers[0]
-
-        self.increment_unit = self.add_unit(cbac.std_unit.IncrementUnit(self.bits))
-
-        self.and_unit = self.add_unit(cbac.std_unit.AndGate.Array(self.bits))
-
-        self.adder_unit = self.add_unit(cbac.std_unit.RippleCarryFullAdderArray)
-        # Set flags for the adder unit.
-        self.adder_unit.carry_flags[3] = self.auxiliary_carry_flag
-        self.adder_unit.carry_flags[7] = self.carry_flag
-
         # this register is signaled when the opcode operation is complete.
         self.done_opcode = self.add_compound(Register(1))
 
-        self.access_unit = self.add_unit(std_unit.MemoryAccessUnit(memory_dump=std_unit.MemoryDump(data)))
+        self.opcode = self.process_registers[0]
 
+        self.increment_unit = self.add_unit(cbac.std_unit.IncrementUnit(self.bits))
+        self.and_unit = self.add_unit(cbac.std_unit.AndGate.Array(self.bits))
+        self.or_unit = self.add_unit(cbac.std_unit.OrGate.Array(self.bits))
+        self.adder_unit = self.add_unit(cbac.std_unit.RippleCarryFullAdderArray)
+
+        self.access_unit = self.add_unit(std_unit.MemoryAccessUnit(memory_dump=std_unit.MemoryDump(data)))
         self.write_unit = self.add_unit(std_unit.WriteUnit(8, self.access_unit))
         self.read_unit = self.add_unit(std_unit.ReadUnit(8, self.access_unit))
 
         self.second_fetcher = self.add_unit(MemoryFetcher(self, self.process_registers[1]))
-
         self.address_fetcher = self.add_unit(MemoryFetcher(self, self.read_unit.address_input))
+
+        # Set flags for the adder unit.
+        self.adder_unit.carry_flags[3] = self.auxiliary_carry_flag
+        self.adder_unit.carry_flags[7] = self.carry_flag
 
         self.pivot_reset = self.procedure(
             mc_command.say("Pivot Reset"),
             *[pivot.shell.summon(self.callback_pivot_home) for pivot in cbac.core.mcentity.pivot.Pivot._all]
         )
+
+        self.handlers = []
+
+    @property
+    def memory_units(self):
+        """
+        :return: list of all the cpu units which are working with the memory
+        """
+        return [self.access_unit, self.write_unit, self.read_unit, self.second_fetcher, self.address_fetcher]
+
+    @property
+    def alu_units(self):
+        """
+        :return: List of all the cpu units which are the alu.
+        """
+        return [self.increment_unit, self.add_unit, self.and_unit, self.subtract_unit]
 
     def set_initial_memory(self, data):
         """
@@ -89,16 +103,8 @@ class Cpu8051(cbac.Unit):
         yield MainLogicJump(self.add_unit(MemoryFetcher(self, self.process_registers[0])))
         yield mc_command.say("After first fetch!")
 
-        yield InlineCall(self.add_unit(cpu8051.handlers.nop.Nop()))
-
-        yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovARx()))
-        yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovRxA()))
-        yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovRxData()))
-        yield InlineCall(self.add_unit(cpu8051.handlers.mov.MovRxAddr()))
-
-        yield InlineCall(self.add_unit(cpu8051.handlers.inc.IncRx()))
-        yield InlineCall(self.add_unit(cpu8051.handlers.inc.IncA()))
-        yield InlineCall(self.add_unit(cpu8051.handlers.inc.IncAddr()))
+        for handler in self.handlers:
+            yield InlineCall(handler)
 
     def opcode_is(self, value):
         return self.opcode.shell.testforblocks(self.constant_factory(value))

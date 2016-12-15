@@ -1,19 +1,24 @@
 from cpu8051.handlers.handler import Handler
 from cpu8051.opcode import *
 
+class _Mov(Handler):
+    uses_adder = False
+    pass
 
-class MovRxA(Handler):
+
+class MovRxA(_Mov):
     """
     MOV A, RX
     """
     opcode_set = mov_rx_a
+
 
     def handle(self, i=None):
         yield self.cpu.accumulator.shell.copy(self.get_register(i))
         yield self.cpu.done_opcode.shell.activate()
 
 
-class MovARx(Handler):
+class MovARx(_Mov):
     """
     MOV RX, A
     """
@@ -24,7 +29,7 @@ class MovARx(Handler):
         yield self.cpu.done_opcode.shell.activate()
 
 
-class MovRxData(Handler):
+class MovRxData(_Mov):
     """
     MOV RX, data
     """
@@ -38,7 +43,7 @@ class MovRxData(Handler):
         ))
 
 
-class MovRxAddr(Handler):
+class MovRxAddr(_Mov):
     """
     MOV RX, @iram addr
     """
@@ -55,6 +60,6 @@ class MovRxAddr(Handler):
         ))
 
 
-mov_handlers = [MovRxA, MovRxAddr, MovRxData, MovARx, MovARx]
+all_handlers = [MovRxA, MovRxAddr, MovRxData, MovARx, MovARx]
 
 __all__ = ["MovRxAddr", "MovRxData", "MovRxA", "MovARx"]

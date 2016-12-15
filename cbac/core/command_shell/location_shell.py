@@ -183,6 +183,12 @@ class LocationShell(CommandShell):
         except AttributeError:
             return self.testforblock(other)
 
+    def __ne__(self, other):
+        eq_command = self.__eq__(other)
+        eq_command.creates_condition = False
+        cb = eq_command.command_block
+        return eq_command, cb.shell.has_failed()
+
     def signal(self):
         """
         alias for activate
