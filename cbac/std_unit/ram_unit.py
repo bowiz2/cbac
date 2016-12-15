@@ -105,7 +105,6 @@ class MemoryAccessUnit(Unit):
         self.raw_memory = self.add_compound(memory_dump)
 
         # This pivot is going to move in the memory.
-        # TODO: create pivot class with generated names.
         self.pivot = Pivot()
         # ==
         self.synthesis()
