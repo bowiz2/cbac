@@ -24,6 +24,9 @@ class BlockBox(object):
 
 
 class PlainBlockBox(BlockBox):
+    """
+    This is a block-box which composed of a single type of a minecraft block.
+    """
     def __init__(self, size, fill_material, fill_data=0, isolated=False):
         super(PlainBlockBox, self).__init__(size, isolated)
         self.fill_material = fill_material
