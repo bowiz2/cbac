@@ -12,6 +12,7 @@ from cbac.unit.statements import *
 from cbac import std_logic
 from test.decorators import named_schematic
 from test_std_unit import StdUnitTestCase
+from test.utils import open_products
 
 
 class TestUniProperties(TestCase):

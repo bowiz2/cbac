@@ -9,6 +9,8 @@ from cbac.unit import Unit
 from cbac.unit.statements import *
 from test.decorators import named_schematic
 import cbac
+import os
+from test.context import product_dir
 
 
 class StdUnitTestCase(TestCase):
@@ -17,7 +19,7 @@ class StdUnitTestCase(TestCase):
     """
 
     def setUp(self):
-        self.schematic_path = "test_schematic.schematic"
+        self.schematic_path = None  # type: str
         self.block_space = BlockSpace((100, 100, 100))
         self.block_space.add(Unit.callback_pivot_home)
 
@@ -25,7 +27,13 @@ class StdUnitTestCase(TestCase):
         self.block_space.pack()
         self.block_space.shrink()
         schematic = assembler.assemble(self.block_space)
-        schematic.saveToFile(self.schematic_path)
+        assert self.schematic_path, "You haven't specified the output schematic file name. Try @named_schematic"
+        path = os.path.join(product_dir, self.schematic_path)
+
+        if not os.path.exists(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+
+        schematic.saveToFile(path)
 
 
 class TestBitwiseUnits(StdUnitTestCase):
