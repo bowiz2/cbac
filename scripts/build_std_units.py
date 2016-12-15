@@ -35,7 +35,7 @@ def build_simple_unit(build_folder, unit_class, bits):
     :return: unit file path.
     """
     # Create the blockspace to which the units are added.
-    blockspace = cbac.BlockSpace(size=(100, 100, 100))
+    blockspace = cbac.BlockSpace()
 
     # Add the unit to the blockspace.
     blockspace.add_unit(unit_class(bits))

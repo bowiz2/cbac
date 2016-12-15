@@ -20,7 +20,7 @@ class StdUnitTestCase(TestCase):
 
     def setUp(self):
         self.schematic_path = None  # type: str
-        self.block_space = BlockSpace((100, 100, 100))
+        self.block_space = BlockSpace()
         self.block_space.add(Unit.callback_pivot_home)
 
     def tearDown(self):

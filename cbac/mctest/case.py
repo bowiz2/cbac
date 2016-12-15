@@ -5,30 +5,34 @@ see example.py for example
 import inspect
 import math
 
-import assembler
-from cbac import BlockSpace, Unit
+import unittest
+
+from cbac import Unit
 from cbac.unit.statements import *
+from core.blockspace.blockspace import BlockSpace
 from mctest.assertion import Assertion
-from cbac.std_unitincrement_unit import IncrementUnit
+from cbac import std_logic
+from cbac.unit import auto_synthesis
 
 
-# TODO: auto deploy
-
-
-class TesterUnit(Unit):
+class _TesterUnit(Unit):
     """
-    This is a unit which tests if a test passes or not.
-    And contains all the in-game logic.
+    A unit which tests a single method in a test case.
     """
 
-    def __init__(self, actions):
-        super(TesterUnit, self).__init__()
+    @auto_synthesis
+    def __init__(self, actions, method_name):
+        """
+        :param method_name: the name of the test method.
+        :param actions: action of the test method.
+        """
+        super(_TesterUnit, self).__init__(0)
+        self.method_name = method_name
         self.actions = actions
         assertion_count = len(self.assertions)
-        assertions_log = int(math.ceil(math.log(assertion_count))) + 1
-        self.incrementer = self.add_unit(IncrementUnit(assertions_log))
-        self.success_count_register = self.create_output(assertions_log)
-        self.synthesis()
+        self.flag_register = self.add(std_logic.OutputRegister(assertion_count + 1))
+        self.assertion_flags = dict(zip(self.assertions, self.flag_register.ports))
+        self.test_pass_flag = self.flag_register.ports[-1]
 
     @property
     def assertions(self):
@@ -36,95 +40,72 @@ class TesterUnit(Unit):
         The assertions made by the user.
         :return:
         """
-        return [isinstance(item, Assertion) for item in self.actions]
+        return filter(lambda x: isinstance(x, Assertion), self.actions)
 
     def architecture(self):
         for action in self.actions:
             if isinstance(action, Assertion):
                 assertion = action
-                yield If(assertion.command).then(
-                    STDCall(self.incrementer, self.success_count_register)
+                yield If(assertion.commands).then(
+                    self.assertion_flags[assertion].shell.activate()
+                ).otherwise(
+                    mc_command.say(assertion.message)
                 )
-                yield If(assertion.command).then(
-                    "/say assertion ok"
-                )
-                yield If(assertion.command).then(
-                    self.incrementer.output.shell.copy(self.success_count_register)
-                )
-
             else:
                 yield action
+        yield If(self.flag_register == self.flag_register.max_value()).then(
+            mc_command.say("All Assertion passed"),
+            self.test_pass_flag.shell.activate()
+        ).otherwise(
+            mc_command.say("{} Failed".format(self.__class__.__name__)),
+            *[If(flag == True).then(mc_command.say(assertion.msg)) for flag, assertion in self.assertion_flags.items()]
+        )
 
 
-class McTestCase(object):
+def test_in_minecraft(self):
+    "casues us to test this module in minecraft"
+    self.assertTrue(True)
+
+
+def mctest(f):
+    def _wrapper(self, *args, **kwargs):
+        actions = list(f(self, *args, **kwargs))
+        tester_unit = _TesterUnit(actions, f.__name__)
+        self.blockspace.add_unit(tester_unit)
+        test_in_minecraft(self)
+    _wrapper.__name__ = f.__name__
+    return _wrapper
+
+
+class McTestCase(unittest.TestCase):
     """
     Imulating unittest's TestCase
     """
 
-    def __init__(self):
-        self.incrementer = None
-        self.actions = []
-        self.units = []
-        # compounds which were needed for assertions.
-        self.compounds = []
+    word_size = None
+    blockspace = BlockSpace()
 
-        self.blockspace = BlockSpace((1000, 1000, 1000))
-        # used in the setup and tear down.
-        self.processed_method_name = None
-
-    def build(self, path):
-        """
-        Build the test and save it to a schematic.
-        :param path: path to the file to which the schematic will be saved.
-        :return:
-        """
-        # work the test functions.
-        test_methods = filter(
-            lambda (key, value): key.startswith("test_"),
-            inspect.getmembers(self.__class__, predicate=inspect.ismethod))
-
-        for pair in test_methods:
-            method_name, unbound_method = pair
-            self.processed_method_name = method_name
-            self.actions += list(self.setUp())
-            unbound = unbound_method(self)
-            if unbound:
-                self.actions += list(unbound)
-            self.actions += list(self.tearDown())
-
-        if len(self.actions) > 0:
-            tester_unit = TesterUnit(self.actions)
-            self.blockspace.add_unit(tester_unit)
-
-            #
-            # cmd_batch_2 = []
-            # for block in cba1.blocks:
-            #     if hasattr(block, "command"):
-            #         if block.command in [assertion.command for assertion in self.assertions]:
-            #             cmd_batch_2.append(block.shell.has_failed())
-            #             cmd_batch_2.append("/say assertion faild")
-            #
-            # cba2 = CommandBlockArray(*cmd_batch_2)
-            # self.compounds.append(cba2)
-        for compound in self.compounds:
-            self.blockspace.add(compound)
-        self.blockspace.pack()
-        self.blockspace.shrink()
-
-        schematic = assembler.assemble(self.blockspace)
-        schematic.saveToFile(path)
-
-    def setUp(self):
-        """
-        Will be added to the statements and executed before each.
-        """
-        yield "/say start {0} : {1}".format(self.__class__.__name__, self.processed_method_name)
-
-    def tearDown(self):
-        """"
-        Will be executed and statements added after each function.
-        """
-        yield "/say end {0} : {1}".format(self.__class__.__name__, self.processed_method_name)
+    _constant_cache = {}
 
     def add_unit(self, unit):
+        if inspect.isclass(unit):
+            unit = unit(self.word_size)
         self.blockspace.add_unit(unit)
+        return unit
+
+    def add(self, compound):
+        self.blockspace.add(compound)
+        return compound
+
+    def constant_factory(self, value, word_size=None):
+        from cbac import HardwareConstant
+
+        if not word_size:
+            word_size = self.word_size
+
+        if value not in self._constant_cache:
+            constant = HardwareConstant(value, word_size)
+            self._constant_cache[value] = constant
+            self.add(constant)
+
+        return self._constant_cache[value]

@@ -23,13 +23,13 @@ class BlockBoxTest(TestCase):
     def test_blockspace_integration(self):
         size = (2, 3, 4)
         my_blockbox = PlainBlockBox(size, BlockID.TRUE_BLOCK)
-        my_blockspace = BlockSpace((20, 20, 20))
+        my_blockspace = BlockSpace()
         my_blockspace.add(my_blockbox)
         my_blockspace.pack()
         return cbac.assembler.assemble(my_blockspace)
 
     def test_ram(self):
         ram = cbac.std_unit.ram_unit.MemoryDump([1, 2, 3])
-        blockspace = BlockSpace((1, 1, 1))
+        blockspace = BlockSpace()
         blockspace.add(ram)
         blockspace.build("./products/memory_dump.schematic")

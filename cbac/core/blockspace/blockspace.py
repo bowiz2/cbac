@@ -12,13 +12,10 @@ class BlockSpace(object):
     Logical representation of blocks in the world
     """
 
-    def __init__(self, size, packer_instance=packer, assembler_instance=assembler):
+    def __init__(self, packer_instance=packer, assembler_instance=assembler):
         """
-        :param size: The size of the blockspace, for packing purposes.
         :param packer_instance: an instance of an object which can pack compounds. is a dependency injection.
         """
-        # Tuple which describes the size of the block space (x,y,z)
-        self.size = size
 
         self.packer = packer_instance
         self.assembler = assembler_instance
@@ -53,18 +50,6 @@ class BlockSpace(object):
             for other_unit in unit.dependent_units:
                 if other_unit not in unit.build_blacklist:
                     self.add_unit(other_unit)
-
-    # Checkers
-    def is_location_out_of_bounds(self, location):
-        """
-        Check if a location is not outside of the bounds of this block-space.
-        """
-        for location_d, size_d in zip(location, self.size):
-            if location_d < 0:
-                return True
-            if location_d > size_d - 1:
-                return True
-
     # Getters
     def get_area_of(self, item):
         """
