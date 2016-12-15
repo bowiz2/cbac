@@ -3,7 +3,7 @@ from unittest import TestCase
 from cbac.core.mc_direction import MCDirection
 from cbac.core.mcentity.mcentity_base import MCEntity
 
-from cbac import CBA
+from cbac import CommandBlockArray
 from cbac import Register
 from cbac.core.mcentity.pivot import Pivot
 from test.test_std_unit import StdUnitTestCase, named_schematic
@@ -45,7 +45,7 @@ class TestPivot(StdUnitTestCase):
         memory = Register(8)
         my_pivot = Pivot()
         blockspace.add(memory)
-        blockspace.add(CBA(
+        blockspace.add(CommandBlockArray(
             my_pivot.shell.summon(memory.blocks[0]),
             my_pivot.shell.activate(),
             my_pivot.shell.move(MCDirection.UP),
@@ -61,7 +61,7 @@ class TestPivot(StdUnitTestCase):
         self.block_space.add(register)
         my_pivot = Pivot()
 
-        self.block_space.add(CBA(
+        self.block_space.add(CommandBlockArray(
             my_pivot.shell.summon(register.blocks[0]),
             my_pivot.shell.store_to_temp(register),
             my_pivot.shell.move(MCDirection.UP),

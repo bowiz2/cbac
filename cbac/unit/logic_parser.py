@@ -7,7 +7,7 @@ from cbac.core.utils import lrange
 
 from cbac.core import utils
 from cbac.unit.statements import *
-from cbac.core.compound import CBA
+from cbac.core.compound import CommandBlockArray
 from cbac.core.mc_command import MCCommand
 
 
@@ -85,7 +85,7 @@ class UnitLogicParser(object):
             self.commands.append(mc_command.factory("/say last"))
 
         for command_collection in self.all_commands:
-            cba = CBA(*command_collection)
+            cba = CommandBlockArray(*command_collection)
             cba_mapping[command_collection] = cba
             logic_cbas.append(cba)
 

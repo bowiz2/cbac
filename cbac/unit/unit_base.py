@@ -264,9 +264,9 @@ class Unit(object):
         pass
 
     def procedure(self, *commands):
-        from cbac.core.compound import CBA
+        from cbac.core.compound import CommandBlockArray
         commands = filter(lambda x: x is not None, commands)
-        return self.add_compound(CBA(*commands))
+        return self.add_compound(CommandBlockArray(*commands))
 
 
 class SimpleUnit(Unit):

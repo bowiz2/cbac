@@ -1,7 +1,5 @@
 from cbac.core.block import Block, CommandBlock
-from cbac.core.compound import Compound, CBA, Register, HardwareConstant
-from cbac.core.constants import mc_direction
-from cbac.core.constants import block_id
+from cbac.core.compound import Compound, CommandBlockArray, Register, HardwareConstant
 from cbac.core.blockspace import BlockSpace
 from cbac.unit import Unit
 from cbac.core.mcentity import Player
@@ -14,7 +12,7 @@ from cbac.core import mc_command
 
 
 BuildEnvironment = BlockSpace
-CommandBlockArray = CBA
-__all__ = ["Block", "CommandBlock", "Compound", "CBA", "CommandBlockArray", "Register", "HardwareConstant",
+CommandBlockArray = CommandBlockArray
+__all__ = ["Block", "CommandBlock", "Compound", "CommandBlockArray", "CommandBlockArray", "Register", "HardwareConstant",
            "BlockSpace",
            "Unit", "MCEntity", "assembler", "mc_direction", "block_id", 'std_unit', 'std_logic', 'schematics', 'Player']

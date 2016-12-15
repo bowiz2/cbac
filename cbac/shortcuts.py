@@ -1,5 +1,4 @@
 import cbac
-from cbac.core.constants import block_id as block_ids
 
 std_unit_gates = [cbac.std_unit.AndGate, cbac.std_unit.OrGate, cbac.std_unit.NandGate, cbac.std_unit.XorGate,
                   cbac.std_unit.XnorGate]
@@ -22,9 +21,9 @@ class procedure:
         self.name = name
 
     def body(self, *statements):
-        from cbac.core.compound.cba import CBA
+        from cbac.core.compound.cb_array import CommandBlockArray
         from cbac.core.mc_command import say
-        return CBA(say("Procedure: {0}".format(self.name)), *statements)
+        return CommandBlockArray(say("Procedure: {0}".format(self.name)), *statements)
 
 
 __all__ = ['std_unit_gates', 'std_unit_arithmetics', 'block_ids']

@@ -3,8 +3,8 @@ Holds all the compounds which are derived from the Compound class, including the
 Compounds are objects which consist of an array of blocks.
 """
 from .compound_base import Compound
-from .cba import CBA
+from .cb_array import CommandBlockArray
 from .hardware_constant import HardwareConstant
 from .register import Register
 
-__all__ = ["Compound", "CBA", "Register", "HardwareConstant"]
+__all__ = ["Compound", "CommandBlockArray", "Register", "HardwareConstant"]

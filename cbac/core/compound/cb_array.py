@@ -9,7 +9,7 @@ from cbac.core.compound import Compound
 from cbac.core.utils import memoize
 
 
-class CBA(Compound):
+class CommandBlockArray(Compound):
     """
     Command Block Array
     This is a very important class! this is the base for all the logic inside the framework.
@@ -33,7 +33,7 @@ class CBA(Compound):
         # This block responsible for deactivating the activator block. if the cba is not repeated.
         self.cb_re_setter = CommandBlock(self.activator.shell.deactivate(), None, "chain", True)
 
-        super(CBA, self).__init__(isolated=True)
+        super(CommandBlockArray, self).__init__(isolated=True)
 
     def add_command(self, command):
         """
@@ -164,7 +164,7 @@ class CBA(Compound):
         :param other: Another cba.
         :return: A new cba.
         """
-        return CBA(*(self.commands + other.commands))
+        return CommandBlockArray(*(self.commands + other.commands))
 
     def __str__(self):
         return self.name

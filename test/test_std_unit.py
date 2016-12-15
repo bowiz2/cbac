@@ -269,6 +269,6 @@ class TestSubRegisterOperation(StdUnitTestCase):
     def test_slice(self):
         my_Register = cbac.Register(8)
         self.block_space.add(my_Register)
-        self.block_space.add(cbac.CBA(
+        self.block_space.add(cbac.CommandBlockArray(
             my_Register.slice(xrange(2, 5)).shell.set_max_value()
         ))

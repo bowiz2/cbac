@@ -3,7 +3,7 @@ from cbac.unit import auto_synthesis
 from cbac.unit.unit_base import Unit
 from cbac.unit.statements import *
 from cbac import std_logic
-from cbac.core.compound import CBA
+from cbac.core.compound import CommandBlockArray
 
 
 class SwitchUnit(Unit):
@@ -21,7 +21,7 @@ class SwitchUnit(Unit):
         self.true_unit = true_unit
         self.false_unit = false_unit
         self.auto_callback = False
-        self.callback_vortex = self.add_compound(CBA(self.callback_pivot.shell.activate()))
+        self.callback_vortex = self.add_compound(CommandBlockArray(self.callback_pivot.shell.activate()))
 
     def architecture(self):
         """

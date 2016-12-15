@@ -5,7 +5,7 @@ from cbac.core.blockspace.area import LineArea, RawArea, BlockBoxArea, WindedAre
 from pymclevel import MCSchematic
 
 from cbac.core.blockbox import BlockBox
-from cbac.core.compound import CBA
+from cbac.core.compound import CommandBlockArray
 
 
 def area_factory(obj):
@@ -19,7 +19,7 @@ def area_factory(obj):
     if isinstance(obj, BlockBox):
         return BlockBoxArea(obj)
 
-    if isinstance(obj, CBA):
+    if isinstance(obj, CommandBlockArray):
         return WindedArea(obj)
 
     return LineArea(obj)
