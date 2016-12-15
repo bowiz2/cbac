@@ -134,7 +134,7 @@ class CommandBlock(Block):
 
 class BlockID(object):
     """
-    Block ids.
+    Block-ID Constants and util methods and variables.
     """
     EMPTY_BLOCK = 0
     AIR_BLOCK = EMPTY_BLOCK
