@@ -1,11 +1,14 @@
 """
 Winds an array of command blocks into a compact area.
 """
-from cbac.core.block import CommandBlock
+import math
+from cbac.core.block import CommandBlock, Block, BlockID
 from cbac.core.blockspace.assignment import BlockAssignment
 from cbac.core.mc_direction import MCDirection
 
 from cbac.core.utils import Vector
+
+PAD_BLOCK = BlockID.EMERALD_BLOCK
 
 
 def winde(blocks, max_width, start_build_direction):
@@ -23,9 +26,10 @@ def winde(blocks, max_width, start_build_direction):
     # Pad last row.
     _pad(rows[-1], max_width)
 
-    directions = decide_directions(rows, build_direction)
+    row_locations = list(locate_rows(rows))
+    directions = decide_directions(rows, build_direction, row_locations)
 
-    locs = locate_blocks(rows)
+    locs = locate_blocks(rows, row_locations)
 
     return [BlockAssignment(block, locs[block], directions[block]) for block in extract_blocks(rows)]
 
@@ -65,10 +69,10 @@ def _pad(row, complete_size):
     :return: row after padding.
     """
     while len(row) < complete_size:
-        row.append(None)
+        row.append(Block(PAD_BLOCK))
 
 
-def decide_directions(rows, start_direction):
+def decide_directions(rows, start_direction, row_locations):
     """
     For each row, decide the directions its blocks are facing. Also reverse rows if needed.
     :param rows: rows you want to change the directions for.
@@ -78,18 +82,42 @@ def decide_directions(rows, start_direction):
     directions = {}
     # set directions for the blocks.
     for row_id, row in enumerate(rows):
+
         for block in row:
             if block is not row[-1]:
                 directions[block] = [start_direction, MCDirection.opposite(start_direction)][row_id % 2]
             else:
-                directions[block] = MCDirection.UP
-
+                if row_id + 1 < len(rows):
+                    direction = MCDirection.from_vector(row_locations[row_id + 1] - row_locations[row_id])
+                    if direction not in [MCDirection.UP, MCDirection.DOWN]:
+                        direction = MCDirection.opposite(direction)
+                    directions[block] = direction
+                else:
+                    directions[block] = MCDirection.UP
         if row_id % 2 is 1:
             row.reverse()
     return directions
 
 
-def locate_blocks(rows):
+def locate_rows(rows):
+    height = int(math.sqrt(len(rows)))
+    while len(rows) % height < (height / 2):
+        height -= 1
+    pivot = Vector(0, 0, 0)
+    direction = 1
+
+    for i, row in enumerate(rows):
+        yield pivot
+
+        if pivot.y % height == 0 and i is not 0:
+            direction *= -1
+            pivot += (0, 0, 1)
+            yield pivot
+
+        pivot += Vector(0, direction, 0)
+
+
+def locate_blocks(rows, row_locations):
     """
     Calculate the locations of each block in the rows.
     :param rows: collection of rows.
@@ -97,9 +125,9 @@ def locate_blocks(rows):
     """
     locations = {}
     # set locations for the blocks.
-    for row_id, row in enumerate(rows):
+    for row, row_location in zip(rows, row_locations):
         for block_id, block in enumerate(row):
-            locations[block] = Vector(block_id, row_id, 0)
+            locations[block] = row_location + Vector(block_id, 0, 0)
     return locations
 
 

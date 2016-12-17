@@ -41,3 +41,18 @@ class MCDirection(object):
         SOUTH: Vector(0, 0, -1),
         WEST: Vector(-1, 0, 0)
     }
+
+
+    @staticmethod
+    def from_vector(vector):
+        """
+        Get a direction form a vector.
+
+        I chose to implement that because it is the simplest way.
+        Premature optimisation is the root of all evil.
+        """
+        assert vector in MCDirection.vectors.values(), "{0} is not one of {1}".format(vector,
+                                                                                      MCDirection.vectors.values())
+        for direction, direction_vector in MCDirection.vectors.items():
+            if direction_vector == vector:
+                return direction
