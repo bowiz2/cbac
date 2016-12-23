@@ -8,8 +8,9 @@ documented python function.
 
 
 
-## Implemented Features for the circuit developer
+## CBAC 1.0
 
 **Command Block Arrays** - Write all your commands in python and import them as a schematic file.
 **Registers** - An easy way of storing binary information, And interacting with it using commands.
 **Units** - Implement complex logic on a higher abstraction level then a command block array.
+
