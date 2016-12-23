@@ -11,4 +11,5 @@ setup(name='cbac',
                 'cbac.core.mcentity', 'cbac.mctest', 'cbac.resources', 'cbac.resources.schematics', 'cbac.schematics',
                 'cbac.std_logic', 'cbac.std_unit', 'cbac.unit'],
       zip_safe=False,
+      scripts=['scripts/build_std_units.py'],
       package_data={'': ['*.schematic']})

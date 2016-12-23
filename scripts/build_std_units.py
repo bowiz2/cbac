@@ -1,7 +1,6 @@
 """
 Build all the units which are in the std_unit folder.
 """
-import cbac
 import os
 import re
 import sys
@@ -26,31 +25,33 @@ def get_unit_filename(unit_class):
     return "{0}.{1}".format(camel_to_underscore(unit_class.__name__), "schematic")
 
 
-def build_simple_unit(build_folder, unit_class, bits):
-    """
-    Builds a unit into a schematic file.
-    :param build_folder: folder to which the unit will be saved.
-    :param unit_class: class of the unit you want to build
-    :param bits: the size of the io bus of the unit.
-    :return: unit file path.
-    """
-    # Create the blockspace to which the units are added.
-    blockspace = cbac.BlockSpace(size=(100, 100, 100))
-
-    # Add the unit to the blockspace.
-    blockspace.add_unit(unit_class(bits))
-
-    # Save the blockspace to a schematic file.
-    blockspace.build(os.path.join(build_folder, get_unit_filename(unit_class)))
-
-    # Print progress.
-    print "  - {0} : {1}".format(unit_class.__name__, get_unit_filename(unit_class))
-
-
 def main(build_folder, bits=4):
     """
     Iterate over all the units imported from cbac.std_unit and build them into the output folder.
     """
+    import cbac
+
+    def build_simple_unit(build_folder, unit_class, bits):
+        """
+        Builds a unit into a schematic file.
+        The reason this is an insde function is beacuase the way i chose to import cbac module.
+        :param build_folder: folder to which the unit will be saved.
+        :param unit_class: class of the unit you want to build
+        :param bits: the size of the io bus of the unit.
+        :return: unit file path.
+        """
+        # Create the blockspace to which the units are added.
+        blockspace = cbac.BlockSpace(size=(100, 100, 100))
+
+        # Add the unit to the blockspace.
+        blockspace.add_unit(unit_class(bits))
+
+        # Save the blockspace to a schematic file.
+        blockspace.build(os.path.join(build_folder, get_unit_filename(unit_class)))
+
+        # Print progress.
+        print "  - {0} : {1}".format(unit_class.__name__, get_unit_filename(unit_class))
+
     print "Building units for {0} bits in folder {1}".format(bits, os.path.abspath(build_folder))
     print
     print "Start building gate arrays..."
@@ -74,10 +75,10 @@ def usage():
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3 or len(sys.argv) > 4:
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
         usage()
-
-    if len(sys.argv) > 3:
-        main(sys.argv[1], sys.argv[2])
     else:
-        main(sys.argv[1])
+        if len(sys.argv) > 2:
+            main(sys.argv[0], sys.argv[1])
+        else:
+            main(sys.argv[0])
