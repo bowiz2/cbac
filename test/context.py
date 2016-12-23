@@ -3,9 +3,7 @@ import sys
 from tempfile import mkdtemp
 import logging
 
-
 sys.path.insert(0, os.path.abspath('..'))
-
 
 if "cbac_test_products" in os.environ:
     product_dir = os.environ["cbac_test_products"]

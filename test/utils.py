@@ -11,6 +11,7 @@ def open_products():
         subprocess.Popen(r'explorer /select,"{}"'.format(context.product_dir))
         products_opened = True
 
+
 def camel_to_underscore(string):
     """
     Converts string in camel case into snake notation ("ExampleString" into "example_class")

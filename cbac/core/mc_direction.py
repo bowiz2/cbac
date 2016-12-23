@@ -42,7 +42,6 @@ class MCDirection(object):
         WEST: Vector(-1, 0, 0)
     }
 
-
     @staticmethod
     def from_vector(vector):
         """

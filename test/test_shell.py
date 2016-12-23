@@ -8,11 +8,11 @@ from cbac.core.utils import Vector, memoize
 from cbac.core.block import BlockID
 
 
-
 class BlockspaceMock(BlockSpace):
     """
     Used in the command shell tests.
     """
+
     def add_block(self, block, location):
         """
         Add a block at a location.
