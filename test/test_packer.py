@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from cbac import Block, Compound
 from cbac.core.blockspace import packer
-from core.block import BlockID
+from cbac.core.block import BlockID
 
 
 class TestPacker(TestCase):

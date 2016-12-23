@@ -1,8 +1,8 @@
 from cbac import std_logic
 from cbac.std_unit.gate import Gate
 from cbac.std_unit.nand_array import NandArray
-from unit import auto_synthesis
-from unit.statements import If
+from cbac.unit import auto_synthesis
+from cbac.unit.statements import If
 
 
 class NandGate(Gate):

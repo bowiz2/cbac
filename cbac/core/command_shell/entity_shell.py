@@ -3,7 +3,7 @@ Holds Entity Shell
 """
 from cbac.core.command_shell.command_shell_base import CommandShell
 from cbac.core.command_shell.decorator import command
-from core.block import BlockID
+from cbac.core.block import BlockID
 from cbac.core.utils import Vector
 from cbac.core.utils import format_relative_location, format_location, format_relative_area, absolute_area, format_area
 from cbac.core.mc_direction import MCDirection

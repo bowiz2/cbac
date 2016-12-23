@@ -3,7 +3,7 @@ from unittest import TestCase
 from cbac.core.blockbox import PlainBlockBox
 from cbac.core.blockspace import BlockSpace
 from cbac.core.blockspace.area import BlockBoxArea
-from core.block import BlockID
+from cbac.core.block import BlockID
 from test.decorators import save_schematic
 import cbac
 

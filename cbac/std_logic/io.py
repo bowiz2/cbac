@@ -1,7 +1,7 @@
 """
 Holds the io sugar.
 """
-from core.block import BlockID
+from cbac.core.block import BlockID
 
 import cbac.core.compound.register
 import cbac.core.block

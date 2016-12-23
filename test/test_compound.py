@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from core.block import BlockID
+from cbac.core.block import BlockID
 
 from cbac.core.compound import HardwareConstant
 from cbac.core.compound import Register

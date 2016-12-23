@@ -5,7 +5,7 @@ from cbac.core.blockspace import BlockSpace
 from cbac.core.command_shell import ShellContext, CommandShell
 from cbac.core.mcentity import Player
 from cbac.core.utils import Vector, memoize
-from core.block import BlockID
+from cbac.core.block import BlockID
 
 
 

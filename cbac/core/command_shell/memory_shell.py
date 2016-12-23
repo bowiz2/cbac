@@ -1,7 +1,7 @@
 """
 Holds register shell.
 """
-from core.block import BlockID
+from cbac.core.block import BlockID
 
 from cbac.core.command_shell.compound_shell import CompoundShell
 

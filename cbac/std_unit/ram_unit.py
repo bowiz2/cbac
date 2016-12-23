@@ -4,7 +4,7 @@ Holds all memory access and manipulation units.
 import math
 
 from cbac.core.blockbox import BlockBox, PlainBlockBox
-from core.block import BlockID
+from cbac.core.block import BlockID
 from cbac.core.mc_direction import MCDirection
 from cbac.core.mcentity.pivot import Pivot
 from cbac.core.utils import Vector, inline_generators

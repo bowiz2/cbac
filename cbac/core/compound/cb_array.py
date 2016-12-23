@@ -3,7 +3,7 @@ Command Block Array holder
 """
 from cbac.core.block import Block, CommandBlock
 from cbac.core.command_shell import CBAShell
-from core.block import BlockID
+from cbac.core.block import BlockID
 
 from cbac.core.compound import Compound
 from cbac.core.utils import memoize

@@ -3,7 +3,7 @@ Holds Location shell, and Block shell, which are the same thing.
 """
 from cbac.core.command_shell.command_shell_base import CommandShell
 from cbac.core.command_shell.decorator import command
-from core.block import BlockID
+from cbac.core.block import BlockID
 
 from cbac.core.utils import Vector, format_area
 from cbac.core.utils import absolute_area as abs_area
