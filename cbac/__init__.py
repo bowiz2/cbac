@@ -12,6 +12,7 @@ from cbac.core import mc_command
 from cbac.core.mc_direction import MCDirection
 
 BuildEnvironment = BlockSpace
-__all__ = ["Block", "CommandBlock", "Compound", "CommandBlockArray", "CommandBlockArray", "Register", "HardwareConstant",
-           "BlockSpace",
-           "Unit", "MCEntity", "assembler", "mc_direction", "block_id", 'std_unit', 'std_logic', 'schematics', 'Player']
+
+__all__ = ["Block", "CommandBlock", "Compound", "CommandBlockArray", "Register", "HardwareConstant", "BlockSpace",
+           "Unit", "MCEntity", "assembler", 'std_unit', 'std_logic', 'schematics', 'Player', "MCDirection",
+           "mc_command", "shortcuts"]
