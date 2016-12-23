@@ -9,4 +9,7 @@ setup(name='cbac',
       license='MIT',
       packages=['cbac'],
       zip_safe=False,
+      install_requires=[
+          'pymclevel'
+      ],
       package_data={'': ['*.schematic']})
