@@ -9,10 +9,9 @@ import std_unit
 import schematics
 import shortcuts
 from cbac.core import mc_command
-
+from cbac.core.mc_direction import MCDirection
 
 BuildEnvironment = BlockSpace
-CommandBlockArray = CommandBlockArray
 __all__ = ["Block", "CommandBlock", "Compound", "CommandBlockArray", "CommandBlockArray", "Register", "HardwareConstant",
            "BlockSpace",
            "Unit", "MCEntity", "assembler", "mc_direction", "block_id", 'std_unit', 'std_logic', 'schematics', 'Player']
