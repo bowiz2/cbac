@@ -2,7 +2,7 @@
 ## Python Library for writing command block circuits in minecraft.
 
 Forget about manually building and configuring your command blocks.
-With this library, you just describe your commands, and we will do  the rest.
+With cbac, you just describe your commands using python, and it will the rest.
 Tiered of remembering the syntax of minecraft commands? No more! each command can be implemented as a fully
 documented python function.
 
